@@ -3,7 +3,7 @@ tvManger as Softcam Mager
 Enigma2 project
 
 
-<img src="https://github.com/Belfagor2005/tvPanel/blob/main/usr/lib/enigma2/python/Plugins/Extensions/tvManager/logo.png">
+<img src="https://github.com/Belfagor2005/tvManager/blob/main/usr/lib/enigma2/python/Plugins/Extensions/tvManager/logo.png">
 
 
 Is a little panel for Manager of Softcam with download :
