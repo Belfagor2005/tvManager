@@ -1,0 +1,40 @@
+#example
+
+[reader]
+label = tivusat_card
+protocol = internal
+device = /dev/sci0
+services = tivusat
+lb_whitelist_services = tivusat
+caid = 183E,183D
+boxkey = 34972384
+rsakey = A92DA72FEEACF2947B003ED652153B189E4043B0138C368BDF6B9ED77DDAD6C0761A2198AEB3FC97A19C9D01CA769B3FFFE4F6E70FA4E0696A8980E18D8C58E11D817121346E3E66457FDD84CFA72589B25B538EFC304361B54845F39E9EFA52D805E5FD86B595B366C35716ABC91FA3DC159C9F4D8164B5
+ecmwhitelist = 183E@1F1F1F:8C,B7,91;183D@1F1F1F:8C,B7,91
+ecmheaderwhitelist = 80308ED387,81308ED387
+detect = cd
+nagra_read = 1
+mhz = 450
+cardmhz = 2700
+ident = 183E:000000,005411;183D:000000,005411
+group = 1
+emmcache = 1,1,2,0
+blockemm-unknown = 1
+inactivitytimeout = 30
+group = 3
+cccversion = 2.2.1
+cccmaxhops = 0
+ccckeepalive = 1
+audisabled = 1
+
+[reader]
+label                         = emulator
+protocol                      = emu
+device                        = emulator
+disablecrccws_only_for        = 0E00:000000
+caid                          = 0500,0604,090F,0E00,1010,1801,2600,2602,2610,4AE1
+detect                        = cd
+ident                         = 0500:000000,007400,007800,021110,023800;0604:000000;090F:000000;0E00:000000;1010:000000;1801:000000,001101,002111,007301;2600:000000;2602:000000;2610:000000;4AE1:000011,000014,0000FE
+group                         = 1
+emmcache                      = 2,1,2,1
+emu_auproviders               = 0604:010200;0E00:000000;1010:000000;2610:000000;4AE1:000011,000014,0000FE
+

@@ -1,0 +1,12 @@
+Package: enigma2-plugin-extensions-tvmanager
+Version: 1.6
+Section: extra
+OE: 2.0
+License: *
+Priority: optional
+Architecture: all
+Depends: python-html
+Maintainer: @lululla
+Description: tivustream tvmanager
+Source: tivustream
+Homepage: www.tivustream.com
