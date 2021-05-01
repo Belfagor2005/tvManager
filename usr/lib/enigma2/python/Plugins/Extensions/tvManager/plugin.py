@@ -5,8 +5,8 @@
 #   skin by MMark    #
 #     02/01/2021     #
 #--------------------#
+from __future__ import print_function
 from . import _
-# from __future__ import print_function
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.Button import Button
 from Components.FileList import FileList
@@ -40,6 +40,7 @@ import base64
 import os, sys, time, re
 import ssl
 import glob
+import six
 from enigma import getDesktop, gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
 from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
 from sys import version_info
@@ -60,7 +61,7 @@ else:
     from urllib2 import urlopen, Request, URLError
     from urllib import urlretrieve
 
-    
+global FTP_XML
 currversion      = '1.6'
 plugin_path    = os.path.dirname(sys.modules[__name__].__file__)
 datax          = 'aHR0cDovL3BhdGJ1d2ViLmNvbS90dk1hbmFnZXIvdHZNYW5hZ2VyLnhtbA=='
@@ -105,7 +106,7 @@ def checkStr(txt):
         #Python 2
         if type(txt) == type(unicode()):
             txt = txt.encode('utf-8')
-        
+
     return txt
 
 def checkdir():
@@ -384,8 +385,8 @@ class tvManager(Screen):
                 self['info'].setText(open(myfile, 'r').read())
         except:
             self['info'].setText(_('No ecm info'))
-        self.EcmInfoPollTimer.start(5000, True)            
-            
+        self.EcmInfoPollTimer.start(5000, True)
+
     # def ecm(self):
         # ecmf = ''
         # if os.path.isfile('/tmp/ecm.info') is True:
@@ -649,7 +650,21 @@ class GetipklistTv(Screen):
             self.timer_conn = self.timer.timeout.connect(self.downloadxmlpage)
 
     def downloadxmlpage(self):
-        url = str(FTP_XML)
+
+        try:
+            url = FTP_XML
+        except:
+            url = six.binary_type(FTP_XML,encoding="utf-8")
+        # getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
+        
+
+        # try:
+            # url = FTP_XML
+        # except:
+            # url = six.binary_type(FTP_XML,encoding="utf-8")
+        # # if PY3:
+            # # url = url.encode("utf-8")
+
         print('url softcam: ', url)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
@@ -658,8 +673,33 @@ class GetipklistTv(Screen):
         self['desc2'].setText(_('Try again later ...'))
         self.downloading = False
 
+
+    # def _gotPageLoad(self, data):
+        # self.xml = six.ensure_str(data)
+        # regexC = '<plugins cont="(.*?)"'
+        # self.names = []
+        # icount = 0
+        # list = []        
+        # try:
+            # if self.xml:
+                # xmlstr = minidom.parseString(self.xml)
+            # else:
+                # self.downloading = False
+                # return        
+            # match = re.compile(regexC, re.DOTALL).findall(self.xml)
+            # for name in match:
+                # self.list.append(name)
+                # self['info'].setText(_('Please select ...'))
+            # self['desc2'].setText(_('PLEASE SELECT...'))
+            # # showlist(self.list, self['text'])
+            # showlist(self.names, self['text'])
+            # self.downloading = True
+        # except:
+            # pass
+            
+            
     def _gotPageLoad(self, data):
-        self.xml = data
+        self.xml = six.ensure_str(data)
         try:
             if self.xml:
                 xmlstr = minidom.parseString(self.xml)
@@ -673,7 +713,7 @@ class GetipklistTv(Screen):
             xmlparse = xmlstr
             self.xmlparse = xmlstr
             for plugins in xmlstr.getElementsByTagName('plugins'):
-                self.names.append(plugins.getAttribute('cont').encode('utf8'))
+                self.names.append(plugins.getAttribute('cont')) #.encode('utf8'))
             self['desc2'].setText(_('PLEASE SELECT...'))
             showlist(self.names, self['text'])
             self.downloading = True
@@ -706,9 +746,11 @@ class GetipkTv(Screen):
         self['text'] = m2list([])
         self.list = []
         for plugins in self.xmlparse.getElementsByTagName('plugins'):
-            if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
+            # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
+            if str(plugins.getAttribute('cont')) == self.selection:            
                 for plugin in plugins.getElementsByTagName('plugin'):
-                    self.list.append(plugin.getAttribute('name').encode('utf8'))
+                    self.list.append(plugin.getAttribute('name'))
+                    # self.list.append(plugin.getAttribute('name').encode('utf8'))                    
         showlist(self.list, self['text'])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
@@ -737,11 +779,14 @@ class GetipkTv(Screen):
 
         if result:
             for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
+                if str(plugins.getAttribute('cont')) == self.selection:
+                # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:                
                     for plugin in plugins.getElementsByTagName('plugin'):
-                        if plugin.getAttribute('name').encode('utf8') == selection_country:
+                        if plugin.getAttribute('name') == selection_country:
+                        # if plugin.getAttribute('name').encode('utf8') == selection_country:                        
                             urlserver = str(plugin.getElementsByTagName('url')[0].childNodes[0].data)
-                            pluginname = plugin.getAttribute('name').encode('utf8')
+                            pluginname = plugin.getAttribute('name')
+                            # pluginname = plugin.getAttribute('name').encode('utf8')                            
                             self.prombt(urlserver, pluginname)
 
         else:
