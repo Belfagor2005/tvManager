@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 # CCam Organizer by fsenes 2011
 from Screens.Screen import Screen
 from Components.MenuList import MenuList

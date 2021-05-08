@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # CCcam Info by AliAbdul
 # Update CCcam Info By RAED Full HD Skin (1920x1080) 29-06-2015

@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
@@ -97,16 +97,12 @@ def __createdir(list):
                 print('Mkdir Failed', dir)
 
 def checkStr(txt):
-    # convert variable to type str both in Python 2 and 3
     if PY3:
-        # Python 3
-        if type(txt) == type(bytes()):
+        if isinstance(txt, type(bytes())):
             txt = txt.decode('utf-8')
     else:
-        #Python 2
-        if type(txt) == type(unicode()):
+        if isinstance(txt, type(six.text_type())):
             txt = txt.encode('utf-8')
-
     return txt
 
 def checkdir():
