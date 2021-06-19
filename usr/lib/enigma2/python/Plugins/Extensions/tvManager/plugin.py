@@ -3,7 +3,7 @@
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     02/01/2021     #
+#     02/06/2021     #
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -49,28 +49,27 @@ global isDreamOS, active
 isDreamOS = False
 active = False
 
-
-PY3 = version_info[0] == 3
-# PY3 = sys.version_info.major >= 3
-
-if PY3:
-    from urllib.request import urlopen, Request
-    from urllib.error import URLError
-    from urllib.request import urlretrieve
-else:
-    from urllib2 import urlopen, Request, URLError
-    from urllib import urlretrieve
+PY3 = sys.version_info.major >= 3
+print('Py3: ',PY3)
+from six.moves.urllib.request import urlopen
+from six.moves.urllib.request import Request
+from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.request import urlretrieve    
+import six.moves.urllib.request
 
 global FTP_XML
 currversion      = '1.6'
+title_plug     = '..:: TiVuStream Manager V. %s ::..' % currversion
+name_plug      = 'TiVuStream Softcam Manager'
 plugin_path    = os.path.dirname(sys.modules[__name__].__file__)
+res_plugin_path=plugin_path + '/res/'
 datax          = 'aHR0cDovL3BhdGJ1d2ViLmNvbS90dk1hbmFnZXIvdHZNYW5hZ2VyLnhtbA=='
 FTP_XML        = base64.b64decode(datax)
 datacfg        = 'aHR0cDovL3BhdGJ1d2ViLmNvbS90dk1hbmFnZXIvY2ZnLnR4dA=='
 FTP_CFG        = base64.b64decode(datacfg)
 DESKHEIGHT     = getDesktop(0).size().height()
 HD             = getDesktop(0).size()
-skin_path      = plugin_path
+# skin_path      = plugin_path
 iconpic        = plugin_path+ '/logo.png'
 keys           = '/usr/keys'
 data_path      = plugin_path + '/data'
@@ -80,8 +79,6 @@ old_ecm_time   = time.time()
 info           = {}
 ecm            = ''
 data           = EMPTY_ECM_INFO
-title_plug     = '..:: TiVuStream Manager V. %s ::..' % currversion
-name_plug        = 'TiVuStream Softcam Manager'
 
 hdr = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
 		 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' }
@@ -136,16 +133,11 @@ def readCurrent_1():
 #=============== SCREEN PATH SETTING
 HD = getDesktop(0).size()
 if HD.width() > 1280:
-    if isDreamOS:
-        skin_path = plugin_path + '/res/skins/fhd/dreamOs'
-    else:
-        skin_path = plugin_path + '/res/skins/fhd'
+    skin_path=res_plugin_path + 'skins/fhd/'
 else:
-    if isDreamOS:
-        skin_path = plugin_path + '/res/skins/hd/dreamOs'
-    else:
-        skin_path = plugin_path + '/res/skins/hd'
-
+    skin_path=res_plugin_path + 'skins/hd/'
+if isDreamOS:
+    skin_path=skin_path + 'dreamOs/'
 
 def show_list(h):
     png1 = plugin_path + '/res/img/actcam.png'
