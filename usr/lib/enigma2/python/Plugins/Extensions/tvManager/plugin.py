@@ -798,7 +798,7 @@ class GetipkTv(Screen):
                 self.timer = eTimer()
                 self.timer.start(1500, 1)
                 if self.com.find('.ipk') != -1:
-                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk) )
+                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk))
                     # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
                     cmd0 = 'opkg install --force-overwrite ' + destipk #self.com #dest
                     self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)

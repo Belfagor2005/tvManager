@@ -28,35 +28,26 @@ from skin import parseColor
 from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
 from twisted.internet import reactor
 from twisted.web.client import HTTPClientFactory
-# import CCcamPrioMaker
-# import CCcamOrganizer
 from . import CCcamPrioMaker
 from . import CCcamOrganizer
-
 import gettext
 import sys
+import six
 from sys import version_info
-
+from six.moves.urllib.request import urlopen
+from six.moves.urllib.request import Request
+from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.parse import urlparse
+from six.moves.urllib.parse import quote
+from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import urlunparse
+PY3 = sys.version_info.major >= 3
 if fileExists("/usr/lib/enigma2/python/Components/Console.py"):
     from Components.Console import Console
     NEW_CVS = True
 else:
     from os import popen
     NEW_CVS = False
-
-PY3 = sys.version_info[0] == 3
-if PY3:
-    from urllib.request import urlopen, Request
-    from urllib.error import URLError, HTTPError
-    from urllib.parse import urlparse, urlunparse
-    from urllib.parse import urlencode, quote
-
-else:
-    from urllib2 import urlopen, Request
-    from urllib2 import URLError, HTTPError
-    from urlparse import urlparse, urlunparse
-    from urllib import urlencode, quote
-
 
 #############################################################
 
