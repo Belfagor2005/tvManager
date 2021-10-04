@@ -28,8 +28,8 @@ from skin import parseColor
 from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
 from twisted.internet import reactor
 from twisted.web.client import HTTPClientFactory
-from . import CCcamPrioMaker
-from . import CCcamOrganizer
+from Plugins.Extensions.CCcamInfo.data import CCcamPrioMaker
+from Plugins.Extensions.CCcamInfo.data import CCcamOrganizer
 import gettext
 import sys
 import six
@@ -41,7 +41,6 @@ from six.moves.urllib.parse import urlparse
 from six.moves.urllib.parse import quote
 from six.moves.urllib.parse import urlencode
 from six.moves.urllib.parse import urlunparse
-PY3 = sys.version_info.major >= 3
 if fileExists("/usr/lib/enigma2/python/Components/Console.py"):
     from Components.Console import Console
     NEW_CVS = True
@@ -73,7 +72,6 @@ def _parse(url):
     host = parsed.hostname
     port = parsed.port or (443 if scheme == 'https' else 80)
     path = urlunparse(('','') + parsed[2:])
-
     if '@' in host:
         username, host = host.split('@')
         if ':' in username:
@@ -106,10 +104,8 @@ def getPage(url, contextFactory=None, *args, **kwargs):
             kwargs["headers"].update(AuthHeaders)
         else:
             kwargs["headers"] = AuthHeaders
-
     factory = HTTPClientFactory(url, *args, **kwargs)
     reactor.connectTCP(host, port, factory)
-
     return factory.deferred
 
 #############################################################

@@ -6,18 +6,14 @@ from Components.MenuList import MenuList
 from Components.ActionMap import ActionMap
 from Screens.MessageBox import MessageBox
 from Tools.Directories import fileExists
-# from . import _
-
 
 class OrganizerMenu(Screen):
     skin = """
         <screen position="center,center" size="460,400" title="CCcam Organizer" >
             <widget name="myMenu" position="10,10" size="420,380" scrollbarMode="showOnDemand" />
         </screen>"""
-
     def __init__(self, session):
         self.session = session
-
         list = []
         if fileExists("/etc/CCcam.cfg"):
             list.append((_("Delete Peer"), "two"))

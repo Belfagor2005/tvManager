@@ -24,23 +24,21 @@ from twisted.web import client
 from twisted.web.client import getPage
 from sys import version_info
 import ssl
+from random import choice
+global skin_path
+
 # plugin_path  = os.path.dirname(sys.modules[__name__].__file__)
 plugin_path = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
 name_plug        = 'TiVuStream Softcam Manager'
 data_path    = plugin_path + '/data/'
 skin_path    = plugin_path
 HD           = getDesktop(0).size()
-Agent        = {'User-agent': 'Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.0.15) Gecko/2009102815 Ubuntu/9.04 (jaunty) Firefox/3.','Connection': 'Close'}
 
-global isDreamOS
-isDreamOS = False
-
-PY3 = version_info[0] == 3
-if PY3:
+try:
     import urllib.request, urllib.parse, urllib.error
     from urllib.error import URLError
     import http.cookiejar
-else:
+except:
     from urllib2 import urlopen, Request, URLError
     import urllib2
     import cookielib
@@ -54,7 +52,7 @@ else:
     ssl._create_default_https_context = _create_unverified_https_context
 
 def checkStr(txt):
-    if PY3:
+    if six.PY3:
         if type(txt) == type(bytes()):
             txt = txt.decode('utf-8')
     else:
@@ -63,37 +61,89 @@ def checkStr(txt):
 
     return txt
 
-def getUrl(url):
-        # if checkInternet():
-            try:
-                print("Here in getUrl url =", url)
-                req = Request(url)
-                req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-                # context = ssl._create_unverified_context()
-                # response = urlopen(req, context=context)
-                response = checkStr(urlopen(req, timeout = 50))
-                link=response.read()
-                response.close()
-                return link
-            except:
-                return 'nodata'
+ListAgent = [          
+          'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15',
+          'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14',
+          'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
+          'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
+          'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1284.0 Safari/537.13',
+          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.8 (KHTML, like Gecko) Chrome/17.0.940.0 Safari/535.8',
+          'Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1',
+          'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1',
+          'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1',
+          'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2',
+          'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.16) Gecko/20120427 Firefox/15.0a1',
+          'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1',
+          'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:15.0) Gecko/20120910144328 Firefox/15.0.2',
+          'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1',
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:9.0a2) Gecko/20111101 Firefox/9.0a2',
+          'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0a2) Gecko/20110613 Firefox/6.0a2',
+          'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0a2) Gecko/20110612 Firefox/6.0a2',
+          'Mozilla/5.0 (Windows NT 6.1; rv:6.0) Gecko/20110814 Firefox/6.0',
+          'Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0',
+          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
+          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)',
+          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)',
+          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; InfoPath.2; SV1; .NET CLR 2.0.50727; WOW64)',
+          'Mozilla/4.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)',
+          'Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)',
+          'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0;  it-IT)',
+          'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US)'
+          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; chromeframe/13.0.782.215)',
+          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; chromeframe/11.0.696.57)',
+          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0) chromeframe/10.0.648.205',
+          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.1; SV1; .NET CLR 2.8.52393; WOW64; en-US)',
+          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; chromeframe/11.0.696.57)',
+          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/4.0; GTB7.4; InfoPath.3; SV1; .NET CLR 3.1.76908; WOW64; en-US)',
+          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)',
+          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)',
+          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; InfoPath.1; SV1; .NET CLR 3.8.36217; WOW64; en-US)',
+          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
+          'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; it-IT)',
+          'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)',
+          'Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02',
+          'Opera/9.80 (Windows NT 6.1; U; es-ES) Presto/2.9.181 Version/12.00',
+          'Opera/9.80 (Windows NT 5.1; U; zh-sg) Presto/2.9.181 Version/12.00',
+          'Opera/12.0(Windows NT 5.2;U;en)Presto/22.9.168 Version/12.00',
+          'Opera/12.0(Windows NT 5.1;U;en)Presto/22.9.168 Version/12.00',
+          'Mozilla/5.0 (Windows NT 5.1) Gecko/20100101 Firefox/14.0 Opera/12.0',
+          'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25',
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10',
+          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'       
+          ]
+                                  
+def RequestAgent():
+    RandomAgent = choice(ListAgent)
+    return RandomAgent
 
-try:
-    from enigma import eMediaDatabase
-    isDreamOS = True
-except:
-    isDreamOS = False
+def getUrl(url):
+        link = []
+        print(  "Here in getUrl url =", url)
+        req = Request(url)
+        # req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+        req.add_header('User-Agent',RequestAgent())
+        try:
+               response = urlopen(req)
+               link=response.read()
+               response.close()
+               return link
+        except:
+               import ssl
+               gcontext = ssl._create_unverified_context()
+               response = urlopen(req, context=gcontext)
+               link=response.read()
+               response.close()
+               return link
 
 if HD.width() > 1280:
-    if isDreamOS:
-        skin_path = plugin_path + '/res/skins/fhd/dreamOs'
-    else:
-        skin_path = plugin_path + '/res/skins/fhd'
+    skin_path = plugin_path + '/res/skins/fhd'
 else:
-    if isDreamOS:
-        skin_path = plugin_path + '/res/skins/hd/dreamOs'
-    else:
-        skin_path = plugin_path + '/res/skins/hd'
+    skin_path = plugin_path + '/res/skins/hd'
+if os.path.exists('/var/lib/dpkg/status'):
+    skin_path = skin_path + '/dreamOs'
 
 #============='<h1>C: (.*?) (.*?) (.*?) (.*?)\n'======================
 dcdlnk1 = 'aHR0cHM6Ly9jY2NhbXN1cHJlbWUuY29tL2NjY2FtZnJlZS9nZXQucGhw'
@@ -118,7 +168,6 @@ dcdlnk10 = 'aHR0cHM6Ly9jY2NhbXNwb3QuY29tL2NjY2FtZnJlZS9nZXQucGhw'
 Link10 = base64.b64decode(dcdlnk10)
 dcdlnk11 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29t'
 Link11 = base64.b64decode(dcdlnk11)
-
 
 sessions = []
 config.plugins.tvmanager = ConfigSubsection()
@@ -154,7 +203,6 @@ def putlblcfg():
 putlblcfg()
 #======================================================
 class tv_config(Screen, ConfigListScreen):
-
     def __init__(self, session):
         self.session = session
         skin = skin_path + '/tv_config.xml'
@@ -366,7 +414,6 @@ class tv_config(Screen, ConfigListScreen):
     def load_getcl(self, data):
         url1 = re.findall('<h1>.*?C: (.*?) (.*?) (.*?) (.*?)\n', data)
         print('===========data=========', url1)
-
         if url1 != '':
             for h, p, u, pw in url1:
                 print(h, p, u, pw)
@@ -383,3 +430,8 @@ class tv_config(Screen, ConfigListScreen):
                 self.createSetup()
         else:
             return
+
+
+
+
+
