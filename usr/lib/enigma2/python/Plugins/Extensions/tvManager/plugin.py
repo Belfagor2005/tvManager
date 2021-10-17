@@ -318,7 +318,7 @@ class tvManager(Screen):
         self['key_blue'] = Button(_('Softcam'))
         self['desc'] = Label()
         self['desc'].setText(_('Scanning and retrieval list softcam ...'))
-        self['info'] = Label('')        
+        self['info'] = Label('')
         self['list'] = m2list([])
         self.currCam = self.readCurrent()
 #---------
@@ -437,8 +437,11 @@ class tvManager(Screen):
 
     def keysdownload(self, result):
         if result:
-            os.system('chmod 755 %s/auto' % plugin_path)
-            self.prombt('sh %s/auto' % plugin_path)
+            script = ('%s/auto' % plugin_path)
+            from os import access, X_OK, chmod
+            if not access(script, X_OK):
+                chmod(script, 0o0755)
+            self.prombt('sh %s' % script)
 
     def prombt(self, com):
         self.session.open(Console, _('Update Softcam.key: %s') % com, ['%s' % com])
@@ -705,7 +708,9 @@ class GetipklistTv(Screen):
                 self.downloading = False
                 return
             for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                self.names.append(plugins.getAttribute('cont')) #.encode('utf8'))
+                namex = checkStr(plugins.getAttribute('cont'))
+                self.names.append(namex)
+                # self.names.append(plugins.getAttribute('cont')) #.encode('utf8'))
             self['desc2'].setText(_('PLEASE SELECT...'))
             showlist(self.names, self['text'])
             self.downloading = True

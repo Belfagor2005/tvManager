@@ -6,7 +6,8 @@
 # Update from Lululla py3
 # from __future__ import print_function
 from . import _
-from base64 import encodestring
+# from base64 import encodestring
+import base64             
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.config import config, ConfigInteger, ConfigSelection, ConfigSubsection, ConfigText, ConfigYesNo, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
@@ -96,7 +97,8 @@ def getPage(url, contextFactory=None, *args, **kwargs):
 
     if username and password:
         url = scheme + '://' + host + ':' + str(port) + path
-        basicAuth = encodestring("%s:%s" % (username, password))
+        basicAuth = base64.encodestring(('%s:%s' % (username,password)).encode()).decode().strip()
+        # basicAuth = encodestring("%s:%s" % (username, password))
         authHeader = "Basic " + basicAuth.strip()
         AuthHeaders = {"Authorization": authHeader}
         if "headers" in kwargs: #py3

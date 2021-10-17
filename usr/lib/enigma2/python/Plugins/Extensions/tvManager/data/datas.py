@@ -44,12 +44,12 @@ except:
     import cookielib
 
 
-# try:
-    # _create_unverified_https_context = ssl._create_unverified_context
-# except AttributeError:
-    # pass
-# else:
-    # ssl._create_default_https_context = _create_unverified_https_context
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
 
 def checkStr(txt):
     if six.PY3:
@@ -61,7 +61,7 @@ def checkStr(txt):
 
     return txt
 
-ListAgent = [          
+ListAgent = [
           'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15',
           'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14',
           'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
@@ -112,9 +112,9 @@ ListAgent = [
           'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25',
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10',
-          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'       
+          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'
           ]
-                                  
+
 def RequestAgent():
     RandomAgent = choice(ListAgent)
     return RandomAgent
@@ -127,7 +127,7 @@ def getUrl(url):
         return link
     except ImportError:
         req = Request(url)
-                                                                                                                                    
+
         req.add_header('User-Agent',RequestAgent())
         response = urlopen(req, None, 3)
         link = response.read()
@@ -403,7 +403,7 @@ class tv_config(Screen, ConfigListScreen):
 
     def getcl(self):
         data = config.plugins.tvmanager.link.value
-        data = getUrl(data)                           
+        data = getUrl(data)
         if six.PY3:
             data = six.ensure_str(data)
         print('=== Lnk ==== ', data)
@@ -415,10 +415,10 @@ class tv_config(Screen, ConfigListScreen):
         if url1 != '':
             for h, p, u, pw in url1:
                 print(h, p, u, pw)
-                host = h
-                port = p
-                user = u
-                password = pw
+                host = checkStr(h)
+                port = checkStr(p)
+                user = checkStr(u)
+                password = checkStr(pw)
                 password = password.replace('</h1>','')
             # if config.plugins.tvmanager.active.getValue():
                 config.plugins.tvmanager.hostaddress.setValue(host)
