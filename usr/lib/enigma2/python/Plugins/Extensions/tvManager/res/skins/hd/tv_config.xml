@@ -5,7 +5,7 @@
 	<widget name="title" position="146,60" size="600,26" font="Regular;20" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
 	<ePixmap position="146,86" size="686,5" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sep.png" zPosition="5" />
 	<!-- Menu List -->
-	<widget name="config" position="146,103" size="686,398" font="Regular;20" itemHeight="33" scrollbarMode="showOnDemand" transparent="1" zPosition="5" 
+	<widget name="config" position="146,103" size="686,398" font="Regular;20" scrollbarMode="showOnDemand" transparent="1" zPosition="5" 
 		foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" 
 		selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sliderb.png" />
 	<widget name="info" position="146,502" size="686,36" font="Regular;20" halign="center" foregroundColor="yellow" backgroundColor="#20000000" transparent="1" zPosition="5" />

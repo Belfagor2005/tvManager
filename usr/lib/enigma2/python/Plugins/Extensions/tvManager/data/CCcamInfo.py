@@ -28,8 +28,8 @@ from skin import parseColor
 from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
 from twisted.internet import reactor
 from twisted.web.client import HTTPClientFactory
-from Plugins.Extensions.CCcamInfo.data import CCcamPrioMaker
-from Plugins.Extensions.CCcamInfo.data import CCcamOrganizer
+from Plugins.Extensions.tvManager.data import CCcamPrioMaker
+from Plugins.Extensions.tvManager.data import CCcamOrganizer
 import gettext
 import sys
 import six
@@ -52,7 +52,7 @@ else:
 
 VERSION         = "v1.4z"
 DATE            = "15.12.2020"
-plugin_path     = '/usr/lib/enigma2/python/Plugins/Extensions/CCcamInfo'
+plugin_path     = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
 CFG             = "/etc/CCcam.cfg"
 ecmInfoStart    = None
 desktop         = getDesktop(0)

@@ -8,7 +8,7 @@
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_menu.png" scale="strech" position="975,90" size="80,35" zPosition="30" />
 	<!-- Menu List -->
 	<widget name="desc" position="220,155" size="830,50" font="Regular;30" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />
-	<widget name="list" position="220,220" size="830,200" font="Regular;30" itemHetght="50" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" zPosition="10" 
+	<widget name="list" position="220,220" size="830,200" font="Regular;30" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" zPosition="10" 
 		foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#000b2049" backgroundColorSelected="#0b2049" 
 		selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" />
 	<widget name="info" position="220,530" size="830,400" font="Regular; 28" halign="left" foregroundColor="grey" backgroundColor="#20000000" transparent="1" zPosition="5" />

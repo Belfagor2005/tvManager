@@ -26,7 +26,11 @@ from sys import version_info
 import ssl
 from random import choice
 global skin_path
-
+import six
+from six.moves.urllib.request import urlopen
+from six.moves.urllib.request import Request
+from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.request import urlretrieve
 # plugin_path  = os.path.dirname(sys.modules[__name__].__file__)
 plugin_path = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
 name_plug        = 'TiVuStream Softcam Manager'
@@ -35,21 +39,17 @@ skin_path    = plugin_path
 HD           = getDesktop(0).size()
 
 try:
-    import urllib.request, urllib.parse, urllib.error
-    from urllib.error import URLError
     import http.cookiejar
 except:
-    from urllib2 import urlopen, Request, URLError
-    import urllib2
     import cookielib
-    import urllib
 
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
+
+# try:
+    # _create_unverified_https_context = ssl._create_unverified_context
+# except AttributeError:
+    # pass
+# else:
+    # ssl._create_default_https_context = _create_unverified_https_context
 
 def checkStr(txt):
     if six.PY3:
@@ -120,23 +120,30 @@ def RequestAgent():
     return RandomAgent
 
 def getUrl(url):
-        link = []
-        print(  "Here in getUrl url =", url)
+    try:
+        import requests
+        link = requests.get(url, headers = {'User-Agent': 'Mozilla/5.0'}).text
+        print('link1: ', link)
+        return link
+    except ImportError:
         req = Request(url)
-        # req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+                                                                                                                                    
         req.add_header('User-Agent',RequestAgent())
-        try:
-               response = urlopen(req)
-               link=response.read()
-               response.close()
-               return link
-        except:
-               import ssl
-               gcontext = ssl._create_unverified_context()
-               response = urlopen(req, context=gcontext)
-               link=response.read()
-               response.close()
-               return link
+        response = urlopen(req, None, 3)
+        link = response.read()
+        response.close()
+        print('link2: ', link)
+        return link
+    except:
+        e = URLError #, e:
+        print('We failed to open "%s".' % url)
+        if hasattr(e, 'code'):
+            print('We failed with error code - %s.' % e.code)
+        if hasattr(e, 'reason'):
+            print('We failed to reach a server.')
+            print('Reason: ', e.reason)
+        return
+    return
 
 if HD.width() > 1280:
     skin_path = plugin_path + '/res/skins/fhd'
@@ -146,28 +153,17 @@ if os.path.exists('/var/lib/dpkg/status'):
     skin_path = skin_path + '/dreamOs'
 
 #============='<h1>C: (.*?) (.*?) (.*?) (.*?)\n'======================
-dcdlnk1 = 'aHR0cHM6Ly9jY2NhbXN1cHJlbWUuY29tL2NjY2FtZnJlZS9nZXQucGhw'
-Link1 = base64.b64decode(dcdlnk1)
-dcdlnk2 = 'aHR0cDovL2NjY2FtaXB0di5jby9GUkVFTjEyL25ldzAucGhw'
-Link2 = base64.b64decode(dcdlnk2)
-dcdlnk3 = 'aHR0cDovL2NjY2FtZ29hbC5jb20vZnJlZTUvZ2V0Mi5waHA='
-Link3 = base64.b64decode(dcdlnk3)
-dcdlnk4 = 'aHR0cDovL2NjY2Ftc3BvdC5jb20vY2NjYW1mcmVlL2dldC5waHA='
-Link4 = base64.b64decode(dcdlnk4)
-dcdlnk5 = 'aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw'
-Link5 = base64.b64decode(dcdlnk5)
-dcdlnk6 = 'aHR0cHM6Ly9jY2NhbXouY28vRlJFRU4xMi9uZXcwLnBocA=='
-Link6 = base64.b64decode(dcdlnk6)
-dcdlnk7 = 'aHR0cHM6Ly9jY2NhbXouY28vRlJFRS9uZXcwLnBocA=='
-Link7 = base64.b64decode(dcdlnk7)
-dcdlnk8 = 'aHR0cHM6Ly9jY2NhbWlwdHYuY28vRlJFRU4xMi9uZXcwLnBocA=='
-Link8 = base64.b64decode(dcdlnk8)
-dcdlnk9 = 'aHR0cDovL2NjY2FtZ29vLmNvbS9mcmVlNS9nZXQyLnBocA=='
-Link9 = base64.b64decode(dcdlnk9)
-dcdlnk10 = 'aHR0cHM6Ly9jY2NhbXNwb3QuY29tL2NjY2FtZnJlZS9nZXQucGhw'
-Link10 = base64.b64decode(dcdlnk10)
-dcdlnk11 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29t'
-Link11 = base64.b64decode(dcdlnk11)
+Link1 = 'http://cccamsupreme.com/cccamfree/get.php'
+Link5 = 'http://cccamprima.com/free5/get2.php'
+Link11 = 'http://cccamfrei.com/free/get.php'
+Link8 = 'https://cccamiptv.club/it/free-cccam/'
+Link9 = 'http://cccamgoo.com/free5/get2.php'
+Link2 = 'http://cccamas.com/free/get.php'
+Link3 = 'http://cccamprime.com/cccam48h.php'
+Link4 = 'http://cccam-premium.com/free-cccam/'
+Link6 = 'http://cccamx.com/v2/getCode.php'
+Link7 = 'http://iptvcccam.co/cccamfree/get.php'
+Link10 = 'https://cccamia.com/free-cccam/'
 
 sessions = []
 config.plugins.tvmanager = ConfigSubsection()
@@ -406,8 +402,10 @@ class tv_config(Screen, ConfigListScreen):
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def getcl(self):
-        Lnk = str(config.plugins.tvmanager.link.value)
-        data = getUrl(Lnk)
+        data = config.plugins.tvmanager.link.value
+        data = getUrl(data)                           
+        if six.PY3:
+            data = six.ensure_str(data)
         print('=== Lnk ==== ', data)
         self.load_getcl(data)
 

@@ -3,7 +3,8 @@
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     02/06/2021     #
+#     update to      #
+#     02/08/2021     #
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -52,8 +53,7 @@ active = False
 from six.moves.urllib.request import urlopen
 from six.moves.urllib.request import Request
 from six.moves.urllib.error import HTTPError, URLError
-from six.moves.urllib.request import urlretrieve    
-import six.moves.urllib.request
+from six.moves.urllib.request import urlretrieve
 
 global FTP_XML
 currversion      = '1.6'
@@ -61,15 +61,16 @@ title_plug     = '..:: TiVuStream Manager V. %s ::..' % currversion
 name_plug      = 'TiVuStream Softcam Manager'
 plugin_path    = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path=plugin_path + '/res/'
-datax          = 'aHR0cDovL3BhdGJ1d2ViLmNvbS90dk1hbmFnZXIvdHZNYW5hZ2VyLnhtbA=='
-FTP_XML        = base64.b64decode(datax)
-datacfg        = 'aHR0cDovL3BhdGJ1d2ViLmNvbS90dk1hbmFnZXIvY2ZnLnR4dA=='
-FTP_CFG        = base64.b64decode(datacfg)
+FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+# FTP_XML = base64.b64decode(datax)
+FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
+# FTP_CFG = base64.b64decode(datacfg)
 DESKHEIGHT     = getDesktop(0).size().height()
 HD             = getDesktop(0).size()
 # skin_path      = plugin_path
 iconpic        = plugin_path+ '/logo.png'
 keys           = '/usr/keys'
+camscript = '/usr/camscript'
 data_path      = plugin_path + '/data'
 ECM_INFO       = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
@@ -77,9 +78,11 @@ old_ecm_time   = time.time()
 info           = {}
 ecm            = ''
 data           = EMPTY_ECM_INFO
+SOFTCAM   = 0
+CCCAMINFO = 1
+OSCAMINFO = 2
 
-
-ListAgent = [          
+ListAgent = [
           'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15',
           'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14',
           'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
@@ -130,9 +133,9 @@ ListAgent = [
           'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25',
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10',
-          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'       
+          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'
           ]
-                                  
+
 def RequestAgent():
     RandomAgent = choice(ListAgent)
     return RandomAgent
@@ -159,6 +162,8 @@ def checkStr(txt):
 def checkdir():
     if not os.path.exists(keys):
         __createdir('/usr/keys')
+    if not os.path.exists(camscript):
+        __createdir('/usr/camscript')
 checkdir()
 
 def readCurrent_1():
@@ -184,7 +189,7 @@ if HD.width() > 1280:
     skin_path=res_plugin_path + 'skins/fhd/'
 else:
     skin_path=res_plugin_path + 'skins/hd/'
-if os.path.exists('/var/lib/dpkg/status'):
+if os.path.isfile('/var/lib/dpkg/status'):
     skin_path=skin_path + 'dreamOs/'
 
 def show_list(h):
@@ -250,24 +255,6 @@ def getUrl(url):
                link=response.read()
                response.close()
                return link
-
-# def getUrl(url):
-        # # if checkInternet():
-            # try:
-                # print("Here in getUrl url =", url)
-                # req = Request(url)
-                # req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-                # context = ssl._create_unverified_context()
-                # # response = urlopen(req, context=context)
-                # response = checkStr(urlopen(req, context=context))
-                # link=response.read()
-                # response.close()
-                # return link
-            # except:
-                # return
-        # # else:
-            # # session.open(MessageBox, "No Internet", MessageBox.TYPE_INFO)
-
 class m2list(MenuList):
 
     def __init__(self, list):
@@ -287,9 +274,7 @@ class m2list(MenuList):
             self.l.setItemHeight(45)
 
 #======================================================
-SOFTCAM   = 0
-CCCAMINFO = 1
-OSCAMINFO = 2
+
 
 
 class tvManager(Screen):
@@ -304,9 +289,9 @@ class tvManager(Screen):
         self.index = 0
         self.emulist = []
         self.namelist = []
+        self.softcamslist = []
         self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         self['actions'] = ActionMap(['OkCancelActions',
-         # 'EPGSelectActions',
          'ColorActions',
          'SetupActions',
          'MenuActions',
@@ -324,47 +309,40 @@ class tvManager(Screen):
          'green': self.action,
          'info': self.CfgInfo,
          'red': self.stop}, -1)
+        self.setTitle(_(title_plug))
+        self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start'))
         # self['key_green2'] = Button(_('ReStart'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
         self['key_blue'] = Button(_('Softcam'))
-        self.setTitle(_(title_plug))
-        self['title'] = Label(_(title_plug))
+        self['desc'] = Label()
+        self['desc'].setText(_('Scanning and retrieval list softcam ...'))
+        self['info'] = Label('')        
+        self['list'] = m2list([])
         self.currCam = self.readCurrent()
 #---------
         self.BlueAction = SOFTCAM
         self.setBlueKey()
 #---------
-        self.softcamslist = []
-        self['desc'] = Label()
-        # self['desc2'] = Label(_('Info Ecm'))
-        self['list'] = m2list([])
-        self['desc'].setText(_('Scanning and retrieval list softcam ...'))
         self.timer = eTimer()
-        self.timer.start(200, 1)
-        if not os.path.exists('/var/lib/dpkg/status'):
-            self.timer.callback.append(self.cgdesc)
-        else:
+        if os.path.isfile('/var/lib/dpkg/status'):
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
+        else:
+            self.timer.callback.append(self.cgdesc)
+        self.timer.start(200, 1)
         self.readScripts()
-        self['info'] = Label('')
         self.EcmInfoPollTimer = eTimer()
-        self.EcmInfoPollTimer.start(100)
-        try:
+        if os.path.isfile('/var/lib/dpkg/status'):
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
-        except:    
+        else:
             self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
+        self.EcmInfoPollTimer.start(100)
         self.onShown.append(self.ecm)
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
 #-------------------------------------------------------
     def setBlueKey(self):
-        # situation = readCurrent_1()
-        # if not situation:
-            # self.BlueAction = SOFTCAM
-            # self["key_blue"].setText(_("Softcam"))
-            # return
         if  self.currCam == 'no':
             self["key_blue"].setText(_("Softcam"))
         if self.currCam is not None:
@@ -387,7 +365,7 @@ class tvManager(Screen):
 
     def Blue(self):
         if self.BlueAction == CCCAMINFO:
-            if os.path.exists(data_path +"/CCcamInfo.py"):
+            if os.path.isfile(data_path +"/CCcamInfo.py"):
                 from Plugins.Extensions.tvManager.data.CCcamInfo import CCcamInfoMain
                 self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
             # self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
@@ -403,7 +381,7 @@ class tvManager(Screen):
     def cccam(self):
         if 'ccam' in self.currCam.lower()and self.currCam != 'no':
             # if fileExists (resolveFilename(data_path, "/CCcamInfo.pyo")):
-            if os.path.exists(data_path +"/CCcamInfo.py"):
+            if os.path.isfile(data_path +"/CCcamInfo.py"):
                 from Plugins.Extensions.tvManager.data.CCcamInfo import CCcamInfoMain
                 self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
 
@@ -693,17 +671,17 @@ class GetipklistTv(Screen):
 
     def get_list(self):
         self.timer = eTimer()
-        self.timer.start(200, 1)
-        if not os.path.exists('/var/lib/dpkg/status'):
-            self.timer.callback.append(self.downloadxmlpage)
-        else:
+        # if not os.path.isfile('/var/lib/dpkg/status'):
+        if os.path.isfile('/var/lib/dpkg/status'):
             self.timer_conn = self.timer.timeout.connect(self.downloadxmlpage)
 
+        else:
+            self.timer.callback.append(self.downloadxmlpage)
+        self.timer.start(200, 1)
     def downloadxmlpage(self):
-        try:
-            url = FTP_XML
-        except:
-            url = six.binary_type(FTP_XML,encoding="utf-8")
+        url = str(FTP_XML)
+        if six.PY3:
+            url = six.binary_type(url,encoding="utf-8")
         print('url softcam: ', url)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
@@ -711,22 +689,22 @@ class GetipklistTv(Screen):
         print(str(error))
         self['desc2'].setText(_('Try again later ...'))
         self.downloading = False
-  
+
     def _gotPageLoad(self, data):
-        self.xml = six.ensure_str(data)
+        self.xml = str(data)
+        if six.PY3:
+            self.xml = six.ensure_str(data)
+        self.data = []
+        self.names = []
+        icount = 0
+        list = []
         try:
             if self.xml:
-                xmlstr = minidom.parseString(self.xml)
+                self.xmlparse = minidom.parseString(self.xml)
             else:
                 self.downloading = False
                 return
-            self.data = []
-            self.names = []
-            icount = 0
-            list = []
-            xmlparse = xmlstr
-            self.xmlparse = xmlstr
-            for plugins in xmlstr.getElementsByTagName('plugins'):
+            for plugins in self.xmlparse.getElementsByTagName('plugins'):
                 self.names.append(plugins.getAttribute('cont')) #.encode('utf8'))
             self['desc2'].setText(_('PLEASE SELECT...'))
             showlist(self.names, self['text'])
@@ -759,10 +737,10 @@ class GetipkTv(Screen):
         self.list = []
         for plugins in self.xmlparse.getElementsByTagName('plugins'):
             # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
-            if str(plugins.getAttribute('cont')) == self.selection:            
+            if str(plugins.getAttribute('cont')) == self.selection:
                 for plugin in plugins.getElementsByTagName('plugin'):
                     self.list.append(plugin.getAttribute('name'))
-                    # self.list.append(plugin.getAttribute('name').encode('utf8'))                    
+                    # self.list.append(plugin.getAttribute('name').encode('utf8'))
         showlist(self.list, self['text'])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
@@ -791,13 +769,13 @@ class GetipkTv(Screen):
         if result:
             for plugins in self.xmlparse.getElementsByTagName('plugins'):
                 if str(plugins.getAttribute('cont')) == self.selection:
-                # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:                
+                # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
                     for plugin in plugins.getElementsByTagName('plugin'):
                         if plugin.getAttribute('name') == selection_country:
-                        # if plugin.getAttribute('name').encode('utf8') == selection_country:                        
+                        # if plugin.getAttribute('name').encode('utf8') == selection_country:
                             urlserver = str(plugin.getElementsByTagName('url')[0].childNodes[0].data)
                             pluginname = plugin.getAttribute('name')
-                            # pluginname = plugin.getAttribute('name').encode('utf8')                            
+                            # pluginname = plugin.getAttribute('name').encode('utf8')
                             self.prombt(urlserver, pluginname)
         else:
             return
@@ -832,7 +810,7 @@ class GetipkTv(Screen):
                     self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
 
                 if self.com.find('.deb') != -1:
-                    if os.path.exists('/var/lib/dpkg/status'):
+                    if os.path.isfile('/var/lib/dpkg/status'):
                         os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
                         cmd0 = 'dpkg -i ' + destdeb
                         # cmd0 = 'dpkg -i ' + self.com
@@ -1055,7 +1033,7 @@ def StartSetup(menuid):
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    if not os.path.exists('/var/lib/dpkg/status'):
+    if not os.path.isfile('/var/lib/dpkg/status'):
         iconpic = plugin_path + '/res/pics/logo.png'
 
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),

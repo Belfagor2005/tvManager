@@ -6,7 +6,7 @@
 	<ePixmap position="146,86" size="686,5" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sep.png" zPosition="5" />
 	<!-- Menu List -->
 	<widget name="desc" position="146,103" size="686,33" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />
-	<widget name="text" position="146,143" size="686,433" itemHeight="33" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sliderb.png" />
+	<widget name="text" position="146,143" size="686,433" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sliderb.png" />
 	<!-- Colors 1220 -->
 	<ePixmap position="146,606" size="686,5" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sep.png" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/key_red.png" position="146,630" size="20,20" alphatest="on" zPosition="5" />
