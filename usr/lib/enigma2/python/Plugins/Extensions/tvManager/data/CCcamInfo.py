@@ -4,10 +4,10 @@
 # Update CCcam Info By RAED Full HD Skin (1920x1080) 29-06-2015
 # Update CCcam Info Dimitrij openPLi 19-04-2016
 # Update from Lululla py3
-# from __future__ import print_function
+from __future__ import print_function
 from . import _
 # from base64 import encodestring
-import base64             
+import base64
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.config import config, ConfigInteger, ConfigSelection, ConfigSubsection, ConfigText, ConfigYesNo, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
@@ -29,8 +29,6 @@ from skin import parseColor
 from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
 from twisted.internet import reactor
 from twisted.web.client import HTTPClientFactory
-from Plugins.Extensions.tvManager.data import CCcamPrioMaker
-from Plugins.Extensions.tvManager.data import CCcamOrganizer
 import gettext
 import sys
 import six
@@ -48,12 +46,13 @@ if fileExists("/usr/lib/enigma2/python/Components/Console.py"):
 else:
     from os import popen
     NEW_CVS = False
-
+from Plugins.Extensions.Levi45MulticamManager.data import CCcamPrioMaker
+from Plugins.Extensions.Levi45MulticamManager.data import CCcamOrganizer
 #############################################################
 
 VERSION         = "v1.4z"
 DATE            = "15.12.2020"
-plugin_path     = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
+plugin_path     = '/usr/lib/enigma2/python/Plugins/Extensions/Levi45MulticamManager'
 CFG             = "/etc/CCcam.cfg"
 ecmInfoStart    = None
 desktop         = getDesktop(0)
@@ -97,6 +96,7 @@ def getPage(url, contextFactory=None, *args, **kwargs):
 
     if username and password:
         url = scheme + '://' + host + ':' + str(port) + path
+        
         basicAuth = base64.encodestring(('%s:%s' % (username,password)).encode()).decode().strip()
         # basicAuth = encodestring("%s:%s" % (username, password))
         authHeader = "Basic " + basicAuth.strip()
@@ -363,9 +363,22 @@ class EcmInfoScreenNew(Screen):
         self.onHide.append(self._onHide)
 
         self.ecmTimer = eTimer()
-        self.ecmTimer.timeout.get().append(self.parseEcmInfo)
-        self.hideTimer = eTimer()
-        self.hideTimer.timeout.get().append(self.hide)
+        if os.path.isfile('/var/lib/dpkg/status'):
+            self.ecmTimer_conn = self.ecmTimer.timeout.connect(self.parseEcmInfo)
+        else:
+            self.ecmTimer.callback.append(self.parseEcmInfo)
+        self.ecmTimer.start(200, 1)
+        
+        self.ecmTimer = eTimer()
+        if os.path.isfile('/var/lib/dpkg/status'):
+            self.hideTimer_conn = self.hideTimer.timeout.connect(self.hide)
+        else:
+            self.hideTimer.callback.append(self.hide)
+        self.hideTimer.start(200, 1)
+        # self.ecmTimer = eTimer()
+        # self.ecmTimer.timeout.get().append(self.parseEcmInfo)
+        # self.hideTimer = eTimer()
+        # self.hideTimer.timeout.get().append(self.hide)
         self.change = False
         self.onShow.append(self.movePosition)
 
@@ -691,10 +704,15 @@ class EcmInfoPositioner(Screen):
             "ok": self.ok,
             "cancel": self.exit
         }, -1)
-
-        self.moveTimer = eTimer()
-        self.moveTimer.timeout.get().append(self.movePosition)
+        self.ecmTimer = eTimer()
+        if os.path.isfile('/var/lib/dpkg/status'):
+            self.moveTimer_conn = self.moveTimer.timeout.connect(self.movePosition)
+        else:
+            self.moveTimer.callback.append(self.movePosition)
         self.moveTimer.start(50, 1)
+        # self.moveTimer = eTimer()
+        # self.moveTimer.timeout.get().append(self.movePosition)
+        # self.moveTimer.start(50, 1)
 
     def createLabels(self):
         for x in SYSTEMS:

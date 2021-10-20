@@ -65,9 +65,7 @@ FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 # FTP_XML = base64.b64decode(datax)
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 # FTP_CFG = base64.b64decode(datacfg)
-DESKHEIGHT     = getDesktop(0).size().height()
 HD             = getDesktop(0).size()
-# skin_path      = plugin_path
 iconpic        = plugin_path+ '/logo.png'
 keys           = '/usr/keys'
 camscript = '/usr/camscript'
@@ -323,21 +321,23 @@ class tvManager(Screen):
         self.currCam = self.readCurrent()
 #---------
         self.BlueAction = SOFTCAM
-        self.setBlueKey()
+        # self.setBlueKey()
 #---------
         self.timer = eTimer()
-        if os.path.isfile('/var/lib/dpkg/status'):
+        # if os.path.isfile('/var/lib/dpkg/status'):
+        try:
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
-        else:
+        except:
             self.timer.callback.append(self.cgdesc)
-        self.timer.start(200, 1)
+        self.timer.start(500, 1)
         self.readScripts()
         self.EcmInfoPollTimer = eTimer()
-        if os.path.isfile('/var/lib/dpkg/status'):
+        # if os.path.isfile('/var/lib/dpkg/status'):
+        try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
-        else:
+        except:
             self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
-        self.EcmInfoPollTimer.start(100)
+        self.EcmInfoPollTimer.start(200)
         self.onShown.append(self.ecm)
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
@@ -348,11 +348,13 @@ class tvManager(Screen):
         if self.currCam is not None:
             print('self.currCam: ', self.currCam)
             if 'ccam' in self.currCam.lower():
-                self.BlueAction = CCCAMINFO
-                self["key_blue"].setText(_("CCcamInfo"))
+                if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                    self.BlueAction = CCCAMINFO
+                    self["key_blue"].setText(_("CCcamInfo"))    
             elif 'oscam' in self.currCam.lower():
-                self.BlueAction = OSCAMINFO
-                self["key_blue"].setText(_("OscamInfo"))
+                if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                    self.BlueAction = OSCAMINFO
+                    self["key_blue"].setText(_("OscamInfo"))
             else:
                 self.BlueAction = SOFTCAM
                 self["key_blue"].setText(_("SOFTCAM"))
@@ -365,8 +367,8 @@ class tvManager(Screen):
 
     def Blue(self):
         if self.BlueAction == CCCAMINFO:
-            if os.path.isfile(data_path +"/CCcamInfo.py"):
-                from Plugins.Extensions.tvManager.data.CCcamInfo import CCcamInfoMain
+            if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
                 self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
             # self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
         elif self.BlueAction == OSCAMINFO:
@@ -380,9 +382,8 @@ class tvManager(Screen):
 
     def cccam(self):
         if 'ccam' in self.currCam.lower()and self.currCam != 'no':
-            # if fileExists (resolveFilename(data_path, "/CCcamInfo.pyo")):
-            if os.path.isfile(data_path +"/CCcamInfo.py"):
-                from Plugins.Extensions.tvManager.data.CCcamInfo import CCcamInfoMain
+            if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
                 self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
 
     def oscam(self):
@@ -406,28 +407,22 @@ class tvManager(Screen):
         else:
             self.ecm()
 
-    def ecm(self):
-        try:
-            if os.path.isfile('/tmp/ecm.info') is True:
-                myfile = file('/tmp/ecm.info')
-                self['info'].setText(open(myfile, 'r').read())
-        except:
-            self['info'].setText(_('No ecm info'))
-        self.EcmInfoPollTimer.start(5000, True)
 
-    # def ecm(self):
-        # ecmf = ''
-        # if os.path.isfile('/tmp/ecm.info') is True:
-            # myfile = file('/tmp/ecm.info')
-            # # ecmf = ''
-            # for line in myfile.readlines():
-                # print('line: ', line)
-                # ecmf = ecmf + line
-                # print('ecmf + line: ', ecmf)
-            # self['info'].setText(ecmf)
-        # else:
-            # self['info'].setText(ecmf)
-        # self.EcmInfoPollTimer.start(5000, True)
+    def ecm(self):
+        ecmf = ''
+        try:
+            if os.path.isfile('/tmp/ecm.info'): # is True:
+                myfile = file('/tmp/ecm.info')
+                # ecmf = ''
+                for line in myfile.readlines():
+                    print('line: ', line)
+                    ecmf = ecmf + line
+                    print('ecmf + line: ', ecmf)
+                    self['info'].setText(ecmf)
+        except:
+            ecmf = 'No data'
+            self['info'].setText(ecmf)
+        self.EcmInfoPollTimer.start(500, True)
 
     def stopEcmInfoPollTimer(self):
         self.EcmInfoPollTimer.stop()
@@ -476,15 +471,15 @@ class tvManager(Screen):
 
     def action(self):
         self.session.nav.playService(None)
-        last = self.getLastIndex()
+        self.last = self.getLastIndex()
         var = self['list'].getSelectionIndex()
-        if last > -1:
-            if last == var:
+        if self.last > -1:
+            if self.last == var:
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[var][0] + '.sh' + ' cam_res &'
                 os.system(self.cmd1)
                 os.system('sleep 1')
             else:
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[last][0] + '.sh' + ' cam_down &'
+                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
                 os.system(self.cmd1)
                 os.system('sleep 1')
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[var][0] + '.sh' + ' cam_up &'
@@ -497,7 +492,7 @@ class tvManager(Screen):
             except:
                 self.close()
 
-        if last != var:
+        if self.last != var:
             try:
                 self.currCam = self.softcamslist[var][0]
                 self.writeFile()
@@ -517,15 +512,15 @@ class tvManager(Screen):
         stcam = open('/etc/startcam.sh', 'w')
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
-        self.cmd2 = 'chmod 755 /etc/startcam.sh &'
-        os.system(self.cmd2)
+        os.system('chmod 755 /etc/startcam.sh &')
         return
 
     def stop(self):
         self.session.nav.playService(None)
-        last = self.getLastIndex()
-        if last > -1:
-            self.cmd1 = '/usr/camscript/' + self.softcamslist[last][0] + '.sh' + ' cam_down &'
+        # last = self.getLastIndex()
+        # self.cmd1 = ''
+        if self.last > -1:
+            self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
             os.system(self.cmd1)
         else:
             return
@@ -611,7 +606,7 @@ class tvManager(Screen):
         self.autoclean()
         alist = open('/etc/autocam.txt', 'a')
         alist.write(self.oldService.toString() + '\n')
-        last = self.getLastIndex()
+        self.last = self.getLastIndex()
         alist.write(current + '\n')
         alist.close()
         self.session.openWithCallback(self.callback, MessageBox, _('Autocam assigned to the current channel'), type=1, timeout=10)
@@ -984,6 +979,7 @@ class Ipkremove(Screen):
         self['text'].number(number)
 
 
+#######################end
 def startConfig(session, **kwargs):
     session.open(tvManager)
 
@@ -1002,19 +998,25 @@ def autostart(reason, session=None, **kwargs):
     "called with reason=1 to during shutdown, with reason=0 at startup?"
     print("[Softcam] Started")
     if reason == 0:
-        try:
-            os.system("mv /usr/bin/dccamd /usr/bin/dccamdOrig &")
-            os.system("ln -sf /usr/bin /var/bin")
-            os.system("ln -sf /usr/keys /var/keys")
-            os.system("ln -sf /usr/scce /var/scce")
-            os.system("ln -sf /usr/camscript /var/camscript")
-            os.system("sleep 2")
-            os.system("/etc/startcam.sh &")
-            os.system('sleep 2')
-        except:
+        print('reason 0')
+        if session is not None:
+            print('session none')
+            try:
+                os.system("mv /usr/bin/dccamd /usr/bin/dccamdOrig &")
+                os.system("ln -sf /usr/bin /var/bin")
+                os.system("ln -sf /usr/keys /var/keys")
+                os.system("ln -sf /usr/scce /var/scce")
+                os.system("ln -sf /usr/camscript /var/camscript")
+                os.system("sleep 2")
+                os.system("/etc/startcam.sh &")
+                os.system('sleep 2')
+                print('ok started autostart')
+            except:
+                print('except autostart')
+                pass
+        else:
+            print('pass autostart')
             pass
-    else:
-        pass
 
 def menu(menuid, **kwargs):
     if menuid == 'cam':
@@ -1031,18 +1033,20 @@ def StartSetup(menuid):
     if menuid == 'mainmenu':
         return [(name_plug,
           main,
-          'Softcamam Manager',
+          'Softcam Manager',
           44)]
     else:
         return []
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    if not os.path.isfile('/var/lib/dpkg/status'):
+    if HD.width() > 1280:
         iconpic = plugin_path + '/res/pics/logo.png'
 
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
-     PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART], fnc=autostart),
+
+     PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
+     # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART], fnc=autostart),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main)]
 
