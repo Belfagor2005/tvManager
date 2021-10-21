@@ -324,21 +324,21 @@ class tvManager(Screen):
         # self.setBlueKey()
 #---------
         self.timer = eTimer()
-        # if os.path.isfile('/var/lib/dpkg/status'):
         try:
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
         except:
             self.timer.callback.append(self.cgdesc)
         self.timer.start(500, 1)
+        
         self.readScripts()
         self.EcmInfoPollTimer = eTimer()
-        # if os.path.isfile('/var/lib/dpkg/status'):
         try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
         except:
             self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
         self.EcmInfoPollTimer.start(200)
-        self.onShown.append(self.ecm)
+        # self.onShown.append(self.ecm)
+        self.ecm()
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
 #-------------------------------------------------------
@@ -408,21 +408,20 @@ class tvManager(Screen):
             self.ecm()
 
 
+
+
     def ecm(self):
         ecmf = ''
-        try:
-            if os.path.isfile('/tmp/ecm.info'): # is True:
-                myfile = file('/tmp/ecm.info')
-                # ecmf = ''
-                for line in myfile.readlines():
-                    print('line: ', line)
-                    ecmf = ecmf + line
-                    print('ecmf + line: ', ecmf)
-                    self['info'].setText(ecmf)
-        except:
-            ecmf = 'No data'
+        if os.path.isfile('/tmp/ecm.info'): # is True:
+            myfile = open('/tmp/ecm.info')
+
+            for line in myfile.readlines():
+                print('line: ', line)
+                ecmf = ecmf + line
+                print('ecmf + line: ', ecmf)
+                self['info'].setText(ecmf)
+        else:
             self['info'].setText(ecmf)
-        self.EcmInfoPollTimer.start(500, True)
 
     def stopEcmInfoPollTimer(self):
         self.EcmInfoPollTimer.stop()
@@ -517,8 +516,6 @@ class tvManager(Screen):
 
     def stop(self):
         self.session.nav.playService(None)
-        # last = self.getLastIndex()
-        # self.cmd1 = ''
         if self.last > -1:
             self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
             os.system(self.cmd1)
