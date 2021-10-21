@@ -4,7 +4,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     02/08/2021     #
+#     20/010/2021     #
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -34,7 +34,8 @@ from Tools.BoundFunction import boundFunction
 from xml.dom import Node, minidom
 from twisted.web.client import getPage
 from Tools.Directories import *
-from Tools.Directories import fileExists, copyfile , SCOPE_PLUGINS
+from Tools.Directories import fileExists, copyfile
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
 from os import path, listdir, remove, mkdir, chmod, walk
 import base64
@@ -56,27 +57,30 @@ from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlretrieve
 
 global FTP_XML
-currversion      = '1.6'
-title_plug     = '..:: TiVuStream Manager V. %s ::..' % currversion
-name_plug      = 'TiVuStream Softcam Manager'
-plugin_path    = os.path.dirname(sys.modules[__name__].__file__)
-res_plugin_path=plugin_path + '/res/'
+currversion = '1.6'
+title_plug = '..:: TiVuStream Manager V. %s ::..' % currversion
+name_plug = 'TiVuStream Softcam Manager'
+plugin_path = os.path.dirname(sys.modules[__name__].__file__)
+res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
+iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
+data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
+# res_plugin_path=plugin_path + '/res/'
+# iconpic        = plugin_path+ '/logo.png'
+# data_path      = plugin_path + '/data'
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 # FTP_XML = base64.b64decode(datax)
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 # FTP_CFG = base64.b64decode(datacfg)
-HD             = getDesktop(0).size()
-iconpic        = plugin_path+ '/logo.png'
-keys           = '/usr/keys'
+HD = getDesktop(0).size()
+keys = '/usr/keys'
 camscript = '/usr/camscript'
-data_path      = plugin_path + '/data'
-ECM_INFO       = '/tmp/ecm.info'
+ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
-old_ecm_time   = time.time()
-info           = {}
-ecm            = ''
-data           = EMPTY_ECM_INFO
-SOFTCAM   = 0
+old_ecm_time = time.time()
+info = {}
+ecm = ''
+data = EMPTY_ECM_INFO
+SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
 
@@ -184,15 +188,19 @@ def readCurrent_1():
 #=============== SCREEN PATH SETTING
 HD = getDesktop(0).size()
 if HD.width() > 1280:
-    skin_path=res_plugin_path + 'skins/fhd/'
+    # skin_path=res_plugin_path + 'skins/fhd/'
+    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
 else:
-    skin_path=res_plugin_path + 'skins/hd/'
+    # skin_path=res_plugin_path + 'skins/hd/'
+    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
 if os.path.isfile('/var/lib/dpkg/status'):
     skin_path=skin_path + 'dreamOs/'
 
 def show_list(h):
-    png1 = plugin_path + '/res/img/actcam.png'
-    png2 = plugin_path + '/res/img/defcam.png'
+    png1 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('actcam.png'))
+    png2 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('defcam.png'))
+    # png1 = plugin_path + '/res/img/actcam.png'
+    # png2 = plugin_path + '/res/img/defcam.png'
     cond = readCurrent_1()
     if HD.width() > 1280:
         res = [h]
@@ -215,7 +223,6 @@ def show_list(h):
             res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png2)))
         return res
 
-
 def showlist(datal, list):
     icount = 0
     plist = []
@@ -224,7 +231,6 @@ def showlist(datal, list):
         plist.append(show_list_1(name))
         icount = icount + 1
         list.setList(plist)
-
 
 def show_list_1(h):
     if HD.width() > 1280:
@@ -242,19 +248,19 @@ def getUrl(url):
         # req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         req.add_header('User-Agent',RequestAgent())
         try:
-               response = urlopen(req)
-               link=response.read()
-               response.close()
-               return link
+           response = urlopen(req)
+           link=response.read()
+           response.close()
+           return link
         except:
-               import ssl
-               gcontext = ssl._create_unverified_context()
-               response = urlopen(req, context=gcontext)
-               link=response.read()
-               response.close()
-               return link
-class m2list(MenuList):
+           import ssl
+           gcontext = ssl._create_unverified_context()
+           response = urlopen(req, context=gcontext)
+           link=response.read()
+           response.close()
+           return link
 
+class m2list(MenuList):
     def __init__(self, list):
         MenuList.__init__(self, list, False, eListboxPythonMultiContent)
         self.l.setFont(0, gFont('Regular', 16))
@@ -272,9 +278,6 @@ class m2list(MenuList):
             self.l.setItemHeight(45)
 
 #======================================================
-
-
-
 class tvManager(Screen):
     def __init__(self, session, args = False):
     # def __init__(self, session, args = 0):
@@ -299,10 +302,7 @@ class tvManager(Screen):
          '1': self.cccam,
          '2': self.oscam,
          'menu': self.configtv,
-         # 'blue': self.messagekd,
-#---------
          'blue': self.Blue,
-#---------
          'yellow': self.download,
          'green': self.action,
          'info': self.CfgInfo,
@@ -319,10 +319,7 @@ class tvManager(Screen):
         self['info'] = Label('')
         self['list'] = m2list([])
         self.currCam = self.readCurrent()
-#---------
         self.BlueAction = SOFTCAM
-        # self.setBlueKey()
-#---------
         self.timer = eTimer()
         try:
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
@@ -341,7 +338,7 @@ class tvManager(Screen):
         self.ecm()
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
-#-------------------------------------------------------
+
     def setBlueKey(self):
         if  self.currCam == 'no':
             self["key_blue"].setText(_("Softcam"))
@@ -391,7 +388,7 @@ class tvManager(Screen):
             if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                 from Plugins.Extensions.OscamStatus.plugin  import OscamStatus
                 self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
-#--------------------------------------------------------
+
     def tvPanel(self):
         if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/tvaddon'):
             from Plugins.Extensions.tvaddon.plugin import Hometv
@@ -406,9 +403,6 @@ class tvManager(Screen):
             self['info'].setText(''.join(ecmInfo))
         else:
             self.ecm()
-
-
-
 
     def ecm(self):
         ecmf = ''
@@ -490,7 +484,6 @@ class tvManager(Screen):
                 os.system('sleep 1')
             except:
                 self.close()
-
         if self.last != var:
             try:
                 self.currCam = self.softcamslist[var][0]
@@ -538,7 +531,6 @@ class tvManager(Screen):
         for root, dirs, files in os.walk(path):
             for name in files:
                 scriptlist.append(name)
-
         self.emulist = scriptlist
         i = len(self.softcamslist)
         del self.softcamslist[0:i]
@@ -559,7 +551,6 @@ class tvManager(Screen):
                         self.softcamslist.append(show_list(nam))
                         self.index += 1
                     pliste.append(nam)
-
             sfile.close()
             self['list'].l.setList(self.softcamslist)
             self.namelist = pliste
@@ -666,13 +657,12 @@ class GetipklistTv(Screen):
 
     def get_list(self):
         self.timer = eTimer()
-        # if not os.path.isfile('/var/lib/dpkg/status'):
         if os.path.isfile('/var/lib/dpkg/status'):
             self.timer_conn = self.timer.timeout.connect(self.downloadxmlpage)
-
         else:
             self.timer.callback.append(self.downloadxmlpage)
         self.timer.start(200, 1)
+        
     def downloadxmlpage(self):
         url = str(FTP_XML)
         if six.PY3:
@@ -702,7 +692,6 @@ class GetipklistTv(Screen):
             for plugins in self.xmlparse.getElementsByTagName('plugins'):
                 namex = checkStr(plugins.getAttribute('cont'))
                 self.names.append(namex)
-                # self.names.append(plugins.getAttribute('cont')) #.encode('utf8'))
             self['desc2'].setText(_('PLEASE SELECT...'))
             showlist(self.names, self['text'])
             self.downloading = True
@@ -749,13 +738,11 @@ class GetipkTv(Screen):
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
-
         self['actions'] = ActionMap(['SetupActions'], {'ok': self.message,
          'cancel': self.close}, -1)
 
     def message(self):
         self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
-
 
     def selclicked(self, result):
         inx = self['text'].getSelectionIndex()
@@ -778,49 +765,45 @@ class GetipkTv(Screen):
             return
 
     def prombt(self, com, dom):
-
         try:
-                useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
-                # com = getUrl(com)
-                self.com = str(com)
-                self.dom = str(dom)
-                print('self.com---------------', self.com)
-                print('self.dom---------------', self.dom)
-                # self.dom = dom
-                # self.com = com
-                ipkpth = '/var/volatile/tmp'
-                destipk = ipkpth + '/download.ipk'
-                desttar = ipkpth + '/download.tar.gz'
-                destdeb = ipkpth + '/download.deb'
-                self.timer = eTimer()
-                self.timer.start(1500, 1)
-                if self.com.find('.ipk') != -1:
-                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk))
-                    # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
-                    cmd0 = 'opkg install --force-overwrite ' + destipk #self.com #dest
-                    self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
-
-                if self.com.find('.tar.gz') != -1:
-                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, desttar) )
-                    # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
-                    cmd0 = 'tar -xzvf ' + desttar + ' -C /'
-                    self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
-
-                if self.com.find('.deb') != -1:
-                    if os.path.isfile('/var/lib/dpkg/status'):
-                        os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
-                        cmd0 = 'dpkg -i ' + destdeb
-                        # cmd0 = 'dpkg -i ' + self.com
-                        self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
-                    else:
-                         self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+            useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
+            # com = getUrl(com)
+            self.com = str(com)
+            self.dom = str(dom)
+            print('self.com---------------', self.com)
+            print('self.dom---------------', self.dom)
+            # self.dom = dom
+            # self.com = com
+            ipkpth = '/var/volatile/tmp'
+            destipk = ipkpth + '/download.ipk'
+            desttar = ipkpth + '/download.tar.gz'
+            destdeb = ipkpth + '/download.deb'
+            self.timer = eTimer()
+            self.timer.start(1500, 1)
+            if self.com.find('.ipk') != -1:
+                os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk))
+                # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
+                cmd0 = 'opkg install --force-overwrite ' + destipk #self.com #dest
+                self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
+            if self.com.find('.tar.gz') != -1:
+                os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, desttar) )
+                # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
+                cmd0 = 'tar -xzvf ' + desttar + ' -C /'
+                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
+            if self.com.find('.deb') != -1:
+                if os.path.isfile('/var/lib/dpkg/status'):
+                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
+                    cmd0 = 'dpkg -i ' + destdeb
+                    # cmd0 = 'dpkg -i ' + self.com
+                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
+                else:
+                     self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
             return
 
 
 class InfoCfg(Screen):
-
     def __init__(self, session):
         self.session = session
         skin = skin_path + '/InfoCfg.xml'
@@ -851,7 +834,7 @@ class InfoCfg(Screen):
         self.onShown.append(self.updateList)
 
     def getcont(self):
-        cont = "Config Softcam Manager' :\n\n"
+        cont = "Config Softcam Manager' :\n"
         cont += "cccam_221\n"
         cont += "/etc/cccam.cfg\n"
         cont += "cccam_230\n"
@@ -871,12 +854,9 @@ class InfoCfg(Screen):
     def updateList(self):
         self["text"].setText(self.getcont())
 
-
 class Ipkremove(Screen):
-
     def __init__(self, session, args = None):
         Screen.__init__(self, session)
-
         self['list'] = FileList('/', matchingPattern='^.*\\.(png|avi|mp3|mpeg|ts)')
         self['pixmap'] = Pixmap()
         self['text'] = Input('1234', maxSize=True, type=Input.NUMBER)
@@ -907,7 +887,6 @@ class Ipkremove(Screen):
                 data[icount] = (_(line), '')
                 ebuf.append(data[icount])
                 icount = icount + 1
-
             myfile.close()
             ipkres = self.session.openWithCallback(self.test2, ChoiceBox, title='Please select ipkg to remove', list=ebuf)
             self.close()
@@ -975,11 +954,8 @@ class Ipkremove(Screen):
         print('pressed', number)
         self['text'].number(number)
 
-
-#######################end
 def startConfig(session, **kwargs):
     session.open(tvManager)
-
 
 def mainmenu(menuid):
     if menuid != 'setup':
@@ -989,7 +965,6 @@ def mainmenu(menuid):
           startConfig,
           'Softcam Manager',
           None)]
-
 
 def autostart(reason, session=None, **kwargs):
     "called with reason=1 to during shutdown, with reason=0 at startup?"
@@ -1038,10 +1013,9 @@ def StartSetup(menuid):
 def Plugins(**kwargs):
     iconpic = 'logo.png'
     if HD.width() > 1280:
-        iconpic = plugin_path + '/res/pics/logo.png'
-
+        # iconpic = plugin_path + '/res/pics/logo.png'
+        iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
-
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
      # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART], fnc=autostart),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),

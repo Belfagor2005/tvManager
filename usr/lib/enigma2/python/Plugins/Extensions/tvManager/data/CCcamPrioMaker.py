@@ -100,9 +100,10 @@ class CCPrioMaker(Screen):
 		# self.ecmTimer.timeout.get().append(self.parseEcmInfo)
         
         self.ecmTimer = eTimer()
-        if os.path.isfile('/var/lib/dpkg/status'):
+        # if os.path.isfile('/var/lib/dpkg/status'):
+        try:
             self.hideTimer_conn = self.hideTimer.timeout.connect(self.parseEcmInfo)
-        else:
+        except:
             self.hideTimer.callback.append(self.parseEcmInfo)
         self.hideTimer.start(200, 1)
 

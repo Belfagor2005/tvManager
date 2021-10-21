@@ -13,6 +13,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists, copyfile
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from enigma import *
 from enigma import getDesktop
 from os import path, listdir, remove, mkdir, chmod, sys, walk
@@ -31,19 +32,20 @@ from six.moves.urllib.request import urlopen
 from six.moves.urllib.request import Request
 from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlretrieve
-# plugin_path  = os.path.dirname(sys.modules[__name__].__file__)
-plugin_path = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
-name_plug        = 'TiVuStream Softcam Manager'
-data_path    = plugin_path + '/data/'
+# plugin_path = os.path.dirname(sys.modules[__name__].__file__)
+# iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
+# plugin_path = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
+# name_plug        = 'TiVuStream Softcam Manager'
+# data_path    = plugin_path + '/data/'
+name_plug = 'TiVuStream Softcam Manager'
+plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
+data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
 skin_path    = plugin_path
-HD           = getDesktop(0).size()
 
 try:
     import http.cookiejar
 except:
     import cookielib
-
-
 try:
     _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:
@@ -145,12 +147,15 @@ def getUrl(url):
         return
     return
 
+HD = getDesktop(0).size()
 if HD.width() > 1280:
-    skin_path = plugin_path + '/res/skins/fhd'
+    # skin_path=res_plugin_path + 'skins/fhd/'
+    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
 else:
-    skin_path = plugin_path + '/res/skins/hd'
-if os.path.exists('/var/lib/dpkg/status'):
-    skin_path = skin_path + '/dreamOs'
+    # skin_path=res_plugin_path + 'skins/hd/'
+    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
+if os.path.isfile('/var/lib/dpkg/status'):
+    skin_path=skin_path + 'dreamOs/'
 
 #============='<h1>C: (.*?) (.*?) (.*?) (.*?)\n'======================
 Link1 = 'http://cccamsupreme.com/cccamfree/get.php'
