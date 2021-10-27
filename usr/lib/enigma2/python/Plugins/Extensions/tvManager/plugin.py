@@ -4,7 +4,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     20/010/2021     #
+#     23/10/2021     #
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -16,33 +16,34 @@ from Components.MenuList import MenuList
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaTest
 from Components.Pixmap import Pixmap
 from Components.PluginComponent import plugins
-from Components.ScrollLabel import ScrollLabel
+# from Components.ScrollLabel import ScrollLabel
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
-from enigma import *
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Console import Console
 from Screens.MessageBox import MessageBox
+from Screens.PluginBrowser import PluginBrowser
 from Screens.Screen import Screen
 from Screens.Standby import TryQuitMainloop
-from Screens.PluginBrowser import PluginBrowser
 from ServiceReference import ServiceReference
-from skin import loadSkin
 from Tools import Notifications
 from Tools.BoundFunction import boundFunction
-from xml.dom import Node, minidom
-from twisted.web.client import getPage
 from Tools.Directories import *
 from Tools.Directories import fileExists, copyfile
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
+from enigma import *
 from os import path, listdir, remove, mkdir, chmod, walk
+# from skin import loadSkin
+from twisted.web.client import getPage
+from xml.dom import Node, minidom
 import base64
 import os, sys, time, re
 import ssl
 import glob
 import six
+from time import sleep
 from random import choice
 from enigma import getDesktop, gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
 from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
@@ -57,20 +58,16 @@ from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlretrieve
 
 global FTP_XML
-currversion = '1.6'
-title_plug = '..:: TiVuStream Manager V. %s ::..' % currversion
+currversion = '1.7'
 name_plug = 'TiVuStream Softcam Manager'
+title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
+
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
 iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
-# res_plugin_path=plugin_path + '/res/'
-# iconpic        = plugin_path+ '/logo.png'
-# data_path      = plugin_path + '/data'
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-# FTP_XML = base64.b64decode(datax)
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
-# FTP_CFG = base64.b64decode(datacfg)
 HD = getDesktop(0).size()
 keys = '/usr/keys'
 camscript = '/usr/camscript'
@@ -188,10 +185,8 @@ def readCurrent_1():
 #=============== SCREEN PATH SETTING
 HD = getDesktop(0).size()
 if HD.width() > 1280:
-    # skin_path=res_plugin_path + 'skins/fhd/'
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
 else:
-    # skin_path=res_plugin_path + 'skins/hd/'
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
 if os.path.isfile('/var/lib/dpkg/status'):
     skin_path=skin_path + 'dreamOs/'
@@ -199,8 +194,6 @@ if os.path.isfile('/var/lib/dpkg/status'):
 def show_list(h):
     png1 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('actcam.png'))
     png2 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('defcam.png'))
-    # png1 = plugin_path + '/res/img/actcam.png'
-    # png2 = plugin_path + '/res/img/defcam.png'
     cond = readCurrent_1()
     if HD.width() > 1280:
         res = [h]
@@ -291,7 +284,11 @@ class tvManager(Screen):
         self.emulist = []
         self.namelist = []
         self.softcamslist = []
-        self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
+        self.ecminfo = GetEcmInfo()
+        try:
+            self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
+        except:
+            self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
         self['actions'] = ActionMap(['OkCancelActions',
          'ColorActions',
          'SetupActions',
@@ -319,6 +316,7 @@ class tvManager(Screen):
         self['info'] = Label('')
         self['list'] = m2list([])
         self.currCam = self.readCurrent()
+        self.readScripts()
         self.BlueAction = SOFTCAM
         self.timer = eTimer()
         try:
@@ -326,16 +324,13 @@ class tvManager(Screen):
         except:
             self.timer.callback.append(self.cgdesc)
         self.timer.start(500, 1)
-        
-        self.readScripts()
         self.EcmInfoPollTimer = eTimer()
         try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
         except:
             self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
         self.EcmInfoPollTimer.start(200)
-        # self.onShown.append(self.ecm)
-        self.ecm()
+        self.onShown.append(self.ecm)
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
 
@@ -347,7 +342,7 @@ class tvManager(Screen):
             if 'ccam' in self.currCam.lower():
                 if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                     self.BlueAction = CCCAMINFO
-                    self["key_blue"].setText(_("CCcamInfo"))    
+                    self["key_blue"].setText(_("CCcamInfo"))
             elif 'oscam' in self.currCam.lower():
                 if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                     self.BlueAction = OSCAMINFO
@@ -367,12 +362,10 @@ class tvManager(Screen):
             if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                 from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
                 self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
-            # self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
         elif self.BlueAction == OSCAMINFO:
             if os.path.exists (resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                 from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                 self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
-            # self.session.openWithCallback(self.ShowSoftcamCallback, OscamInfoMenu)
         else:
             self.BlueAction == SOFTCAM
             self.messagekd()
@@ -408,7 +401,6 @@ class tvManager(Screen):
         ecmf = ''
         if os.path.isfile('/tmp/ecm.info'): # is True:
             myfile = open('/tmp/ecm.info')
-
             for line in myfile.readlines():
                 print('line: ', line)
                 ecmf = ecmf + line
@@ -419,6 +411,7 @@ class tvManager(Screen):
 
     def stopEcmInfoPollTimer(self):
         self.EcmInfoPollTimer.stop()
+        return
 
     def messagekd(self):
         self.session.openWithCallback(self.keysdownload, MessageBox, _('Update SoftcamKeys from google search?'), MessageBox.TYPE_YESNO)
@@ -463,37 +456,49 @@ class tvManager(Screen):
         return -1
 
     def action(self):
-        self.session.nav.playService(None)
+        self.session.nav.stopService()
+        msg = []
         self.last = self.getLastIndex()
-        var = self['list'].getSelectionIndex()
+        self.var = self['list'].getSelectionIndex()
         if self.last > -1:
-            if self.last == var:
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[var][0] + '.sh' + ' cam_res &'
+            if self.last == self.var:
+                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
+                msg.append(_("RESTART CAM "))
                 os.system(self.cmd1)
-                os.system('sleep 1')
+                sleep(1)
             else:
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+                msg.append(_("STOP & RESTART CAM "))
                 os.system(self.cmd1)
-                os.system('sleep 1')
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[var][0] + '.sh' + ' cam_up &'
+                sleep(1)
+                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
                 os.system(self.cmd1)
         else:
             try:
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[var][0] + '.sh' + ' cam_up &'
+                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
+                msg.append(_("UP CAM 2"))
                 os.system(self.cmd1)
-                os.system('sleep 1')
+                sleep(1)
             except:
                 self.close()
-        if self.last != var:
+        if self.last != self.var:
             try:
-                self.currCam = self.softcamslist[var][0]
+                self.currCam = self.softcamslist[self.var][0]
                 self.writeFile()
             except:
                 self.close()
-
-        self.readScripts()
-
+        msg = (" %s " % _("and")).join(msg)
+        self.mbox = self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
+        # self.session.nav.playService(self.oldService, adjust=False)
         self.session.nav.playService(self.oldService)
+        
+        self.EcmInfoPollTimer = eTimer()
+        try:
+            self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
+        except:
+            self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
+        self.EcmInfoPollTimer.start(200)
+        self.readScripts()
         return
 
     def writeFile(self):
@@ -508,18 +513,23 @@ class tvManager(Screen):
         return
 
     def stop(self):
-        self.session.nav.playService(None)
-        if self.last > -1:
-            self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+        self.EcmInfoPollTimer.stop()
+        last = self.getLastIndex()
+        if last > -1:
+            self.cmd1 = '/usr/camscript/' + self.softcamslist[last][0] + ' cam_down &'
             os.system(self.cmd1)
         else:
             return
         self.currCam = 'no'
         self.writeFile()
-        os.system('sleep 1')
+        sleep(1)
+        self['info'].setText('CAM STOPPED')
+        try:
+            self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
+        except:
+            self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
+        self.session.nav.stopService()
         self.readScripts()
-        self['info'].setText(' ')
-        self.session.nav.playService(self.oldService)
         return
 
     def readScripts(self):
@@ -554,7 +564,6 @@ class tvManager(Screen):
             sfile.close()
             self['list'].l.setList(self.softcamslist)
             self.namelist = pliste
-        self.setBlueKey()
         return
 
     def readCurrent(self):
@@ -662,7 +671,7 @@ class GetipklistTv(Screen):
         else:
             self.timer.callback.append(self.downloadxmlpage)
         self.timer.start(200, 1)
-        
+
     def downloadxmlpage(self):
         url = str(FTP_XML)
         if six.PY3:
@@ -675,10 +684,10 @@ class GetipklistTv(Screen):
         self['desc2'].setText(_('Try again later ...'))
         self.downloading = False
 
-    def _gotPageLoad(self, data):
-        self.xml = str(data)
+    def _gotPageLoad(self, result):
+        self.xml = str(result)
         if six.PY3:
-            self.xml = six.ensure_str(data)
+            self.xml = six.ensure_str(result)
         self.data = []
         self.names = []
         icount = 0
@@ -800,8 +809,17 @@ class GetipkTv(Screen):
                      self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
+            self.addondel()
             return
 
+    def addondel(self):
+        files = glob.glob('/var/volatile/tmp/download.*', recursive=True)
+        for f in files:
+            try:
+                os.remove(f)
+            except OSError as e:
+                print("Error: %s : %s" % (f, e.strerror))
+        self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
 
 class InfoCfg(Screen):
     def __init__(self, session):
@@ -880,12 +898,12 @@ class Ipkremove(Screen):
         try:
             myfile = open('/var/lib/opkg/status', 'r+')
             icount = 0
-            data = []
+            listc = []
             ebuf = []
             for line in myfile:
-                data.append(icount)
-                data[icount] = (_(line), '')
-                ebuf.append(data[icount])
+                listc.append(icount)
+                listc[icount] = (_(line), '')
+                ebuf.append(listc[icount])
                 icount = icount + 1
             myfile.close()
             ipkres = self.session.openWithCallback(self.test2, ChoiceBox, title='Please select ipkg to remove', list=ebuf)
@@ -1013,11 +1031,9 @@ def StartSetup(menuid):
 def Plugins(**kwargs):
     iconpic = 'logo.png'
     if HD.width() > 1280:
-        # iconpic = plugin_path + '/res/pics/logo.png'
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
-     # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART], fnc=autostart),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main)]
 
