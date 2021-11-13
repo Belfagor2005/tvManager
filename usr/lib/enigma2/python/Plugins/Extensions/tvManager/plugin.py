@@ -238,7 +238,6 @@ def getUrl(url):
         link = []
         print(  "Here in getUrl url =", url)
         req = Request(url)
-        # req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         req.add_header('User-Agent',RequestAgent())
         try:
            response = urlopen(req)
@@ -307,7 +306,6 @@ class tvManager(Screen):
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start'))
-        # self['key_green2'] = Button(_('ReStart'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
         self['key_blue'] = Button(_('Softcam'))
@@ -421,7 +419,7 @@ class tvManager(Screen):
             script = ('%s/auto' % plugin_path)
             from os import access, X_OK, chmod
             if not access(script, X_OK):
-                chmod(script, 0o0755)
+                chmod(script, 493)
             self.prombt('sh %s' % script)
 
     def prombt(self, com):
@@ -491,7 +489,7 @@ class tvManager(Screen):
         self.mbox = self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
         # self.session.nav.playService(self.oldService, adjust=False)
         self.session.nav.playService(self.oldService)
-        
+
         self.EcmInfoPollTimer = eTimer()
         try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
@@ -701,6 +699,7 @@ class GetipklistTv(Screen):
             for plugins in self.xmlparse.getElementsByTagName('plugins'):
                 namex = checkStr(plugins.getAttribute('cont'))
                 self.names.append(namex)
+                self.names.sort()
             self['desc2'].setText(_('PLEASE SELECT...'))
             showlist(self.names, self['text'])
             self.downloading = True
@@ -731,10 +730,17 @@ class GetipkTv(Screen):
         self['text'] = m2list([])
         self.list = []
         for plugins in self.xmlparse.getElementsByTagName('plugins'):
-            # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
-            if str(plugins.getAttribute('cont')) == self.selection:
+            # # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
+            namex = checkStr(plugins.getAttribute('cont'))
+            namex = namex.replace('_',' ')
+            if str(namex) == self.selection:                                          
+            # if str(plugins.getAttribute('cont')) == self.selection:
                 for plugin in plugins.getElementsByTagName('plugin'):
-                    self.list.append(plugin.getAttribute('name'))
+                    pluginname = plugin.getAttribute('name')
+                    pluginname = checkStr(pluginname)
+                    self.list.append(pluginname)
+                    self.list.sort()
+                    # self.list.append(plugin.getAttribute('name'))
                     # self.list.append(plugin.getAttribute('name').encode('utf8'))
         showlist(self.list, self['text'])
         self.setTitle(_(title_plug))
@@ -743,7 +749,7 @@ class GetipkTv(Screen):
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
-        self["key_blue"] = Button(_(''))
+        self['key_blue'] = Button(_(''))
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
@@ -761,14 +767,17 @@ class GetipkTv(Screen):
             return
         if result:
             for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                if str(plugins.getAttribute('cont')) == self.selection:
-                # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
+                namex = checkStr(plugins.getAttribute('cont'))
+                namex = namex.replace('_',' ')
+                if str(namex) == self.selection:
+                # if str(plugins.getAttribute('cont')) == self.selection:
+                # # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
                     for plugin in plugins.getElementsByTagName('plugin'):
-                        if plugin.getAttribute('name') == selection_country:
-                        # if plugin.getAttribute('name').encode('utf8') == selection_country:
+                        # if plugin.getAttribute('name') == selection_country:
+                        # # if plugin.getAttribute('name').encode('utf8') == selection_country:
                             urlserver = str(plugin.getElementsByTagName('url')[0].childNodes[0].data)
                             pluginname = plugin.getAttribute('name')
-                            # pluginname = plugin.getAttribute('name').encode('utf8')
+                            pluginname = checkStr(pluginname)
                             self.prombt(urlserver, pluginname)
         else:
             return
@@ -842,7 +851,7 @@ class InfoCfg(Screen):
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
-        self["key_blue"] = Button(_(''))
+        self['key_blue'] = Button(_(''))
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
