@@ -4,7 +4,9 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     23/10/2021     #
+
+#     11/11/2021     #
+
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -19,6 +21,7 @@ from Components.PluginComponent import plugins
 # from Components.ScrollLabel import ScrollLabel
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
+
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Console import Console
@@ -62,6 +65,10 @@ currversion = '1.7'
 name_plug = 'TiVuStream Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 
+                   
+                                                          
+                                     
+                                
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
 iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
@@ -233,6 +240,7 @@ def show_list_1(h):
         res = [h]
         res.append(MultiContentEntryText(pos=(2, 2), size=(660, 30), font=3, text=h, flags=RT_HALIGN_LEFT))
     return res
+
 
 def getUrl(url):
         link = []
@@ -651,24 +659,22 @@ class GetipklistTv(Screen):
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
-        self["key_blue"] = Button(_(''))
+        self['key_blue'] = Button(_(''))
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
         self.addon = 'emu'
         self.icount = 0
         self.downloading = False
-        self['actions'] = ActionMap(['SetupActions', 'ColorActions'], {'ok': self.okClicked,
-         'cancel': self.close}, -1)
-        self.onShown.append(self.get_list)
-
-    def get_list(self):
         self.timer = eTimer()
-        if os.path.isfile('/var/lib/dpkg/status'):
+        if os.path.exists('/var/lib/dpkg/status'):
             self.timer_conn = self.timer.timeout.connect(self.downloadxmlpage)
         else:
             self.timer.callback.append(self.downloadxmlpage)
-        self.timer.start(200, 1)
+        self.timer.start(500, 1)
+        self['actions'] = ActionMap(['SetupActions', 'ColorActions'], {'ok': self.okClicked,
+         'cancel': self.close}, -1)
+        # self.onShown.append(self.get_list)
 
     def downloadxmlpage(self):
         url = str(FTP_XML)
@@ -682,40 +688,34 @@ class GetipklistTv(Screen):
         self['desc2'].setText(_('Try again later ...'))
         self.downloading = False
 
-    def _gotPageLoad(self, result):
-        self.xml = str(result)
+    def _gotPageLoad(self, data):
+        self.xml = str(data)
         if six.PY3:
-            self.xml = six.ensure_str(result)
-        self.data = []
-        self.names = []
-        icount = 0
-        list = []
+            self.xml = six.ensure_str(data)
         try:
-            if self.xml:
-                self.xmlparse = minidom.parseString(self.xml)
-            else:
-                self.downloading = False
-                return
-            for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                namex = checkStr(plugins.getAttribute('cont'))
-                self.names.append(namex)
-                self.names.sort()
-            self['desc2'].setText(_('PLEASE SELECT...'))
-            showlist(self.names, self['text'])
+            # regexC = '<plugins cont = "(.*?)"'
+            regexC = '<plugins cont="(.*?)"'
+            match = re.compile(regexC, re.DOTALL).findall(self.xml)
+            for name in match:
+                # name = name.replace('_',' ').replace('-',' ')
+                name = checkStr(name)
+                self.list.append(name)
+                self['desc2'].setText(_('Please select ...'))
+            showlist(self.list, self['text'])
             self.downloading = True
         except:
-            self.downloading = False
+            pass
 
     def okClicked(self):
-        inx = self['text'].getSelectionIndex()
         if self.downloading == True:
             try:
-                selection = self.names[inx]
-                self.session.open(GetipkTv, self.xmlparse, selection)
+                idx = self["text"].getSelectionIndex()
+                name = self.list[idx]
+                self.session.open(GetipkTv, self.xml, name)
             except:
                 return
         else:
-            return
+            self.close()
 
 class GetipkTv(Screen):
     def __init__(self, session, xmlparse, selection):
@@ -729,20 +729,29 @@ class GetipkTv(Screen):
         self.selection = selection
         self['text'] = m2list([])
         self.list = []
-        for plugins in self.xmlparse.getElementsByTagName('plugins'):
-            # # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
-            namex = checkStr(plugins.getAttribute('cont'))
-            namex = namex.replace('_',' ')
-            if str(namex) == self.selection:                                          
-            # if str(plugins.getAttribute('cont')) == self.selection:
-                for plugin in plugins.getElementsByTagName('plugin'):
-                    pluginname = plugin.getAttribute('name')
-                    pluginname = checkStr(pluginname)
-                    self.list.append(pluginname)
-                    self.list.sort()
-                    # self.list.append(plugin.getAttribute('name'))
-                    # self.list.append(plugin.getAttribute('name').encode('utf8'))
-        showlist(self.list, self['text'])
+        n1 = xmlparse.find(self.selection, 0)
+        n2 = xmlparse.find("</plugins>", n1)
+        data1 = xmlparse[n1:n2]
+        self.names = []
+        self.urls = []
+        items = []
+        # regex = '<plugin name = "(.*?)".*?url>(.*?)</url'
+        regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
+        match = re.compile(regex,re.DOTALL).findall(data1)
+        for name, url in match:
+            name = name.replace('_',' ').replace('-',' ')
+            name = checkStr(name)
+
+            item = name + "###" + url
+            items.append(item)
+        items.sort()
+        for item in items:
+            name = item.split('###')[0]
+            url = item.split('###')[1]
+
+            self.names.append(name)
+            self.urls.append(url)
+        # showlist(self.list, self['text'])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['desc'] = Label(_('Select and Install'))
@@ -755,43 +764,28 @@ class GetipkTv(Screen):
         self['key_blue'].hide()
         self['actions'] = ActionMap(['SetupActions'], {'ok': self.message,
          'cancel': self.close}, -1)
+        self.onLayoutFinish.append(self.start)
+
+    def start(self):
+        showlist(self.names, self['text'])
 
     def message(self):
         self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
 
     def selclicked(self, result):
-        inx = self['text'].getSelectionIndex()
-        try:
-            selection_country = self.list[inx]
-        except:
-            return
         if result:
-            for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                namex = checkStr(plugins.getAttribute('cont'))
-                namex = namex.replace('_',' ')
-                if str(namex) == self.selection:
-                # if str(plugins.getAttribute('cont')) == self.selection:
-                # # if str(plugins.getAttribute('cont').encode('utf8')) == self.selection:
-                    for plugin in plugins.getElementsByTagName('plugin'):
-                        # if plugin.getAttribute('name') == selection_country:
-                        # # if plugin.getAttribute('name').encode('utf8') == selection_country:
-                            urlserver = str(plugin.getElementsByTagName('url')[0].childNodes[0].data)
-                            pluginname = plugin.getAttribute('name')
-                            pluginname = checkStr(pluginname)
-                            self.prombt(urlserver, pluginname)
-        else:
-            return
+            idx = self["text"].getSelectionIndex()
+            dom = self.names[idx]
+            com = self.urls[idx]
+            self.prombt(com, dom)
 
     def prombt(self, com, dom):
         try:
             useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
-            # com = getUrl(com)
             self.com = str(com)
             self.dom = str(dom)
             print('self.com---------------', self.com)
             print('self.dom---------------', self.dom)
-            # self.dom = dom
-            # self.com = com
             ipkpth = '/var/volatile/tmp'
             destipk = ipkpth + '/download.ipk'
             desttar = ipkpth + '/download.tar.gz'
@@ -840,7 +834,7 @@ class InfoCfg(Screen):
         Screen.__init__(self, session)
         info = ''
         self.list = []
-        self['text'] = Label("")
+        self['text'] = Label('')
         self['actions'] = ActionMap(['WizardActions',
          'OkCancelActions',
          'DirectionActions',
