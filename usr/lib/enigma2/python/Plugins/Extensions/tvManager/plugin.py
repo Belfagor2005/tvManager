@@ -21,7 +21,6 @@ from Components.PluginComponent import plugins
 # from Components.ScrollLabel import ScrollLabel
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
-
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Console import Console
@@ -61,14 +60,10 @@ from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlretrieve
 
 global FTP_XML
-currversion = '1.7'
+currversion = '1.8'
 name_plug = 'TiVuStream Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
-
-                   
-                                                          
-                                     
-                                
+                      
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
 iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
@@ -793,16 +788,22 @@ class GetipkTv(Screen):
             self.timer = eTimer()
             self.timer.start(1500, 1)
             if self.com.find('.ipk') != -1:
+                if fileExists(destipk):
+                    os.remove(destipk)              
                 os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk))
                 # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
                 cmd0 = 'opkg install --force-overwrite ' + destipk #self.com #dest
                 self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
             if self.com.find('.tar.gz') != -1:
+                if fileExists(desttar):
+                    os.remove(desttar)                 
                 os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, desttar) )
                 # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
                 cmd0 = 'tar -xzvf ' + desttar + ' -C /'
                 self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
             if self.com.find('.deb') != -1:
+                if fileExists(destdeb):
+                    os.remove(destdeb)                  
                 if os.path.isfile('/var/lib/dpkg/status'):
                     os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
                     cmd0 = 'dpkg -i ' + destdeb
@@ -812,11 +813,11 @@ class GetipkTv(Screen):
                      self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
-            self.addondel()
+            # self.addondel()
             return
 
     def addondel(self):
-        files = glob.glob('/var/volatile/tmp/download.*', recursive=True)
+        files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
         for f in files:
             try:
                 os.remove(f)
