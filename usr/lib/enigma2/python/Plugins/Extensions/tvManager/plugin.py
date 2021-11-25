@@ -152,13 +152,25 @@ def __createdir(list):
                 print('Mkdir Failed', dir)
 
 def checkStr(txt):
-    if six.PY3:
-        if isinstance(txt, type(bytes())):
+    # convert variable to type str both in Python 2 and 3
+    if PY3:
+        # Python 3
+        if type(txt) == type(bytes()):
             txt = txt.decode('utf-8')
     else:
-        if isinstance(txt, type(six.text_type())):
+        #Python 2
+        if type(txt) == type(unicode()):
             txt = txt.encode('utf-8')
     return txt
+
+# def checkStr(txt):
+    # if six.PY3:
+        # if isinstance(txt, type(bytes())):
+            # txt = txt.decode('utf-8')
+    # else:
+        # if isinstance(txt, type(six.text_type())):
+            # txt = txt.encode('utf-8')
+    # return txt
 
 def checkdir():
     if not os.path.exists(keys):
