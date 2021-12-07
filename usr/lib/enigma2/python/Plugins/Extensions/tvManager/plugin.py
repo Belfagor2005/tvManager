@@ -46,17 +46,20 @@ import ssl
 import glob
 import six
 from time import sleep
-from random import choice
-from enigma import getDesktop, gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
+# from random import choice
+from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
 from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
 from sys import version_info
+try:
+    from Plugins.Extensions.tvManager.Utils import *
+except:
+    from . import Utils
 #======================================================
 global active
 active = False
 
 from six.moves.urllib.request import urlopen
 from six.moves.urllib.request import Request
-from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlretrieve
 
 global FTP_XML
@@ -70,7 +73,7 @@ iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
-HD = getDesktop(0).size()
+# HD = getDesktop(0).size()
 keys = '/usr/keys'
 camscript = '/usr/camscript'
 ECM_INFO = '/tmp/ecm.info'
@@ -83,64 +86,6 @@ SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
 
-ListAgent = [
-          'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15',
-          'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14',
-          'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
-          'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13',
-          'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1284.0 Safari/537.13',
-          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.8 (KHTML, like Gecko) Chrome/17.0.940.0 Safari/535.8',
-          'Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1',
-          'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1',
-          'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1',
-          'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2',
-          'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.16) Gecko/20120427 Firefox/15.0a1',
-          'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1',
-          'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:15.0) Gecko/20120910144328 Firefox/15.0.2',
-          'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1',
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:9.0a2) Gecko/20111101 Firefox/9.0a2',
-          'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0a2) Gecko/20110613 Firefox/6.0a2',
-          'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0a2) Gecko/20110612 Firefox/6.0a2',
-          'Mozilla/5.0 (Windows NT 6.1; rv:6.0) Gecko/20110814 Firefox/6.0',
-          'Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0',
-          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
-          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)',
-          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)',
-          'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; InfoPath.2; SV1; .NET CLR 2.0.50727; WOW64)',
-          'Mozilla/4.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)',
-          'Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)',
-          'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0;  it-IT)',
-          'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US)'
-          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; chromeframe/13.0.782.215)',
-          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; chromeframe/11.0.696.57)',
-          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0) chromeframe/10.0.648.205',
-          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.1; SV1; .NET CLR 2.8.52393; WOW64; en-US)',
-          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; chromeframe/11.0.696.57)',
-          'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/4.0; GTB7.4; InfoPath.3; SV1; .NET CLR 3.1.76908; WOW64; en-US)',
-          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)',
-          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)',
-          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; InfoPath.1; SV1; .NET CLR 3.8.36217; WOW64; en-US)',
-          'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
-          'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; it-IT)',
-          'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)',
-          'Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02',
-          'Opera/9.80 (Windows NT 6.1; U; es-ES) Presto/2.9.181 Version/12.00',
-          'Opera/9.80 (Windows NT 5.1; U; zh-sg) Presto/2.9.181 Version/12.00',
-          'Opera/12.0(Windows NT 5.2;U;en)Presto/22.9.168 Version/12.00',
-          'Opera/12.0(Windows NT 5.1;U;en)Presto/22.9.168 Version/12.00',
-          'Mozilla/5.0 (Windows NT 5.1) Gecko/20100101 Firefox/14.0 Opera/12.0',
-          'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25',
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10',
-          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'
-          ]
-
-def RequestAgent():
-    RandomAgent = choice(ListAgent)
-    return RandomAgent
-
 def __createdir(list):
     dir = ''
     for line in list[1:].split('/'):
@@ -150,27 +95,6 @@ def __createdir(list):
                 mkdir(dir)
             except:
                 print('Mkdir Failed', dir)
-
-def checkStr(txt):
-    # convert variable to type str both in Python 2 and 3
-    if PY3:
-        # Python 3
-        if type(txt) == type(bytes()):
-            txt = txt.decode('utf-8')
-    else:
-        #Python 2
-        if type(txt) == type(unicode()):
-            txt = txt.encode('utf-8')
-    return txt
-
-# def checkStr(txt):
-    # if six.PY3:
-        # if isinstance(txt, type(bytes())):
-            # txt = txt.decode('utf-8')
-    # else:
-        # if isinstance(txt, type(six.text_type())):
-            # txt = txt.encode('utf-8')
-    # return txt
 
 def checkdir():
     if not os.path.exists(keys):
@@ -197,19 +121,19 @@ def readCurrent_1():
     return currCam
 
 #=============== SCREEN PATH SETTING
-HD = getDesktop(0).size()
-if HD.width() > 1280:
+# HD = getDesktop(0).size()
+if isFHD():
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
 else:
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
-if os.path.isfile('/var/lib/dpkg/status'):
+if DreamOS():
     skin_path=skin_path + 'dreamOs/'
 
 def show_list(h):
     png1 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('actcam.png'))
     png2 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('defcam.png'))
     cond = readCurrent_1()
-    if HD.width() > 1280:
+    if isFHD():
         res = [h]
         if cond == h:
             active = True
@@ -240,32 +164,13 @@ def showlist(datal, list):
         list.setList(plist)
 
 def show_list_1(h):
-    if HD.width() > 1280:
+    if isFHD():
         res = [h]
         res.append(MultiContentEntryText(pos=(2, 2), size=(670, 40), font=8, text=h, flags=RT_HALIGN_LEFT))
     else:
         res = [h]
         res.append(MultiContentEntryText(pos=(2, 2), size=(660, 30), font=3, text=h, flags=RT_HALIGN_LEFT))
     return res
-
-
-def getUrl(url):
-        link = []
-        print(  "Here in getUrl url =", url)
-        req = Request(url)
-        req.add_header('User-Agent',RequestAgent())
-        try:
-           response = urlopen(req)
-           link=response.read()
-           response.close()
-           return link
-        except:
-           import ssl
-           gcontext = ssl._create_unverified_context()
-           response = urlopen(req, context=gcontext)
-           link=response.read()
-           response.close()
-           return link
 
 class m2list(MenuList):
     def __init__(self, list):
@@ -279,7 +184,7 @@ class m2list(MenuList):
         self.l.setFont(6, gFont('Regular', 30))
         self.l.setFont(7, gFont('Regular', 32))
         self.l.setFont(8, gFont('Regular', 34))
-        if HD.width() > 1280:
+        if isFHD():
             self.l.setItemHeight(50)
         else:
             self.l.setItemHeight(45)
@@ -816,7 +721,7 @@ class GetipkTv(Screen):
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)                  
-                if os.path.isfile('/var/lib/dpkg/status'):
+                if DreamOS():
                     os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
                     cmd0 = 'dpkg -i ' + destdeb
                     # cmd0 = 'dpkg -i ' + self.com
@@ -1033,6 +938,12 @@ def menu(menuid, **kwargs):
     return []
 
 def main(session, **kwargs):
+    try:
+        from Plugins.Extensions.tvManager.Update import upd_done
+        upd_done()
+    except:
+        pass
+        
     session.open(tvManager)
 
 def StartSetup(menuid):
@@ -1046,7 +957,7 @@ def StartSetup(menuid):
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    if HD.width() > 1280:
+    if isFHD():
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
