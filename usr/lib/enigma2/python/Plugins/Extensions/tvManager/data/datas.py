@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-# from __future__ import print_function
+#--------------------#
+#  coded by Lululla  #
+#   skin by MMark    #
+#     02/12/2021     #
+#      No Coppy      #
+#--------------------#
+from __future__ import print_function
 from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigList, ConfigListScreen
 from Components.Label import Label
@@ -8,6 +14,9 @@ from Components.Button import Button
 from Components.ScrollLabel import ScrollLabel
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
+from Components.config import ConfigNumber, ConfigSelection, ConfigYesNo, ConfigText, ConfigSubsection, ConfigPassword
+from Components.config import config, ConfigEnableDisable, KEY_LEFT, KEY_RIGHT, KEY_0
+from Components.config import ConfigInteger, getConfigListEntry
 from Components.config import *
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -15,7 +24,6 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists, copyfile
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from enigma import *
-from enigma import getDesktop
 from os import path, listdir, remove, mkdir, chmod, sys, walk
 import base64
 import os, gettext
@@ -28,19 +36,40 @@ import ssl
 from random import choice
 global skin_path
 import six
-from six.moves.urllib.request import urlopen
-from six.moves.urllib.request import Request
-from six.moves.urllib.error import HTTPError, URLError
-from six.moves.urllib.request import urlretrieve
-# plugin_path = os.path.dirname(sys.modules[__name__].__file__)
-# iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
-# plugin_path = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager'
-# name_plug        = 'TiVuStream Softcam Manager'
-# data_path    = plugin_path + '/data/'
+
+def DreamOS():
+    DreamOS = False
+    if os.path.exists('/var/lib/dpkg/status'):
+        DreamOS = True
+        return DreamOS
+
+PY3 = sys.version_info.major >= 3
+if PY3:
+    # Python 3
+    PY3 = True; unicode = str; unichr = chr; long = int
+    # str = unicode = basestring = str
+    unichr = chr; long = int
+    from urllib.parse import quote
+    from urllib.request import urlopen, urlretrieve
+    from urllib.request import Request
+    from urllib.error import HTTPError, URLError
+
+else:
+    # Python 2
+    _str = str
+    str = unicode
+    range = xrange
+    unicode = unicode
+    basestring = basestring
+    from urllib import quote, urlretrieve
+    from urllib2 import urlopen
+    from urllib2 import Request
+    from urllib2 import HTTPError, URLError
+
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
-skin_path    = plugin_path
+skin_path = plugin_path
 
 try:
     import http.cookiejar
@@ -53,14 +82,22 @@ except AttributeError:
 else:
     ssl._create_default_https_context = _create_unverified_https_context
 
+def getDesktopSize():
+    from enigma import getDesktop
+    s = getDesktop(0).size()
+    return (s.width(), s.height())
+
+def isFHD():
+    desktopSize = getDesktopSize()
+    return desktopSize[0] == 1920
+
 def checkStr(txt):
-    if six.PY3:
+    if PY3:
         if type(txt) == type(bytes()):
             txt = txt.decode('utf-8')
     else:
         if type(txt) == type(unicode()):
             txt = txt.encode('utf-8')
-
     return txt
 
 ListAgent = [
@@ -122,69 +159,90 @@ def RequestAgent():
     return RandomAgent
 
 def getUrl(url):
-    try:
-        import requests
-        link = requests.get(url, headers = {'User-Agent': 'Mozilla/5.0'}).text
-        print('link1: ', link)
-        return link
-    except ImportError:
-        req = Request(url)
+    if sys.version_info.major == 3:
+         import urllib.request as urllib2
+    elif sys.version_info.major == 2:
+         import urllib2
+    req = urllib2.Request(url)                      
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')
+    r = urllib2.urlopen(req, None, 15)
+    link = r.read()
+    r.close()
+    content = link
+    if str(type(content)).find('bytes') != -1:
+        try:
+            content = content.decode("utf-8")                
+        except Exception as e:                   
+               print("Error: %s." % e)   
+    return content
+    
 
-        req.add_header('User-Agent',RequestAgent())
-        response = urlopen(req, None, 3)
-        link = response.read()
-        response.close()
-        print('link2: ', link)
-        return link
-    except:
-        e = URLError #, e:
-        print('We failed to open "%s".' % url)
-        if hasattr(e, 'code'):
-            print('We failed with error code - %s.' % e.code)
-        if hasattr(e, 'reason'):
-            print('We failed to reach a server.')
-            print('Reason: ', e.reason)
-        return
-    return
-
-HD = getDesktop(0).size()
-if HD.width() > 1280:
+if isFHD():
     # skin_path=res_plugin_path + 'skins/fhd/'
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
 else:
     # skin_path=res_plugin_path + 'skins/hd/'
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
-if os.path.isfile('/var/lib/dpkg/status'):
+if DreamOS():
     skin_path=skin_path + 'dreamOs/'
 
-#============='<h1>C: (.*?) (.*?) (.*?) (.*?)\n'======================
-Link1 = 'http://cccamsupreme.com/cccamfree/get.php'
-Link5 = 'http://cccamprima.com/free5/get2.php'
-Link11 = 'http://cccamfrei.com/free/get.php'
-Link8 = 'https://cccamiptv.club/it/free-cccam/'
-Link9 = 'http://cccamgoo.com/free5/get2.php'
-Link2 = 'http://cccamas.com/free/get.php'
-Link3 = 'http://cccamprime.com/cccam48h.php'
-Link4 = 'http://cccam-premium.com/free-cccam/'
-Link6 = 'http://cccamx.com/v2/getCode.php'
-Link7 = 'http://iptvcccam.co/cccamfree/get.php'
-Link10 = 'https://cccamia.com/free-cccam/'
+#============='<h1>C: (.+?) (.+?) (.+?) (.+?)\n'
+Server01 = 'http://cccamprima.com/free5/get2.php'
+Server02 = 'https://cccamas.com/free/get.php'
+Server03 = 'https://cccamazon.com/free/get.php'
+Server04 = 'https://cccamfrei.com/free/get.php'
+#=============
+Server05 = 'https://cccamia.com/free-cccam'
+Server06 = 'http://cccamx.com/v2/getCode.php'
+Server07 = 'https://www.cccambird.com/freecccam.php'
+Server08 = 'https://cccamiptv.club/it/free-cccam'
+Server09 = 'https://www.cccamiptv.club/FREEN12/new0.php'
+Server10 = 'http://cccamstore.tv/free-server.php'
+Server11 = 'https://cccam.net/free'
 
-sessions = []
+Server14 = 'https://www.rogcam.com/newfree.php'
+Server15 = 'https://bosscccam.co/Test.php'
+Server16 = 'https://iptv-15days.blogspot.com'
+
+Server12 = 'http://iptvcccam.co/cccamfree/get.php'
+Server13 = 'https://testcline.com/free-cccam-server.php'
+Server17 = 'http://cccam-premium.com/free-cccam'
+
+
+Serverlive = [
+    (Server01, 'Server01'),
+    (Server02, 'Server02'),
+    (Server03, 'Server03'),
+    (Server04, 'Server04'),
+    (Server05, 'Server05'),
+    (Server06, 'Server06'),
+    (Server07, 'Server07'),
+    (Server08, 'Server08'),
+    (Server09, 'Server09'),
+    (Server10, 'Server10'),
+    (Server11, 'Server11'), 
+    (Server12, 'Server12'),
+    (Server13, 'Server13'),
+    (Server14, 'Server14'),
+    (Server15, 'Server15'), 
+    (Server16, 'Server16'),  
+    (Server17, 'Server17'),      
+]
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
+config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='100.200.300.400'))
-config.plugins.tvmanager.port = NoSave(ConfigNumber(default='15000'))
+config.plugins.tvmanager.port = NoSave(ConfigNumber(default=15000))
 config.plugins.tvmanager.user = NoSave(ConfigText(default='Enter Username', visible_width=50, fixed_size=False))
 # config.plugins.tvmanager.passw = NoSave(ConfigText(default='Enter Password', visible_width=50, fixed_size=False))
 config.plugins.tvmanager.passw = NoSave(ConfigPassword(default='******', fixed_size=False, censor='*'))
-config.plugins.tvmanager.link = NoSave(ConfigSelection(default=Link11, choices=[(Link1, ('Link1')),(Link2, ('Link2')),(Link3, ('Link3')),(Link4, ('Link4')),(Link5, ('Link5')),(Link6, ('Link6')), (Link7, ('Link7')), (Link8, ('Link8')), (Link9, ('Link9')), (Link10, ('Link10')), (Link11, ('Link11'))]))
-#======================================================
-host =          str(config.plugins.tvmanager.hostaddress.value)
-port =          str(config.plugins.tvmanager.port.value)
-user =          str(config.plugins.tvmanager.user.value)
-password =      str(config.plugins.tvmanager.passw.value)
+
+#===================================================
+host = str(config.plugins.tvmanager.hostaddress.value)
+port = str(config.plugins.tvmanager.port.value)
+user = str(config.plugins.tvmanager.user.value)
+password = str(config.plugins.tvmanager.passw.value)
 
 def putlblcfg():
     global rstcfg
@@ -211,7 +269,10 @@ class tv_config(Screen, ConfigListScreen):
         self.skin = f.read()
         f.close()
         Screen.__init__(self, session)
-        self.setup_title = _(name_plug)
+        self.setup_title = (name_plug)
+        self.onChangedEntry = []
+        self.list = []
+        ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
         self['title'] = Label(_(name_plug))
         self['actions'] = ActionMap(['OkCancelActions',
          'DirectionActions',
@@ -238,11 +299,11 @@ class tv_config(Screen, ConfigListScreen):
         self['key_blue'].hide()
         self['info'] = Label('')
         self['description'] = Label('')
-        self.onChangedEntry = []
-        self.list = []
-        ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
         self.createSetup()
-        self.onLayoutFinish.append(self.layoutFinished)
+        # self.onLayoutFinish.append(self.layoutFinished)
+        self.onShown.append(self.layoutFinished)
+        # self.onFirstExecBegin.append(self.layoutFinished)
+        
 
     def closex(self):
         self.close()
@@ -280,11 +341,11 @@ class tv_config(Screen, ConfigListScreen):
                 self.Ncam()
 
     def layoutFinished(self):
-        config.plugins.tvmanager.hostaddress.setValue('100.200.300.400')
-        config.plugins.tvmanager.port.setValue('15000')
-        config.plugins.tvmanager.user.setValue('Enter Username')
-        config.plugins.tvmanager.passw.setValue('Enter Password')
-        config.plugins.tvmanager.link.setValue('Link6')
+        # config.plugins.tvmanager.hostaddress.setValue('100.200.300.400')
+        # config.plugins.tvmanager.port.setValue(str('15000'))
+        # config.plugins.tvmanager.user.setValue('Enter Username')
+        # config.plugins.tvmanager.passw.setValue('Enter Password')
+        # config.plugins.tvmanager.Server.setValue('Server11')
         self.setTitle(self.setup_title)
 
     def createSetup(self):
@@ -293,7 +354,7 @@ class tv_config(Screen, ConfigListScreen):
         self.list.append(getConfigListEntry(_('Activate Insert line in Config File:'), config.plugins.tvmanager.active, _('If Active: Download/Reset Server Config')))
         if config.plugins.tvmanager.active.getValue():
             self.list.append(getConfigListEntry(_('Server Config'), config.plugins.tvmanager.cfgfile, putlbl))
-            self.list.append(getConfigListEntry(_('Server Link'), config.plugins.tvmanager.link, _('Select Get Link')))
+            self.list.append(getConfigListEntry(_('Server Link'), config.plugins.tvmanager.Server, _('Select Get Link')))
             self.list.append(getConfigListEntry(_('Server URL'), config.plugins.tvmanager.hostaddress, _('Server Url i.e. 012.345.678.900')))
             self.list.append(getConfigListEntry(_('Server Port'), config.plugins.tvmanager.port, _('Port')))
             self.list.append(getConfigListEntry(_('Server Username'), config.plugins.tvmanager.user, _('Username')))
@@ -407,32 +468,106 @@ class tv_config(Screen, ConfigListScreen):
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def getcl(self):
-        data = config.plugins.tvmanager.link.value
-        data = getUrl(data)
-        if six.PY3:
-            data = six.ensure_str(data)
-        print('=== Lnk ==== ', data)
-        self.load_getcl(data)
+        data = str(config.plugins.tvmanager.Server.value)
+        print(data)
+        try:
+            data = getUrl(data)
+            if PY3:
+                data = six.ensure_str(data)
+            print('=== Lnk ==== ', data)
+            self.load_getcl(data)
+        except Exception as e:
+            print('getcl error: ', e)
 
     def load_getcl(self, data):
-        url1 = re.findall('<h1>.*?C: (.*?) (.*?) (.*?) (.*?)\n', data)
-        print('===========data=========', url1)
-        if url1 != '':
-            for h, p, u, pw in url1:
-                print(h, p, u, pw)
-                host = checkStr(h)
-                port = checkStr(p)
-                user = checkStr(u)
-                password = checkStr(pw)
-                password = password.replace('</h1>','')
-            # if config.plugins.tvmanager.active.getValue():
-                config.plugins.tvmanager.hostaddress.setValue(host)
-                config.plugins.tvmanager.port.setValue(port)
-                config.plugins.tvmanager.user.setValue(user)
-                config.plugins.tvmanager.passw.setValue(password)
-                self.createSetup()
-        else:
-            return
+        try:
+            data = checkStr(data)
+            url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
+            if 'testcline' in data:
+                # <div>C: egygold.co 51002 jsp271 88145</div>
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
+                
+            if 'cccamprima.com' in data:
+                # <div>C: egygold.co 51002 jsp271 88145</div>
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)                
+                
+            if 'iptvcccam' in data:
+                # <h1>C: egygold.co 51002 jsp271 88145</div>
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (*?).*?<h2>', data)  
+                
+            if 'premium' in data:
+                #<h3 style="color:red;">
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n</h3>', data) 
+                
+            if 'cccamia' in data:
+                # <div class="dslc-module-shortcode">
+                # C: free.CCcamia.com 18000 uknrru CCcamia.com
+                # </div>
+                url1 = re.findall('shortcode">\nC: (.+?) (.+?) (.+?) (.*?)\n', data)            
+            if 'cccamx' in data:
+                #">
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)            
+            if 'cccamiptv.club/it/free-cccam' in data:
+                # <h3 style="color:red;">
+                # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
+                # </h3>
+                url1 = re.findall('style="color:red;">\nC: (.+?) (.+?) (.+?) (.*?)\n', data) 
+            if 'FREEN12' in data:
+                # <h3 style="color:red;">
+                # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
+                # </h3>
+                url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.*?)\n', data)                 
+            if 'history' in data:
+                url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.*?)</a>.*?title="CCcam server online and valid"></span>', data)    
+
+            if 'store' in data:
+                #view-source:http://cccamstore.tv/free-server.php
+                #<center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
+                url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.*?) <br>', data) 
+                
+            if 'cccam.net' in data:
+                #https://cccam.net/free
+                url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.*?)</b>', data)   
+
+            if 'rogcam' in data:
+                #
+                url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.*?) </span>', data)                  
+
+            if 'cccambird' in data:
+                #class="tg-juwk">
+                url1 = re.findall('class="tg-juwk">C: (.+?) (.+?) (.+?) (.*?)</th>', data)  
+
+            if 'bosscccam' in data:
+                #class="tg-juwk">
+                url1 = re.findall('line : <strong>C: (.+?) (.+?) (.+?) (.*?)</strong></p', data)  
+
+            if '15days' in data:
+                #class="tg-juwk">
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</th></tr>', data)  
+
+  
+
+                
+            print('===========data=========', url1)
+            
+            if url1 != '':
+                for h, p, u, pw in url1:
+                    print(h, p, u, pw)
+                    host = str(h)
+                    port = str(p)
+                    user = str(u)
+                    password = str(pw)
+                    password = password.replace('</h1>','')
+                # if config.plugins.tvmanager.active.getValue():
+                    config.plugins.tvmanager.hostaddress.setValue(host)
+                    config.plugins.tvmanager.port.setValue(port)
+                    config.plugins.tvmanager.user.setValue(user)
+                    config.plugins.tvmanager.passw.setValue(password)
+                    self.createSetup()
+            else:
+                return
+        except Exception as e:
+            print('error on string cline', e)
 
 
 
