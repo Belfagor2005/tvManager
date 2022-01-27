@@ -172,10 +172,10 @@ def show_list(h):
         if cond == h:
             active = True
             res.append(MultiContentEntryText(pos=(70, 0), size=(406, 50), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png1)))
+            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 12), size=(43, 24), png=loadPNG(png1)))
         else:
             res.append(MultiContentEntryText(pos=(70, 0), size=(406, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png2)))
+            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 12), size=(43, 24), png=loadPNG(png2)))
         return res
 
 def showlist(datal, list):
