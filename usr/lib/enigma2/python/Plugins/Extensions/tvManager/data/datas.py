@@ -94,7 +94,7 @@ def b64decoder(s):
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
-skin_path = plugin_path
+# skin_path = plugin_path
 
 try:
     import http.cookiejar
@@ -201,12 +201,9 @@ def getUrl(url):
                print("Error: %s." % str(e))
     return content
 
+skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
 if isFHD():
-    # skin_path=res_plugin_path + 'skins/fhd/'
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
-else:
-    # skin_path=res_plugin_path + 'skins/hd/'
-    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
 if DreamOS():
     skin_path=skin_path + 'dreamOs/'
 
@@ -214,24 +211,25 @@ if DreamOS():
 Server01 = 'aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw'
 Server02 = 'aHR0cHM6Ly9jY2NhbWFzLmNvbS9mcmVlL2dldC5waHA='
 Server03 = 'aHR0cHM6Ly9jY2NhbWF6b24uY29tL2ZyZWUvZ2V0LnBocA=='
-Server04 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
+# Server04 = 'aHR0cHM6Ly9jY2NhbXByaW1lLmNvbS9jY2NhbTQ4aC5waHA='
+Server04 = 'aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw=='
 #=============
-Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2Ft'
-Server06 = 'aHR0cDovL2NjY2FteC5jb20vdjIvZ2V0Q29kZS5waHA='
+Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw=='
+Server06 = 'aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA=='
 Server07 = 'aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw'
 Server08 = 'aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9pdC9mcmVlLWNjY2Ft'
-
 Server09 = 'aHR0cHM6Ly93d3cuY2NjYW1pcHR2LmNsdWIvRlJFRU4xMi9uZXcwLnBocA=='
 Server10 = 'aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw'
 Server11 = 'aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ=='
-
+Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA=='
+Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA=='
 Server14 = 'aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA=='
 Server15 = 'aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA='
 Server16 = 'aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20='
-
-Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA=='
-Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA=='
 Server17 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
+
+
+
 
 Serverlive = [
     (Server01, 'Server01'),
@@ -339,7 +337,7 @@ class tv_config(Screen, ConfigListScreen):
         if config.plugins.tvmanager.active.getValue():
             self['key_green'].setText(buttn)
             self['key_green'].show()
-            self['key_yellow'].setText(_('Get Link'))
+            self['key_yellow'].setText(_('Get Server'))
             self['key_yellow'].show()
             self['key_blue'].setText(_('Reset'))
             self['key_blue'].show()
@@ -505,6 +503,10 @@ class tv_config(Screen, ConfigListScreen):
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
 
+            if 'cccamprime' in data:
+                # Cline : C: s2.cccamprime.com 13303 39911015 cccamprime<br>
+                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.*?)<br>', data)
+
             if 'cccamprima.com' in data:
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
@@ -513,14 +515,20 @@ class tv_config(Screen, ConfigListScreen):
                 # <h1>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (*?).*?<h2>', data)
 
-            if 'premium' in data:
-                #<h3 style="color:red;">
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n</h3>', data)
-            if 'cccamia' in data:
+            if 'cccam-premium' in data:
+                #<C: free.cccam-premium.co 15014 is9y9c cccam-premium.co
+                url1 = re.findall('\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
+            if 'CCcamia' in data:
                 # <div class="dslc-module-shortcode">
                 # C: free.CCcamia.com 18000 uknrru CCcamia.com
                 # </div>
-                url1 = re.findall('shortcode">\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
+            if 'cccameurop' in data:
+                # <div class="dslc-module-shortcode">
+                # C: free.CCcamia.com 18000 uknrru CCcamia.com
+                # </div>
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</', data)                
+                
             if 'cccamx' in data:
                 #">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
@@ -539,8 +547,8 @@ class tv_config(Screen, ConfigListScreen):
 
             if 'store' in data:
                 #view-source:http://cccamstore.tv/free-server.php
-                #<center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
-                url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.*?) <br>', data)
+                #<strong>C: free.cccamstore.tv 13921 k3xlsgct WWW.cccamstore.TV <br>
+                url1 = re.findall('<strong>C: (.+?) (.+?) (.+?) (.*?) <br>', data)
 
             if 'cccam.net' in data:
                 #https://cccam.net/free
@@ -556,11 +564,11 @@ class tv_config(Screen, ConfigListScreen):
 
             if 'bosscccam' in data:
                 #class="tg-juwk">
-                url1 = re.findall('line : <strong>C: (.+?) (.+?) (.+?) (.*?)</strong></p', data)
+                url1 = re.findall('<strong>C: (.+?) (.+?) (.+?) (.*?)</strong>', data)
 
             if '15days' in data:
-                #class="tg-juwk">
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</th></tr>', data)
+                #>C: s2.cccambird.com 11700 49611257 cccambird</th>
+                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.*?)</th>', data)
 
             print('===========data=========', url1)
 
