@@ -3,7 +3,7 @@
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     14/01/2022     #
+#     04/03/2022     #
 #      No Coppy      #
 #--------------------#
 from __future__ import print_function
@@ -208,27 +208,24 @@ if DreamOS():
     skin_path=skin_path + 'dreamOs/'
 
 #============='<h1>C: (.+?) (.+?) (.+?) (.+?)\n'
-Server01 = 'aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw'
-Server02 = 'aHR0cHM6Ly9jY2NhbWFzLmNvbS9mcmVlL2dldC5waHA='
-Server03 = 'aHR0cHM6Ly9jY2NhbWF6b24uY29tL2ZyZWUvZ2V0LnBocA=='
-# Server04 = 'aHR0cHM6Ly9jY2NhbXByaW1lLmNvbS9jY2NhbTQ4aC5waHA='
-Server04 = 'aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw=='
-#=============
-Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw=='
-Server06 = 'aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA=='
-Server07 = 'aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw'
-Server08 = 'aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9pdC9mcmVlLWNjY2Ft'
-Server09 = 'aHR0cHM6Ly93d3cuY2NjYW1pcHR2LmNsdWIvRlJFRU4xMi9uZXcwLnBocA=='
-Server10 = 'aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw'
-Server11 = 'aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ=='
-Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA=='
-Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA=='
-Server14 = 'aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA=='
-Server15 = 'aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA='
-Server16 = 'aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20='
-Server17 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
-
-
+# Server01 = 'http://cccamprima.com/free5/get2.php'
+Server01 = 'aHR0cDovL3d3dy50dmxpdmVwcm8uY29tL2ZyZWVfY2NjYW1fNDhoLw==' #'http://www.tvlivepro.com/free_cccam_48h/'
+Server02 = 'aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=' #https://bosscccam.co/Test.php
+Server03 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==' #http://iptvcccam.co/cccamfree/get.php
+Server04 = 'aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20='  #https://cccam-premium.com/free-cccam/
+Server05 = 'aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA==' #https://cccamia.com/free-cccam/
+Server06 = 'aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA==' #http://cccameurop.com/freetest.php
+Server07 = 'aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw' #https://www.cccambird.com/freecccam.php
+Server08 = 'aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9pdC9mcmVlLWNjY2Ft' #https://cccamiptv.club/it/free-cccam
+Server09 = 'aHR0cHM6Ly9jY2NhbWh1Yi5jb20vY2NjYW1mcmVlLw==' #https://cccamhub.com/cccamfree/
+Server10 = 'aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw' #http://cccamstore.tv/free-server.php
+Server11 = 'aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==' #https://cccam.net/free
+Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA==' #http://iptvcccam.co/cccamfree/get.php
+Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==' #https://testcline.com/free-cccam-server.php
+Server14 = 'aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA==' #https://www.rogcam.com/newfree.php
+Server15 = 'aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=' #https://bosscccam.co/Test.php
+Server16 = 'aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=' #https://iptv-15days.blogspot.com
+Server17 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==' #https://cccamfrei.com/free/get.php
 
 
 Serverlive = [
@@ -499,13 +496,25 @@ class tv_config(Screen, ConfigListScreen):
         try:
             data = checkStr(data)
             url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
+            
             if 'testcline' in data:
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
 
+            if 'bosscccam' in data:
+                #class="tg-juwk">
+                url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.*?)</strong>', data)
+
             if 'cccamprime' in data:
                 # Cline : C: s2.cccamprime.com 13303 39911015 cccamprime<br>
                 url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.*?)<br>', data)
+
+            if 'cccamhub' in data:
+                # Cline : C: s2.cccamprime.com 13303 39911015 cccamprime<br>
+                url1 = re.findall('id="cline">.*?C: (.+?) (.+?) (.+?) (.+?)\n</div', data)
+
+            if 'tvlivepro' in data:
+                url1 = re.findall('Host.*?</th>.*?<th>(.+?)</th>.*?Port.*?<th>(.+?)</th>.*?User.*?<th>(.+?)</th>.*?Password.*?<th>(.+?)</th>', data)
 
             if 'cccamprima.com' in data:
                 # <div>C: egygold.co 51002 jsp271 88145</div>
@@ -518,7 +527,7 @@ class tv_config(Screen, ConfigListScreen):
             if 'cccam-premium' in data:
                 #<C: free.cccam-premium.co 15014 is9y9c cccam-premium.co
                 url1 = re.findall('\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'CCcamia' in data:
+            if 'cccamia' in data.lower():
                 # <div class="dslc-module-shortcode">
                 # C: free.CCcamia.com 18000 uknrru CCcamia.com
                 # </div>
@@ -562,9 +571,6 @@ class tv_config(Screen, ConfigListScreen):
                 #class="tg-juwk">
                 url1 = re.findall('class="tg-juwk">C: (.+?) (.+?) (.+?) (.*?)</th>', data)
 
-            if 'bosscccam' in data:
-                #class="tg-juwk">
-                url1 = re.findall('<strong>C: (.+?) (.+?) (.+?) (.*?)</strong>', data)
 
             if '15days' in data:
                 #>C: s2.cccambird.com 11700 49611257 cccambird</th>
