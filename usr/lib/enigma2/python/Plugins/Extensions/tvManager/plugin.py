@@ -5,7 +5,7 @@
 #   skin by MMark    #
 #     update to      #
 
-#     23/01/2022     #
+#     23/03/2022     #
 
 #--------------------#
 from __future__ import print_function
@@ -18,7 +18,6 @@ from Components.MenuList import MenuList
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaTest
 from Components.Pixmap import Pixmap
 from Components.PluginComponent import plugins
-# from Components.ScrollLabel import ScrollLabel
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Plugins.Plugin import PluginDescriptor
@@ -41,10 +40,13 @@ from os import path, listdir, remove, mkdir, chmod, walk
 from twisted.web.client import getPage
 from xml.dom import Node, minidom
 import base64
-import os, sys, time, re
-import ssl
 import glob
+import os
+import re
 import six
+import ssl
+import sys
+import time
 from time import sleep
 # from random import choice
 from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
@@ -76,12 +78,11 @@ else:
         from urllib import urlencode, quote
         import httplib
         import six
-        
+
 global FTP_XML
 currversion = '1.8'
 name_plug = 'TiVuStream Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
-                      
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
 iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
@@ -145,20 +146,21 @@ if DreamOS():
 class m2list(MenuList):
     def __init__(self, list):
         MenuList.__init__(self, list, True, eListboxPythonMultiContent)
-        self.l.setItemHeight(50)
-        textfont=int(24)
-        self.l.setFont(0, gFont('Regular', textfont))        
         if isFHD():
             self.l.setItemHeight(50)
             textfont=int(34)
             self.l.setFont(0, gFont('Regular', textfont))
-            
+        else:
+            self.l.setItemHeight(50)
+            textfont=int(24)
+            self.l.setFont(0, gFont('Regular', textfont))
+
 def show_list(h):
     png1 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('actcam.png'))
     png2 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('defcam.png'))
     cond = readCurrent_1()
+    res = [h]
     if isFHD():
-        res = [h]
         if cond == h:
             active = True
             res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png1)))
@@ -168,7 +170,6 @@ def show_list(h):
             res.append(MultiContentEntryText(pos=(70, 0), size=(800, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
         return res
     else:
-        res = [h]
         if cond == h:
             active = True
             res.append(MultiContentEntryText(pos=(70, 0), size=(406, 50), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
@@ -189,10 +190,10 @@ def showlist(datal, list):
 
 def show_list_1(h):
     res = [h]
-    res.append(MultiContentEntryText(pos=(2, 0), size=(660, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     if isFHD():
-        res = [h]
         res.append(MultiContentEntryText(pos=(2, 0), size=(670, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+    else:
+        res.append(MultiContentEntryText(pos=(2, 0), size=(660, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
 
 #======================================================
@@ -206,7 +207,7 @@ class tvManager(Screen):
         f.close()
         Screen.__init__(self, session)
         self.index = 0
-        self.emulist = []
+        # self.emulist = []
         self.namelist = []
         self.softcamslist = []
         self.ecminfo = GetEcmInfo()
@@ -247,7 +248,7 @@ class tvManager(Screen):
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
         except:
             self.timer.callback.append(self.cgdesc)
-        self.timer.start(500, 1)
+        self.timer.start(200, 1)
         self.EcmInfoPollTimer = eTimer()
         try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
@@ -320,14 +321,16 @@ class tvManager(Screen):
             self['info'].setText(''.join(ecmInfo))
         else:
             self.ecm()
+            # self['info'].setText(_('No ecm info'))
 
     def ecm(self):
         ecmf = ''
         if os.path.isfile('/tmp/ecm.info'): # is True:
             myfile = open('/tmp/ecm.info')
             for line in myfile.readlines():
-                print('line: ', line)
+                # print('line: ', line)
                 ecmf = ecmf + line
+                # ecmf = line
                 print('ecmf + line: ', ecmf)
                 self['info'].setText(ecmf)
         else:
@@ -455,16 +458,24 @@ class tvManager(Screen):
         self.readScripts()
         return
 
+    # def createcamlist(self):
+        # camlist = []
+        # if self.actcam != 'none':
+            # camlist.append((self.actcam, self.actcampng, self.checkcam(self.actcam)))
+        # for line in self.softcamlist:
+            # if line != self.actcam:
+                # camlist.append((line, self.defcampng, self.checkcam(line)))
+        # self['list'].setList(camlist)
+        # self.finish = True
+
     def readScripts(self):
         self.index = 0
-        self.indexto = ''
         scriptlist = []
         pliste = []
         path = '/usr/camscript/'
         for root, dirs, files in os.walk(path):
             for name in files:
                 scriptlist.append(name)
-        self.emulist = scriptlist
         i = len(self.softcamslist)
         del self.softcamslist[0:i]
         for lines in scriptlist:
@@ -479,7 +490,7 @@ class tvManager(Screen):
                             self.softcamslist.append(show_list(nam))
                         else:
                             self.softcamslist.append(show_list(nam))
-                            self.index += 1
+                        self.index += 1
                     else:
                         self.softcamslist.append(show_list(nam))
                         self.index += 1
@@ -598,7 +609,6 @@ class GetipklistTv(Screen):
     def downloadxmlpage(self):
         url = str(FTP_XML)
         if PY3:
-            # url = six.binary_type(url,encoding="utf-8")
             url = url.encode()
         print('url softcam: ', url)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
@@ -617,7 +627,6 @@ class GetipklistTv(Screen):
             regexC = '<plugins cont="(.*?)"'
             match = re.compile(regexC, re.DOTALL).findall(self.xml)
             for name in match:
-                # name = name.replace('_',' ').replace('-',' ')
                 name = checkStr(name)
                 self.list.append(name)
                 self['desc2'].setText(_('Please select ...'))
@@ -660,36 +669,12 @@ class GetipkTv(Screen):
         self['key_yellow'].hide()
         self['key_blue'].hide()
         self['actions'] = ActionMap(['SetupActions'], {'ok': self.message,
-         'cancel': self.close}, -1) 
-        self.onLayoutFinish.append(self.start)                                                     
-        # n1 = xmlparse.find(self.selection, 0)
-        # n2 = xmlparse.find("</plugins>", n1)
-        # data1 = xmlparse[n1:n2]
-        # self.names = []
-        # self.urls = []
-        # items = []
-        # # regex = '<plugin name = "(.*?)".*?url>(.*?)</url'
-        # regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
-        # match = re.compile(regex,re.DOTALL).findall(data1)
-        # for name, url in match:
-            # name = name.replace('_',' ').replace('-',' ')
-            # name = checkStr(name)
-
-            # item = name + "###" + url
-            # items.append(item)
-        # items.sort()
-        # for item in items:
-            # name = item.split('###')[0]
-            # url = item.split('###')[1]
-
-            # self.names.append(name)
-            # self.urls.append(url)
-        # # # showlist(self.list, self['text'])
-        # self.onLayoutFinish.append(self.start)
+         'cancel': self.close}, -1)
+        self.onLayoutFinish.append(self.start)
 
     def start(self):
         xmlparse = self.xmlparse
-    
+
         n1 = xmlparse.find(self.selection, 0)
         n2 = xmlparse.find("</plugins>", n1)
         data1 = xmlparse[n1:n2]
@@ -711,8 +696,8 @@ class GetipkTv(Screen):
             url = item.split('###')[1]
 
             self.names.append(name)
-            self.urls.append(url)   
-    
+            self.urls.append(url)
+
         showlist(self.names, self['text'])
 
     def message(self):
@@ -737,40 +722,35 @@ class GetipkTv(Screen):
             desttar = ipkpth + '/download.tar.gz'
             destdeb = ipkpth + '/download.deb'
             self.timer = eTimer()
-            # self.timer.start(1500, 1)
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
-                    os.remove(destipk)              
-                os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk))
-                # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
+                    os.remove(destipk)
+                os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, destipk))
                 cmd0 = 'opkg install --force-overwrite ' + destipk #self.com #dest
-                self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
+                self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5'])
             if self.com.find('.tar.gz') != -1:
                 if fileExists(desttar):
-                    os.remove(desttar)                 
-                os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, desttar) )
-                # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
+                    os.remove(desttar)
+                os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, desttar) )
                 cmd0 = 'tar -xzvf ' + desttar + ' -C /'
-                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
+                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5'])
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
-                    os.remove(destdeb)                  
+                    os.remove(destdeb)
                 if DreamOS():
-                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
+                    os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, destdeb) )
                     cmd0 = 'dpkg -i ' + destdeb
-                    # cmd0 = 'dpkg -i ' + self.com
-                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
+                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5'])
                 else:
-                     self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+                    self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
             self.timer.start(1500, 1)
-            
+
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
-            # self.addondel()
             return
 
     def addondel(self):
-        try:            
+        try:
             files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
             for f in files:
                 try:
@@ -780,8 +760,8 @@ class GetipkTv(Screen):
             self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
 
         except Exception as e:
-            print(str(e))            
-            
+            print(str(e))
+
 class InfoCfg(Screen):
     def __init__(self, session):
         self.session = session
@@ -988,7 +968,6 @@ def main(session, **kwargs):
             upd_done()
         except:
             pass
-        
     session.open(tvManager)
 
 def StartSetup(menuid):
