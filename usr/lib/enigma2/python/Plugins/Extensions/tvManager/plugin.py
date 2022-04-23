@@ -216,10 +216,9 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
         self["NumberActions"] = NumberActionMap(["NumberActions"],
         {
-         '0': self.openemu,
+         '0': self.messagekd,
          '1': self.cccam,
-         '2': self.oscam,
-         '8': self.messagekd
+         '2': self.oscam
         })
         self['actions'] = ActionMap(['OkCancelActions',
          'ColorActions',
