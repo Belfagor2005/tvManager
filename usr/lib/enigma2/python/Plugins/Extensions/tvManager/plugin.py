@@ -4,9 +4,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-
-#     23/03/2022     #
-
+#     23/04/2022     #
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -36,19 +34,14 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
 from enigma import *
 from os import path, listdir, remove, mkdir, chmod, walk
-# from skin import loadSkin
 from twisted.web.client import getPage
 from xml.dom import Node, minidom
 import base64
-import glob
-import os
-import re
-import six
+import os, sys, time, re
 import ssl
-import sys
-import time
+import glob
+import six
 from time import sleep
-# from random import choice
 from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
 from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
 from sys import version_info
@@ -71,7 +64,7 @@ if PY3:
         unicode = str; unichr = chr; long = int
         PY3 = True
 else:
-# if os.path.exists('/usr/lib/python2.7'):
+        # if os.path.exists('/usr/lib/python2.7'):
         from httplib import HTTPConnection, CannotSendRequest, BadStatusLine, HTTPException
         from urllib2 import urlopen, Request, URLError, HTTPError
         from urlparse import urlparse, parse_qs
@@ -83,13 +76,13 @@ global FTP_XML
 currversion = '1.8'
 name_plug = 'TiVuStream Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
+
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
 iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
-# HD = getDesktop(0).size()
 keys = '/usr/keys'
 camscript = '/usr/camscript'
 ECM_INFO = '/tmp/ecm.info'
@@ -137,11 +130,14 @@ def readCurrent_1():
     return currCam
 
 #=============== SCREEN PATH SETTING
-skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
 if isFHD():
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
+else:
+    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
 if DreamOS():
     skin_path=skin_path + 'dreamOs/'
+
+
 
 class m2list(MenuList):
     def __init__(self, list):
@@ -152,31 +148,32 @@ class m2list(MenuList):
             self.l.setFont(0, gFont('Regular', textfont))
         else:
             self.l.setItemHeight(50)
-            textfont=int(24)
+            textfont=int(22)
             self.l.setFont(0, gFont('Regular', textfont))
 
 def show_list(h):
     png1 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('actcam.png'))
     png2 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('defcam.png'))
     cond = readCurrent_1()
-    res = [h]
     if isFHD():
+        res = [h]
         if cond == h:
             active = True
             res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png1)))
-            res.append(MultiContentEntryText(pos=(70, 0), size=(800, 50), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+            res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT))
         else:
             res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png2)))
-            res.append(MultiContentEntryText(pos=(70, 0), size=(800, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+            res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h, flags=RT_HALIGN_LEFT))
         return res
     else:
+        res = [h]
         if cond == h:
             active = True
-            res.append(MultiContentEntryText(pos=(70, 0), size=(406, 50), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 12), size=(43, 24), png=loadPNG(png1)))
+            res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT))
+            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png1)))
         else:
-            res.append(MultiContentEntryText(pos=(70, 0), size=(406, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 12), size=(43, 24), png=loadPNG(png2)))
+            res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h, flags=RT_HALIGN_LEFT))
+            res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png2)))
         return res
 
 def showlist(datal, list):
@@ -189,17 +186,19 @@ def showlist(datal, list):
         list.setList(plist)
 
 def show_list_1(h):
-    res = [h]
     if isFHD():
-        res.append(MultiContentEntryText(pos=(2, 0), size=(670, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res = [h]
+        res.append(MultiContentEntryText(pos=(2, 2), size=(670, 40), font=0, text=h, flags=RT_HALIGN_LEFT))
     else:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(660, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res = [h]
+        res.append(MultiContentEntryText(pos=(2, 2), size=(660, 30), font=0, text=h, flags=RT_HALIGN_LEFT))
     return res
+
+
 
 #======================================================
 class tvManager(Screen):
     def __init__(self, session, args = False):
-    # def __init__(self, session, args = 0):
         self.session = session
         skin = skin_path + '/tvManager.xml'
         f = open(skin, 'r')
@@ -207,7 +206,7 @@ class tvManager(Screen):
         f.close()
         Screen.__init__(self, session)
         self.index = 0
-        # self.emulist = []
+        self.emulist = []
         self.namelist = []
         self.softcamslist = []
         self.ecminfo = GetEcmInfo()
@@ -215,15 +214,22 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
+        self["NumberActions"] = NumberActionMap(["NumberActions"],
+        {
+         '0': self.openemu,
+         '1': self.cccam,
+         '2': self.oscam,
+         '8': self.messagekd
+        })
         self['actions'] = ActionMap(['OkCancelActions',
          'ColorActions',
          'SetupActions',
-         'MenuActions',
-         'NumberActions'], {'ok': self.action,
-         'cancel': self.cancel,
-         '0': self.messagekd,
-         '1': self.cccam,
-         '2': self.oscam,
+         'MenuActions'], {'ok': self.action,
+         # 'NumberActions'], {'ok': self.action,
+         'cancel': self.close,
+         # '0': self.messagekd,
+         # '1': self.cccam,
+         # '2': self.oscam,
          'menu': self.configtv,
          'blue': self.Blue,
          'yellow': self.download,
@@ -248,7 +254,7 @@ class tvManager(Screen):
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
         except:
             self.timer.callback.append(self.cgdesc)
-        self.timer.start(200, 1)
+        self.timer.start(500, 1)
         self.EcmInfoPollTimer = eTimer()
         try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
@@ -321,16 +327,14 @@ class tvManager(Screen):
             self['info'].setText(''.join(ecmInfo))
         else:
             self.ecm()
-            # self['info'].setText(_('No ecm info'))
 
     def ecm(self):
         ecmf = ''
         if os.path.isfile('/tmp/ecm.info'): # is True:
             myfile = open('/tmp/ecm.info')
             for line in myfile.readlines():
-                # print('line: ', line)
+                print('line: ', line)
                 ecmf = ecmf + line
-                # ecmf = line
                 print('ecmf + line: ', ecmf)
                 self['info'].setText(ecmf)
         else:
@@ -349,10 +353,11 @@ class tvManager(Screen):
             from os import access, X_OK, chmod
             if not access(script, X_OK):
                 chmod(script, 493)
-            self.prombt('sh %s' % script)
+            # self.prombt('sh %s' % script)
+            self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
 
-    def prombt(self, com):
-        self.session.open(Console, _('Update Softcam.key: %s') % com, ['%s' % com])
+    def prombt(self, script):
+        self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
 
     def CfgInfo(self):
         self.session.open(InfoCfg)
@@ -383,6 +388,10 @@ class tvManager(Screen):
         return -1
 
     def action(self):
+        i = len(self.softcamslist)
+        print('iiiiii= ',i)
+        if i < 1:
+            return
         self.session.nav.stopService()
         msg = []
         self.last = self.getLastIndex()
@@ -458,24 +467,16 @@ class tvManager(Screen):
         self.readScripts()
         return
 
-    # def createcamlist(self):
-        # camlist = []
-        # if self.actcam != 'none':
-            # camlist.append((self.actcam, self.actcampng, self.checkcam(self.actcam)))
-        # for line in self.softcamlist:
-            # if line != self.actcam:
-                # camlist.append((line, self.defcampng, self.checkcam(line)))
-        # self['list'].setList(camlist)
-        # self.finish = True
-
     def readScripts(self):
         self.index = 0
+        self.indexto = ''
         scriptlist = []
         pliste = []
         path = '/usr/camscript/'
         for root, dirs, files in os.walk(path):
             for name in files:
                 scriptlist.append(name)
+        self.emulist = scriptlist
         i = len(self.softcamslist)
         del self.softcamslist[0:i]
         for lines in scriptlist:
@@ -490,7 +491,7 @@ class tvManager(Screen):
                             self.softcamslist.append(show_list(nam))
                         else:
                             self.softcamslist.append(show_list(nam))
-                        self.index += 1
+                            self.index += 1
                     else:
                         self.softcamslist.append(show_list(nam))
                         self.index += 1
@@ -567,9 +568,6 @@ class tvManager(Screen):
         os.system('rm /etc/autocam.txt')
         os.system('cp /etc/autocam2.txt /etc/autocam.txt')
 
-    def cancel(self):
-        deletetmp()
-        self.close()
 
 class GetipklistTv(Screen):
     def __init__(self, session):
@@ -608,8 +606,8 @@ class GetipklistTv(Screen):
 
     def downloadxmlpage(self):
         url = str(FTP_XML)
-        if PY3:
-            url = url.encode()
+        if six.PY3:
+            url = six.binary_type(url,encoding="utf-8")
         print('url softcam: ', url)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
@@ -620,13 +618,14 @@ class GetipklistTv(Screen):
 
     def _gotPageLoad(self, data):
         self.xml = str(data)
-        if PY3:
+        if six.PY3:
             self.xml = six.ensure_str(data)
         try:
             # regexC = '<plugins cont = "(.*?)"'
             regexC = '<plugins cont="(.*?)"'
             match = re.compile(regexC, re.DOTALL).findall(self.xml)
             for name in match:
+                # name = name.replace('_',' ').replace('-',' ')
                 name = checkStr(name)
                 self.list.append(name)
                 self['desc2'].setText(_('Please select ...'))
@@ -636,6 +635,10 @@ class GetipklistTv(Screen):
             pass
 
     def okClicked(self):
+        i = len(self.list)
+        print('iiiiii= ',i)
+        if i < 1:
+            return
         if self.downloading == True:
             try:
                 idx = self["text"].getSelectionIndex()
@@ -658,23 +661,6 @@ class GetipkTv(Screen):
         self.selection = selection
         self['text'] = m2list([])
         self.list = []
-        self.setTitle(_(title_plug))
-        self['title'] = Label(_(title_plug))
-        self['desc'] = Label(_('Select and Install'))
-        self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button(_(''))
-        self['key_yellow'] = Button(_(''))
-        self['key_blue'] = Button(_(''))
-        self['key_green'].hide()
-        self['key_yellow'].hide()
-        self['key_blue'].hide()
-        self['actions'] = ActionMap(['SetupActions'], {'ok': self.message,
-         'cancel': self.close}, -1)
-        self.onLayoutFinish.append(self.start)
-
-    def start(self):
-        xmlparse = self.xmlparse
-
         n1 = xmlparse.find(self.selection, 0)
         n2 = xmlparse.find("</plugins>", n1)
         data1 = xmlparse[n1:n2]
@@ -697,10 +683,29 @@ class GetipkTv(Screen):
 
             self.names.append(name)
             self.urls.append(url)
+        # showlist(self.list, self['text'])
+        self.setTitle(_(title_plug))
+        self['title'] = Label(_(title_plug))
+        self['desc'] = Label(_('Select and Install'))
+        self['key_red'] = Button(_('Back'))
+        self['key_green'] = Button(_(''))
+        self['key_yellow'] = Button(_(''))
+        self['key_blue'] = Button(_(''))
+        self['key_green'].hide()
+        self['key_yellow'].hide()
+        self['key_blue'].hide()
+        self['actions'] = ActionMap(['SetupActions'], {'ok': self.message,
+         'cancel': self.close}, -1)
+        self.onLayoutFinish.append(self.start)
 
+    def start(self):
         showlist(self.names, self['text'])
 
     def message(self):
+        i = len(self.names)
+        print('iiiiii= ',i)
+        if i < 1:
+            return
         self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
 
     def selclicked(self, result):
@@ -722,45 +727,44 @@ class GetipkTv(Screen):
             desttar = ipkpth + '/download.tar.gz'
             destdeb = ipkpth + '/download.deb'
             self.timer = eTimer()
+            self.timer.start(1500, 1)
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
                     os.remove(destipk)
-                os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, destipk))
+                os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destipk))
+                # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
                 cmd0 = 'opkg install --force-overwrite ' + destipk #self.com #dest
-                self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5'])
+                self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
             if self.com.find('.tar.gz') != -1:
                 if fileExists(desttar):
                     os.remove(desttar)
-                os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, desttar) )
+                os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, desttar) )
+                # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
                 cmd0 = 'tar -xzvf ' + desttar + ' -C /'
-                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5'])
+                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)
                 if DreamOS():
-                    os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, destdeb) )
+                    os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
                     cmd0 = 'dpkg -i ' + destdeb
-                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5'])
+                    # cmd0 = 'dpkg -i ' + self.com
+                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
                 else:
-                    self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
-            self.timer.start(1500, 1)
-
+                     self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
+            # self.addondel()
             return
 
     def addondel(self):
-        try:
-            files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
-            for f in files:
-                try:
-                    os.remove(f)
-                except OSError as e:
-                    print("Error: %s : %s" % (f, e.strerror))
-            self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
-
-        except Exception as e:
-            print(str(e))
+        files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
+        for f in files:
+            try:
+                os.remove(f)
+            except OSError as e:
+                print("Error: %s : %s" % (f, e.strerror))
+        self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
 
 class InfoCfg(Screen):
     def __init__(self, session):
@@ -946,7 +950,7 @@ def autostart(reason, session=None, **kwargs):
                 pass
         else:
             print('pass autostart')
-            pass
+    return
 
 def menu(menuid, **kwargs):
     if menuid == 'cam':
@@ -954,20 +958,20 @@ def menu(menuid, **kwargs):
           boundFunction(main, showExtentionMenuOption=True),
           'Softcam Manager',
           -1)]
-    return []
+    else:
+        return []
 
 def main(session, **kwargs):
-    try:
-        from Plugins.Extensions.tvManager.Utils import checkInternet
-    except:
-        from . import Utils
-    checkInternet()
+
+    from . import Utils
+    Utils.checkInternet()
     if checkInternet():
         try:
-            from Plugins.Extensions.tvManager.Update import upd_done
-            upd_done()
+            from . import Update
+            Update.upd_done()
         except:
             pass
+
     session.open(tvManager)
 
 def StartSetup(menuid):
