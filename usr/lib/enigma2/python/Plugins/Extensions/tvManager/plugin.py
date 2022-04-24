@@ -43,12 +43,11 @@ import glob
 import six
 from time import sleep
 from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
-from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
 from sys import version_info
-try:
-    from Plugins.Extensions.tvManager.Utils import *
-except:
-    from . import Utils
+# from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
+
+from .data.GetEcmInfo import GetEcmInfo
+from . import Utils
 #======================================================
 global active
 active = False
@@ -130,19 +129,17 @@ def readCurrent_1():
     return currCam
 
 #=============== SCREEN PATH SETTING
-if isFHD():
+if Utils.isFHD():
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
 else:
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
-if DreamOS():
+if Utils.DreamOS():
     skin_path=skin_path + 'dreamOs/'
-
-
 
 class m2list(MenuList):
     def __init__(self, list):
         MenuList.__init__(self, list, True, eListboxPythonMultiContent)
-        if isFHD():
+        if Utils.isFHD():
             self.l.setItemHeight(50)
             textfont=int(34)
             self.l.setFont(0, gFont('Regular', textfont))
@@ -155,7 +152,7 @@ def show_list(h):
     png1 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('actcam.png'))
     png2 = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format('defcam.png'))
     cond = readCurrent_1()
-    if isFHD():
+    if Utils.isFHD():
         res = [h]
         if cond == h:
             active = True
@@ -186,15 +183,13 @@ def showlist(datal, list):
         list.setList(plist)
 
 def show_list_1(h):
-    if isFHD():
+    if Utils.isFHD():
         res = [h]
         res.append(MultiContentEntryText(pos=(2, 2), size=(670, 40), font=0, text=h, flags=RT_HALIGN_LEFT))
     else:
         res = [h]
         res.append(MultiContentEntryText(pos=(2, 2), size=(660, 30), font=0, text=h, flags=RT_HALIGN_LEFT))
     return res
-
-
 
 #======================================================
 class tvManager(Screen):
@@ -567,6 +562,9 @@ class tvManager(Screen):
         os.system('rm /etc/autocam.txt')
         os.system('cp /etc/autocam2.txt /etc/autocam.txt')
 
+    def cancel(self):
+        # Utils.deletetmp()
+        self.close()
 
 class GetipklistTv(Screen):
     def __init__(self, session):
@@ -606,7 +604,8 @@ class GetipklistTv(Screen):
     def downloadxmlpage(self):
         url = str(FTP_XML)
         if six.PY3:
-            url = six.binary_type(url,encoding="utf-8")
+            # url = six.binary_type(url,encoding="utf-8")
+            url = url.encode()
         print('url softcam: ', url)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
@@ -625,12 +624,13 @@ class GetipklistTv(Screen):
             match = re.compile(regexC, re.DOTALL).findall(self.xml)
             for name in match:
                 # name = name.replace('_',' ').replace('-',' ')
-                name = checkStr(name)
+                name = Utils.checkStr(name)
                 self.list.append(name)
                 self['desc2'].setText(_('Please select ...'))
             showlist(self.list, self['text'])
             self.downloading = True
         except:
+            self['desc2'].setText(_('Try again later ...'))
             pass
 
     def okClicked(self):
@@ -660,29 +660,6 @@ class GetipkTv(Screen):
         self.selection = selection
         self['text'] = m2list([])
         self.list = []
-        n1 = xmlparse.find(self.selection, 0)
-        n2 = xmlparse.find("</plugins>", n1)
-        data1 = xmlparse[n1:n2]
-        self.names = []
-        self.urls = []
-        items = []
-        # regex = '<plugin name = "(.*?)".*?url>(.*?)</url'
-        regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
-        match = re.compile(regex,re.DOTALL).findall(data1)
-        for name, url in match:
-            name = name.replace('_',' ').replace('-',' ')
-            name = checkStr(name)
-
-            item = name + "###" + url
-            items.append(item)
-        items.sort()
-        for item in items:
-            name = item.split('###')[0]
-            url = item.split('###')[1]
-
-            self.names.append(name)
-            self.urls.append(url)
-        # showlist(self.list, self['text'])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['desc'] = Label(_('Select and Install'))
@@ -698,6 +675,29 @@ class GetipkTv(Screen):
         self.onLayoutFinish.append(self.start)
 
     def start(self):
+        xmlparse = self.xmlparse
+        n1 = xmlparse.find(self.selection, 0)
+        n2 = xmlparse.find("</plugins>", n1)
+        data1 = xmlparse[n1:n2]
+        self.names = []
+        self.urls = []
+        items = []
+        # regex = '<plugin name = "(.*?)".*?url>(.*?)</url'
+        regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
+        match = re.compile(regex,re.DOTALL).findall(data1)
+        for name, url in match:
+            name = name.replace('_',' ').replace('-',' ')
+            name = Utils.checkStr(name)
+
+            item = name + "###" + url
+            items.append(item)
+        items.sort()
+        for item in items:
+            name = item.split('###')[0]
+            url = item.split('###')[1]
+
+            self.names.append(name)
+            self.urls.append(url)
         showlist(self.names, self['text'])
 
     def message(self):
@@ -726,7 +726,7 @@ class GetipkTv(Screen):
             desttar = ipkpth + '/download.tar.gz'
             destdeb = ipkpth + '/download.deb'
             self.timer = eTimer()
-            self.timer.start(1500, 1)
+
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
                     os.remove(destipk)
@@ -744,26 +744,30 @@ class GetipkTv(Screen):
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)
-                if DreamOS():
+                if Utils.DreamOS():
                     os.system("wget %s -c %s -O %s > /dev/null" %(useragent, self.com, destdeb) )
                     cmd0 = 'dpkg -i ' + destdeb
                     # cmd0 = 'dpkg -i ' + self.com
                     self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5']) #, finishedCallback=self.msgipkinst)
                 else:
                      self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+            self.timer.start(500, 1)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
             # self.addondel()
             return
 
     def addondel(self):
-        files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
-        for f in files:
-            try:
-                os.remove(f)
-            except OSError as e:
-                print("Error: %s : %s" % (f, e.strerror))
-        self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
+        try:
+            files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
+            for f in files:
+                try:
+                    os.remove(f)
+                except OSError as e:
+                    print("Error: %s : %s" % (f, e.strerror))
+            self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
+        except Exception as e:
+            print(e)
 
 class InfoCfg(Screen):
     def __init__(self, session):
@@ -961,10 +965,9 @@ def menu(menuid, **kwargs):
         return []
 
 def main(session, **kwargs):
-
     from . import Utils
-    Utils.checkInternet()
-    if checkInternet():
+
+    if Utils.checkInternet():
         try:
             from . import Update
             Update.upd_done()
@@ -984,7 +987,7 @@ def StartSetup(menuid):
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    if isFHD():
+    if Utils.isFHD():
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
      PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
