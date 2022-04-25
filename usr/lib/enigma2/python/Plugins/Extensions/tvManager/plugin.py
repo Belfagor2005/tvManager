@@ -787,6 +787,7 @@ class InfoCfg(Screen):
          'back': self.close,
          'cancel': self.close,
          'red': self.close}, -1)
+        self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
@@ -818,7 +819,17 @@ class InfoCfg(Screen):
         return cont
 
     def updateList(self):
+        paypal = self.paypal2()
+        self["paypal"].setText(paypal)    
         self["text"].setText(self.getcont())
+
+
+    def paypal2(self):
+        conthelp = "If you like what I do you\n"
+        conthelp += " can contribute with a coffee\n\n"
+        conthelp += "scan the qr code and donate € 1.00"
+        return conthelp
+
 
 class Ipkremove(Screen):
     def __init__(self, session, args = None):
