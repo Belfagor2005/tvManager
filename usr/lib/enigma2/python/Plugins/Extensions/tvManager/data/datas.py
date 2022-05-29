@@ -3,7 +3,7 @@
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     02/12/2021     #
+#     29/05/2022     #
 #      No Coppy      #
 #--------------------#
 from __future__ import print_function
@@ -198,15 +198,14 @@ def getUrl(url):
         try:
             content = content.decode("utf-8")
         except Exception as e:
-               print("Error: %s." % e)
+               print("Error: %s." % str(e))
     return content
 
+skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")                                                                                            
 if isFHD():
     # skin_path=res_plugin_path + 'skins/fhd/'
     skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
-else:
-    # skin_path=res_plugin_path + 'skins/hd/'
-    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
+    
 if DreamOS():
     skin_path=skin_path + 'dreamOs/'
 
@@ -214,24 +213,30 @@ if DreamOS():
 Server01 = 'aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw'
 Server02 = 'aHR0cHM6Ly9jY2NhbWFzLmNvbS9mcmVlL2dldC5waHA='
 Server03 = 'aHR0cHM6Ly9jY2NhbWF6b24uY29tL2ZyZWUvZ2V0LnBocA=='
-Server04 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
+# Server04 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
+Server04 = 'aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw=='
 #=============
-Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2Ft'
-Server06 = 'aHR0cDovL2NjY2FteC5jb20vdjIvZ2V0Q29kZS5waHA='
+# Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2Ft'
+# Server06 = 'aHR0cDovL2NjY2FteC5jb20vdjIvZ2V0Q29kZS5waHA='
+Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw=='
+Server06 = 'aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA=='
 Server07 = 'aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw'
 Server08 = 'aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9pdC9mcmVlLWNjY2Ft'
-
 Server09 = 'aHR0cHM6Ly93d3cuY2NjYW1pcHR2LmNsdWIvRlJFRU4xMi9uZXcwLnBocA=='
 Server10 = 'aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw'
 Server11 = 'aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ=='
-
+Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA=='
+Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA=='
 Server14 = 'aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA=='
 Server15 = 'aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA='
 Server16 = 'aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20='
 
-Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA=='
-Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA=='
+
 Server17 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
+Server18 = 'aHR0cHM6Ly9jY2NhbXguY28vZ2V0Q29kZS5waHA='
+Server19 = 'aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS8='
+Server20 = 'aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v'
+Server21 = 'aHR0cHM6Ly9jY2NhbXByaW1lLmNvbS9jY2NhbTQ4aC5waHA='
 
 Serverlive = [
     (Server01, 'Server01'),
@@ -251,10 +256,14 @@ Serverlive = [
     (Server15, 'Server15'),
     (Server16, 'Server16'),
     (Server17, 'Server17'),
-]
+    (Server18, 'Server18'),
+    (Server19, 'Server19'),
+    (Server20, 'Server20'),
+    (Server21, 'Server21')
+    ]
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
-config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))
+config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive, default="Server01"))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='100.200.300.400'))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=15000))
@@ -401,12 +410,14 @@ class tv_config(Screen, ConfigListScreen):
         print('current selection:', self['config'].l.getCurrentSelection())
         putlblcfg()
         self.createSetup()
+        self.getcl()                    
 
     def keyRight(self):
         ConfigListScreen.keyRight(self)
         print('current selection:', self['config'].l.getCurrentSelection())
         putlblcfg()
         self.createSetup()
+        self.getcl()                    
 
     def VirtualKeyBoardCallback(self, callback = None):
         if callback is not None and len(callback):
@@ -516,6 +527,10 @@ class tv_config(Screen, ConfigListScreen):
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
 
+
+            if 'cccamprime' in data:
+                # Cline : C: s2.cccamprime.com 13303 39911015 cccamprime<br>
+                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.*?)<br>', data)                                    
             if 'cccamprima.com' in data:
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
@@ -527,6 +542,13 @@ class tv_config(Screen, ConfigListScreen):
             if 'premium' in data:
                 #<h3 style="color:red;">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n</h3>', data)
+                
+            if 'cccameurop' in data:
+                # <div class="dslc-module-shortcode">
+                # C: free.CCcamia.com 18000 uknrru CCcamia.com
+                # </div>
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</', data)
+                
             if 'cccamia' in data:
                 # <div class="dslc-module-shortcode">
                 # C: free.CCcamia.com 18000 uknrru CCcamia.com
@@ -592,7 +614,7 @@ class tv_config(Screen, ConfigListScreen):
             else:
                 return
         except Exception as e:
-            print('error on string cline', e)
+            print('error on string cline', str(e))
 
 
 
