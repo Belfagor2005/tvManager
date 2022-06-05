@@ -210,60 +210,54 @@ if DreamOS():
     skin_path=skin_path + 'dreamOs/'
 
 #============='<h1>C: (.+?) (.+?) (.+?) (.+?)\n'
-Server01 = 'aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw'
-Server02 = 'aHR0cHM6Ly9jY2NhbWFzLmNvbS9mcmVlL2dldC5waHA='
-Server03 = 'aHR0cHM6Ly9jY2NhbWF6b24uY29tL2ZyZWUvZ2V0LnBocA=='
-# Server04 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
-Server04 = 'aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw=='
-#=============
-# Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2Ft'
-# Server06 = 'aHR0cDovL2NjY2FteC5jb20vdjIvZ2V0Q29kZS5waHA='
-Server05 = 'aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw=='
-Server06 = 'aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA=='
-Server07 = 'aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw'
-Server08 = 'aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9pdC9mcmVlLWNjY2Ft'
-Server09 = 'aHR0cHM6Ly93d3cuY2NjYW1pcHR2LmNsdWIvRlJFRU4xMi9uZXcwLnBocA=='
-Server10 = 'aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw'
-Server11 = 'aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ=='
-Server12 = 'aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA=='
-Server13 = 'aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA=='
-Server14 = 'aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA=='
-Server15 = 'aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA='
-Server16 = 'aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20='
+# Server02 = 'https://cccamas.com/free/get.php' # no work
+# Server03 = 'https://cccamazon.com/free/get.php'  # no work
+# Server16 = 'https://cccamfrei.com/free/get.php' # no work
+# work
+# Server1 = 'http://cccamprima.com/free5/get2.php'
+# Server2 = 'https://cccamprime.com/cccam48h.php'
+# Server3 = 'https://cccam-premium.com/free-cccam/' # no work fine
+# Server4 = 'https://cccamia.com/free-cccam'
+# Server5 = 'http://cccameurop.com/freetest.php'
+# Server6 = 'https://www.cccambird.com/freecccam.php'
+# Server7 = 'https://cccamiptv.club/it/free-cccam'
+# Server8 = 'https://www.cccamiptv.club/FREEN12/new0.php'
+# Server9 = 'http://cccamstore.tv/free-server.php'
+# Server10 = 'https://cccam.net/free'
+# Server11 = 'http://iptvcccam.co/cccamfree/get.php'
+# Server12 = 'https://testcline.com/free-cccam-server.php'
+# Server13 = 'https://www.rogcam.com/newfree.php'
+# Server14 = 'https://bosscccam.co/Test.php'
+# Server15 = 'https://iptv-15days.blogspot.com'
+# Server16 = 'https://cccamx.co/getCode.php'
+# Server17 = 'https://cccameagle.com/fccam'
+# Server18 = 'https://cccam-premium.co/free-cccam/'
 
-
-Server17 = 'aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA=='
-Server18 = 'aHR0cHM6Ly9jY2NhbXguY28vZ2V0Q29kZS5waHA='
-Server19 = 'aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS8='
-Server20 = 'aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v'
-Server21 = 'aHR0cHM6Ly9jY2NhbXByaW1lLmNvbS9jY2NhbTQ4aC5waHA='
 
 Serverlive = [
-    (Server01, 'Server01'),
-    (Server02, 'Server02'),
-    (Server03, 'Server03'),
-    (Server04, 'Server04'),
-    (Server05, 'Server05'),
-    (Server06, 'Server06'),
-    (Server07, 'Server07'),
-    (Server08, 'Server08'),
-    (Server09, 'Server09'),
-    (Server10, 'Server10'),
-    (Server11, 'Server11'),
-    (Server12, 'Server12'),
-    (Server13, 'Server13'),
-    (Server14, 'Server14'),
-    (Server15, 'Server15'),
-    (Server16, 'Server16'),
-    (Server17, 'Server17'),
-    (Server18, 'Server18'),
-    (Server19, 'Server19'),
-    (Server20, 'Server20'),
-    (Server21, 'Server21')
+    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw',            'Server01'),
+    ('aHR0cHM6Ly9jY2NhbXByaW1lLmNvbS9jY2NhbTQ4aC5waHA=',            'Server02'),
+    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==',        'Server03'),
+    ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2Ft',                    'Server04'),
+    ('aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA==',            'Server05'),
+    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw',        'Server06'),
+    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9pdC9mcmVlLWNjY2Ft',            'Server07'),
+    ('aHR0cHM6Ly93d3cuY2NjYW1pcHR2LmNsdWIvRlJFRU4xMi9uZXcwLnBocA==','Server08'),
+    ('aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw',            'Server09'),
+    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==',                            'Server10'),
+    ('aHR0cDovL2lwdHZjY2NhbS5jby9jY2NhbWZyZWUvZ2V0LnBocA==',        'Server11'),
+    ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==','Server12'),
+    ('aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA==',            'Server13'),
+    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=',                    'Server14'),
+    ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=',                'Server15'),
+    ('aHR0cHM6Ly9jY2NhbXguY28vZ2V0Q29kZS5waHA=',                    'Server16'),
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==',                    'Server17'),
+    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=',            'Server18'),
     ]
+
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
-config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive, default="Server01"))
+config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive)) #, default=Server1))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='100.200.300.400'))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=15000))
@@ -410,14 +404,14 @@ class tv_config(Screen, ConfigListScreen):
         print('current selection:', self['config'].l.getCurrentSelection())
         putlblcfg()
         self.createSetup()
-        self.getcl()                    
+        self.getcl()
 
     def keyRight(self):
         ConfigListScreen.keyRight(self)
         print('current selection:', self['config'].l.getCurrentSelection())
         putlblcfg()
         self.createSetup()
-        self.getcl()                    
+        self.getcl()
 
     def VirtualKeyBoardCallback(self, callback = None):
         if callback is not None and len(callback):
@@ -505,10 +499,9 @@ class tv_config(Screen, ConfigListScreen):
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def getcl(self):
-        data = str(config.plugins.tvmanager.Server.value)
-        print(data)
-        print('data1 ', data)
-        data = b64decoder(data)
+        data1 = str(config.plugins.tvmanager.Server.value)
+        print(data1)
+        data = b64decoder(data1)
         print('data2 ', data)
         try:
             data = getUrl(data)
@@ -517,83 +510,87 @@ class tv_config(Screen, ConfigListScreen):
             print('=== Lnk ==== ', data)
             self.load_getcl(data)
         except Exception as e:
-            print('getcl error: ', e)
+            print('getcl error: ', str(e))
 
     def load_getcl(self, data):
         try:
             data = checkStr(data)
             url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'testcline' in data:
+            if 'testcline' in data.lower():
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
 
 
-            if 'cccamprime' in data:
-                # Cline : C: s2.cccamprime.com 13303 39911015 cccamprime<br>
-                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.*?)<br>', data)                                    
-            if 'cccamprima.com' in data:
+            if 'cccamprime' in data.lower():
+                # <br>Cline : C: s2.cccamprime.com 14808 50853334 cccamprime<br>
+                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?).*?Host', data)
+                url1 = url1.replace('<br><br>', '')
+            if 'cccamprima.com' in data.lower():
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
 
-            if 'iptvcccam' in data:
-                # <h1>C: egygold.co 51002 jsp271 88145</div>
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (*?).*?<h2>', data)
+            if 'iptvcccam' in data.lower():
+                #<h1>C: free.iptvcccam.co 2021 tcsi iptvcccam.co        </h1>
 
-            if 'premium' in data:
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
+
+            if 'premium' in data.lower():
                 #<h3 style="color:red;">
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n</h3>', data)
-                
-            if 'cccameurop' in data:
-                # <div class="dslc-module-shortcode">
-                # C: free.CCcamia.com 18000 uknrru CCcamia.com
-                # </div>
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</', data)
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
                 
             if 'cccamia' in data:
+                # C: free.CCcamia.com 18000 e4xd88 CCcamia.com
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
+                
+            if 'cccameurop' in data.lower():
                 # <div class="dslc-module-shortcode">
                 # C: free.CCcamia.com 18000 uknrru CCcamia.com
                 # </div>
-                url1 = re.findall('shortcode">\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'cccamx' in data:
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</', data)                
+            if 'cccamx' in data.lower():
                 #">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'cccamiptv.club/it/free-cccam' in data:
-                # <h3 style="color:red;">
-                # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
+            if 'cccamiptv.club' in data.lower():
+                #<h3 style="color:red;">
+                # C: free.cccamiptv.co 13100 69o7yy cccamiptv.co
                 # </h3>
-                url1 = re.findall('style="color:red;">\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'FREEN12' in data:
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?).*?</h3>', data)
+            if 'FREEN12' in data.lower():
                 # <h3 style="color:red;">
                 # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
                 # </h3>
                 url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'history' in data:
+            if 'history' in data.lower():
                 url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.*?)</a>.*?title="CCcam server online and valid"></span>', data)
 
-            if 'store' in data:
+            if 'store' in data.lower():
                 #view-source:http://cccamstore.tv/free-server.php
                 #<center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
                 url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.*?) <br>', data)
 
-            if 'cccam.net' in data:
-                #https://cccam.net/free
+            if 'cccam.net' in data.lower():
+                #>C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
                 url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.*?)</b>', data)
 
-            if 'rogcam' in data:
+            if 'cccameagle' in data.lower():
+                #>C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
+                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.*?)</h2>', data)
+
+            if 'rogcam' in data.lower():
                 #
                 url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.*?) </span>', data)
 
-            if 'cccambird' in data:
-                #class="tg-juwk">
-                url1 = re.findall('class="tg-juwk">C: (.+?) (.+?) (.+?) (.*?)</th>', data)
+            if 'cccambird' in data.lower():
+                #>C: t2.cccambird.com 14800 51190374 cccambird</th>
+                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.*?)</th>', data)
 
-            if 'bosscccam' in data:
-                #class="tg-juwk">
-                url1 = re.findall('line : <strong>C: (.+?) (.+?) (.+?) (.*?)</strong></p', data)
+            if 'bosscccam' in data.lower():
+                #<strong>c: bosscccam.nowddns.com 26210 GkAevhy888 BosS-ccCAm.coM</strong>
+                url1 = re.findall('<strong>C: (.+?) (.+?) (.+?) (.*?)</strong', data)
 
-            if '15days' in data:
-                #class="tg-juwk">
-                url1 = re.findall('C: (.*?) (.*?) (.*?) (.*?)</th></tr>', data)
+            if '15days' in data.lower():
+                #">C: s7.cccambird.com 12550 72953333 cccambird</th></tr>
+                url1 = re.findall('">C: (.*?) (.*?) (.*?) (.*?)</th></tr>', data)
 
             print('===========data=========', url1)
 

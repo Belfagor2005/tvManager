@@ -4,10 +4,12 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     23/04/2022     #
+#     10/05/2022     #
 #--------------------#
 from __future__ import print_function
 from . import _
+from . import Utils
+from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.Button import Button
 from Components.FileList import FileList
@@ -46,8 +48,7 @@ from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG,
 from sys import version_info
 # from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
 
-from .data.GetEcmInfo import GetEcmInfo
-from . import Utils
+
 #======================================================
 global active
 active = False
@@ -82,8 +83,7 @@ iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
-keys = '/usr/keys'
-camscript = '/usr/camscript'
+
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
 old_ecm_time = time.time()
@@ -105,6 +105,8 @@ def __createdir(list):
                 print('Mkdir Failed', dir)
 
 def checkdir():
+    keys = '/usr/keys'
+    camscript = '/usr/camscript'
     if not os.path.exists(keys):
         __createdir('/usr/keys')
     if not os.path.exists(camscript):
@@ -930,6 +932,10 @@ class Ipkremove(Screen):
         print('pressed', number)
         self['text'].number(number)
 
+
+
+
+#===================init
 def startConfig(session, **kwargs):
     session.open(tvManager)
 
