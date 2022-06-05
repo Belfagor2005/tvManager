@@ -3,7 +3,7 @@
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     29/05/2022     #
+#     05/06/2022     #
 #      No Coppy      #
 #--------------------#
 from __future__ import print_function
@@ -253,6 +253,7 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbXguY28vZ2V0Q29kZS5waHA=',                    'Server16'),
     ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==',                    'Server17'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=',            'Server18'),
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=',                    'Server19'), 
     ]
 
 config.plugins.tvmanager = ConfigSubsection()
@@ -520,6 +521,9 @@ class tv_config(Screen, ConfigListScreen):
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
 
+            if 'cccameagle' in data.lower():
+                # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
+                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)                   
 
             if 'cccamprime' in data.lower():
                 # <br>Cline : C: s2.cccamprime.com 14808 50853334 cccamprime<br>
