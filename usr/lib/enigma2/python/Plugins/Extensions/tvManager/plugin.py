@@ -4,7 +4,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     10/05/2022     #
+#     10/07/2022     #
 #--------------------#
 from __future__ import print_function
 from . import _
@@ -972,14 +972,7 @@ def autostart(reason, session=None, **kwargs):
             print('pass autostart')
     return
 
-def intCheck():
-    import socket
-    try:
-        socket.setdefaulttimeout(1)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-        return True
-    except:
-        return False
+
 
 def menu(menuid, **kwargs):
     if menuid == 'cam':
@@ -989,17 +982,42 @@ def menu(menuid, **kwargs):
           -1)]
     else:
         return []
+        
+def intCheck():
+    import socket
+    try:
+        socket.setdefaulttimeout(1)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        return True
+    except:
+        return False
 
 def main(session, **kwargs):
-    # from . import Utils
-    if intCheck():
-        try:
+    try:
+        if intCheck():
             from . import Update
             Update.upd_done()
-        except:
-            pass
+            session.open(tvManager)
+        else:
+            from Screens.MessageBox import MessageBox
+            from Tools.Notifications import AddPopup
+            AddPopup(_("Sorry but No Internet :("),MessageBox.TYPE_INFO, 10, 'Sorry')  
+    except:
+        import traceback
+        traceback.print_exc() 
+        pass
 
-    session.open(tvManager)
+
+# def main(session, **kwargs):
+    # # from . import Utils
+    # if intCheck():
+        # try:
+            # from . import Update
+            # Update.upd_done()
+        # except:
+            # pass
+
+    # session.open(tvManager)
 
 def StartSetup(menuid):
     if menuid == 'mainmenu':
