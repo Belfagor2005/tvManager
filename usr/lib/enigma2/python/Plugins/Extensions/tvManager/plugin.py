@@ -972,6 +972,15 @@ def autostart(reason, session=None, **kwargs):
             print('pass autostart')
     return
 
+def intCheck():
+    import socket
+    try:
+        socket.setdefaulttimeout(1)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        return True
+    except:
+        return False
+
 def menu(menuid, **kwargs):
     if menuid == 'cam':
         return [(_(name_plug),
@@ -982,9 +991,8 @@ def menu(menuid, **kwargs):
         return []
 
 def main(session, **kwargs):
-    from . import Utils
-
-    if Utils.checkInternet():
+    # from . import Utils
+    if intCheck():
         try:
             from . import Update
             Update.upd_done()
