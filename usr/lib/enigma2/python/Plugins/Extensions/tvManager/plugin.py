@@ -4,10 +4,10 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     10/07/2022     #
+#     10/08/2022     #
 #--------------------#
 from __future__ import print_function
-from . import _
+from .__init__ import _
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -47,7 +47,6 @@ from time import sleep
 from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER
 from sys import version_info
 # from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
-
 
 #======================================================
 global active
@@ -221,11 +220,7 @@ class tvManager(Screen):
          'ColorActions',
          'SetupActions',
          'MenuActions'], {'ok': self.action,
-         # 'NumberActions'], {'ok': self.action,
          'cancel': self.close,
-         # '0': self.messagekd,
-         # '1': self.cccam,
-         # '2': self.oscam,
          'menu': self.configtv,
          'blue': self.Blue,
          'yellow': self.download,
@@ -690,7 +685,6 @@ class GetipkTv(Screen):
         for name, url in match:
             name = name.replace('_',' ').replace('-',' ')
             name = Utils.checkStr(name)
-
             item = name + "###" + url
             items.append(item)
         items.sort()
@@ -972,8 +966,6 @@ def autostart(reason, session=None, **kwargs):
             print('pass autostart')
     return
 
-
-
 def menu(menuid, **kwargs):
     if menuid == 'cam':
         return [(_(name_plug),
@@ -983,20 +975,14 @@ def menu(menuid, **kwargs):
     else:
         return []
         
-def intCheck():
-    import socket
-    try:
-        socket.setdefaulttimeout(1)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-        return True
-    except:
-        return False
-
 def main(session, **kwargs):
     try:
-        if intCheck():
-            from . import Update
-            Update.upd_done()
+        if Utils.zCheckInternet(0):
+            try:
+                from . import Update
+                Update.upd_done()
+            except Exception as e:
+                print('error ', str(e))
             session.open(tvManager)
         else:
             from Screens.MessageBox import MessageBox
@@ -1006,18 +992,6 @@ def main(session, **kwargs):
         import traceback
         traceback.print_exc() 
         pass
-
-
-# def main(session, **kwargs):
-    # # from . import Utils
-    # if intCheck():
-        # try:
-            # from . import Update
-            # Update.upd_done()
-        # except:
-            # pass
-
-    # session.open(tvManager)
 
 def StartSetup(menuid):
     if menuid == 'mainmenu':

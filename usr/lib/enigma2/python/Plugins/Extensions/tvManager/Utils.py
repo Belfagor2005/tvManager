@@ -240,6 +240,38 @@ def daterange(start_date, end_date):
     for n in range((end_date - start_date).days + 1):
         yield end_date - datetime.timedelta(n)
 
+global CountConnOk
+CountConnOk = 0
+def zCheckInternet(opt=1,server=None,port=None): # opt=5 custom server and port.
+      global CountConnOk
+      sock = False 
+      checklist = [("8.8.44.4",53),("8.8.88.8",53),("www.e2skin.blogspot.com",80),("www.e2skin.blogspot.com",443),("www.google.com",443)]
+      if opt < 5:
+          srv = checklist[opt]
+      else:
+          srv = (server,port) 
+      try:
+         import socket  
+         socket.setdefaulttimeout(0.5)         
+         socket.socket(socket.AF_INET,socket.SOCK_STREAM).connect(srv)
+         sock = True         
+         #print("[iSettingE2] - Internet OK")
+         CountConnOk = 0
+         print(_("Status Internet: %s:%s -> OK" % (srv[0],srv[1])))
+      except:
+         sock = False
+         #print("[iSettingE2] - Internet KO")         
+         print(_("Status Internet: %s:%s -> KO" % (srv[0],srv[1])))
+         if CountConnOk == 0 and opt != 2 and opt != 3:
+              CountConnOk = 1
+              print(_("Restart Check 1 Internet."))
+              return zCheckInternet(0)
+         elif CountConnOk == 1 and opt != 2 and opt != 3:
+              CountConnOk = 2
+              print(_("Restart Check 2 Internet."))
+              return zCheckInternet(4)
+      return sock
+      
 def checkInternet():
     try:
         import socket
@@ -265,40 +297,6 @@ def check(url):
         return False
     except socket.timeout:
         return False
-        
-        
-# global CountNumberOk
-# CountNumberOk = 0
-# def checkInternet(opt=1,server=None,port=None): # opt=5 custom server and port.
-      # global CountNumberOk
-      # sock = False 
-      # checklist = [("8.8.44.4",53),("8.8.88.8",53),("www.patbuweb.com",80),("www.tivustream.com",443),("www.google.com",443)]
-      # if opt < 5:
-          # srv = checklist[opt]
-      # else:
-          # srv = (server,port) 
-      # try:
-         # import socket  
-         # socket.setdefaulttimeout(0.5)         
-         # socket.socket(socket.AF_INET,socket.SOCK_STREAM).connect(srv)
-         # sock = True         
-         # #print("[patbuweb] - Internet OK")
-         # CountNumberOk = 0
-         # print(_("Status Internet: %s:%s -> OK" % (srv[0],srv[1])))
-      # except:
-         # sock = False
-         # #print("[patbuweb] - Internet KO")         
-         # print(_("Status Internet: %s:%s -> KO" % (srv[0],srv[1])))
-         # if CountNumberOk == 0 and opt != 2 and opt != 3:
-              # CountNumberOk = 1
-              # print(_("Restart Check 1 Internet."))
-              # return CheckInternet(0)
-         # elif CountNumberOk == 1 and opt != 2 and opt != 3:
-              # CountNumberOk = 2
-              # print(_("Restart Check 2 Internet."))
-              # return CheckInternet(4)
-      # return sock
-
 
 def testWebConnection(host="www.google.com", port=80, timeout=3):
     import socket
@@ -340,7 +338,8 @@ def checkStr(text, encoding="utf8"):
         # if isinstance(txt, type(six.text_type())):
             # txt = txt.encode('utf-8')
     # return txt
-    #kiddac code        
+    
+#kiddac code        
 def checkRedirect(url):
     # print("*** check redirect ***")
     try:
@@ -603,6 +602,7 @@ def isStreamlinkAvailable():
 
 
 def AdultUrl(url):
+        import sys        
         if sys.version_info.major == 3:
              import urllib.request as urllib2
         elif sys.version_info.major == 2:
