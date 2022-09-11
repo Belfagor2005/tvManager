@@ -3,7 +3,7 @@
 #channelinfo="http://www.lokumsat.esy.es/CaMs-EmU/CCcam.channelinfo"
 #prio="http://www.lokumsat.esy.es/CaMs-EmU/CCcam.prio"
 #providers="http://www.lokumsat.esy.es/CaMs-EmU/CCcam.providers"
-softcam="http://raw.githubusercontent.com/pablitodrito/prova-pablito/master/SoftCam.Key"
+softcam="https://raw.githubusercontent.com/pablitodrito/prova-pablito/master/SoftCam.Key"
 #autoroll="http://depo.dreamosat-forum.com/CaMs-EmU/CCcam/AutoRoll.Key"
 #vubiss="http://www.lokumsat.esy.es/CaMs-EmU/SoftCam.Key"
 #oscam="http://www.lokumsat.esy.es/CaMs-EmU/oscam.keys"
@@ -30,3 +30,5 @@ KeyDate=`/bin/date -r /usr/keys/SoftCam.Key +%d.%m.%y-%H:%M:%S`
 	echo "DATA E ORA AGGIORNAMENTO: $KeyDate"
 	echo ""
 exit 0
+
+wget https://raw.githubusercontent.com/pablitodrito/prova-pablito/master/SoftCam.Key -O /usr/keys/SoftCam.Key

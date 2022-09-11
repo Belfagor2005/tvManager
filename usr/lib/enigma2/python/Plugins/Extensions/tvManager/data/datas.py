@@ -221,9 +221,8 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==',                            'Server10'),
     ('aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA==',            'Server11'),
     ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==','Server12'),
-    ('aHR0cHM6Ly93d3cucm9nY2FtLmNvbS9uZXdmcmVlLnBocA==',            'Server13'),
-    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=',                    'Server14'),
-    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=',            'Server15'),
+    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=',                    'Server13'),
+    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=',            'Server14'),
     ]
 
 config.plugins.tvmanager = ConfigSubsection()
@@ -494,8 +493,10 @@ class tv_config(Screen, ConfigListScreen):
             data = checkStr(data)
             url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
             if 'testcline' in data.lower():
-                # <div>C: egygold.co 51002 jsp271 88145</div>
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</div>', data)
+                # <div>C: s2.livetvip.com 9626 gf023 pon</div>
+                # <div>C: top2.supercline.net 18802 paisilvpenedo 89682009</div>
+                # <div>C: top1.supercline.net 18801 paisilvpenedo 89682009</div>
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</d', data)
 
             if 'cccameagle' in data.lower():
                 # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
@@ -507,7 +508,7 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = url1.replace('<br><br>', '')
             if 'cccamprima.com' in data.lower():
                 # <div>C: egygold.co 51002 jsp271 88145</div>
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             if 'iptvcccam' in data.lower():
                 #<h1>C: free.iptvcccam.co 2021 tcsi iptvcccam.co        </h1>
@@ -516,61 +517,61 @@ class tv_config(Screen, ConfigListScreen):
 
             if 'premium' in data.lower():
                 #<h3 style="color:red;">
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
                 
             if 'cccamia' in data:
                 # C: free.CCcamia.com 18000 e4xd88 CCcamia.com
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
                 
             if 'cccameurop' in data.lower():
                 # <div class="dslc-module-shortcode">
                 # C: free.CCcamia.com 18000 uknrru CCcamia.com
                 # </div>
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)</', data)                
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</', data)                
             if 'cccamx' in data.lower():
                 #">
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n', data)
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
             if 'cccamiptv' in data.lower():
                 # <h3 style="color:red;">
                 # C: free.cccamiptv.club 13100 8n1gv9 cccamiptv.club
                 # </h3>
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.*?)\n.*?</h3>', data)
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
             if 'FREEN12' in data.lower():
                 # <h3 style="color:red;">
                 # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
                 # </h3>
-                url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.*?)\n', data)
+                url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
             if 'history' in data.lower():
-                url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.*?)</a>.*?title="CCcam server online and valid"></span>', data)
+                url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title="CCcam server online and valid"></span>', data)
 
             if 'store' in data.lower():
                 #view-source:http://cccamstore.tv/free-server.php
                 #<center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
-                url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.*?) <br>', data)
+                url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
 
             if 'cccam.net' in data.lower():
                 #>C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
-                url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.*?)</b>', data)
+                url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
             if 'cccameagle' in data.lower():
                 #>C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
-                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.*?)</h2>', data)
+                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
 
             if 'rogcam' in data.lower():
                 #
-                url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.*?) </span>', data)
+                url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
 
             if 'cccambird' in data.lower():
                 #>C: t2.cccambird.com 14800 51190374 cccambird</th>
-                url1 = re.findall('">C: (.+?) (.+?) (.+?) (.*?)</th></tr>', data)
+                url1 = re.findall('">C: (.+?) (.+?) (.+?) (.+?)</th></tr>', data)
 
             if 'bosscccam' in data.lower():
                 #<strong>c: bosscccam.nowddns.com 26210 L2O000mhI8 BosS-ccCAm.coM</strong></p>
-                url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.*?)</strong', data)
+                url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.+?)</strong', data)
 
             if '15days' in data.lower():
                 #">C: s7.cccambird.com 12550 72953333 cccambird</th></tr>
-                url1 = re.findall('">C: (.*?) (.*?) (.*?) (.*?)</th></tr>', data)
+                url1 = re.findall('">C: (.*?) (.*?) (.*?) (.+?)</th></tr>', data)
 
             print('===========data=========', url1)
 
@@ -582,6 +583,7 @@ class tv_config(Screen, ConfigListScreen):
                     user = str(u)
                     password = str(pw)
                     password = password.replace('</h1>','')
+                    password = password.replace('</div>','')
                 # if config.plugins.tvmanager.active.getValue():
                     config.plugins.tvmanager.hostaddress.setValue(host)
                     config.plugins.tvmanager.port.setValue(port)
