@@ -31,7 +31,6 @@ import re
 import glob
 from twisted.web import client
 from twisted.web.client import getPage
-from sys import version_info
 import ssl
 from random import choice
 global skin_path
@@ -213,10 +212,10 @@ if DreamOS():
 # Server02 = 'https://cccamas.com/free/get.php' # no work
 # Server03 = 'https://cccamazon.com/free/get.php'  # no work
 # Server16 = 'https://cccamfrei.com/free/get.php' # no work
+# Server3 = 'https://cccam-premium.com/free-cccam/' # no work fine
 # work
 # Server1 = 'http://cccamprima.com/free5/get2.php'
 # Server2 = 'https://cccamprime.com/cccam48h.php'
-# Server3 = 'https://cccam-premium.com/free-cccam/' # no work fine
 # Server4 = 'https://cccamia.com/free-cccam'
 # Server5 = 'http://cccameurop.com/freetest.php'
 # Server6 = 'https://www.cccambird.com/freecccam.php'
@@ -232,10 +231,11 @@ if DreamOS():
 # Server16 = 'https://cccamx.co/getCode.php'
 # Server17 = 'https://cccameagle.com/fccam'
 # Server18 = 'https://cccam-premium.co/free-cccam/'
+# Server20 = 'https://cccamiptv.club/free-cccam/'
 
 
 Serverlive = [
-    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw',            'Server01'),
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==',                    'Server01'),
     ('aHR0cHM6Ly9jY2NhbXByaW1lLmNvbS9jY2NhbTQ4aC5waHA=',            'Server02'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==',        'Server03'),
     ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2Ft',                    'Server04'),
@@ -251,9 +251,10 @@ Serverlive = [
     ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=',                    'Server14'),
     ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=',                'Server15'),
     ('aHR0cHM6Ly9jY2NhbXguY28vZ2V0Q29kZS5waHA=',                    'Server16'),
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==',                    'Server17'),
+    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw',            'Server17'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=',            'Server18'),
     ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=',                    'Server19'), 
+    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==',            'Server20'),     
     ]
 
 config.plugins.tvmanager = ConfigSubsection()
@@ -500,19 +501,25 @@ class tv_config(Screen, ConfigListScreen):
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def getcl(self):
-        data1 = str(config.plugins.tvmanager.Server.value)
-        print(data1)
-        data = b64decoder(data1)
-        print('data2 ', data)
         try:
-            data = getUrl(data)
-            if PY3:
-                data = six.ensure_str(data)
-            print('=== Lnk ==== ', data)
-            self.load_getcl(data)
-        except Exception as e:
-            print('getcl error: ', str(e))
+            if host:
+        
+                data1 = str(config.plugins.tvmanager.Server.value)
+                print(data1)
+                data = b64decoder(data1)
+                print('data2 ', data)
+                try:
+                    data = getUrl(data)
+                    if PY3:
+                        data = six.ensure_str(data)
+                    print('=== Lnk ==== ', data)
+                    self.load_getcl(data)
+                except Exception as e:
+                    print('getcl error: ', str(e))
 
+        except Exception as e:
+            print('error on host', str(e))
+            
     def load_getcl(self, data):
         try:
             data = checkStr(data)

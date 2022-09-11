@@ -977,7 +977,7 @@ def menu(menuid, **kwargs):
         
 def main(session, **kwargs):
     try:
-        if Utils.zCheckInternet(0):
+        if Utils.zCheckInternet(1):
             try:
                 from . import Update
                 Update.upd_done()

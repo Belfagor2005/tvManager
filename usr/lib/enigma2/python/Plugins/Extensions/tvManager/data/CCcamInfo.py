@@ -6,7 +6,6 @@
 # Update from Lululla py3
 from __future__ import print_function
 from . import _
-# from base64 import encodestring
 import base64
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.config import config, ConfigInteger, ConfigSelection, ConfigSubsection, ConfigText, ConfigYesNo, getConfigListEntry
@@ -32,7 +31,6 @@ from twisted.web.client import HTTPClientFactory
 import gettext
 import sys
 import six
-from sys import version_info
 from six.moves.urllib.request import urlopen
 from six.moves.urllib.request import Request
 from six.moves.urllib.error import HTTPError, URLError

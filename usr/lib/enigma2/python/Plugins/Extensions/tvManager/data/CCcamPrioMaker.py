@@ -11,7 +11,7 @@ from os import path as os_path, rename
 from Components.config import config, ConfigSubsection, ConfigEnableDisable, KEY_LEFT, KEY_RIGHT, KEY_0, getConfigListEntry
 from Components.ActionMap import ActionMap
 from Components.Sources.StaticText import StaticText
-from . import _
+#from . import _
 config.plugins.ccprio = ConfigSubsection()
 config.plugins.ccprio.autostart = ConfigEnableDisable(default=False)
 config.plugins.ccprio.onecaid = ConfigEnableDisable(default=False)
@@ -96,19 +96,12 @@ class CCPrioMaker(Screen):
         self.Provider = None
         self.ServiceName = None
         self.caidlist = None
-        # self.ecmTimer = eTimer()
-        # self.ecmTimer.timeout.get().append(self.parseEcmInfo)
-
         self.ecmTimer = eTimer()
-        # if os.path.isfile('/var/lib/dpkg/status'):
         try:
             self.hideTimer_conn = self.hideTimer.timeout.connect(self.parseEcmInfo)
         except:
             self.hideTimer.callback.append(self.parseEcmInfo)
         self.hideTimer.start(200, 1)
-
-
-
         self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
                         { iPlayableService.evUpdatedEventInfo: self.__evUpdatedEventInfo, 
                           iPlayableService.evStopped: self.__evStopped})

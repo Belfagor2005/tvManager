@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-# CCam Organizer by fsenes 2011
 from Screens.Screen import Screen
 from Components.MenuList import MenuList
 from Components.ActionMap import ActionMap
@@ -36,10 +34,8 @@ class OrganizerMenu(Screen):
             return
         global returnValue
         returnValue = self["myMenu"].l.getCurrentSelection() and self["myMenu"].l.getCurrentSelection()[1]
-        # if returnValue is "five":
         if returnValue == "five":
             self.Revert()
-        # elif returnValue is "exit":
         elif returnValue == "exit":
             self.close(None)
         else:
