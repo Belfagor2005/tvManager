@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+
 from Screens.Screen import Screen
 from Components.MenuList import MenuList
 from Components.ActionMap import ActionMap

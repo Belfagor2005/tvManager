@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
@@ -816,7 +817,7 @@ class InfoCfg(Screen):
 
     def updateList(self):
         paypal = self.paypal2()
-        self["paypal"].setText(paypal)    
+        self["paypal"].setText(paypal)
         self["text"].setText(self.getcont())
 
 
@@ -926,9 +927,6 @@ class Ipkremove(Screen):
         print('pressed', number)
         self['text'].number(number)
 
-
-
-
 #===================init
 def startConfig(session, **kwargs):
     session.open(tvManager)
@@ -974,7 +972,7 @@ def menu(menuid, **kwargs):
           -1)]
     else:
         return []
-        
+
 def main(session, **kwargs):
     try:
         if Utils.zCheckInternet(1):
@@ -987,10 +985,10 @@ def main(session, **kwargs):
         else:
             from Screens.MessageBox import MessageBox
             from Tools.Notifications import AddPopup
-            AddPopup(_("Sorry but No Internet :("),MessageBox.TYPE_INFO, 10, 'Sorry')  
+            AddPopup(_("Sorry but No Internet :("),MessageBox.TYPE_INFO, 10, 'Sorry')
     except:
         import traceback
-        traceback.print_exc() 
+        traceback.print_exc()
         pass
 
 def StartSetup(menuid):

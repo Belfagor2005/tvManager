@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+
 # CCcam Info by AliAbdul
 # Update CCcam Info By RAED Full HD Skin (1920x1080) 29-06-2015
 # Update CCcam Info Dimitrij openPLi 19-04-2016
@@ -46,7 +47,6 @@ else:
     NEW_CVS = False
 from Plugins.Extensions.Levi45MulticamManager.data import CCcamPrioMaker
 from Plugins.Extensions.Levi45MulticamManager.data import CCcamOrganizer
-#############################################################
 
 VERSION         = "v1.4z"
 DATE            = "15.12.2020"
@@ -61,7 +61,7 @@ lock_off        = loadPNG("/usr/share/enigma2/skin_default/icons/lock_off.png")
 TOGGLE_SHOW     = InfoBar.toggleShow
 # png = plugin_path + "/icons/key_%s.png" % str(idx)  #remember
 # png = plugin_path + "/icons/key_%s.png" % color  #remember
-#############################################################
+
 
 def _parse(url):
     url = url.strip()
@@ -108,8 +108,6 @@ def getPage(url, contextFactory=None, *args, **kwargs):
     reactor.connectTCP(host, port, factory)
     return factory.deferred
 
-#############################################################
-
 class HelpableNumberActionMap(NumberActionMap):
     def __init__(self, parent, context, actions, prio):
         alist = []
@@ -153,8 +151,6 @@ def translateBlock(block):
             block = block.replace(x[0], x[1])
     return block
 
-#############################################################
-
 def getConfigValue(l):
     list = l.split(":")
     ret = ""
@@ -171,8 +167,6 @@ def getConfigValue(l):
 
     return ret
 
-#############################################################
-
 def notBlackListed(entry):
     try:
         f = open(config.plugins.CCcamInfo.blacklist.value, "r")
@@ -185,8 +179,6 @@ def notBlackListed(entry):
         if x == entry:
             ret = False
     return ret
-
-#############################################################
 
 menu_list = [
     _("General"),
@@ -206,8 +198,6 @@ menu_list = [
     _("CCcam Organizer"),
     _("Switch config"),
     _("About")]
-
-#############################################################
 
 config.plugins.CCcamInfo = ConfigSubsection()
 config.plugins.CCcamInfo.name = ConfigText(default="Profile", fixed_size=False)
@@ -229,8 +219,6 @@ config.plugins.CCcamInfo.ecmInfoPositionZ = ConfigSelection([(str(x), str(x)) fo
 config.plugins.CCcamInfo.blacklist = ConfigText(default="/etc/enigma2/CCcamInfo.blacklisted", fixed_size=False)
 config.plugins.CCcamInfo.profiles = ConfigText(default="/etc/enigma2/CCcamInfo.profiles", fixed_size=False)
 
-#############################################################
-
 # lock_on = loadPNG("/usr/share/enigma2/skin_default/icons/lock_on.png")
 # lock_off = loadPNG("/usr/share/enigma2/skin_default/icons/lock_off.png")
 
@@ -251,8 +239,6 @@ def getConfigNameAndContent(fileName):
         name = fileName.replace("/etc/", "")
 
     return (name, content)
-
-#############################################################
 
 if width > 1280 :
     MAX_X = 400
@@ -311,8 +297,6 @@ else:
 
 SYSTEMS = ["irdeto", "seca", "nagra", "via", "conax", "betacrypt", "crypto", "dreamcrypt", "nds", "drecrypt", "powervu", "verimatrix", "rosscrypt", "exset", "codicrypt", "digicipher", "biss"]
 
-#############################################################
-
 class EcmInfoLabel(Label):
     def __init__(self, text=""):
         Label.__init__(self, text)
@@ -325,8 +309,6 @@ class EcmInfoLabel(Label):
 
     def encrypted(self):
         self.instance.setForegroundColor(parseColor("#00d100"))
-
-#############################################################
 
 class EcmInfoScreenNew(Screen):
     def __init__(self, session):
@@ -646,8 +628,6 @@ class EcmInfoScreenNew(Screen):
 
             self["ecmInfo"].setText(ecmInfoString)
 
-#############################################################
-
 class EcmInfo():
     def __init__(self):
         self.dialog = None
@@ -680,8 +660,6 @@ class EcmInfo():
             self.dialog.hide()
 
 ecmInfo = EcmInfo()
-
-#############################################################
 
 class EcmInfoPositioner(Screen):
     def __init__(self, session):
@@ -756,11 +734,6 @@ class EcmInfoPositioner(Screen):
 
 #############################################################
 
-# if width == 1280:
-    # EcmInfoConfigMenu_SKIN = """
-    # <screen position="center,center" size="560,220" title="CCcam Info">
-        # <widget name="config" position="10,10" size="540,200" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     EcmInfoConfigMenu_SKIN = """
     <screen name="" position="center,center" size="860,320" title="CCcam Info">
@@ -824,8 +797,6 @@ class EcmInfoConfigMenu(ConfigListScreen, Screen):
         for x in self["config"].list:
             x[1].cancel()
         self.close()
-
-#############################################################
 
 class CCcamList(MenuList):
     def __init__(self, list):
@@ -949,13 +920,6 @@ def CCcamMenuConfigListEntry(name, blacklisted):
 
     return res
 
-#############################################################
-
-# if width == 1280:
-     # CCcamInfoMain_SKIN = """
-    # <screen position="center,center" size="500,420" title="CCcam Info" >
-        # <widget name="menu" position="0,0" size="500,420" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoMain_SKIN = """
     <screen position="center,center" size="800,620" title="CCcam Info">
@@ -1345,13 +1309,6 @@ class CCcamInfoMain(Screen):
     def workingFinished(self, callback=None):
         self.working = False
 
-#############################################################
-
-# if width == 1280:
-     # CCcamInfoEcmInfoSelection_SKIN = """
-    # <screen position="center,center" size="500,420" title="CCcam Info" >
-        # <widget name="list" position="0,0" size="500,420" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoEcmInfoSelection_SKIN = """
     <screen name="" position="center,center" size="800,620" title="CCcam Info">
@@ -1381,13 +1338,6 @@ class CCcamInfoEcmInfoSelection(Screen):
     def ok(self):
         self.close(self["list"].getCurrent())
 
-#############################################################
-
-# if width == 1280:
-     # CCcamInfoInfoScreen_SKIN = """
-    # <screen position="center,center" size="500,420" title="CCcam Info" >
-        # <widget name="text" position="0,0" size="500,420" font="Regular;20" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoInfoScreen_SKIN = """
     <screen position="center,center" size="800,620" title="CCcam Info">
@@ -1417,19 +1367,6 @@ class CCcamInfoInfoScreen(Screen):
                 "right": self["text"].pageDown,
             }, -1)
 
-#############################################################
-
-# if width == 1280:
-    # CCcamShareViewMenu_SKIN = """
-    # <screen position="center,center" size="560,430" title="CCcam Info" >
-        # <widget name="list" position="0,0" size="560,320" scrollbarMode="showOnDemand" />
-        # <eLabel text="" position="10,322" size="540,2" font="Regular;14" backgroundColor="#ffffff" />
-        # <widget name="uphops" position="10,340" size="260,25" font="Regular;20" />
-        # <widget name="cards" position="290,340" size="260,25" halign="right" font="Regular;20" />
-        # <widget name="providers" position="10,370" size="260,25" font="Regular;20" />
-        # <widget name="reshare" position="290,370" size="260,25" halign="right" font="Regular;20" />
-        # <widget name="title" position="0,400" size="560,20" halign="center" font="Regular;20" />
-    # </screen>"""
 if width > 1280:
     CCcamShareViewMenu_SKIN = """
     <screen position="center,center" size="860,700" title="CCcam Info">
@@ -1626,7 +1563,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                         countList.append(count)
                                         numberofcards = count
                                         providername = self.providers.get(caidprovider, 'Multiple Providers given')
-                                        #if providername == 'Multiple Providers given':
+                                        # if providername == 'Multiple Providers given':
                                         #       print caidprovider
 
                                         numberofreshare = 0
@@ -1649,7 +1586,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                         if int(down)>0:
                                             reshare = reshareList[i]
                                             reshare += 1
-                                            #if caidprovider == "05021700":
+                                            # if caidprovider == "05021700":
                                             #       print "re: %d" %(reshare)
                                             reshareList[i] = reshare
                                             numberofreshare = 0
@@ -1664,12 +1601,12 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                     self.hostList.append(hostname)
                                     self.caidList.append(caidprovider)
                                     totalcards += 1
-                                    #maxdown = list[6]
-                                    #while maxdown.startswith(" "):
-                                        #maxdown = maxdown[1:]
-                                        #down = maxdown
-                                    #if int(down)>0:
-                                        #resharecards +=1
+                                    # maxdown = list[6]
+                                    # while maxdown.startswith(" "):
+                                        # maxdown = maxdown[1:]
+                                        # down = maxdown
+                                    # if int(down)>0:
+                                        # resharecards +=1
 
         self.instance.setTitle("%s (%s %d) %s %s" % (_("Share View"), _("Total cards:"), totalcards, _("Hops:"), ulevel))
         self["title"].setText("%s (%s %d) %s %s" % (_("Share View"), _("Total cards:"), totalcards, _("Hops:"), ulevel))
@@ -1774,15 +1711,6 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                 e += 1
             self.session.open(CCcamInfoInfoScreen, server)
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoSubMenu_SKIN = """
-    # <screen position="center,center" size="500,420" title="CCcam Info" >
-        # <widget name="list" position="0,0" size="500,250" scrollbarMode="showOnDemand" />
-        # <eLabel text="" position="10,252" size="480,2" font="Regular;14" backgroundColor="#ffffff" />
-        # <widget name="info" position="0,255" size="500,165" font="Regular;16" transparent="1" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoSubMenu_SKIN = """
     <screen position="center,center" size="800,620" title="CCcam Info">
@@ -1834,15 +1762,6 @@ class CCcamInfoSubMenu(Screen):
         except:
             return ""
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoServerMenu_SKIN = """
-    # <screen position="center,center" size="500,420" title="CCcam Info" >
-        # <widget name="list" position="0,0" size="500,250" scrollbarMode="showOnDemand" />
-        # <eLabel text="" position="10,252" size="480,2" font="Regular;14" backgroundColor="#ffffff" />
-        # <widget name="info" position="0,255" size="500,165" font="Regular;16" transparent="1" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoServerMenu_SKIN = """
     <screen position="center,center" size="800,620" title="CCcam Info">
@@ -1874,7 +1793,7 @@ class CCcamInfoServerMenu(Screen):
                 list.append(CCcamServerListEntry(x[0], "red"))
             elif x[1] == _("Cards: 0"): #online with no card - blue
                 list.append(CCcamServerListEntry(x[0], "blue"))
-            else: #online with cards - green
+            else: # online with cards - green
                 list.append(CCcamServerListEntry(x[0], "green"))
         self["list"] = CCcamList(list)
         self["info"] = Label()
@@ -1906,8 +1825,6 @@ class CCcamInfoServerMenu(Screen):
         if sel is not None:
             self.session.open(CCcamInfoShareInfo, sel[0], self.url)
 
-#############################################################
-
 class CCcamInfoRemoteBox:
     def __init__(self, name, ip, username, password, port):
         self.name = name
@@ -1916,13 +1833,6 @@ class CCcamInfoRemoteBox:
         self.password = password
         self.port = port
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoConfigMenu_SKIN = """
-    # <screen position="center,center" size="560,150" title="CCcam Info">
-        # <widget name="config" position="0,0" size="560,150" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoConfigMenu_SKIN = """
     <screen position="center,center" size="700,250" title="CCcam Info">
@@ -1961,21 +1871,6 @@ class CCcamInfoConfigMenu(ConfigListScreen, Screen):
     def exit(self):
         self.close(None)
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoRemoteBoxMenu_SKIN = """
-    # <screen position="center,center" size="560,420" title="CCcam Info" >
-        # <ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" transparent="1" alphatest="on" />
-        # <widget name="key_red" position="0,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_green" position="140,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_yellow" position="280,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_blue" position="420,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="list" position="0,50" size="560,360" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoRemoteBoxMenu_SKIN = """
     <screen position="center,center" size="860,620" title="CCcam Info">
@@ -2124,21 +2019,6 @@ class CCcamInfoRemoteBoxMenu(Screen):
             self.profiles.append(callback)
             self["list"].setList(self.list)
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoShareInfo_SKIN = """
-    # <screen position="center,center" size="560,420" title="CCcam Info" >
-        # <ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" transparent="1" alphatest="on" />
-        # <widget name="key_red" position="0,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_green" position="140,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_yellow" position="280,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_blue" position="420,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="list" position="0,50" size="560,360" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoShareInfo_SKIN = """
     <screen position="center,center" size="860,620" title="CCcam Info">
@@ -2316,21 +2196,6 @@ class CCcamInfoShareInfo(Screen):
         self["list"].setList(shareList)
         self.working = False
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoConfigSwitcher_SKIN = """
-    # <screen position="center,center" size="560,420" title="CCcam Info" >
-        # <ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" transparent="1" alphatest="on" />
-        # <widget name="key_red" position="0,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_green" position="140,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_yellow" position="280,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_blue" position="420,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="list" position="0,50" size="560,360" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoConfigSwitcher_SKIN = """
     <screen position="center,center" size="860,620" title="CCcam Info">
@@ -2472,20 +2337,6 @@ class CCcamInfoConfigSwitcher(Screen):
                 content = _("Could not open the file %s!") % fileName[0]
             self.session.open(CCcamInfoInfoScreen, content)
 
-#############################################################
-
-# if width == 1280:
-    # CCcamInfoMenuConfig_SKIN = """
-    # <screen position="center,center" size="560,420" title="CCcam Info Config" >
-        # <ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" transparent="1" alphatest="on" />
-        # <ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" transparent="1" alphatest="on" />
-        # <widget name="key_red" position="0,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_green" position="140,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="key_yellow" position="280,0" zPosition="1" size="140,40" font="Regular;20" valign="center" halign="center" backgroundColor="#1f771f" transparent="1" />
-        # <widget name="list" position="0,50" size="560,360" scrollbarMode="showOnDemand" />
-    # </screen>"""
 if width > 1280:
     CCcamInfoMenuConfig_SKIN = """
     <screen position="center,center" size="860,620" title="CCcam Info Config">
@@ -2589,8 +2440,6 @@ class CCcamInfoMenuConfig(Screen):
         if callback:
             config.plugins.CCcamInfo.blacklist.value = ("%s/CCcamInfo.blacklisted"%callback).replace("//", "/")
             config.plugins.CCcamInfo.blacklist.save()
-
-#############################################################
 
 def main(session, **kwargs):
     session.open(CCcamInfoMain)

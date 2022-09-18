@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+
 from Components.ServiceEventTracker import ServiceEventTracker
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
@@ -11,7 +12,7 @@ from os import path as os_path, rename
 from Components.config import config, ConfigSubsection, ConfigEnableDisable, KEY_LEFT, KEY_RIGHT, KEY_0, getConfigListEntry
 from Components.ActionMap import ActionMap
 from Components.Sources.StaticText import StaticText
-#from . import _
+
 config.plugins.ccprio = ConfigSubsection()
 config.plugins.ccprio.autostart = ConfigEnableDisable(default=False)
 config.plugins.ccprio.onecaid = ConfigEnableDisable(default=False)
@@ -25,7 +26,7 @@ PRIOPATH = "/etc/CCcam.prio"
 PRIOPATHBAK = "/etc/CCcam.prio.bak"
 PRIOLIST_D = []
 PRIOLIST_D.append("# Make with CCPrioMaker")
-#PRIOLIST_D.append("I: 09C4")
+# PRIOLIST_D.append("I: 09C4")
 PRIOLIST_D.append("P: 0D05:000000")
 PRIOLIST_D.append("P: 1702:000000")
 PRIOLIST_D.append("P: 1722:000000")

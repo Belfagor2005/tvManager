@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+
 #--------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
 #     05/06/2022     #
 #      No Coppy      #
 #--------------------#
+
 from __future__ import print_function
 from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigList, ConfigListScreen
@@ -545,8 +547,8 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title="CCcam server online and valid"></span>', data)
 
             if 'store' in data.lower():
-                #view-source:http://cccamstore.tv/free-server.php
-                #<center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
+                # view-source:http://cccamstore.tv/free-server.php
+                # <center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
                 url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
 
             if 'cccam.net' in data.lower():
