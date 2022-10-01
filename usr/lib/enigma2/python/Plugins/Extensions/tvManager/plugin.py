@@ -16,48 +16,42 @@ from Components.Button import Button
 from Components.FileList import FileList
 from Components.Label import Label
 from Components.MenuList import MenuList
-from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaTest
+from Components.MultiContent import MultiContentEntryPixmapAlphaTest
+from Components.MultiContent import MultiContentEntryText
 from Components.Pixmap import Pixmap
 from Components.PluginComponent import plugins
-from Components.Sources.List import List
-from Components.Sources.StaticText import StaticText
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Console import Console
-from Screens.MessageBox import MessageBox
 from Screens.InputBox import Input
+from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
-from os import remove, mkdir, chmod, walk
+from enigma import RT_HALIGN_LEFT
+from enigma import eListboxPythonMultiContent
+from enigma import eTimer, loadPNG
+from enigma import gFont
+from os import mkdir, chmod
+from time import sleep
 from twisted.web.client import getPage
-import base64
+import glob
 import os
+import re
+import six
 import sys
 import time
-import re
-import ssl
-import glob
-import six
-from time import sleep
-from enigma import gFont, eListboxPythonMultiContent, eTimer, ePicLoad, loadPNG
-from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
-# from Plugins.Extensions.tvManager.data.GetEcmInfo import GetEcmInfo
-# ======================================================
+
 global active
 active = False
 
 PY3 = sys.version_info.major >= 3
 if PY3:
-        from urllib.error import URLError, HTTPError
-        from urllib.request import urlopen, Request
-        unicode = str
-        unichr = chr
-        long = int
-        PY3 = True
-else:
-        from urllib2 import urlopen, Request, URLError, HTTPError
+    unicode = str
+    unichr = chr
+    long = int
+    PY3 = True
 
 
 
@@ -102,6 +96,7 @@ def checkdir():
         __createdir('/usr/keys')
     if not os.path.exists(camscript):
         __createdir('/usr/camscript')
+
 
 checkdir()
 
@@ -193,7 +188,7 @@ def show_list_1(h):
 
 
 class tvManager(Screen):
-    def __init__(self, session, args = False):
+    def __init__(self, session, args=False):
         self.session = session
         skin = skin_path + '/tvManager.xml'
         f = open(skin, 'r')
@@ -209,23 +204,21 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-        self["NumberActions"] = NumberActionMap(["NumberActions"],
-                                                                {
-                                                                 '0': self.messagekd,
-                                                                 '1': self.cccam,
-                                                                 '2': self.oscam
-                                                                })
+        self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
+                                                                    '1': self.cccam,
+                                                                    '2': self.oscam
+                                                                    })
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
                                      'SetupActions',
                                      'MenuActions'], {'ok': self.action,
-                                     'cancel': self.close,
-                                     'menu': self.configtv,
-                                     'blue': self.Blue,
-                                     'yellow': self.download,
-                                     'green': self.action,
-                                     'info': self.CfgInfo,
-                                     'red': self.stop}, -1)
+                                                      'cancel': self.close,
+                                                      'menu': self.configtv,
+                                                      'blue': self.Blue,
+                                                      'yellow': self.download,
+                                                      'green': self.action,
+                                                      'info': self.CfgInfo,
+                                                      'red': self.stop}, -1)
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start'))
@@ -340,7 +333,7 @@ class tvManager(Screen):
     def keysdownload(self, result):
         if result:
             script = ('%s/auto' % plugin_path)
-            from os import access, X_OK, chmod
+            from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
             # self.prombt('sh %s' % script)
@@ -462,15 +455,15 @@ class tvManager(Screen):
         self.indexto = ''
         scriptlist = []
         pliste = []
-        path = '/usr/camscript/'
-        for root, dirs, files in os.walk(path):
+        pathscript = '/usr/camscript/'
+        for root, dirs, files in os.walk(pathscript):
             for name in files:
                 scriptlist.append(name)
         self.emulist = scriptlist
         i = len(self.softcamslist)
         del self.softcamslist[0:i]
         for lines in scriptlist:
-            dat = path + lines
+            dat = pathscript + lines
             sfile = open(dat, 'r')
             for line in sfile:
                 if line[0:3] == 'OSD':
@@ -735,7 +728,7 @@ class GetipkTv(Screen):
                 os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, desttar))
                 # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
                 cmd0 = 'tar -xzvf ' + desttar + ' -C /'
-                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5']) # , finishedCallback=self.msgipkinst)
+                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)
@@ -776,12 +769,12 @@ class InfoCfg(Screen):
         self.list = []
         self['text'] = Label('')
         self['actions'] = ActionMap(['WizardActions',
-         'OkCancelActions',
-         'DirectionActions',
-         'ColorActions'], {'ok': self.close,
-         'back': self.close,
-         'cancel': self.close,
-         'red': self.close}, -1)
+                                     'OkCancelActions',
+                                     'DirectionActions',
+                                     'ColorActions'], {'ok': self.close,
+                                                       'back': self.close,
+                                                       'cancel': self.close,
+                                                       'red': self.close}, -1)
         self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
@@ -878,7 +871,6 @@ class Ipkremove(Screen):
             os.system(cmd)
             myfile = open('/var/lib/opkg/status', 'r')
             f = open('/etc/tmpfile', 'w')
-            icount = 0
             for line in myfile:
                 if line != ipkname:
                     print('myfile line=', line)
