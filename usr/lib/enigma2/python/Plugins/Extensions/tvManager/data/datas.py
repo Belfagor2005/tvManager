@@ -201,26 +201,33 @@ if DreamOS():
     skin_path = skin_path + 'dreamOs/'
 
 Serverlive = [
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==',                     'Server01'),
-    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==',             'Server02'),
-    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==',         'Server03'),
-    ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=',                 'Server04'),
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=',                     'Server05'),
-    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw',             'Server06'),
-    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw',         'Server07'),
-    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2Ft',                 'Server08'),
-    ('aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw',             'Server09'),
-    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==',                             'Server10'),
-    ('aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA==',             'Server11'),
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==', 'Server01'),
+    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
+    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==', 'Server03'),
+    ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server04'),
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server05'),
+    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server06'),
+    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server07'),
+    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2Ft', 'Server08'),
+    ('aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw', 'Server09'),
+    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server10'),
+    ('aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA==', 'Server11'),
     ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server12'),
-    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=',                     'Server13'),
-    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=',             'Server14'),
+    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server13'),
+    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=', 'Server14'),
     ]
+
+cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
+          ('/etc/tuxbox/config/oscam.server', 'Oscam'),
+          ('/etc/tuxbox/config/ncam.server', 'Ncam'),
+          ('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
+          ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
 config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
-config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
+# config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
+config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='100.200.300.400'))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=15000))
 config.plugins.tvmanager.user = NoSave(ConfigText(default='Enter Username', visible_width=50, fixed_size=False))
@@ -244,6 +251,12 @@ def putlblcfg():
         rstcfg = 'CCcam.cfg'
     elif putlbl == '/etc/tuxbox/config/oscam.server':
         buttn = _('Write') + ' Oscam'
+        rstcfg = 'oscam.server'
+    elif putlbl == '/etc/tuxbox/config/oscam-emu/oscam.server':
+        buttn = _('Write') + ' OscamEmu'
+        rstcfg = 'oscam.server'
+    elif putlbl == '/etc/tuxbox/config/Oscamicam/oscam.server':
+        buttn = _('Write') + ' Oscamicam'
         rstcfg = 'oscam.server'
     elif putlbl == '/etc/tuxbox/config/ncam.server':
         buttn = _('Write') + ' Ncam'
@@ -328,6 +341,10 @@ class tv_config(Screen, ConfigListScreen):
             if putlbl == '/etc/CCcam.cfg':
                 self.CCcam()
             elif putlbl == '/etc/tuxbox/config/oscam.server':
+                self.Oscam()
+            elif putlbl == '/etc/tuxbox/config/oscam-emu/oscam.server':
+                self.Oscam()
+            elif putlbl == '/etc/tuxbox/config/Oscamicam/oscam.server':
                 self.Oscam()
             elif putlbl == '/etc/tuxbox/config/ncam.server':
                 self.Ncam()
@@ -423,18 +440,18 @@ class tv_config(Screen, ConfigListScreen):
 
     def Oscam(self):
         global host, port, user, passw
-        if config.plugins.tvmanager.cfgfile.value != '/etc/tuxbox/config/oscam.server':
-            self.session.open(MessageBox, _('Select Oscam'), type=MessageBox.TYPE_INFO, timeout=5)
-            return
+        # if config.plugins.tvmanager.cfgfile.value != '/etc/tuxbox/config/oscam.server':
+            # self.session.open(MessageBox, _('Select Oscam'), type=MessageBox.TYPE_INFO, timeout=5)
+            # return
         cfgfile = config.plugins.tvmanager.cfgfile.value
         dest = cfgfile
         host = str(config.plugins.tvmanager.hostaddress.value)
         port = str(config.plugins.tvmanager.port.value)
         user = str(config.plugins.tvmanager.user.value)
         pasw = str(config.plugins.tvmanager.passw.value)
-        if fileExists('/etc/tuxbox/config/oscam.server'):
-            dest = '/etc/tuxbox/config/oscam.server'
-        else:
+        if not fileExists(dest):
+            # dest = '/etc/tuxbox/config/oscam.server'
+        # else:
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
