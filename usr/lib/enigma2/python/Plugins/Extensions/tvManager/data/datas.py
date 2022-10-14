@@ -373,7 +373,7 @@ class tv_config(Screen, ConfigListScreen):
             self.list.append(getConfigListEntry(_('Server Password'), config.plugins.tvmanager.passw, _('Password')))
 
         self['config'].list = self.list
-        self['config'].setList(self.list)
+        self['config'].l.setList(self.list)
         self.showhide()
         # return
 
