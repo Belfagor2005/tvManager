@@ -1,20 +1,24 @@
 <!-- Skin GetIpkList 15/08/2020 -->
-<screen name="GetipklistTv" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#20000000" flags="wfNoBorder">
+<screen name="GetipkTv" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#20000000" flags="wfNoBorder">
 	<widget name="title" position="146,60" size="600,26" font="Regular;20" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="desc2" position="146,103" size="686,33" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/main2.png" position="0,0" size="1280,720" zPosition="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/tvs.png" position="146,26" size="186,33" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sep.png" position="146,86" size="686,5" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sep.png" position="146,606" size="686,5" alphatest="blend" zPosition="5" />	
+	<widget name="description" position="146,103" size="553,33" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/main22.png" position="0,0" size="1280,720" zPosition="1"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="143,6" size="289,52" alphatest="blend" zPosition="5" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="146,86" size="686,5" alphatest="blend" zPosition="5"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="146,606" size="686,5" alphatest="blend" zPosition="5"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/PayPal.png" position="959,38" size="156,77" zPosition="3" alphatest="on" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/qr-codehd.png" position="931,120" size="225,225" zPosition="2" alphatest="on" />	
+	<widget name="paypal" position="860,346" size="381,234" font="Regular;20" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2" />	
+	<eLabel position="855,32" size="392,550" backgroundColor="#80000000" cornerRadius="20" zPosition="1" />
 	<!-- Menu List -->
-	<widget name="text"  position="146,143" size="686,433" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sliderb.png" />
+	<widget name="list" position="146,143" size="686,433" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sliderb.png"/>
 	<!-- Colors 1220 -->
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/key_red.png" position="146,630" size="20,20" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/key_green.png" position="146,670" size="20,20" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/key_yellow.png" position="813,630" size="20,20" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/key_blue.png" position="813,670" size="20,20" alphatest="blend" zPosition="5" />
-	<widget name="key_red" position="180,626" size="200,26" font="Regular;20" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_green" position="180,666" size="200,26" font="Regular;20" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_yellow" position="603,626" size="200,26" font="Regular;20" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_blue" position="603,666" size="200,26" font="Regular;20" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="146,630" size="20,20" alphatest="blend" zPosition="5"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="146,670" size="20,20" alphatest="blend" zPosition="5"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="813,630" size="20,20" alphatest="blend" zPosition="5"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_blue.png" position="813,670" size="20,20" alphatest="blend" zPosition="5"/>
+	<widget name="key_red" position="180,626" size="200,26" font="Regular;20" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1"/>
+	<widget name="key_green" position="180,666" size="200,26" font="Regular;20" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1"/>
+	<widget name="key_yellow" position="603,626" size="200,26" font="Regular;20" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1"/>
+	<widget name="key_blue" position="603,666" size="200,26" font="Regular;20" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1"/>
 </screen>

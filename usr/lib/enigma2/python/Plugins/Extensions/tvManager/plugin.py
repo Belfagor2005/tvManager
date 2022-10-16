@@ -225,8 +225,8 @@ class tvManager(Screen):
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
         self['key_blue'] = Button(_('Softcam'))
-        self['desc'] = Label()
-        self['desc'].setText(_('Scanning and retrieval list softcam ...'))
+        self['description'] = Label()
+        self['description'].setText(_('Scanning and retrieval list softcam ...'))
         self['info'] = Label('')
         self['list'] = m2list([])
         self.currCam = self.readCurrent()
@@ -350,7 +350,7 @@ class tvManager(Screen):
         self.session.open(tv_config)
 
     def cgdesc(self):
-        self['desc'].setText(_('Select a cam to run ...'))
+        self['description'].setText(_('Select a cam to run ...'))
 
     def openTest(self):
         pass
@@ -567,10 +567,10 @@ class GetipklistTv(Screen):
         self.names = []
         self.names_1 = []
         self.list = []
-        self['text'] = m2list([])
+        self['list'] = m2list([])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
-        self['desc2'] = Label(_('Getting the list, please wait ...'))
+        self['description'] = Label(_('Getting the list, please wait ...'))
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
@@ -600,7 +600,7 @@ class GetipklistTv(Screen):
 
     def errorLoad(self, error):
         print(str(error))
-        self['desc2'].setText(_('Try again later ...'))
+        self['description'].setText(_('Try again later ...'))
         self.downloading = False
 
     def _gotPageLoad(self, data):
@@ -615,11 +615,11 @@ class GetipklistTv(Screen):
                 # name = name.replace('_',' ').replace('-',' ')
                 name = Utils.checkStr(name)
                 self.list.append(name)
-                self['desc2'].setText(_('Please select ...'))
-            showlist(self.list, self['text'])
+                self['description'].setText(_('Please select ...'))
+            showlist(self.list, self['list'])
             self.downloading = True
         except:
-            self['desc2'].setText(_('Try again later ...'))
+            self['description'].setText(_('Try again later ...'))
             pass
 
     def okClicked(self):
@@ -629,7 +629,7 @@ class GetipklistTv(Screen):
             return
         if self.downloading is True:
             try:
-                idx = self["text"].getSelectionIndex()
+                idx = self["list"].getSelectionIndex()
                 name = self.list[idx]
                 self.session.open(GetipkTv, self.xml, name)
             except:
@@ -648,11 +648,11 @@ class GetipkTv(Screen):
         Screen.__init__(self, session)
         self.xmlparse = xmlparse
         self.selection = selection
-        self['text'] = m2list([])
+        self['list'] = m2list([])
         self.list = []
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
-        self['desc'] = Label(_('Select and Install'))
+        self['description'] = Label(_('Select and Install'))
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
@@ -686,7 +686,7 @@ class GetipkTv(Screen):
 
             self.names.append(name)
             self.urls.append(url)
-        showlist(self.names, self['text'])
+        showlist(self.names, self['list'])
 
     def message(self):
         i = len(self.names)
@@ -697,7 +697,7 @@ class GetipkTv(Screen):
 
     def selclicked(self, result):
         if result:
-            idx = self["text"].getSelectionIndex()
+            idx = self["list"].getSelectionIndex()
             dom = self.names[idx]
             com = self.urls[idx]
             self.prombt(com, dom)
@@ -767,7 +767,7 @@ class InfoCfg(Screen):
         f.close()
         Screen.__init__(self, session)
         self.list = []
-        self['text'] = Label('')
+        self['list'] = Label('')
         self['actions'] = ActionMap(['WizardActions',
                                      'OkCancelActions',
                                      'DirectionActions',
@@ -785,7 +785,7 @@ class InfoCfg(Screen):
         self['key_blue'].hide()
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
-        self['desc'] = Label(_('Path Configuration Folder'))
+        self['description'] = Label(_('Path Configuration Folder'))
         self.onShown.append(self.updateList)
 
     def getcont(self):
@@ -809,7 +809,7 @@ class InfoCfg(Screen):
     def updateList(self):
         paypal = self.paypal2()
         self["paypal"].setText(paypal)
-        self["text"].setText(self.getcont())
+        self["list"].setText(self.getcont())
 
     def paypal2(self):
         conthelp = "If you like what I do you\n"
@@ -823,7 +823,7 @@ class Ipkremove(Screen):
         Screen.__init__(self, session)
         self['list'] = FileList('/', matchingPattern='^.*\\.(png|avi|mp3|mpeg|ts)')
         self['pixmap'] = Pixmap()
-        self['text'] = Input('1234', maxSize=True, type=Input.NUMBER)
+        self['list'] = Input('1234', maxSize=True, type=Input.NUMBER)
         self['actions'] = NumberActionMap(['WizardActions', 'InputActions'], {'ok': self.ok,
                                                                               'back': self.close,
                                                                               'left': self.keyLeft,
@@ -898,10 +898,10 @@ class Ipkremove(Screen):
         print('answer:', answer)
 
     def keyLeft(self):
-        self['text'].left()
+        self['list'].left()
 
     def keyRight(self):
-        self['text'].right()
+        self['list'].right()
 
     def ok(self):
         selection = self['list'].getSelection()
@@ -912,7 +912,7 @@ class Ipkremove(Screen):
 
     def keyNumberGlobal(self, number):
         print('pressed', number)
-        self['text'].number(number)
+        self['list'].number(number)
 
 
 def startConfig(session, **kwargs):
