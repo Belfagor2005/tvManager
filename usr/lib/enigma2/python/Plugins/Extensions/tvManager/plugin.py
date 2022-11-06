@@ -66,7 +66,7 @@ iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
-
+_firstStarttvsman = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
 old_ecm_time = time.time()
@@ -929,14 +929,37 @@ def mainmenu(menuid):
                  None)]
 
 
+
+class AutoStartTimertvman:
+
+    def __init__(self, session):
+        self.session = session
+        global _firstStarttvsman
+        print("*** running AutoStartTimertvman ***")
+        if _firstStarttvsman:
+            self.runUpdate()
+
+    def runUpdate(self):
+        print("*** running update ***")
+        try:
+            from . import Update
+            Update.upd_done()
+            _firstStarttvsman = False
+        except Exception as e:
+            print('error Fxy', str(e))
+
+
 def autostart(reason, session=None, **kwargs):
     "called with reason=1 to during shutdown, with reason=0 at startup?"
     print("[Softcam] Started")
+    global autoStartTimertvsman
+    global _firstStarttvsman
     if reason == 0:
         print('reason 0')
         if session is not None:
             print('session none')
             try:
+                print('ok started autostart')
                 os.system("mv /usr/bin/dccamd /usr/bin/dccamdOrig &")
                 os.system("ln -sf /usr/bin /var/bin")
                 os.system("ln -sf /usr/keys /var/keys")
@@ -945,7 +968,9 @@ def autostart(reason, session=None, **kwargs):
                 os.system("sleep 2")
                 os.system("/etc/startcam.sh &")
                 os.system('sleep 2')
-                print('ok started autostart')
+                print("*** running autostart ***")
+                _firstStarttvsman = True
+                autoStartTimertvsman = AutoStartTimertvman(session)
             except:
                 print('except autostart')
                 pass
@@ -966,17 +991,7 @@ def menu(menuid, **kwargs):
 
 def main(session, **kwargs):
     try:
-        if Utils.zCheckInternet(1):
-            try:
-                from . import Update
-                Update.upd_done()
-            except Exception as e:
-                print('error ', str(e))
-            session.open(tvManager)
-        else:
-            from Screens.MessageBox import MessageBox
-            from Tools.Notifications import AddPopup
-            AddPopup(_("Sorry but No Internet :("), MessageBox.TYPE_INFO, 10, 'Sorry')
+        session.open(tvManager)
     except:
         import traceback
         traceback.print_exc()
