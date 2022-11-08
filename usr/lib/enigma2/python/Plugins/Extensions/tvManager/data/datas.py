@@ -219,9 +219,9 @@ Serverlive = [
 
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
-          ('/etc/tuxbox/config/ncam.server', 'Ncam'),
           ('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
-          ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
+          ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam'),
+          ('/etc/tuxbox/config/ncam.server', 'Ncam')]
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)

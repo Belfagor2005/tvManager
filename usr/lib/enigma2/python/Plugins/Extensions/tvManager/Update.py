@@ -20,7 +20,7 @@ def upd_done():
     response = requests.head(xfile)
     if response.status_code == 200:
         # print(response.headers['content-length'])
-        print("Code 200 upd_done xfile =", xfile)
+        # print("Code 200 upd_done xfile =", xfile)
         downloadPage(xfile, fdest).addCallback(upd_last)
     elif response.status_code == 404:
         print("Error 404")

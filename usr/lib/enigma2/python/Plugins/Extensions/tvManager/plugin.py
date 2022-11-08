@@ -5,10 +5,10 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     10/08/2022     #
+#     07/11/2022     #
 # --------------------#
 from __future__ import print_function
-from .__init__ import _
+from . import _
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -19,7 +19,7 @@ from Components.MenuList import MenuList
 from Components.MultiContent import MultiContentEntryPixmapAlphaTest
 from Components.MultiContent import MultiContentEntryText
 from Components.Pixmap import Pixmap
-from Components.PluginComponent import plugins
+# from Components.PluginComponent import plugins
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Console import Console
@@ -29,7 +29,7 @@ from Screens.Screen import Screen
 from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
-from enigma import RT_HALIGN_LEFT
+from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from enigma import eListboxPythonMultiContent
 from enigma import eTimer, loadPNG
 from enigma import gFont
@@ -43,7 +43,7 @@ import six
 import sys
 import time
 
-global active
+global active, FTP_XML
 active = False
 
 PY3 = sys.version_info.major >= 3
@@ -55,14 +55,14 @@ if PY3:
 
 
 
-global FTP_XML
 currversion = '1.8'
 name_plug = 'TiVuStream Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
-
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
-res_plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/")
-iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/{}".format('logo.png'))
+res_plugin_path = resolveFilename(SCOPE_PLUGINS,
+                                  "Extensions/tvManager/res/")
+iconpic = resolveFilename(SCOPE_PLUGINS,
+                          "Extensions/tvManager/{}".format('logo.png'))
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
@@ -121,9 +121,11 @@ def readCurrent_1():
 
 # =============== SCREEN PATH SETTING
 if Utils.isFHD():
-    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
+    skin_path = resolveFilename(SCOPE_PLUGINS,
+                                "Extensions/tvManager/res/skins/fhd/")
 else:
-    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
+    skin_path = resolveFilename(SCOPE_PLUGINS,
+                                "Extensions/tvManager/res/skins/hd/")
 if Utils.DreamOS():
     skin_path = skin_path + 'dreamOs/'
 
@@ -150,16 +152,16 @@ def show_list(h):
         if cond == h:
             active = True
             res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png1)))
-            res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT))
+            res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
         else:
             res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png2)))
-            res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h, flags=RT_HALIGN_LEFT))
+            res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
         return res
     else:
         res = [h]
         if cond == h:
             active = True
-            res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT))
+            res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
             res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png1)))
         else:
             res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h, flags=RT_HALIGN_LEFT))
@@ -210,7 +212,6 @@ class tvManager(Screen):
                                                                     })
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
-                                     'SetupActions',
                                      'MenuActions'], {'ok': self.action,
                                                       'cancel': self.close,
                                                       'menu': self.configtv,
@@ -929,7 +930,6 @@ def mainmenu(menuid):
                  None)]
 
 
-
 class AutoStartTimertvman:
 
     def __init__(self, session):
@@ -950,7 +950,7 @@ class AutoStartTimertvman:
 
 
 def autostart(reason, session=None, **kwargs):
-    "called with reason=1 to during shutdown, with reason=0 at startup?"
+    """called with reason=1 to during shutdown, with reason=0 at startup?"""
     print("[Softcam] Started")
     global autoStartTimertvsman
     global _firstStarttvsman
