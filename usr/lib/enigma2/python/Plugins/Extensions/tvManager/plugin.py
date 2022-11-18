@@ -54,7 +54,6 @@ if PY3:
     PY3 = True
 
 
-
 currversion = '1.8'
 name_plug = 'TiVuStream Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
@@ -946,7 +945,7 @@ class AutoStartTimertvman:
             Update.upd_done()
             _firstStarttvsman = False
         except Exception as e:
-            print('error Fxy', str(e))
+            print('error tvmanager', str(e))
 
 
 def autostart(reason, session=None, **kwargs):
