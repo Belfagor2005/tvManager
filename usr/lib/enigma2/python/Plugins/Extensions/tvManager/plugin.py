@@ -211,6 +211,7 @@ class tvManager(Screen):
                                                                     })
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
+                                     'EPGSelectActions',
                                      'MenuActions'], {'ok': self.action,
                                                       'cancel': self.close,
                                                       'menu': self.configtv,
@@ -587,7 +588,8 @@ class GetipklistTv(Screen):
         else:
             self.timer.callback.append(self.downloadxmlpage)
         self.timer.start(500, 1)
-        self['actions'] = ActionMap(['SetupActions', 'ColorActions'], {'ok': self.okClicked, 'cancel': self.close}, -1)
+        self['actions'] = ActionMap(['OkCancelActions',
+                                     'ColorActions'], {'ok': self.okClicked, 'cancel': self.close}, -1)
         # self.onShown.append(self.get_list)
 
     def downloadxmlpage(self):
@@ -660,7 +662,8 @@ class GetipkTv(Screen):
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
-        self['actions'] = ActionMap(['SetupActions'], {'ok': self.message, 'cancel': self.close}, -1)
+        self['actions'] = ActionMap(['OkCancelActions',
+                                     'ColorActions'], {'ok': self.message, 'cancel': self.close}, -1)
         self.onLayoutFinish.append(self.start)
 
     def start(self):
