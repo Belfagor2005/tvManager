@@ -78,7 +78,7 @@ def b64decoder(s):
 
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
-data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data")
+data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data/")
 skin_path = plugin_path
 
 
@@ -619,3 +619,4 @@ class tv_config(Screen, ConfigListScreen):
                 return
         except Exception as e:
             print('error on string cline', str(e))
+
