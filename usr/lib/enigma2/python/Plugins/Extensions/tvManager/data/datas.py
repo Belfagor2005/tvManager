@@ -103,10 +103,12 @@ def isFHD():
 
 def checkStr(txt):
     if PY3:
-        if type(txt) == type(bytes()):
+        if isinstance(type(txt), type(bytes())):
+        # if type(txt) == type(bytes()):
             txt = txt.decode('utf-8')
     else:
-        if type(txt) == type(unicode()):
+        # if type(txt) == type(unicode()):
+        if isinstance(type(txt), type(unicode())):
             txt = txt.encode('utf-8')
     return txt
 
@@ -201,27 +203,25 @@ if DreamOS():
     skin_path = skin_path + 'dreamOs/'
 
 Serverlive = [
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbQ==', 'Server01'),
+    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
     ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==', 'Server03'),
     ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server04'),
     ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server05'),
     ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server06'),
-    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server07'),
-    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2Ft', 'Server08'),
-    ('aHR0cDovL2NjY2Ftc3RvcmUudHYvZnJlZS1zZXJ2ZXIucGhw', 'Server09'),
-    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server10'),
-    ('aHR0cDovL2NjY2FtZXVyb3AuY29tL2ZyZWV0ZXN0LnBocA==', 'Server11'),
-    ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server12'),
-    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server13'),
-    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=', 'Server14'),
+    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2Ft', 'Server07'),
+    ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server08'),
+    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server09'),
+    ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server10'),
+    ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
     ]
 
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
           ('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
-          ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam'),
-          ('/etc/tuxbox/config/ncam.server', 'Ncam')]
+          ('/etc/tuxbox/config/ncam.server', 'Ncam'),
+          ('/etc/tuxbox/config/gcam.server', 'Gcam'),
+          ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
@@ -252,6 +252,9 @@ def putlblcfg():
     elif putlbl == '/etc/tuxbox/config/oscam.server':
         buttn = _('Write') + ' Oscam'
         rstcfg = 'oscam.server'
+    elif putlbl == '/etc/tuxbox/config/gcam.server':
+        buttn = _('Write') + ' Gcam'
+        rstcfg = 'gcam.server'
     elif putlbl == '/etc/tuxbox/config/oscam-emu/oscam.server':
         buttn = _('Write') + ' OscamEmu'
         rstcfg = 'oscam.server'
@@ -514,76 +517,82 @@ class tv_config(Screen, ConfigListScreen):
                 # <div>C: top1.supercline.net 18801 paisilvpenedo 89682009</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</d', data)
 
-            if 'cccameagle' in data.lower():
+            elif 'cccameagle' in data.lower():
                 # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
                 url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
-
-            if 'cccamprime' in data.lower():
+                
+            elif 'cccamfrei' in data.lower():
+                # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
+                
+            elif 'cccamprime' in data.lower():
                 # <br>Cline : C: s2.cccamprime.com 14808 50853334 cccamprime<br>
                 url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?).*?Host', data)
                 url1 = url1.replace('<br><br>', '')
-            if 'cccamprima.com' in data.lower():
+
+            elif 'cccamprima.com' in data.lower():
                 # <div>C: egygold.co 51002 jsp271 88145</div>
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
-            if 'iptvcccam' in data.lower():
+            elif 'iptvcccam' in data.lower():
                 # <h1>C: free.iptvcccam.co 2021 tcsi iptvcccam.co        </h1>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
 
-            if 'premium' in data.lower():
+            elif 'premium' in data.lower():
                 # <h3 style="color:red;">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
-            if 'cccamia' in data:
+            elif 'cccamia' in data:
                 # C: free.CCcamia.com 18000 e4xd88 CCcamia.com
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
-            if 'cccameurop' in data.lower():
+            elif 'cccameurop' in data.lower():
                 # ">C:  873259 527418</strong></H3><br><br>
                 # C: cccameurop.com 19000
+                # </div>
                 url1 = re.findall('C: (.+?) (.+?)</', data)
                 # url1 = 'cccameurop.com 19000' + url1[0] + url1[1]
-            if 'cccamx' in data.lower():
+            elif 'cccamx' in data.lower():
                 # ">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
-            if 'cccamiptv' in data.lower():
+            elif 'cccamiptv' in data.lower():
                 # <h3 style="color:red;">
                 # C: free.cccamiptv.club 13100 8n1gv9 cccamiptv.club
                 # </h3>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
-            if 'FREEN12' in data.lower():
+            elif 'FREEN12' in data.lower():
                 # <h3 style="color:red;">
                 # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
                 # </h3>
                 url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
-            if 'history' in data.lower():
+            elif 'history' in data.lower():
                 url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title="CCcam server online and valid"></span>', data)
 
-            if 'store' in data.lower():
+            elif 'store' in data.lower():
                 # view-source:http://cccamstore.tv/free-server.php
                 # <center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
                 url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
 
-            if 'cccam.net' in data.lower():
+            elif 'cccam.net' in data.lower():
                 # >C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
-                url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
+                url1 = re.findall('span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
-            if 'cccameagle' in data.lower():
+            elif 'cccameagle' in data.lower():
                 # >C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
                 url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
 
-            if 'rogcam' in data.lower():
+            elif 'rogcam' in data.lower():
                 url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
 
-            if 'cccambird' in data.lower():
+            elif 'cccambird' in data.lower():
                 # >C: t2.cccambird.com 14800 51190374 cccambird</th>
                 url1 = re.findall('">C: (.+?) (.+?) (.+?) (.+?)</th></tr>', data)
 
-            if 'bosscccam' in data.lower():
+            elif 'bosscccam' in data.lower():
                 # <strong>c: bosscccam.nowddns.com 26210 L2O000mhI8 BosS-ccCAm.coM</strong></p>
                 url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.+?)</strong', data)
 
-            if '15days' in data.lower():
+            elif '15days' in data.lower():
                 # ">C: s7.cccambird.com 12550 72953333 cccambird</th></tr>
                 url1 = re.findall('">C: (.*?) (.*?) (.*?) (.+?)</th></tr>', data)
             print('===========data=========', url1)
@@ -619,4 +628,3 @@ class tv_config(Screen, ConfigListScreen):
                 return
         except Exception as e:
             print('error on string cline', str(e))
-

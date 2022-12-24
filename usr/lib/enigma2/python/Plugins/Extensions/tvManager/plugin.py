@@ -572,6 +572,7 @@ class GetipklistTv(Screen):
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['description'] = Label(_('Getting the list, please wait ...'))
+        self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
@@ -591,6 +592,18 @@ class GetipklistTv(Screen):
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions'], {'ok': self.okClicked, 'cancel': self.close}, -1)
         # self.onShown.append(self.get_list)
+        # self.onShown.append(self.updateList)
+
+    def updateList(self):
+        paypal = self.paypal2()
+        self["paypal"].setText(paypal)
+        self["list"].setText(self.getcont())
+
+    def paypal2(self):
+        conthelp = "If you like what I do you\n"
+        conthelp += " can contribute with a coffee\n\n"
+        conthelp += "scan the qr code and donate € 1.00"
+        return conthelp
 
     def downloadxmlpage(self):
         url = str(FTP_XML)
@@ -655,6 +668,7 @@ class GetipkTv(Screen):
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['description'] = Label(_('Select and Install'))
+        self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
@@ -665,6 +679,18 @@ class GetipkTv(Screen):
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions'], {'ok': self.message, 'cancel': self.close}, -1)
         self.onLayoutFinish.append(self.start)
+        # self.onShown.append(self.updateList)
+
+    def updateList(self):
+        paypal = self.paypal2()
+        self["paypal"].setText(paypal)
+        self["list"].setText(self.getcont())
+
+    def paypal2(self):
+        conthelp = "If you like what I do you\n"
+        conthelp += " can contribute with a coffee\n\n"
+        conthelp += "scan the qr code and donate € 1.00"
+        return conthelp
 
     def start(self):
         xmlparse = self.xmlparse
