@@ -4,12 +4,10 @@
 # --------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     25/09/2022     #
+#     25/12/2022     #
 #      No Coppy      #
 # --------------------#
 from __future__ import print_function
-# import base64
-# import six
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.ConfigList import ConfigListScreen
@@ -24,6 +22,7 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from random import choice
+from enigma import eTimer
 import os
 import re
 import ssl
@@ -377,9 +376,7 @@ class tv_config(Screen, ConfigListScreen):
 
         self['config'].list = self.list
         self['config'].l.setList(self.list)
-        # self['config'].setList(self.list)
         self.showhide()
-        # return
 
     def KeyText(self):
         sel = self['config'].getCurrent()
@@ -500,7 +497,13 @@ class tv_config(Screen, ConfigListScreen):
                     import six
                     data = six.ensure_str(data)
                 print('=== Lnk ==== ', data)
-                self.load_getcl(data)
+                self.timer = eTimer()
+                if DreamOS():
+                    self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
+                else:
+                    self.timer.callback.append(self.load_getcl(data))
+                self.timer.start(300, 1)
+                # self.load_getcl(data)
             except Exception as e:
                 print('getcl error: ', str(e))
         except Exception as e:
@@ -510,8 +513,11 @@ class tv_config(Screen, ConfigListScreen):
         global host, port, user, passw
         try:
             data = checkStr(data)
-            url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.*?)\n', data)
-            if 'testcline' in data.lower():
+            url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+            if 'bosscccam' in data.lower():
+                # <strong>c: bosscccam.nowddns.com 26210 J5LQo1TnNI BosS-ccCAm.coM</strong></p>
+                url1 = re.findall('ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
+            elif 'testcline' in data.lower():
                 # <div>C: s2.livetvip.com 9626 gf023 pon</div>
                 # <div>C: top2.supercline.net 18802 paisilvpenedo 89682009</div>
                 # <div>C: top1.supercline.net 18801 paisilvpenedo 89682009</div>
@@ -521,18 +527,18 @@ class tv_config(Screen, ConfigListScreen):
                 # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
                 url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
                 
-            elif 'cccamfrei' in data.lower():
-                # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
+            # elif 'cccamfrei' in data.lower():
+                # # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
+                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n.*?</centre>', data)
                 
             elif 'cccamprime' in data.lower():
                 # <br>Cline : C: s2.cccamprime.com 14808 50853334 cccamprime<br>
                 url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?).*?Host', data)
                 url1 = url1.replace('<br><br>', '')
 
-            elif 'cccamprima.com' in data.lower():
-                # <div>C: egygold.co 51002 jsp271 88145</div>
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+            # elif 'cccamprima.com' in data.lower():
+                # # <div>C: egygold.co 51002 jsp271 88145</div>
+                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'iptvcccam' in data.lower():
                 # <h1>C: free.iptvcccam.co 2021 tcsi iptvcccam.co        </h1>
@@ -587,10 +593,6 @@ class tv_config(Screen, ConfigListScreen):
             elif 'cccambird' in data.lower():
                 # >C: t2.cccambird.com 14800 51190374 cccambird</th>
                 url1 = re.findall('">C: (.+?) (.+?) (.+?) (.+?)</th></tr>', data)
-
-            elif 'bosscccam' in data.lower():
-                # <strong>c: bosscccam.nowddns.com 26210 L2O000mhI8 BosS-ccCAm.coM</strong></p>
-                url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.+?)</strong', data)
 
             elif '15days' in data.lower():
                 # ">C: s7.cccambird.com 12550 72953333 cccambird</th></tr>
