@@ -213,6 +213,10 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server09'),
     ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server10'),
     ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
+    # ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server12'),
+    # ('aHR0cHM6Ly9jY2NhbWFzLmNvbS8jY2NjYW0tZnJlZQ==', 'Server13'),
+    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12'),
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server13'),
     ]
 
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
@@ -441,9 +445,6 @@ class tv_config(Screen, ConfigListScreen):
 
     def Oscam(self):
         global host, port, user, passw
-        # if config.plugins.tvmanager.cfgfile.value != '/etc/tuxbox/config/oscam.server':
-            # self.session.open(MessageBox, _('Select Oscam'), type=MessageBox.TYPE_INFO, timeout=5)
-            # return
         cfgfile = config.plugins.tvmanager.cfgfile.value
         dest = cfgfile
         host = str(config.plugins.tvmanager.hostaddress.value)
@@ -451,8 +452,6 @@ class tv_config(Screen, ConfigListScreen):
         user = str(config.plugins.tvmanager.user.value)
         pasw = str(config.plugins.tvmanager.passw.value)
         if not fileExists(dest):
-            # dest = '/etc/tuxbox/config/oscam.server'
-        # else:
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
@@ -515,89 +514,67 @@ class tv_config(Screen, ConfigListScreen):
             data = checkStr(data)
             url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
             if 'bosscccam' in data.lower():
-                # <strong>c: bosscccam.nowddns.com 26210 J5LQo1TnNI BosS-ccCAm.coM</strong></p>
                 url1 = re.findall('ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
+
             elif 'testcline' in data.lower():
-                # <div>C: s2.livetvip.com 9626 gf023 pon</div>
-                # <div>C: top2.supercline.net 18802 paisilvpenedo 89682009</div>
-                # <div>C: top1.supercline.net 18801 paisilvpenedo 89682009</div>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</d', data)
 
             elif 'cccameagle' in data.lower():
-                # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
                 url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
-                
-            # elif 'cccamfrei' in data.lower():
-                # # >C: free1.cccameagle.com 13065 yf24n cccameagle</h2>
-                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n.*?</centre>', data)
-                
+
             elif 'cccamprime' in data.lower():
-                # <br>Cline : C: s2.cccamprime.com 14808 50853334 cccamprime<br>
                 url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?).*?Host', data)
                 url1 = url1.replace('<br><br>', '')
 
-            # elif 'cccamprima.com' in data.lower():
-                # # <div>C: egygold.co 51002 jsp271 88145</div>
-                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+            elif 'cccamprima.com' in data.lower():
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'iptvcccam' in data.lower():
-                # <h1>C: free.iptvcccam.co 2021 tcsi iptvcccam.co        </h1>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
 
             elif 'premium' in data.lower():
-                # <h3 style="color:red;">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccamia' in data:
-                # C: free.CCcamia.com 18000 e4xd88 CCcamia.com
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccameurop' in data.lower():
-                # ">C:  873259 527418</strong></H3><br><br>
-                # C: cccameurop.com 19000
-                # </div>
                 url1 = re.findall('C: (.+?) (.+?)</', data)
-                # url1 = 'cccameurop.com 19000' + url1[0] + url1[1]
+
             elif 'cccamx' in data.lower():
                 # ">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
+
             elif 'cccamiptv' in data.lower():
-                # <h3 style="color:red;">
-                # C: free.cccamiptv.club 13100 8n1gv9 cccamiptv.club
-                # </h3>
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
+
             elif 'FREEN12' in data.lower():
-                # <h3 style="color:red;">
-                # C: free.cccamiptv.co 13100 9d0of5 cccamiptv.co
-                # </h3>
                 url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
+
             elif 'history' in data.lower():
                 url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title="CCcam server online and valid"></span>', data)
 
             elif 'store' in data.lower():
-                # view-source:http://cccamstore.tv/free-server.php
-                # <center><strong>C: free.cccamstore.tv 12892 93t60rhi cccamstore.tv <br>
                 url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
 
-            elif 'cccam.net' in data.lower():
-                # >C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
-                url1 = re.findall('span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
+            # elif 'cccam.net' in data.lower():
+                # url1 = re.findall('span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
-            elif 'cccameagle' in data.lower():
-                # >C: free1.cccameagle.com 13065 yc8sn cccameagle</h2>
-                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
+            elif 'cccam.net' in data.lower():
+                url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
             elif 'rogcam' in data.lower():
                 url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
 
             elif 'cccambird' in data.lower():
-                # >C: t2.cccambird.com 14800 51190374 cccambird</th>
-                url1 = re.findall('">C: (.+?) (.+?) (.+?) (.+?)</th></tr>', data)
+                url1 = re.findall('Cline</th>.*?C: (.+?) (.+?) (.+?) (.+?)</th></tr>', data)
+            elif 'bosscccam' in data.lower():
+                url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.+?)</strong', data)
 
             elif '15days' in data.lower():
-                # ">C: s7.cccambird.com 12550 72953333 cccambird</th></tr>
                 url1 = re.findall('">C: (.*?) (.*?) (.*?) (.+?)</th></tr>', data)
             print('===========data=========', url1)
+
             if url1 != '':
                 host = ''
                 port = ''
