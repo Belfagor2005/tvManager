@@ -213,11 +213,8 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server09'),
     ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server10'),
     ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
-    # ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server12'),
-    # ('aHR0cHM6Ly9jY2NhbWFzLmNvbS8jY2NjYW0tZnJlZQ==', 'Server13'),
     ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12'),
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server13'),
-    ]
+    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server13')]
 
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
@@ -561,7 +558,7 @@ class tv_config(Screen, ConfigListScreen):
                 # url1 = re.findall('span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
             elif 'cccam.net' in data.lower():
-                url1 = re.findall('credentials"><span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
+                url1 = re.findall('b>C: (.+?) (.+?) (.+?) (.+?)<b>', data)
 
             elif 'rogcam' in data.lower():
                 url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
@@ -588,6 +585,17 @@ class tv_config(Screen, ConfigListScreen):
                         user = str(u)
                         password = str(pw)
                         print('Host: %s - Port: %s - User: %s - Password: %s' % (host, port, user, password))
+                elif 'cccam.net' in data.lower():
+                    for h, p, u, pw in url1:
+                        print(h, p, u, pw)
+                        host = str(h)
+                        port = str(p)
+                        user = str(u)
+                        password = str(pw)
+                        password = password.replace('</b>','').replace('</span>','')
+                        password = password.replace('</div>','')
+                        password = password.replace('</h1>', '')
+                        password = password.replace('</div>', '')
                 else:
                     for h, p, u, pw in url1:
                         print(h, p, u, pw)
