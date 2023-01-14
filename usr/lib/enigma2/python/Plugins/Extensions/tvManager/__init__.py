@@ -5,7 +5,7 @@ from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 import gettext
 import os
-
+sl= 'slManager'
 PluginLanguageDomain = 'tvManager'
 PluginLanguagePath = 'Extensions/tvManager/locale'
 

@@ -8,7 +8,7 @@
 #     07/11/2022     #
 # --------------------#
 from __future__ import print_function
-from . import _
+from . import _, sl
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -187,6 +187,9 @@ def show_list_1(h):
         res.append(MultiContentEntryText(pos=(2, 2), size=(660, 30), font=0, text=h, flags=RT_HALIGN_LEFT))
     return res
 
+sl2 = skin_path + sl + '.xml'
+if os.path.exists(sl2):
+    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
 class tvManager(Screen):
     def __init__(self, session, args=False):
@@ -847,6 +850,10 @@ class InfoCfg(Screen):
         return conthelp
 
 
+sl2 = skin_path + sl + '.xml'
+if os.path.exists(sl2):
+    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+
 class Ipkremove(Screen):
     def __init__(self, session, args=None):
         Screen.__init__(self, session)
@@ -944,6 +951,9 @@ class Ipkremove(Screen):
         self['list'].number(number)
 
 
+if os.path.exists(sl2):
+    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+
 def startConfig(session, **kwargs):
     session.open(tvManager)
 
@@ -1037,6 +1047,7 @@ def StartSetup(menuid):
 
 
 def Plugins(**kwargs):
+    sl= 'slManager'
     iconpic = 'logo.png'
     if Utils.isFHD():
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")

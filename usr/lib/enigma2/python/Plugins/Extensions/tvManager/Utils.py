@@ -167,6 +167,7 @@ def getFreeMemory():
         pass
     return (mem_free,mem_total)
 
+
 def sizeToString(nbytes):
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     size="0 B"
@@ -178,6 +179,18 @@ def sizeToString(nbytes):
         f = ('%.2f' % nbytes).rstrip('0').rstrip('.').replace(".",",")
         size = '%s %s' % (f, suffixes[i])
     return size  
+
+
+def convert_size(size_bytes):
+    import math
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes // p, 2)
+    return "%s %s" % (s, size_name[i])
+
 
 def getMountPoint(path):
     pathname= os.path.realpath(path)
@@ -460,13 +473,15 @@ def testWebConnection(host='www.google.com', port=80, timeout=3):
 
 
 def checkStr(text, encoding='utf8'):
-    if PY3 is False:
-        if isinstance(text, unicode):
-            return text.encode(encoding)
-        else:
-            return text
+    if PY3:
+        if isinstance(text, type(bytes())):
+            text = text.decode('utf-8')    
     else:
-        return text
+        if isinstance(text, unicode):
+            text = text.encode(encoding)
+        # else:
+            # return text
+    return text
 
 
 # def checkStr(txt):
@@ -512,7 +527,7 @@ def freespace():
         available = float(diskSpace.f_bsize * diskSpace.f_bavail)
         fspace = round(float(available / 1048576.0), 2)
         tspace = round(float(capacity / 1048576.0), 1)
-        spacestr = 'Free space(' + str(fspace) + 'MB) Total space(' + str(tspace) + 'MB)'
+        spacestr = 'Free space(' + str(fspace) + 'MB)\nTotal space(' + str(tspace) + 'MB)'
         return spacestr
     except:
         return ''

@@ -74,12 +74,15 @@ def b64decoder(s):
             print('outp2 ', outp)
         return outp
 
-
+from .. import _, sl
+sl= 'slManager'
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
 data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data/")
 skin_path = plugin_path
-
+sl2 = skin_path + sl + '.xml'
+if os.path.exists(sl2):
+    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
 try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -200,6 +203,8 @@ if isFHD():
 
 if DreamOS():
     skin_path = skin_path + 'dreamOs/'
+if os.path.exists(sl2):
+    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
 Serverlive = [
     ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
@@ -213,8 +218,7 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server09'),
     ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server10'),
     ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
-    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12'),
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server13')]
+    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12'), ]
 
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
