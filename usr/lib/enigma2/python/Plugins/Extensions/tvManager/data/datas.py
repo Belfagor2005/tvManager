@@ -4,7 +4,7 @@
 # --------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     14/01/2023     #
+#     05/02/2023     #
 #      No Coppy      #
 # --------------------#
 from __future__ import print_function
@@ -78,7 +78,7 @@ from .. import _, sl
 sl= 'slManager'
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
-data_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/data/")
+data_path = os.path.join(plugin_path, 'data/')
 skin_path = plugin_path
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
@@ -194,12 +194,12 @@ def getUrl(url):
     return content
 
 
-skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/hd/")
+skin_path = os.path.join(plugin_path, 'res/skins/hd/')
 
 
 if isFHD():
     # skin_path=res_plugin_path + 'skins/fhd/'
-    skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/skins/fhd/")
+    skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
 
 if DreamOS():
     skin_path = skin_path + 'dreamOs/'
@@ -276,10 +276,9 @@ putlblcfg()
 class tv_config(Screen, ConfigListScreen):
     def __init__(self, session):
         self.session = session
-        skin = skin_path + 'tv_config.xml'
-        f = open(skin, 'r')
-        self.skin = f.read()
-        f.close()
+        skin = os.path.join(skin_path, 'tv_config.xml')
+        with open(skin, 'r') as f:
+            self.skin = f.read()
         Screen.__init__(self, session)
         self.setup_title = (name_plug)
         self.onChangedEntry = []

@@ -181,10 +181,10 @@ def showlist(datal, list):
 def show_list_1(h):
     if Utils.isFHD():
         res = [h]
-        res.append(MultiContentEntryText(pos=(2, 2), size=(670, 40), font=0, text=h, flags=RT_HALIGN_LEFT))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(670, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     else:
         res = [h]
-        res.append(MultiContentEntryText(pos=(2, 2), size=(660, 30), font=0, text=h, flags=RT_HALIGN_LEFT))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
 
 sl2 = skin_path + sl + '.xml'
