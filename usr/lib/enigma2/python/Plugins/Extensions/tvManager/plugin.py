@@ -377,7 +377,7 @@ class tvManager(Screen):
     def action(self):
         i = len(self.softcamslist)
         print('iiiiii= ', i)
-        if i < 1:
+        if i < 0:
             return
         self.session.nav.stopService()
         msg = []
@@ -643,7 +643,7 @@ class GetipklistTv(Screen):
     def okClicked(self):
         i = len(self.list)
         print('iiiiii= ', i)
-        if i < 1:
+        if i < 0:
             return
         if self.downloading is True:
             try:
@@ -723,7 +723,7 @@ class GetipkTv(Screen):
     def message(self):
         i = len(self.names)
         print('iiiiii= ', i)
-        if i < 1:
+        if i < 0:
             return
         self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
 
