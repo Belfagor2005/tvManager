@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     07/11/2022     #
+#     03/04/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl
@@ -55,7 +55,7 @@ if PY3:
 
 
 currversion = '1.8'
-name_plug = 'TiVuStream Softcam Manager'
+name_plug = 'Softcam_Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = resolveFilename(SCOPE_PLUGINS,
@@ -70,6 +70,7 @@ ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
 old_ecm_time = time.time()
 info = {}
+sl = 'slManager'
 ecm = ''
 data = EMPTY_ECM_INFO
 SOFTCAM = 0
@@ -125,6 +126,7 @@ if Utils.isFHD():
 else:
     skin_path = resolveFilename(SCOPE_PLUGINS,
                                 "Extensions/tvManager/res/skins/hd/")
+sl = 'slManager'
 if Utils.DreamOS():
     skin_path = skin_path + 'dreamOs/'
 
@@ -187,9 +189,11 @@ def show_list_1(h):
         res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
 
+
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+
 
 class tvManager(Screen):
     def __init__(self, session, args=False):
@@ -736,7 +740,7 @@ class GetipkTv(Screen):
 
     def prombt(self, com, dom):
         try:
-            useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
+            # useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
             self.com = str(com)
             self.dom = str(dom)
             print('self.com---------------', self.com)
@@ -750,25 +754,25 @@ class GetipkTv(Screen):
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
                     os.remove(destipk)
-                os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, destipk))
-                # cmd0 = "wget %s -c %s -O %s > /dev/null" %(useragent,self.com,destipk)
-                cmd0 = 'opkg install --force-overwrite ' + destipk  # self.com # dest
-                self.session.open(Console, title='IPK Installation', cmdlist=[cmd0, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
+                cmd = "wget -U '%s' -c '%s' -O '%s';opkg install --force-reinstall %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
+                if "https" in str(self.com):
+                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';opkg install --force-reinstall %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
+                self.session.open(Console, title='IPK Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
             if self.com.find('.tar.gz') != -1:
                 if fileExists(desttar):
                     os.remove(desttar)
-                os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, desttar))
-                # cmd0 = 'tar -xzvf ' + self.com + ' -C /'
-                cmd0 = 'tar -xzvf ' + desttar + ' -C /'
-                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd0, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
+                cmd = "wget -U '%s' -c '%s' -O '%s';tar -xzvf %s -C / > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), desttar, desttar)
+                if "https" in str(self.com):
+                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';tar -xzvf %s -C / > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), desttar, desttar)
+                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)
                 if Utils.DreamOS():
-                    os.system("wget %s -c %s -O %s > /dev/null" % (useragent, self.com, destdeb))
-                    cmd0 = 'dpkg -i ' + destdeb
-                    # cmd0 = 'dpkg -i ' + self.com
-                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd0, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
+                    cmd = "wget -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvAddon Plugin', str(self.com), destdeb, destdeb)
+                    if "https" in str(self.com):
+                        cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvAddon Plugin', str(self.com), destdeb, destdeb)
+                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
                 else:
                     self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
             self.timer.start(500, 1)
@@ -854,6 +858,7 @@ sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
+
 class Ipkremove(Screen):
     def __init__(self, session, args=None):
         Screen.__init__(self, session)
@@ -884,9 +889,9 @@ class Ipkremove(Screen):
             ebuf = []
             for line in myfile:
                 listc.append(icount)
-                listc[icount] = (_(line), '')
+                listc[icount] = (line, '')
                 ebuf.append(listc[icount])
-                icount = icount + 1
+                icount += 1
             myfile.close()
             self.session.openWithCallback(self.test2, ChoiceBox, title='Please select ipkg to remove', list=ebuf)
             self.close()
@@ -953,6 +958,7 @@ class Ipkremove(Screen):
 
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+
 
 def startConfig(session, **kwargs):
     session.open(tvManager)
@@ -1021,7 +1027,7 @@ def menu(menuid, **kwargs):
     if menuid == 'cam':
         return [(_(name_plug),
                  boundFunction(main, showExtentionMenuOption=True),
-                 'Softcam Manager',
+                 'SoftcamManager',
                  -1)]
     else:
         return []
@@ -1040,14 +1046,13 @@ def StartSetup(menuid):
     if menuid == 'mainmenu':
         return [(name_plug,
                  main,
-                 'Softcam Manager',
+                 'SoftcamManager',
                  44)]
     else:
         return []
 
 
 def Plugins(**kwargs):
-    sl= 'slManager'
     iconpic = 'logo.png'
     if Utils.isFHD():
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
