@@ -358,7 +358,10 @@ class tvManager(Screen):
         self.session.open(tv_config)
 
     def cgdesc(self):
-        self['description'].setText(_('Select a cam to run ...'))
+        if len(self.namelist) > 0:
+            self['description'].setText(_('Select a cam to run ...'))
+        else:
+            self['description'].setText(_('Install Cam first!!!'))
 
     def openTest(self):
         pass
