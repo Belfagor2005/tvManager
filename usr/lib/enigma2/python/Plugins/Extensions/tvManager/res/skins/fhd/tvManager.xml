@@ -10,8 +10,22 @@
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_info.png" position="1659,1003" size="80,35" alphatest="blend" zPosition="30" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_menu.png" position="1556,1003" size="80,35" alphatest="blend" zPosition="30" />
 	<!-- Menu List -->
-	<widget name="list" position="28,811" size="580,237" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" zPosition="10" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#000b2049" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" />
-	<!-- Colors -->
+	<!-- <widget name="list" position="28,811" size="580,237" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" zPosition="10" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#000b2049" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" /> -->
+	
+    <widget source="list" render="Listbox" position="28,811" size="580,237" scrollbarMode="showOnDemand" enableWrapAround="1" scrollbarWidth="10" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#000b2049" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png">
+        <convert type="TemplatedMultiContent">
+            {"template": [
+                    MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (70, 40), png = 1), # index 1 is the pixmap   
+                    MultiContentEntryText(pos = (85, 3), size = (400, 45), flags = RT_HALIGN_LEFT, text = 0), # index 0 is the text name,
+                    MultiContentEntryText(pos = (400, 3), size = (150, 45), flags = RT_HALIGN_LEFT, text = 2), # index 0 is the text name,
+                ],
+             "fonts": [gFont("Regular", 34)],
+             "itemHeight": 50
+            }
+        </convert>
+    </widget>
+    
+    <!-- Colors -->
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="1553,820" size="30,30" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="1553,865" size="30,30" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="1553,909" size="30,30" alphatest="blend" zPosition="5" />
