@@ -119,9 +119,9 @@ def readCurrent_1():
 
 # =============== SCREEN PATH SETTING
 if Utils.isFHD():
-    skin_path = os.path.join(plugin_path, "res/skins/fhd/")
+    skin_path = os.path.join(res_plugin_path, "skins/fhd/")
 else:
-    skin_path = os.path.join(plugin_path, "res/skins/hd/")
+    skin_path = os.path.join(res_plugin_path, "skins/hd/")
 sl = 'slManager'
 if Utils.DreamOS():
     skin_path = skin_path + 'dreamOs/'
@@ -138,34 +138,6 @@ class m2list(MenuList):
             self.l.setItemHeight(50)
             textfont = int(22)
             self.l.setFont(0, gFont('Regular', textfont))
-
-
-# def show_list(h):
-    # active = False
-    # png1 = os.path.join(plugin_path, 'res/img/actcam.png')
-    # png2 = os.path.join(plugin_path, 'res/img/defcam.png')
-    # cond = readCurrent_1()
-    # res = [h]
-    # active = False
-    # if Utils.isFHD():
-        # if cond == h:
-            # active = True
-            # res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png1)))
-            # res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-        # else:
-            # res.append(MultiContentEntryPixmapAlphaTest(pos=(10, 12), size=(43, 24), png=loadPNG(png2)))
-            # res.append(MultiContentEntryText(pos=(70, 3), size=(800, 48), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-        # # return res
-    # else:
-        # if cond == h:
-            # active = True
-            # res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h + ' (Active)', color=11403008, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-            # res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png1)))
-        # else:
-            # res.append(MultiContentEntryText(pos=(70, 4), size=(406, 40), font=0, text=h, flags=RT_HALIGN_LEFT))
-            # res.append(MultiContentEntryPixmapAlphaTest(pos=(2, 8), size=(43, 24), png=loadPNG(png2)))
-    # return res
-
 
 
 def showlist(datal, list):
@@ -318,17 +290,16 @@ class tvManager(Screen):
 
     def ecm(self):
         ecmf = ''
-        myfile = '/tmp/ecm.info'
-        if os.path.exists(myfile):
+        if os.path.exists(ECM_INFO):
             try:
-                with open(myfile) as f:
+                with open(ECM_INFO) as f:
                     self["info"].text = f.read()
                     return
             except IOError:
                 pass
         else:
             self['info'].setText(ecmf)
-            
+
     def stopEcmInfoPollTimer(self):
         self.EcmInfoPollTimer.stop()
 
@@ -370,7 +341,7 @@ class tvManager(Screen):
     def getLastIndex(self):
         a = 0
         if len(self.namelist) > -1:
-            for x in self.namelist:
+            for x in self.namelist[0]:
                 if x == self.currCam:
                     return a
                 a += 1
@@ -380,13 +351,13 @@ class tvManager(Screen):
 
     def action(self):
         i = len(self.softcamslist)
-        print('iiiiii= ', i)
         if i < 0:
             return
         self.session.nav.stopService()
         msg = []
         self.last = self.getLastIndex()
         self.var = self['list'].getSelectedIndex()
+        # print('self var=== ', self.var)
         if self.last > -1:
             if self.last == self.var:
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
@@ -450,6 +421,8 @@ class tvManager(Screen):
         self.currCam = 'no'
         self.writeFile()
         sleep(1)
+        if os.path.exists(ECM_INFO):
+            os.remove(ECM_INFO)
         self['info'].setText('CAM STOPPED')
         try:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
@@ -460,8 +433,6 @@ class tvManager(Screen):
         return
 
     def readScripts(self):
-        # self.index = 0
-        # self.indexto = ''
         scriptlist = []
         pliste = []
         pathscript = '/usr/camscript/'
@@ -470,28 +441,6 @@ class tvManager(Screen):
                 scriptlist.append(name)
         i = len(self.softcamslist)
         del self.softcamslist[0:i]
-        # for lines in scriptlist:
-            # dat = pathscript + lines
-            # sfile = open(dat, 'r')
-            # for line in sfile:
-                # if line[0:3] == 'OSD':
-                    # nam = line[5:len(line) - 2]
-                    # print('We are in tvManager and cam is type  = ', nam)
-                    # if self.currCam is not None:
-                        # if nam == self.currCam:
-                            # print('nam == self.currCam: ', nam)
-                            # # nam = sorted(nam, key=lambda x: ('(Active)') in x, reverse=True)
-                            # self.softcamslist.append(show_list(nam))
-                        # else:
-                            # print('nam != self.currCam: ', nam)
-                            # # nam = sorted(nam, key=lambda x: ('(Active)') in x, reverse=True)
-                            # self.softcamslist.append(show_list(nam))
-                        # # self.index += 1
-                    # else:
-                        # self.softcamslist.append(show_list(nam))
-                        # # self.index += 1
-                    # pliste.append(nam)
-
         png1 = LoadPixmap(cached=True,
                 path=resolveFilename(SCOPE_PLUGINS,
                 "Extensions/tvManager/res/img/{}".format('actcam.png')))
@@ -507,18 +456,23 @@ class tvManager(Screen):
                     print('We are in tvManager and cam is type  = ', nam)
                     if self.currCam is not None:
                         if nam == self.currCam:
-                            print('nam == self.currCam: ', nam)
+                            # print('nam == self.currCam: ', nam)
                             self.softcamslist.append((nam,  png1, '(Active)'))
+                            pliste.append((nam, '(Active)'))
                         else:
-                            print('nam != self.currCam: ', nam)
+                            # print('nam != self.currCam: ', nam)
                             self.softcamslist.append((nam, png2, ''))
+                            pliste.append((nam, ''))
                     else:
+                        # print('self.currCam is None: ', nam)
                         self.softcamslist.append((nam, png2, ''))
-                    pliste.append(nam)
+                        pliste.append((nam, ''))
 
             sfile.close()
             self.softcamslist.sort(key=lambda i: i[2], reverse=True)
-            print('self.softcamslist 2:\n', self.softcamslist)
+            pliste.sort(key=lambda i: i[1], reverse=True)
+            print('self.softcamslist: ', self.softcamslist)
+            print('pliste: ', pliste)
             self.namelist = pliste
             # self['list'].l.setList(self.softcamslist)
             self["list"].setList(self.softcamslist)
@@ -565,7 +519,7 @@ class tvManager(Screen):
         alist.write(current + '\n')
         alist.close()
         # self.session.openWithCallback(self.callback, MessageBox, _('Autocam assigned to the current channel'), type=1, timeout=10)
-        mbox = self.session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
+        mbox = _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
         return
 
     def autoclean(self):
