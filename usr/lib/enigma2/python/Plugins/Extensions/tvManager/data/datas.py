@@ -438,7 +438,7 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
-        cfgdok = open(dest, 'a')
+        cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n\n' + host + ' ' + port + ' ' + user + ' ' + pasw)
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -455,7 +455,7 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
-        cfgdok = open(dest, 'a')
+        cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n[reader]\nlabel = Server_' + host + '\nenable= 1\nprotocol = cccam\ndevice = ' + host + ',' + port + '\nuser = ' + user + '\npassword = ' + pasw + '\ninactivitytimeout = 30\ngroup = 3\ncccversion = 2.2.1\ncccmaxhops = 0\nccckeepalive = 1\naudisabled = 1\n\n')
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -479,7 +479,7 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
-        cfgdok = open(dest, 'a')
+        cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n[reader]\nlabel = Server_' + host + '\nenable= 1\nprotocol = cccam\ndevice = ' + host + ',' + port + '\nuser = ' + user + '\npassword = ' + pasw + '\ngroup = 3\ncccversion = 2.0.11\ndisablecrccws_only_for= 0500:032830\ncccmaxhops= 1\nccckeepalive= 1\naudisabled = 1\n\n')
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)

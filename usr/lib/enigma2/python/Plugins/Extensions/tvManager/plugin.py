@@ -402,10 +402,10 @@ class tvManager(Screen):
 
     def writeFile(self):
         if self.currCam is not None:
-            clist = open('/etc/clist.list', 'w')
+            clist = open('/etc/clist.list', 'w', encoding='utf-8')
             clist.write(self.currCam)
             clist.close()
-        stcam = open('/etc/startcam.sh', 'w')
+        stcam = open('/etc/startcam.sh', 'w', encoding='utf-8')
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
         os.system('chmod 755 /etc/startcam.sh &')
@@ -511,10 +511,10 @@ class tvManager(Screen):
             clist.close()
         print('current =', current)
         if os.path.isfile('/etc/autocam.txt') is False:
-            alist = open('/etc/autocam.txt', 'w')
+            alist = open('/etc/autocam.txt', 'w', encoding='utf-8')
             alist.close()
         self.autoclean()
-        alist = open('/etc/autocam.txt', 'a')
+        alist = open('/etc/autocam.txt', 'a', encoding='utf-8')
         alist.write(self.oldService.toString() + '\n')
         self.last = self.getLastIndex()
         alist.write(current + '\n')
@@ -527,8 +527,8 @@ class tvManager(Screen):
         delemu = 'no'
         if os.path.isfile('/etc/autocam.txt') is False:
             return
-        myfile = open('/etc/autocam.txt', 'r', encoding='utf-8')
-        myfile2 = open('/etc/autocam2.txt', 'w')
+        myfile = open('/etc/autocam.txt', 'r')
+        myfile2 = open('/etc/autocam2.txt', 'w', encoding='utf-8')
         icount = 0
         for line in myfile.readlines():
             print('We are in tvManager line, self.oldService.toString() =', line, self.oldService.toString())
@@ -894,7 +894,7 @@ class Ipkremove(Screen):
             cmd = 'touch /etc/tmpfile'
             os.system(cmd)
             myfile = open('/var/lib/opkg/status', 'r')
-            f = open('/etc/tmpfile', 'w')
+            f = open('/etc/tmpfile', 'w', encoding='utf-8')
             for line in myfile:
                 if line != ipkname:
                     f.write(line)
