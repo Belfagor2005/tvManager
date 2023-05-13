@@ -61,6 +61,7 @@ name_plug = 'Softcam_Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = os.path.join(plugin_path, "res/")
+emu_plugin = os.path.join(plugin_path, "emu/"
 iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
@@ -153,7 +154,7 @@ def showlist(datal, list):
 def show_list_1(h):
     res = [h]
     if Utils.isFHD():
-        res.append(MultiContentEntryText(pos=(2, 0), size=(670, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(900, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     else:
         res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
