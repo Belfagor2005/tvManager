@@ -415,7 +415,7 @@ class tvManager(Screen):
         self.EcmInfoPollTimer.stop()
         last = self.getLastIndex()
         if last > -1:
-            self.cmd1 = '/usr/camscript/' + self.softcamslist[last][0] + ' cam_down &'
+            self.cmd1 = '/usr/camscript/' + self.softcamslist[last][0] + '.sh' + ' cam_down &'
             os.system(self.cmd1)
         else:
             return
