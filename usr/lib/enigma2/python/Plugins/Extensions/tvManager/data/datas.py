@@ -302,8 +302,8 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'back': self.closex}, -1)
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
-        self['key_yellow'] = Button(_(''))
-        self["key_blue"] = Button(_('Send Oscam Emm'))
+        self['key_yellow'] = Button(_('Send Oscam Emm'))
+        self["key_blue"] = Button(_('Default Config'))
         self['key_green'].hide()
         # self['key_yellow'].hide()
         self['key_blue'].hide()
@@ -316,11 +316,21 @@ class tv_config(Screen, ConfigListScreen):
 
     def sendemm(self):
         try:
-            msg = (_("SEND EMM TO OSCAM"))
+            msg = []
+            msg.append(_("SEND EMM TO OSCAM"))
             self.cmd1 = data_path + 'emm_sender.sh'
-            os.system('chmod 755 ' + self.cmd1)
+            from os import access, X_OK
+            if not access(self.cmd1, X_OK):
+                chmod(self.cmd1, 493)
+            # os.system('chmod 755 ' + self.cmd1)
             os.system(self.cmd1)
-            self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
+            # os.system('sleep 5')
+            if os.path.exists('/tmp/emm.txt'):
+                with open('/tmp/emm.txt') as f:
+                    f = f.read()
+                    msg.append(f)
+            msg = (" %s " % _("\nEMM:\n")).join(msg)
+            self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
         except Exception as e:
             print('error on emm', str(e))
 

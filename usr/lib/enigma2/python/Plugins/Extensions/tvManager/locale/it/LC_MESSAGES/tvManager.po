@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tvManager TivuStream\n"
-"POT-Creation-Date: 2020-08-17 19:26+0200\n"
-"PO-Revision-Date: 2020-08-17 19:26+0200\n"
+"POT-Creation-Date: 2023-05-15 19:02+0200\n"
+"PO-Revision-Date: 2023-05-15 19:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: lululla\n"
 "Language: it_IT\n"
@@ -16,1806 +16,1010 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: tvManager/data/datas.py\n"
 
-#: TivuStream/plugin.py:156
-msgid "IPTV(4097)"
-msgstr ""
-
-#: TivuStream/plugin.py:157
-msgid "Dvb(1)"
-msgstr ""
-
-#: TivuStream/plugin.py:158
-msgid "eServiceUri(8193)"
-msgstr ""
-
-#: TivuStream/plugin.py:162
-msgid "Gstreamer(5001)"
-msgstr ""
-
-#: TivuStream/plugin.py:164
-msgid "Exteplayer3(5002)"
-msgstr ""
-
-#: TivuStream/plugin.py:434
-msgid "Channel List"
-msgstr ""
-
-#: TivuStream/plugin.py:439 TivuStream/plugin.py:693 TivuStream/plugin.py:922
-#: TivuStream/plugin.py:1422
-#, python-format
-msgid "..:: TiVuStream List V. %s ::.."
-msgstr ""
-
-#: TivuStream/plugin.py:450 TivuStream/plugin.py:706 TivuStream/plugin.py:932
-#: TivuStream/plugin.py:1300 TivuStream/plugin.py:1433 tvPanel/plugin.py:334
-#: tvSettings/plugin.py:263
-msgid "Exit"
-msgstr ""
-
-#: TivuStream/plugin.py:451
-msgid "Reload Bouquet"
-msgstr ""
-
-#: TivuStream/plugin.py:452
-msgid "Delete Bouquet"
-msgstr ""
-
-#: TivuStream/plugin.py:453
-msgid "Player"
-msgstr ""
-
-#: TivuStream/plugin.py:476
-msgid "Check List Update wait please..."
-msgstr ""
-
-#: TivuStream/plugin.py:491
-msgid "List Update: None"
-msgstr ""
-
-#: TivuStream/plugin.py:544
-msgid "Bouquet not installed"
-msgstr ""
-
-#: TivuStream/plugin.py:559
-msgid "You are not allowed!"
-msgstr ""
-
-#: TivuStream/plugin.py:562
-msgid "CONNECTION ERROR OR UNKNOWN"
-msgstr ""
-
-#: TivuStream/plugin.py:590 TivuStream/plugin.py:841 TivuStream/plugin.py:886
-msgid "Check out the favorites list ..."
-msgstr ""
-
-#: TivuStream/plugin.py:630 TivuStream/plugin.py:645 TivuStream/plugin.py:852
-#: TivuStream/plugin.py:898
-msgid "Shuffle Favorite List in Progress"
-msgstr ""
-
-#: TivuStream/plugin.py:630 TivuStream/plugin.py:642 TivuStream/plugin.py:645
-#: TivuStream/plugin.py:852 TivuStream/plugin.py:898
-msgid "Wait please ..."
-msgstr ""
-
-#: TivuStream/plugin.py:638
-msgid "Install the selected list?"
-msgstr ""
-
-#: TivuStream/plugin.py:642
-msgid "Installation in progress"
-msgstr ""
-
-#: TivuStream/plugin.py:652
-msgid "ATTENTION"
-msgstr ""
-
-#: TivuStream/plugin.py:652
-msgid "Delete TiVuStream channel lists"
-msgstr ""
-
-#: TivuStream/plugin.py:670
-msgid "TiVuStream channel lists successfully deleted"
-msgstr ""
-
-#: TivuStream/plugin.py:700
-#, python-format
-msgid "Folder path %s"
-msgstr ""
-
-#: TivuStream/plugin.py:707
-msgid "Convert ExtePlayer3"
-msgstr ""
-
-#: TivuStream/plugin.py:708
-msgid "Convert Gstreamer"
-msgstr ""
-
-#: TivuStream/plugin.py:709
-msgid "Convert StreamLink"
-msgstr ""
-
-#: TivuStream/plugin.py:778 tvPanel/plugin.py:3427
-msgid "Do you want to remove?"
-msgstr ""
-
-#: TivuStream/plugin.py:928
-#, python-format
-msgid "Service Reference used %s"
-msgstr ""
-
-#: TivuStream/plugin.py:933 tvManager/plugin.py:242
-msgid "Download"
-msgstr "Download"
-
-#: TivuStream/plugin.py:934
-msgid "Add Stream to Bouquet"
-msgstr ""
-
-#: TivuStream/plugin.py:935
-msgid "Search"
-msgstr ""
-
-#: TivuStream/plugin.py:971
-msgid "Filter this category..."
-msgstr ""
-
-#: TivuStream/plugin.py:1015
-msgid "You are already downloading!!!"
-msgstr ""
-
-#: TivuStream/plugin.py:1020
-msgid "DOWNLOAD VIDEO?"
-msgstr ""
-
-#: TivuStream/plugin.py:1023 TivuStream/plugin.py:1225
-msgid "Only VOD Movie allowed or not .ext Filtered!!!"
-msgstr ""
-
-#: TivuStream/plugin.py:1051 TivuStream/plugin.py:1073
-msgid "Download Failed!!!"
-msgstr ""
-
-#: TivuStream/plugin.py:1117 tvPanel/plugin.py:4707
-msgid "Please enter the parental control pin code"
-msgstr ""
-
-#: TivuStream/plugin.py:1117 tvPanel/plugin.py:4707
-msgid "Enter pin code"
-msgstr ""
-
-#: TivuStream/plugin.py:1122 tvPanel/plugin.py:4715
-msgid "The pin code you entered is wrong."
-msgstr ""
-
-#: TivuStream/plugin.py:1294
-#, python-format
-msgid "..:: TiVuStream List V. %s by Lululla ::.."
-msgstr ""
-
-#: TivuStream/plugin.py:1301
-msgid "Ok"
-msgstr ""
-
-#: TivuStream/plugin.py:1328
-msgid "Add Stream IPTV"
-msgstr ""
-
-#: TivuStream/plugin.py:1334
-msgid "Select the Bouquet and press OK to add"
-msgstr ""
-
-#: TivuStream/plugin.py:1369
-msgid "Enter Name"
-msgstr ""
-
-#: TivuStream/plugin.py:1418
-msgid "TiVuStream Config"
-msgstr ""
-
-#: TivuStream/plugin.py:1434 tvManager/data/CCcamInfo.py:1616
-#: tvPanel/plugin.py:3628
-msgid "Save"
-msgstr ""
-
-#: TivuStream/plugin.py:1436 tvPanel/plugin.py:3239 tvPanel/plugin.py:3627
-msgid "Update"
-msgstr ""
-
-#: TivuStream/plugin.py:1478 TivuStream/plugin.py:1481
-#: TivuStream/plugin.py:1484 tvManager/data/CCcamInfo.py:586
-#: tvManager/data/CCcamInfo.py:624 tvManager/data/CCcamInfo.py:657
-msgid "Version: "
-msgstr ""
-
-#: TivuStream/plugin.py:1478 TivuStream/plugin.py:1481
-msgid "No updates!"
-msgstr ""
-
-#: TivuStream/plugin.py:1478 TivuStream/plugin.py:1481
-msgid "if you like it you can make a free donation"
-msgstr ""
-
-#: TivuStream/plugin.py:1478 TivuStream/plugin.py:1481
-msgid "www.paypal.me/TivuStream"
-msgstr ""
-
-#: TivuStream/plugin.py:1484
-msgid "Last update"
-msgstr ""
-
-#: TivuStream/plugin.py:1484
-msgid "available!"
-msgstr ""
-
-#: TivuStream/plugin.py:1484
-msgid "ChangeLog:"
-msgstr ""
-
-#: TivuStream/plugin.py:1489
-msgid "No updates available"
-msgstr ""
-
-#: TivuStream/plugin.py:1489
-msgid "No internet connection or server OFF"
-msgstr ""
-
-#: TivuStream/plugin.py:1489
-msgid "Please try again later or change SERVER to config menu."
-msgstr ""
-
-#: TivuStream/plugin.py:1503
-msgid "      Server:"
-msgstr ""
-
-#: TivuStream/plugin.py:1503
-msgid "Server selection"
-msgstr ""
-
-#: TivuStream/plugin.py:1504
-msgid "      Auto Update Plugin:"
-msgstr ""
-
-#: TivuStream/plugin.py:1504
-msgid "Automatic plugin update"
-msgstr ""
-
-#: TivuStream/plugin.py:1505
-msgid "      Personal Password:"
-msgstr ""
-
-#: TivuStream/plugin.py:1505
-msgid "Enter the password to download Lists XXX Adults"
-msgstr ""
-
-#: TivuStream/plugin.py:1506
-msgid "      IPTV bouquets location "
-msgstr ""
-
-#: TivuStream/plugin.py:1506
-msgid "Configure position of the bouquets of the converted lists"
-msgstr ""
-
-#: TivuStream/plugin.py:1507
-msgid "      Player folder List <.m3u>:"
-msgstr ""
-
-#: TivuStream/plugin.py:1507
-msgid "Folder path containing the .m3u files"
-msgstr ""
-
-#: TivuStream/plugin.py:1508
-msgid "      Services Player Reference type"
-msgstr ""
-
-#: TivuStream/plugin.py:1508
-msgid "Configure Service Player Reference"
-msgstr ""
-
-#: TivuStream/plugin.py:1509
-msgid "      Link in Extensions Menu:"
-msgstr ""
-
-#: TivuStream/plugin.py:1509
-msgid "Show Plugin in Extensions Menu"
-msgstr ""
-
-#: TivuStream/plugin.py:1510
-msgid "      Link in Main Menu:"
-msgstr ""
-
-#: TivuStream/plugin.py:1510
-msgid "Show Plugin in Main Menu"
-msgstr ""
-
-#: TivuStream/plugin.py:1564 tvPanel/plugin.py:3727
-msgid "Choose Directory:"
-msgstr ""
-
-#: TivuStream/plugin.py:1565
-msgid "Choose Directory"
-msgstr ""
-
-#: TivuStream/plugin.py:1586
-msgid "M3u list folder not detected!"
-msgstr ""
-
-#: TivuStream/plugin.py:1596
-msgid "Settings saved correctly!"
-msgstr ""
-
-#: TivuStream/plugin.py:1622 tvPanel/plugin.py:3767
-msgid "Really close without saving the settings?"
-msgstr ""
-
-#: TivuStream/plugin.py:1631
-msgid "New Online Version!"
-msgstr ""
-
-#: TivuStream/plugin.py:1631
-#, python-format
-msgid "Update Plugin to Version %s ?"
-msgstr ""
-
-#: TivuStream/plugin.py:1636
-msgid "Update Plugin ?"
-msgstr ""
-
-#: TivuStream/plugin.py:1644
-#, python-format
-msgid "Update Plugin: %s"
-msgstr ""
-
-#: TivuStream/plugin.py:1700
-msgid "Executing in run:"
-msgstr ""
-
-#: TivuStream/plugin.py:1712
-msgid "Execution finished !!"
-msgstr ""
-
-#: TivuStream/plugin.py:1782 tvPanel/plugin.py:3485
-msgid "Question"
-msgstr ""
-
-#: TivuStream/plugin.py:1783 tvPanel/plugin.py:3486
-msgid "Information"
-msgstr ""
-
-#: TivuStream/plugin.py:1784 tvPanel/plugin.py:3487
-msgid "Warning"
-msgstr ""
-
-#: TivuStream/plugin.py:1785 tvManager/data/CCcamInfo.py:578
-#: tvPanel/plugin.py:3488
-msgid "Error"
-msgstr ""
-
-#: TivuStream/plugin.py:1785 tvPanel/plugin.py:3488
-msgid "Message"
-msgstr ""
-
-#: TivuStream/plugin.py:1790 TivuStream/plugin.py:1792 tvPanel/plugin.py:3493
-#: tvPanel/plugin.py:3495
-msgid "Yes"
-msgstr ""
-
-#: TivuStream/plugin.py:1790 TivuStream/plugin.py:1792 tvPanel/plugin.py:3493
-#: tvPanel/plugin.py:3495
-msgid "No"
-msgstr ""
-
-#: TivuStream/plugin.py:1932
-msgid "\n"
-"\n"
-"\n"
-"Check Connection wait please..."
-msgstr ""
-
-#: TivuStream/plugin.py:1951
-msgid "\n"
-"\n"
-"Error downloading updates!"
-msgstr ""
-
-#: TivuStream/plugin.py:1955
-msgid "\n"
-"\n"
-"Server Off !"
-msgstr ""
-
-#: TivuStream/plugin.py:1955
-msgid "check SERVER in config"
-msgstr ""
-
-#: TivuStream/plugin.py:1980 TivuStream/plugin.py:1998
-msgid "TiVuStream List"
-msgstr ""
-
-#: TivuStream/plugin.py:1999 TivuStream/plugin.py:2001
-msgid "TiVuStream List v."
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:110
+#: tvManager/data/CCcamInfo.py:119
 msgid "Current time"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:111
+#: tvManager/data/CCcamInfo.py:120
 msgid "NodeID"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:112
+#: tvManager/data/CCcamInfo.py:121
 msgid "Uptime"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:113
+#: tvManager/data/CCcamInfo.py:122
 msgid "Connected clients"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:114 tvManager/data/CCcamInfo.py:178
-#: tvManager/data/CCcamInfo.py:480
+#: tvManager/data/CCcamInfo.py:123 tvManager/data/CCcamInfo.py:186
+#: tvManager/data/CCcamInfo.py:1055
 msgid "Active clients"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:115
+#: tvManager/data/CCcamInfo.py:124
 msgid "Total handled client ecm's"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:116
+#: tvManager/data/CCcamInfo.py:125
 msgid "Total handled client emm's"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:117
+#: tvManager/data/CCcamInfo.py:126
 msgid "Peak load (max queued requests per workerthread)"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:118
+#: tvManager/data/CCcamInfo.py:127
 msgid "card reader"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:119
+#: tvManager/data/CCcamInfo.py:128
 msgid "no or unknown card inserted"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:120
+#: tvManager/data/CCcamInfo.py:129
 msgid "system:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:121
+#: tvManager/data/CCcamInfo.py:130
 msgid "caid:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:122
+#: tvManager/data/CCcamInfo.py:131
 msgid "provider:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:123
+#: tvManager/data/CCcamInfo.py:132
 msgid "provid:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:124
+#: tvManager/data/CCcamInfo.py:133
 msgid "using:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:125
+#: tvManager/data/CCcamInfo.py:134
 msgid "address:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:126
+#: tvManager/data/CCcamInfo.py:135
 msgid "hops:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:127
+#: tvManager/data/CCcamInfo.py:136
 msgid "pid:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:128
+#: tvManager/data/CCcamInfo.py:137
 msgid "share:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:129
+#: tvManager/data/CCcamInfo.py:138
 msgid "handled"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:130
+#: tvManager/data/CCcamInfo.py:139
 msgid " and"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:131
+#: tvManager/data/CCcamInfo.py:140
 msgid "card"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:132
+#: tvManager/data/CCcamInfo.py:141
 msgid "Cardserial"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:133
+#: tvManager/data/CCcamInfo.py:142
 msgid "ecm time:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:176 tvManager/data/CCcamInfo.py:476
-#: tvManager/data/CCcamInfo.py:592 tvManager/data/CCcamInfo.py:594
+#: tvManager/data/CCcamInfo.py:184 tvManager/data/CCcamInfo.py:1051
 msgid "General"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:177 tvManager/data/CCcamInfo.py:478
+#: tvManager/data/CCcamInfo.py:185 tvManager/data/CCcamInfo.py:1053
 msgid "Clients"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:179 tvManager/data/CCcamInfo.py:482
-#: tvManager/data/CCcamInfo.py:1099
+#: tvManager/data/CCcamInfo.py:187 tvManager/data/CCcamInfo.py:1057
 msgid "Servers"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:180 tvManager/data/CCcamInfo.py:484
+#: tvManager/data/CCcamInfo.py:188 tvManager/data/CCcamInfo.py:1059
 msgid "Shares"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:181 tvManager/data/CCcamInfo.py:486
-#: tvManager/data/CCcamInfo.py:992 tvManager/data/CCcamInfo.py:997
+#: tvManager/data/CCcamInfo.py:189 tvManager/data/CCcamInfo.py:1061
+#: tvManager/data/CCcamInfo.py:1618 tvManager/data/CCcamInfo.py:1619
 msgid "Share View"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:182 tvManager/data/CCcamInfo.py:488
+#: tvManager/data/CCcamInfo.py:190 tvManager/data/CCcamInfo.py:1063
 msgid "Extended Shares"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:183 tvManager/data/CCcamInfo.py:490
+#: tvManager/data/CCcamInfo.py:191 tvManager/data/CCcamInfo.py:1065
 msgid "Providers"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:184 tvManager/data/CCcamInfo.py:492
-#: tvManager/data/CCcamInfo.py:740 tvManager/data/CCcamInfo.py:742
+#: tvManager/data/CCcamInfo.py:192 tvManager/data/CCcamInfo.py:1067
 msgid "Entitlements"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:185 tvManager/data/CCcamInfo.py:494
+#: tvManager/data/CCcamInfo.py:193 tvManager/data/CCcamInfo.py:1069
 msgid "ecm.info"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:186 tvManager/data/CCcamInfo.py:496
-#: tvManager/data/CCcamInfo.py:1656
+#: tvManager/data/CCcamInfo.py:194 tvManager/data/CCcamInfo.py:1071
+#: tvManager/data/CCcamInfo.py:2422
 msgid "Menu config"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:187 tvManager/data/CCcamInfo.py:498
-#: tvManager/data/CCcamInfo.py:500
+#: tvManager/data/CCcamInfo.py:195 tvManager/data/CCcamInfo.py:1073
 msgid "Local box"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:188 tvManager/data/CCcamInfo.py:501
+#: tvManager/data/CCcamInfo.py:196 tvManager/data/CCcamInfo.py:1076
 msgid "Remote box"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:189 tvManager/data/CCcamInfo.py:503
-#: tvManager/data/CCcamInfo.py:770 tvManager/data/CCcamInfo.py:772
-#: tvManager/data/CCcamInfo.py:774
-msgid "Free memory"
+#: tvManager/data/CCcamInfo.py:197 tvManager/data/CCcamInfo.py:1078
+msgid "CCcam Prio Maker"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:190 tvManager/data/CCcamInfo.py:508
+#: tvManager/data/CCcamInfo.py:198 tvManager/data/CCcamInfo.py:1080
+#: tvManager/data/CCcamOrganizer.py:29 tvManager/data/CCcamOrganizer.py:100
+msgid "CCcam Organizer"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:199 tvManager/data/CCcamInfo.py:1082
 msgid "Switch config"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:191 tvManager/data/CCcamInfo.py:511
+#: tvManager/data/CCcamInfo.py:200
 msgid "About"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:311 tvManager/data/CCcamInfo.py:656
-#: tvManager/data/CCcamInfo.py:697
+#: tvManager/data/CCcamInfo.py:481
+msgid "No parse cannot emu"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:614
+msgid "Free to Air"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:620 tvManager/data/CCcamInfo.py:1618
+#: tvManager/data/CCcamInfo.py:1619 tvManager/data/CCcamInfo.py:1621
+msgid "Hops:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:622
+msgid "Ecm time:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:756
+msgid "Encoding screen config menu"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:759
+msgid "Activate screen:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:760
+msgid "Show ecm.info:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:761
+msgid "Hide ecm.info after (x) seconds:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:762
+msgid "Hide ecm.info with InfoBar:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:763
+msgid "Cut servername after (x) letters:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:764
+msgid "Z position screen:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:765
+msgid "Position:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:766
+msgid "Show CCcam Info in ext menu:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:883 tvManager/data/CCcamInfo.py:1230
+#: tvManager/data/CCcamInfo.py:1271
 msgid "Type: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:312 tvManager/data/CCcamInfo.py:698
-#: tvManager/data/CCcamInfo.py:702 tvManager/data/CCcamInfo.py:724
-#: tvManager/data/CCcamInfo.py:728
+#: tvManager/data/CCcamInfo.py:884 tvManager/data/CCcamInfo.py:1271
+#: tvManager/data/CCcamInfo.py:1272 tvManager/data/CCcamInfo.py:1295
+#: tvManager/data/CCcamInfo.py:1296
 msgid "CaID: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:313 tvManager/data/CCcamInfo.py:699
-#: tvManager/data/CCcamInfo.py:727
+#: tvManager/data/CCcamInfo.py:885 tvManager/data/CCcamInfo.py:1271
+#: tvManager/data/CCcamInfo.py:1295
 msgid "System: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:314 tvManager/data/CCcamInfo.py:700
-#: tvManager/data/CCcamInfo.py:1436 tvManager/data/CCcamInfo.py:1491
+#: tvManager/data/CCcamInfo.py:886 tvManager/data/CCcamInfo.py:1271
+#: tvManager/data/CCcamInfo.py:2151 tvManager/data/CCcamInfo.py:2204
 msgid "Uphops: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:315 tvManager/data/CCcamInfo.py:701
-#: tvManager/data/CCcamInfo.py:1438 tvManager/data/CCcamInfo.py:1493
+#: tvManager/data/CCcamInfo.py:887 tvManager/data/CCcamInfo.py:1271
+#: tvManager/data/CCcamInfo.py:2151 tvManager/data/CCcamInfo.py:2204
 msgid "Maxdown: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:385
-msgid "CCcam Info"
+#: tvManager/data/CCcamInfo.py:953
+msgid "CCcam Info Main"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:467
+#: tvManager/data/CCcamInfo.py:1043
 msgid "New profile: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:467 tvManager/data/CCcamInfo.py:469
-msgid "Profile"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:469
+#: tvManager/data/CCcamInfo.py:1045
 msgid "Using old profile: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:500
+#: tvManager/data/CCcamInfo.py:1075
 msgid "Profile: Local box"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:511
+#: tvManager/data/CCcamInfo.py:1085
 #, python-format
-msgid "CCcam Info %s\n"
+msgid ""
+"CCcam Info %s\n"
 "by AliAbdul %s\n"
-"\n"
-"This plugin shows you the status of your CCcam."
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:552 tvManager/data/CCcamInfo.py:578
-#: tvManager/data/CCcamInfo.py:742 tvManager/data/CCcamInfo.py:853
-#: tvManager/data/CCcamInfo.py:1381
+#: tvManager/data/CCcamInfo.py:1085
+msgid "This plugin shows you the status of your CCcam."
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1127 tvManager/data/CCcamInfo.py:1152
+#: tvManager/data/CCcamInfo.py:1311 tvManager/data/CCcamInfo.py:1453
+#: tvManager/data/CCcamInfo.py:2097
 msgid "Error reading webpage!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:560 tvManager/data/CCcamInfo.py:1603
+#: tvManager/data/CCcamInfo.py:1135 tvManager/data/CCcamInfo.py:2344
 #, python-format
 msgid "Could not open the file %s!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:592 tvManager/data/CCcamInfo.py:1434
-#: tvManager/data/CCcamInfo.py:1489
+#: tvManager/data/CCcamInfo.py:1160 tvManager/data/CCcamInfo.py:1199
+#: tvManager/data/CCcamInfo.py:1230
+msgid "Version: "
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1167 tvManager/data/CCcamInfo.py:2151
+#: tvManager/data/CCcamInfo.py:2204
 msgid "Available shares:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:621
+#: tvManager/data/CCcamInfo.py:1199
 msgid "Hostname: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:622 tvManager/data/CCcamInfo.py:659
-#: tvManager/data/CCcamInfo.py:1149
+#: tvManager/data/CCcamInfo.py:1199 tvManager/data/CCcamInfo.py:1230
+#: tvManager/data/CCcamInfo.py:1801
 msgid "Connected: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:623
+#: tvManager/data/CCcamInfo.py:1199
 msgid "Idle Time: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:625
+#: tvManager/data/CCcamInfo.py:1199
 msgid "Last used share: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:629
-msgid "CCcam Client Info"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:655
+#: tvManager/data/CCcamInfo.py:1230
 msgid "Cards: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:658
+#: tvManager/data/CCcamInfo.py:1230
 msgid "NodeID: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:704
-msgid "CCcam Shares Info"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:725 tvManager/data/CCcamInfo.py:728
+#: tvManager/data/CCcamInfo.py:1295 tvManager/data/CCcamInfo.py:1296
 msgid "Provider: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:726
+#: tvManager/data/CCcamInfo.py:1295
 msgid "Provider Name: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:730
-msgid "CCcam Provider Info"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:739
+#: tvManager/data/CCcamInfo.py:1307
 msgid "No card inserted!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:764
-msgid "Free memory:"
+#: tvManager/data/CCcamInfo.py:1340
+msgid "ecm.info selection"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:765
-msgid "Total:"
+#: tvManager/data/CCcamInfo.py:1371
+msgid "CCcam Info"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:767
-msgid "Used:"
+#: tvManager/data/CCcamInfo.py:1413
+msgid "CCcam Share View Menu"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:769
-msgid "Free:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:781
-msgid "CCcam ECM Info"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:816 tvManager/data/CCcamInfo.py:1354
-msgid "CCcam Share Info"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:828
+#: tvManager/data/CCcamInfo.py:1427
 msgid "close share view"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:829
+#: tvManager/data/CCcamInfo.py:1428
 msgid "show cards with uphop 0"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:830
+#: tvManager/data/CCcamInfo.py:1429
 msgid "show cards with uphop 1"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:831
+#: tvManager/data/CCcamInfo.py:1430
 msgid "show cards with uphop 2"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:832
+#: tvManager/data/CCcamInfo.py:1431
 msgid "show cards with uphop 3"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:833
+#: tvManager/data/CCcamInfo.py:1432
 msgid "show cards with uphop 4"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:834
+#: tvManager/data/CCcamInfo.py:1433
 msgid "show cards with uphop 5"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:835
+#: tvManager/data/CCcamInfo.py:1434
 msgid "show cards with uphop 6"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:836
+#: tvManager/data/CCcamInfo.py:1435
 msgid "show cards with uphop 7"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:837
+#: tvManager/data/CCcamInfo.py:1436
 msgid "show cards with uphop 8"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:838
+#: tvManager/data/CCcamInfo.py:1437
 msgid "show cards with uphop 9"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:839
+#: tvManager/data/CCcamInfo.py:1438
 msgid "show all cards"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:840
+#: tvManager/data/CCcamInfo.py:1439
 msgid "increase uphop by 1"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:841
+#: tvManager/data/CCcamInfo.py:1440
 msgid "decrease uphop by 1"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:842
+#: tvManager/data/CCcamInfo.py:1441
 msgid "get the cards' server"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:933 tvManager/data/CCcamInfo.py:1427
-#: tvManager/data/CCcamInfo.py:1431 tvManager/data/CCcamInfo.py:1482
-#: tvManager/data/CCcamInfo.py:1486
+#: tvManager/data/CCcamInfo.py:1542 tvManager/data/CCcamInfo.py:2142
+#: tvManager/data/CCcamInfo.py:2147 tvManager/data/CCcamInfo.py:2195
+#: tvManager/data/CCcamInfo.py:2200
 msgid "All"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:993 tvManager/data/CCcamInfo.py:998
-#: tvManager/data/CCcamInfo.py:1004
+#: tvManager/data/CCcamInfo.py:1618 tvManager/data/CCcamInfo.py:1619
+#: tvManager/data/CCcamInfo.py:1622
 msgid "Total cards:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:995 tvManager/data/CCcamInfo.py:1000
-#: tvManager/data/CCcamInfo.py:1003
-msgid "Hops:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1005
+#: tvManager/data/CCcamInfo.py:1623
 msgid "Providers:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1006
+#: tvManager/data/CCcamInfo.py:1624
 msgid "Reshare:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1086
+#: tvManager/data/CCcamInfo.py:1707
 msgid "Servers:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1144
-msgid "CCcam Server Info"
+#: tvManager/data/CCcamInfo.py:1744
+msgid "CCcam Info Sub Menu"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1151
+#: tvManager/data/CCcamInfo.py:1795
+msgid "CCcam Info Server Menu"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1803
 msgid "Cards: 0"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1200
-msgid "CCcam Info Setup"
+#: tvManager/data/CCcamInfo.py:1864
+msgid "CCcam Info Config Menu"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1206
+#: tvManager/data/CCcamInfo.py:1872
 msgid "Name:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1207
+#: tvManager/data/CCcamInfo.py:1873
 msgid "IP:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1208
+#: tvManager/data/CCcamInfo.py:1874
 msgid "Username:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1209
+#: tvManager/data/CCcamInfo.py:1875
 msgid "Password:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1210
+#: tvManager/data/CCcamInfo.py:1876
 msgid "Port:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1227
-msgid "CCcam Remote Info"
+#: tvManager/data/CCcamInfo.py:1921
+msgid "CCcam Info Remote Box Menu"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1230 tvManager/data/CCcamInfo.py:1505
+#: tvManager/data/CCcamInfo.py:1925 tvManager/data/CCcamInfo.py:2244
 msgid "Delete"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1231
+#: tvManager/data/CCcamInfo.py:1926
 msgid "New"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1232 tvManager/data/CCcamInfo.py:1617
+#: tvManager/data/CCcamInfo.py:1927 tvManager/data/CCcamInfo.py:2383
 msgid "Location"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1233
+#: tvManager/data/CCcamInfo.py:1928
 msgid "Edit"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1361
+#: tvManager/data/CCcamInfo.py:2068
+msgid "CCcam Share Info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:2075
 msgid "Uphops +"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1362
+#: tvManager/data/CCcamInfo.py:2076
 msgid "Uphops -"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1363
+#: tvManager/data/CCcamInfo.py:2077
 msgid "Maxdown +"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1364
+#: tvManager/data/CCcamInfo.py:2078
 msgid "Maxdown -"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1504 tvManager/data/CCcamInfo.py:1605
+#: tvManager/data/CCcamInfo.py:2243
 msgid "CCcam Config Switcher"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1506
+#: tvManager/data/CCcamInfo.py:2245
 msgid "Activate"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1507
+#: tvManager/data/CCcamInfo.py:2246
 msgid "Rename"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1508
+#: tvManager/data/CCcamInfo.py:2247
 msgid "Content"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1535
+#: tvManager/data/CCcamInfo.py:2276
 #, python-format
 msgid "Delete %s?"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1542
+#: tvManager/data/CCcamInfo.py:2282
 msgid "Delete failed!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1544
+#: tvManager/data/CCcamInfo.py:2284
 #, python-format
 msgid "Deleted %s!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1564
+#: tvManager/data/CCcamInfo.py:2306
 msgid "Rename to:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1586
+#: tvManager/data/CCcamInfo.py:2329
 #, python-format
 msgid "Renamed %s!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1589 tvManager/data/CCcamInfo.py:1592
+#: tvManager/data/CCcamInfo.py:2332 tvManager/data/CCcamInfo.py:2334
 msgid "Rename failed!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1614
+#: tvManager/data/CCcamInfo.py:2380
 msgid "CCcam Info Config"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1615
+#: tvManager/data/CCcamInfo.py:2381 tvManager/data/CCcamPrioMaker.py:216
 msgid "Cancel"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1674
+#: tvManager/data/CCcamInfo.py:2382
+msgid "Save"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:2438
 #, python-format
 msgid "Configfile %s saved."
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1676
+#: tvManager/data/CCcamInfo.py:2440
 #, python-format
 msgid "Could not save configfile %s!"
 msgstr ""
 
-#: tvManager/data/GetEcmInfo.py:65
+#: tvManager/data/CCcamInfo.py:2468
+msgid "Ecm Info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:2474 tvManager/data/CCcamInfo.py:2478
+#, python-format
+msgid "CCcam Info %s"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:2474 tvManager/data/CCcamInfo.py:2478
+msgid "This plugin shows you the status of your CCcam"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:22
+msgid "Delete Peer"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:23
+msgid "Recover Peer"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:24
+msgid "Find Fakes"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:25
+msgid "Stop Finding Fakes"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:26
+msgid "Exit"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:62
+msgid ""
+"\n"
+"STOPPED FINDING FAKES \n"
+"\n"
+"REVERTED BACK TO INITIAL STATUS"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:117
+msgid "Temporarely DELETED"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:125
+msgid "UNDELETED"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:127
+msgid "a NOTHING.TO.UNDELE"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:128
+msgid "PRESS RETURN"
+msgstr ""
+
+#: tvManager/data/CCcamOrganizer.py:145
+msgid "Set as UNIQUE PEER"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:163
+msgid "Caid:"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:163
+msgid "\tProvid:"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:171 tvManager/data/CCcamPrioMaker.py:193
+#: tvManager/data/CCcamPrioMaker.py:202
+msgid "Provider"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:171 tvManager/data/CCcamPrioMaker.py:193
+#: tvManager/data/CCcamPrioMaker.py:202
+msgid "Service"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:176
+msgid ""
+"\n"
+" All Caid:"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:193
+#, python-format
+msgid ""
+"%s\n"
+"\n"
+"%s\n"
+"%s\n"
+"\n"
+"Prio entry\n"
+"%s"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:193
+msgid "Add"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:211
+msgid "CCPrioMaker Settings"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:217
+msgid "OK"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:220
+msgid "CCPrioMaker autostart"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:221
+msgid "Ask for the selection caid"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:222
+msgid "Ask all caid"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:223
+msgid "Editing one caid"
+msgstr ""
+
+#: tvManager/data/CCcamPrioMaker.py:224
+msgid "Write-Debug"
+msgstr ""
+
+#: tvManager/data/GetEcmInfo.py:68
 msgid "FTA"
 msgstr "FTA"
 
-#: tvManager/data/datas.py:101
-msgid "CCcam"
-msgstr "CCcam"
-
-#: tvManager/data/datas.py:101
-msgid "Oscam"
-msgstr "Oscam"
-
-#: tvManager/data/datas.py:101
-msgid "Ncam"
-msgstr "Ncam"
-
-#: tvManager/data/datas.py:107
-msgid "Link1"
-msgstr "Link1"
-
-#: tvManager/data/datas.py:107
-msgid "Link2"
-msgstr "Link2"
-
-#: tvManager/data/datas.py:107
-msgid "Link3"
-msgstr "Link3"
-
-#: tvManager/data/datas.py:107
-msgid "Link4"
-msgstr "Link4"
-
-#: tvManager/data/datas.py:107
-msgid "Link5"
-msgstr "Link5"
-
-#: tvManager/data/datas.py:107
-msgid "Link6"
-msgstr "Link6"
-
-#: tvManager/data/datas.py:107
-msgid "Link7"
+#: tvManager/data/Utils.py:289
+#, python-format
+msgid "Status Internet: %s:%s -> OK"
 msgstr ""
 
-#: tvManager/data/datas.py:107
-msgid "Link8"
+#: tvManager/data/Utils.py:293
+#, python-format
+msgid "Status Internet: %s:%s -> KO"
 msgstr ""
 
-#: tvManager/data/datas.py:107
-msgid "Link9"
+#: tvManager/data/Utils.py:296
+msgid "Restart Check 1 Internet."
 msgstr ""
 
-#: tvManager/data/datas.py:107
-msgid "Link10"
+#: tvManager/data/Utils.py:300
+msgid "Restart Check 2 Internet."
 msgstr ""
 
-#: tvManager/data/datas.py:107
-msgid "Link11"
+#: tvManager/data/Utils.py:778
+#, python-format
+msgid ""
+"ReadUrl1:\n"
+"  url = %s"
 msgstr ""
 
-#: tvManager/data/datas.py:117 tvManager/data/datas.py:120
-#: tvManager/data/datas.py:123
+#: tvManager/data/Utils.py:1284
+msgid "Stream already added to bouquet"
+msgstr ""
+
+#: tvManager/data/Utils.py:1291
+msgid "Adding to bouquet failed"
+msgstr ""
+
+#: tvManager/data/datas.py:252 tvManager/data/datas.py:255
+#: tvManager/data/datas.py:258 tvManager/data/datas.py:261
+#: tvManager/data/datas.py:264 tvManager/data/datas.py:267
 msgid "Write"
 msgstr "Scrivi"
 
-#: tvManager/data/datas.py:136 tvManager/data/datas.py:137
-msgid "..:: TiVuStream Softcam Manager ::.."
-msgstr ""
-
-#: tvManager/data/datas.py:154 tvManager/plugin.py:592 tvManager/plugin.py:680
-#: tvManager/plugin.py:855 tvPanel/plugin.py:526 tvPanel/plugin.py:599
-#: tvPanel/plugin.py:670 tvPanel/plugin.py:741 tvPanel/plugin.py:812
-#: tvPanel/plugin.py:883 tvPanel/plugin.py:954 tvPanel/plugin.py:1026
-#: tvPanel/plugin.py:1097 tvPanel/plugin.py:1168 tvPanel/plugin.py:1239
-#: tvPanel/plugin.py:1311 tvPanel/plugin.py:1386 tvPanel/plugin.py:1457
-#: tvPanel/plugin.py:1529 tvPanel/plugin.py:1601 tvPanel/plugin.py:1677
-#: tvPanel/plugin.py:1797 tvPanel/plugin.py:1939 tvPanel/plugin.py:2059
-#: tvPanel/plugin.py:2181 tvPanel/plugin.py:2307 tvPanel/plugin.py:2431
-#: tvPanel/plugin.py:2547 tvPanel/plugin.py:2665 tvPanel/plugin.py:2797
-#: tvPanel/plugin.py:3136 tvPanel/plugin.py:3238 tvPanel/plugin.py:3368
-#: tvPanel/plugin.py:3629 tvPanel/plugin.py:3801 tvPanel/plugin.py:3867
-#: tvPanel/plugin.py:4012 tvPanel/plugin.py:4156 tvPanel/plugin.py:4311
-#: tvPanel/plugin.py:4378 tvPanel/plugin.py:4508 tvPanel/plugin.py:4636
-#: tvPanel/plugin.py:4790 tvPanel/plugin.py:4918 tvSettings/plugin.py:381
-#: tvSettings/plugin.py:524 tvSettings/plugin.py:647 tvSettings/plugin.py:778
-#: tvSettings/plugin.py:909 tvSettings/plugin.py:1037 tvSettings/plugin.py:1156
-#: tvSettings/plugin.py:1275
+#: tvManager/data/datas.py:303 tvManager/plugin -~.py:682 -~.py:777 -~.py:912
+#: tvManager/plugin.py:570 tvManager/plugin.py:665 tvManager/plugin.py:800
 msgid "Back"
 msgstr "Indietro"
 
-#: tvManager/data/datas.py:177 tvManager/data/datas.py:185
+#: tvManager/data/datas.py:305
+msgid "Send Oscam Emm"
+msgstr "Invio Oscam Emm"
+
+#: tvManager/data/datas.py:306
+msgid "Default Config"
+msgstr ""
+
+#: tvManager/data/datas.py:319
+msgid "SEND EMM TO OSCAM"
+msgstr "INVIO EMM ALLA OSCAM"
+
+#: tvManager/data/datas.py:326
+#, python-format
+msgid "Please wait, %s."
+msgstr ""
+
+#: tvManager/data/datas.py:338 tvManager/data/datas.py:346
 msgid "Reset"
 msgstr "Reset"
 
-#: tvManager/data/datas.py:183
-msgid "Get Link"
-msgstr "Ottieni link"
-
-#: tvManager/data/datas.py:215
+#: tvManager/data/datas.py:383
 msgid "Activate Insert line in Config File:"
 msgstr "Attivare inserimento in File Cfg 3C"
 
-#: tvManager/data/datas.py:215
+#: tvManager/data/datas.py:383
 msgid "If Active: Download/Reset Server Config"
 msgstr "Se Attivo: Scarica/Reset Server config"
 
-#: tvManager/data/datas.py:217
+#: tvManager/data/datas.py:385
 msgid "Server Config"
 msgstr "Server Config"
 
-#: tvManager/data/datas.py:218
+#: tvManager/data/datas.py:386
 msgid "Server Link"
 msgstr ""
 
-#: tvManager/data/datas.py:218
+#: tvManager/data/datas.py:386
 msgid "Select Get Link"
 msgstr "Seleziona Link di scarico"
 
-#: tvManager/data/datas.py:219
+#: tvManager/data/datas.py:387
 msgid "Server URL"
 msgstr "Server URL"
 
-#: tvManager/data/datas.py:219
+#: tvManager/data/datas.py:387
 msgid "Server Url i.e. 012.345.678.900"
 msgstr "Server Url i.e. 012.345.678.900"
 
-#: tvManager/data/datas.py:220
+#: tvManager/data/datas.py:388
 msgid "Server Port"
 msgstr "Server Port"
 
-#: tvManager/data/datas.py:220
+#: tvManager/data/datas.py:388
 msgid "Port"
 msgstr "Port"
 
-#: tvManager/data/datas.py:221
+#: tvManager/data/datas.py:389
 msgid "Server Username"
 msgstr "Server Username"
 
-#: tvManager/data/datas.py:221
+#: tvManager/data/datas.py:389
 msgid "Username"
 msgstr "Username"
 
-#: tvManager/data/datas.py:222
+#: tvManager/data/datas.py:390
 msgid "Server Password"
 msgstr "Server Password"
 
-#: tvManager/data/datas.py:222
+#: tvManager/data/datas.py:390
 msgid "Password"
 msgstr "Password"
 
-#: tvManager/data/datas.py:268
+#: tvManager/data/datas.py:438
 msgid "Select CCcam"
 msgstr "Seleziona CCcam"
 
-#: tvManager/data/datas.py:279 tvManager/data/datas.py:300
-#: tvManager/data/datas.py:323
+#: tvManager/data/datas.py:449 tvManager/data/datas.py:466
+#: tvManager/data/datas.py:490
 msgid "Please Reset - No File CFG"
 msgstr "Prego Reset - nessun file di Config"
 
-#: tvManager/data/datas.py:285 tvManager/data/datas.py:306
-#: tvManager/data/datas.py:329
+#: tvManager/data/datas.py:455 tvManager/data/datas.py:472
+#: tvManager/data/datas.py:496
 msgid "Server Copy in "
 msgstr "Server copiato in "
 
-#: tvManager/data/datas.py:289
-msgid "Select Oscam"
-msgstr "Seleziona Oscam"
-
-#: tvManager/data/datas.py:310
+#: tvManager/data/datas.py:477
 msgid "Select Ncam"
 msgstr "Seleziona Ncam"
 
-#: tvManager/plugin.py:240
+#: tvManager/plugin -~.py:270 tvManager/plugin.py:201
 msgid "Start"
 msgstr "Avvio"
 
-#: tvManager/plugin.py:243
+#: tvManager/plugin -~.py:271 tvManager/plugin.py:202
+msgid "Download"
+msgstr "Download"
+
+#: tvManager/plugin -~.py:272 tvManager/plugin.py:203
 msgid "Stop"
 msgstr "Stop"
 
-#: tvManager/plugin.py:244 tvManager/plugin.py:287
+#: tvManager/plugin -~.py:273 -~.py:300 tvManager/plugin.py:204
+#: tvManager/plugin.py:231
 msgid "Softcam"
 msgstr "Softcam"
 
-#: tvManager/plugin.py:245 tvManager/plugin.py:246 tvManager/plugin.py:589
-#: tvManager/plugin.py:590 tvManager/plugin.py:677 tvManager/plugin.py:678
-#: tvManager/plugin.py:862 tvManager/plugin.py:863
-#, python-format
-msgid "..:: tvManager V. %s ::.."
-msgstr ""
-
-#: tvManager/plugin.py:256
+#: tvManager/plugin -~.py:275 tvManager/plugin.py:206
 msgid "Scanning and retrieval list softcam ..."
 msgstr "Scansione e recupero lista softcam"
 
-#: tvManager/plugin.py:292
+#: tvManager/plugin -~.py:306 tvManager/plugin.py:237
 msgid "CCcamInfo"
 msgstr ""
 
-#: tvManager/plugin.py:295
+#: tvManager/plugin -~.py:310 tvManager/plugin.py:241
 msgid "OscamInfo"
 msgstr ""
 
-#: tvManager/plugin.py:298 tvManager/plugin.py:301
+#: tvManager/plugin -~.py:313 -~.py:316 tvManager/plugin.py:244
+#: tvManager/plugin.py:247
 msgid "SOFTCAM"
 msgstr ""
 
-#: tvManager/plugin.py:369
+#: tvManager/plugin -~.py:389 tvManager/plugin.py:308
 msgid "Update SoftcamKeys from google search?"
 msgstr "Aggiornamento SoftcamKeys da ricerca google?"
 
-#: tvManager/plugin.py:377
+#: tvManager/plugin -~.py:398 -~.py:401 tvManager/plugin.py:317
+#: tvManager/plugin.py:320
 #, python-format
 msgid "Update Softcam.key: %s"
 msgstr "Aggiornamento SoftCam.Key: %s"
 
-#: tvManager/plugin.py:387
+#: tvManager/plugin -~.py:412 tvManager/plugin.py:331
 msgid "Select a cam to run ..."
 msgstr "Selezionare una cam da avviare ..."
 
-#: tvManager/plugin.py:548
+#: tvManager/plugin -~.py:414 tvManager/plugin.py:333
+msgid "Install Cam first!!!"
+msgstr "Installa prima una Cam!!!"
+
+#: tvManager/plugin -~.py:446 tvManager/plugin.py:365
+msgid "RESTART CAM "
+msgstr ""
+
+#: tvManager/plugin -~.py:451 tvManager/plugin.py:370
+msgid "STOP & RESTART CAM "
+msgstr ""
+
+#: tvManager/plugin -~.py:459 tvManager/plugin.py:378
+msgid "UP CAM 2"
+msgstr ""
+
+#: tvManager/plugin -~.py:470 tvManager/plugin.py:389
+msgid "and"
+msgstr ""
+
+#: tvManager/plugin -~.py:472
+msgid "Please wait.."
+msgstr ""
+
+#: tvManager/plugin -~.py:635 tvManager/plugin.py:523
 msgid "Autocam assigned to the current channel"
 msgstr "Autocam assegnato al canale corrente"
 
-#: tvManager/plugin.py:591 tvPanel/plugin.py:524 tvPanel/plugin.py:597
-#: tvPanel/plugin.py:668 tvPanel/plugin.py:739 tvPanel/plugin.py:810
-#: tvPanel/plugin.py:881 tvPanel/plugin.py:952 tvPanel/plugin.py:1024
-#: tvPanel/plugin.py:1095 tvPanel/plugin.py:1166 tvPanel/plugin.py:1237
-#: tvPanel/plugin.py:1309 tvPanel/plugin.py:1384 tvPanel/plugin.py:1455
-#: tvPanel/plugin.py:1527 tvPanel/plugin.py:1599 tvPanel/plugin.py:1795
-#: tvPanel/plugin.py:1937 tvPanel/plugin.py:2057 tvPanel/plugin.py:2179
-#: tvPanel/plugin.py:2305 tvPanel/plugin.py:2429 tvPanel/plugin.py:2545
-#: tvPanel/plugin.py:2663 tvSettings/plugin.py:379 tvSettings/plugin.py:522
-#: tvSettings/plugin.py:645 tvSettings/plugin.py:776 tvSettings/plugin.py:907
-#: tvSettings/plugin.py:1035 tvSettings/plugin.py:1154
-#: tvSettings/plugin.py:1273
+#: tvManager/plugin -~.py:680 tvManager/plugin.py:568
 msgid "Getting the list, please wait ..."
 msgstr "Getting the list, please wait ..."
 
-#: tvManager/plugin.py:621 tvPanel/plugin.py:553 tvPanel/plugin.py:624
-#: tvPanel/plugin.py:695 tvPanel/plugin.py:766 tvPanel/plugin.py:837
-#: tvPanel/plugin.py:908 tvPanel/plugin.py:979 tvPanel/plugin.py:1051
-#: tvPanel/plugin.py:1122 tvPanel/plugin.py:1193 tvPanel/plugin.py:1264
-#: tvPanel/plugin.py:1340 tvPanel/plugin.py:1411 tvPanel/plugin.py:1482
-#: tvPanel/plugin.py:1554 tvPanel/plugin.py:1626 tvPanel/plugin.py:1823
-#: tvPanel/plugin.py:1966 tvPanel/plugin.py:2085 tvPanel/plugin.py:2208
-#: tvPanel/plugin.py:2333 tvPanel/plugin.py:2458 tvPanel/plugin.py:2574
-#: tvPanel/plugin.py:2695 tvPanel/plugin.py:3891 tvPanel/plugin.py:4037
-#: tvPanel/plugin.py:4180 tvPanel/plugin.py:4402 tvPanel/plugin.py:4532
-#: tvPanel/plugin.py:4660 tvPanel/plugin.py:4814 tvPanel/plugin.py:4942
-#: tvSettings/plugin.py:407 tvSettings/plugin.py:552 tvSettings/plugin.py:675
-#: tvSettings/plugin.py:805 tvSettings/plugin.py:936 tvSettings/plugin.py:1065
-#: tvSettings/plugin.py:1183 tvSettings/plugin.py:1303
+#: tvManager/plugin -~.py:724 -~.py:743 tvManager/plugin.py:612
+#: tvManager/plugin.py:631
 msgid "Try again later ..."
 msgstr "Riprova piu tardi ..."
 
-#: tvManager/plugin.py:640
-msgid "PLEASE SELECT..."
-msgstr "SELEZIONA PREGO..."
-
-#: tvManager/plugin.py:679
-msgid "Select and Install"
-msgstr "Seleziona e Installa"
-
-#: tvManager/plugin.py:692 tvPanel/plugin.py:1743 tvPanel/plugin.py:1762
-#: tvPanel/plugin.py:1862 tvPanel/plugin.py:1991 tvPanel/plugin.py:2118
-#: tvPanel/plugin.py:2234 tvPanel/plugin.py:2363 tvPanel/plugin.py:2485
-#: tvPanel/plugin.py:2601 tvPanel/plugin.py:2722 tvPanel/plugin.py:2812
-#: tvSettings/plugin.py:327 tvSettings/plugin.py:346 tvSettings/plugin.py:444
-#: tvSettings/plugin.py:577 tvSettings/plugin.py:709 tvSettings/plugin.py:834
-#: tvSettings/plugin.py:968 tvSettings/plugin.py:1092 tvSettings/plugin.py:1211
-#: tvSettings/plugin.py:1331
-msgid "Do you want to install?"
-msgstr "Vuoi installare?"
-
-#: tvManager/plugin.py:824 tvPanel/plugin.py:2937 tvPanel/plugin.py:3187
-msgid "Unknow Image!"
-msgstr "Unknow Image!"
-
-#: tvManager/plugin.py:826
-msgid "Download failur!"
-msgstr ""
-
-#: tvManager/plugin.py:864
-msgid "Folder Config Path tvManager"
-msgstr "Percorso Config tvManager"
-
-#: tvManager/plugin.py:1020
-msgid "Cam tvManager"
-msgstr "Cam tvManager"
-
-#: tvManager/plugin.py:1046
-msgid "TiVuStream Cam Manager..."
-msgstr "TiVuStream Cam Manager..."
-
-#: tvManager/plugin.py:1072 tvManager/plugin.py:1073 tvManager/plugin.py:1074
-#: tvManager/plugin.py:1075
-msgid "TiVuStream Cam Manager"
-msgstr "TiVuStream Cam Manager"
-
-#: tvManager/plugin.py:1074 tvManager/plugin.py:1075
-msgid "Softcam Management"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "All Picons"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "Other"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "500x300"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "417x250"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "330x198"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "300x130"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "220x132"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "130x80"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "100x60"
-msgstr ""
-
-#: tvPanel/plugin.py:148
-msgid "50x30"
-msgstr ""
-
-#: tvPanel/plugin.py:225 tvPanel/plugin.py:462
-msgid "SETTINGS DAILY"
-msgstr ""
-
-#: tvPanel/plugin.py:226 tvPanel/plugin.py:438
-msgid "PICONS"
-msgstr ""
-
-#: tvPanel/plugin.py:227 tvPanel/plugin.py:440
-msgid "KODILITE BY PCD"
-msgstr ""
-
-#: tvPanel/plugin.py:228 tvPanel/plugin.py:436
-msgid "DEPENDENCIES"
-msgstr ""
-
-#: tvPanel/plugin.py:229 tvPanel/plugin.py:434
-msgid "DRIVERS"
-msgstr ""
-
-#: tvPanel/plugin.py:230 tvPanel/plugin.py:442
-msgid "PLUGIN BACKUP"
-msgstr ""
-
-#: tvPanel/plugin.py:231 tvPanel/plugin.py:444
-msgid "PLUGIN DEBIAN"
-msgstr ""
-
-#: tvPanel/plugin.py:232 tvPanel/plugin.py:448
-msgid "PLUGIN EPG"
-msgstr ""
-
-#: tvPanel/plugin.py:233 tvPanel/plugin.py:446
-msgid "PLUGIN EMULATORS CAMS"
-msgstr ""
-
-#: tvPanel/plugin.py:234 tvPanel/plugin.py:450
-msgid "PLUGIN KODI"
-msgstr ""
-
-#: tvPanel/plugin.py:235 tvPanel/plugin.py:452
-msgid "PLUGIN MULTIBOOT"
-msgstr ""
-
-#: tvPanel/plugin.py:236 tvPanel/plugin.py:454
-msgid "PLUGIN MULTIMEDIA"
-msgstr ""
-
-#: tvPanel/plugin.py:237 tvPanel/plugin.py:456
-msgid "PLUGIN PICONS"
-msgstr ""
-
-#: tvPanel/plugin.py:238 tvPanel/plugin.py:458
-msgid "PLUGIN PPANEL"
-msgstr ""
-
-#: tvPanel/plugin.py:239 tvPanel/plugin.py:460
-msgid "PLUGIN SETTINGS PANEL"
-msgstr ""
-
-#: tvPanel/plugin.py:240 tvPanel/plugin.py:464
-msgid "PLUGIN SKINS"
-msgstr ""
-
-#: tvPanel/plugin.py:241 tvPanel/plugin.py:466
-msgid "PLUGIN SPORT"
-msgstr ""
-
-#: tvPanel/plugin.py:242 tvPanel/plugin.py:468
-msgid "PLUGIN UTILITY"
-msgstr ""
-
-#: tvPanel/plugin.py:243 tvPanel/plugin.py:470
-msgid "PLUGIN WEATHER"
-msgstr ""
-
-#: tvPanel/plugin.py:330 tvPanel/plugin.py:519 tvPanel/plugin.py:590
-#: tvPanel/plugin.py:661 tvPanel/plugin.py:732 tvPanel/plugin.py:803
-#: tvPanel/plugin.py:874 tvPanel/plugin.py:945 tvPanel/plugin.py:1017
-#: tvPanel/plugin.py:1088 tvPanel/plugin.py:1159 tvPanel/plugin.py:1230
-#: tvPanel/plugin.py:1302 tvPanel/plugin.py:1377 tvPanel/plugin.py:1448
-#: tvPanel/plugin.py:1520 tvPanel/plugin.py:1592 tvPanel/plugin.py:1665
-#: tvPanel/plugin.py:1669 tvPanel/plugin.py:1788 tvPanel/plugin.py:1811
-#: tvPanel/plugin.py:1930 tvPanel/plugin.py:1953 tvPanel/plugin.py:2050
-#: tvPanel/plugin.py:2073 tvPanel/plugin.py:2172 tvPanel/plugin.py:2195
-#: tvPanel/plugin.py:2298 tvPanel/plugin.py:2321 tvPanel/plugin.py:2422
-#: tvPanel/plugin.py:2446 tvPanel/plugin.py:2538 tvPanel/plugin.py:2561
-#: tvPanel/plugin.py:2656 tvPanel/plugin.py:2682 tvPanel/plugin.py:2774
-#: tvPanel/plugin.py:2795 tvPanel/plugin.py:3032 tvPanel/plugin.py:3033
-#: tvPanel/plugin.py:3117 tvPanel/plugin.py:3130 tvPanel/plugin.py:3236
-#: tvPanel/plugin.py:3251 tvPanel/plugin.py:3360 tvPanel/plugin.py:3364
-#: tvPanel/plugin.py:3461 tvPanel/plugin.py:3473 tvPanel/plugin.py:3622
-#: tvPanel/plugin.py:3625 tvPanel/plugin.py:3787 tvPanel/plugin.py:3791
-#: tvPanel/plugin.py:3852 tvPanel/plugin.py:3879 tvPanel/plugin.py:3996
-#: tvPanel/plugin.py:4024 tvPanel/plugin.py:4141 tvPanel/plugin.py:4168
-#: tvPanel/plugin.py:4299 tvPanel/plugin.py:4303 tvPanel/plugin.py:4365
-#: tvPanel/plugin.py:4390 tvPanel/plugin.py:4495 tvPanel/plugin.py:4520
-#: tvPanel/plugin.py:4623 tvPanel/plugin.py:4648 tvPanel/plugin.py:4775
-#: tvPanel/plugin.py:4802 tvPanel/plugin.py:4905 tvPanel/plugin.py:4930
-#, python-format
-msgid "..:: TiVuStream Addons V. %s ::.."
-msgstr ""
-
-#: tvPanel/plugin.py:335
-msgid "Extensions Installer"
-msgstr ""
-
-#: tvPanel/plugin.py:336 tvPanel/plugin.py:3366
-msgid "Uninstall"
-msgstr ""
-
-#: tvPanel/plugin.py:337 tvPanel/plugin.py:341 tvPanel/plugin.py:344
-msgid "tvManager"
-msgstr ""
-
-#: tvPanel/plugin.py:480 tvPanel/plugin.py:3312
-msgid "New update available!!\n"
-"Do you want update plugin ?\n"
-"Please Reboot GUI after install!"
-msgstr ""
-
-#: tvPanel/plugin.py:489 tvPanel/plugin.py:493 tvPanel/plugin.py:3327
-#: tvPanel/plugin.py:3331
-#, python-format
-msgid "Install Update: %s"
-msgstr ""
-
-#: tvPanel/plugin.py:496 tvPanel/plugin.py:3334 tvPanel/plugin.py:3431
-msgid "Do you want restart enigma2 ?"
-msgstr ""
-
-#: tvPanel/plugin.py:525 tvPanel/plugin.py:598 tvPanel/plugin.py:669
-#: tvPanel/plugin.py:740 tvPanel/plugin.py:811 tvPanel/plugin.py:882
-#: tvPanel/plugin.py:953 tvPanel/plugin.py:1025 tvPanel/plugin.py:1096
-#: tvPanel/plugin.py:1167 tvPanel/plugin.py:1238 tvPanel/plugin.py:1310
-#: tvPanel/plugin.py:1385 tvPanel/plugin.py:1456 tvPanel/plugin.py:1528
-#: tvPanel/plugin.py:1600 tvPanel/plugin.py:1796 tvPanel/plugin.py:1938
-#: tvPanel/plugin.py:2058 tvPanel/plugin.py:2180 tvPanel/plugin.py:2306
-#: tvPanel/plugin.py:2430 tvPanel/plugin.py:2546 tvPanel/plugin.py:2664
-#: tvPanel/plugin.py:2796 tvPanel/plugin.py:3133 tvPanel/plugin.py:3866
-#: tvPanel/plugin.py:4011 tvPanel/plugin.py:4155 tvPanel/plugin.py:4377
-#: tvPanel/plugin.py:4507 tvPanel/plugin.py:4635 tvPanel/plugin.py:4789
-#: tvPanel/plugin.py:4917 tvSettings/plugin.py:380 tvSettings/plugin.py:523
-#: tvSettings/plugin.py:646 tvSettings/plugin.py:777 tvSettings/plugin.py:908
-#: tvSettings/plugin.py:1036 tvSettings/plugin.py:1155
-#: tvSettings/plugin.py:1274
-msgid "Install"
-msgstr ""
-
-#: tvPanel/plugin.py:563 tvPanel/plugin.py:634 tvPanel/plugin.py:705
-#: tvPanel/plugin.py:776 tvPanel/plugin.py:847 tvPanel/plugin.py:918
-#: tvPanel/plugin.py:989 tvPanel/plugin.py:1061 tvPanel/plugin.py:1132
-#: tvPanel/plugin.py:1203 tvPanel/plugin.py:1274 tvPanel/plugin.py:1350
-#: tvPanel/plugin.py:1421 tvPanel/plugin.py:1492 tvPanel/plugin.py:1564
-#: tvPanel/plugin.py:1636 tvPanel/plugin.py:1675 tvPanel/plugin.py:1849
-#: tvPanel/plugin.py:1984 tvPanel/plugin.py:2111 tvPanel/plugin.py:2227
-#: tvPanel/plugin.py:2356 tvPanel/plugin.py:2478 tvPanel/plugin.py:2594
-#: tvPanel/plugin.py:2715 tvPanel/plugin.py:2836 tvPanel/plugin.py:3799
-#: tvPanel/plugin.py:3920 tvPanel/plugin.py:3931 tvPanel/plugin.py:3933
-#: tvPanel/plugin.py:3973 tvPanel/plugin.py:4066 tvPanel/plugin.py:4077
-#: tvPanel/plugin.py:4079 tvPanel/plugin.py:4118 tvPanel/plugin.py:4210
-#: tvPanel/plugin.py:4220 tvPanel/plugin.py:4222 tvPanel/plugin.py:4225
-#: tvPanel/plugin.py:4266 tvPanel/plugin.py:4309 tvPanel/plugin.py:4428
-#: tvPanel/plugin.py:4430 tvPanel/plugin.py:4471 tvPanel/plugin.py:4557
-#: tvPanel/plugin.py:4559 tvPanel/plugin.py:4601 tvPanel/plugin.py:4685
-#: tvPanel/plugin.py:4687 tvPanel/plugin.py:4753 tvPanel/plugin.py:4841
-#: tvPanel/plugin.py:4843 tvPanel/plugin.py:4882 tvPanel/plugin.py:4967
-#: tvPanel/plugin.py:4969 tvPanel/plugin.py:5010 tvSettings/plugin.py:260
-#: tvSettings/plugin.py:436 tvSettings/plugin.py:570 tvSettings/plugin.py:702
-#: tvSettings/plugin.py:827 tvSettings/plugin.py:961 tvSettings/plugin.py:1085
-#: tvSettings/plugin.py:1204 tvSettings/plugin.py:1324
+#: tvManager/plugin -~.py:739 tvManager/plugin.py:627
 msgid "Please select ..."
 msgstr ""
 
-#: tvPanel/plugin.py:1676 tvPanel/plugin.py:3800 tvPanel/plugin.py:4310
-#: tvSettings/plugin.py:262
-msgid "Select"
+#: tvManager/plugin -~.py:775 tvManager/plugin.py:663
+msgid "Select and Install"
+msgstr "Seleziona e Installa"
+
+#: tvManager/plugin -~.py:830 tvManager/plugin.py:718
+msgid "Do you want to install?"
+msgstr "Vuoi installare?"
+
+#: tvManager/plugin -~.py:875 tvManager/plugin.py:763
+msgid "Unknow Image!"
+msgstr "Unknow Image!"
+
+#: tvManager/plugin -~.py:878 tvManager/plugin.py:766
+msgid "Download failur!"
 msgstr ""
 
-#: tvPanel/plugin.py:1678 tvSettings/plugin.py:261
-msgid "Lcn"
+#: tvManager/plugin -~.py:890 tvManager/plugin.py:778
+msgid "All file Download are removed!"
 msgstr ""
 
-#: tvPanel/plugin.py:1692
-msgid "Reorder terrestrial channels with Lcn rules"
+#: tvManager/plugin -~.py:921 tvManager/plugin.py:809
+msgid "Path Configuration Folder"
 msgstr ""
 
-#: tvPanel/plugin.py:1716 tvSettings/plugin.py:301
-msgid "UPDATE SATELLITES.XML"
+#: tvManager/plugin -~.py:1068 tvManager/plugin.py:947
+msgid "Softcam Manager"
 msgstr ""
 
-#: tvPanel/plugin.py:1718 tvSettings/plugin.py:303
-msgid "UPDATE TERRESTRIAL.XML"
-msgstr ""
-
-#: tvPanel/plugin.py:1752 tvSettings/plugin.py:336
-msgid "Satellites.xml Updated!"
-msgstr ""
-
-#: tvPanel/plugin.py:1753 tvPanel/plugin.py:1772 tvPanel/plugin.py:2835
-#: tvPanel/plugin.py:2867 tvPanel/plugin.py:2890 tvPanel/plugin.py:2891
-#: tvPanel/plugin.py:2904 tvPanel/plugin.py:2905 tvPanel/plugin.py:2918
-#: tvPanel/plugin.py:2919 tvPanel/plugin.py:2932 tvPanel/plugin.py:2933
-#: tvPanel/plugin.py:2952 tvPanel/plugin.py:2953 tvPanel/plugin.py:3002
-#: tvPanel/plugin.py:3003 tvPanel/plugin.py:3020 tvSettings/plugin.py:337
-#: tvSettings/plugin.py:356
-msgid "Installation performed successfully!"
-msgstr ""
-
-#: tvPanel/plugin.py:1771 tvSettings/plugin.py:355
-msgid "Terrestrial.xml Updated!"
-msgstr ""
-
-#: tvPanel/plugin.py:1917 tvPanel/plugin.py:2036 tvPanel/plugin.py:2158
-#: tvPanel/plugin.py:2285 tvPanel/plugin.py:2408 tvPanel/plugin.py:2525
-#: tvPanel/plugin.py:2643 tvPanel/plugin.py:2762 tvSettings/plugin.py:500
-#: tvSettings/plugin.py:625 tvSettings/plugin.py:755 tvSettings/plugin.py:887
-#: tvSettings/plugin.py:1013 tvSettings/plugin.py:1134
-#: tvSettings/plugin.py:1253 tvSettings/plugin.py:1373
-msgid "Installation Settings"
-msgstr ""
-
-#: tvPanel/plugin.py:2794
-msgid "Please install ..."
-msgstr ""
-
-#: tvPanel/plugin.py:2833 tvPanel/plugin.py:2860 tvPanel/plugin.py:2889
-#: tvPanel/plugin.py:2903 tvPanel/plugin.py:2917 tvPanel/plugin.py:2931
-#: tvPanel/plugin.py:2950
+#: tvManager/plugin.py:391
 #, python-format
-msgid "Installing: %s"
-msgstr "Installazione: %s"
-
-#: tvPanel/plugin.py:2854 tvPanel/plugin.py:2857 tvPanel/plugin.py:2880
-#: tvPanel/plugin.py:2894 tvPanel/plugin.py:2908 tvPanel/plugin.py:2922
-#: tvPanel/plugin.py:2941 tvPanel/plugin.py:2957 tvPanel/plugin.py:2996
-msgid "Installing "
+msgid "Please wait.. %s"
 msgstr ""
 
-#: tvPanel/plugin.py:2854 tvPanel/plugin.py:2857 tvPanel/plugin.py:2880
-#: tvPanel/plugin.py:2894 tvPanel/plugin.py:2908 tvPanel/plugin.py:2922
-#: tvPanel/plugin.py:2941 tvPanel/plugin.py:2957 tvPanel/plugin.py:2996
-#: tvPanel/plugin.py:3005 tvPanel/plugin.py:3944 tvPanel/plugin.py:4090
-#: tvPanel/plugin.py:4237 tvPanel/plugin.py:4443 tvPanel/plugin.py:4572
-#: tvPanel/plugin.py:4724 tvPanel/plugin.py:4854 tvPanel/plugin.py:4981
-msgid "... please wait"
-msgstr ""
+#~ msgid "CCcam"
+#~ msgstr "CCcam"
 
-#: tvPanel/plugin.py:2938
-msgid "Installation canceled!"
-msgstr ""
+#~ msgid "Oscam"
+#~ msgstr "Oscam"
 
-#: tvPanel/plugin.py:2989
-msgid "Download Failed!"
-msgstr ""
+#~ msgid "Ncam"
+#~ msgstr "Ncam"
 
-#: tvPanel/plugin.py:3000 tvPanel/plugin.py:3971 tvPanel/plugin.py:4116
-#: tvPanel/plugin.py:4264
-msgid "Installation Picons"
-msgstr ""
+#~ msgid "Link1"
+#~ msgstr "Link1"
 
-#: tvPanel/plugin.py:3005
-msgid "Downloading file select in /tmp"
-msgstr ""
+#~ msgid "Link2"
+#~ msgstr "Link2"
 
-#: tvPanel/plugin.py:3011
-msgid "Download file in /tmp successful!"
-msgstr ""
+#~ msgid "Link3"
+#~ msgstr "Link3"
 
-#: tvPanel/plugin.py:3012
-msgid "Download file in /tmp successful!!"
-msgstr ""
+#~ msgid "Link4"
+#~ msgstr "Link4"
 
-#: tvPanel/plugin.py:3014
-msgid "Download failed!"
-msgstr ""
+#~ msgid "Link5"
+#~ msgstr "Link5"
 
-#: tvPanel/plugin.py:3014
-msgid "... Not supported"
-msgstr ""
+#~ msgid "Link6"
+#~ msgstr "Link6"
 
-#: tvPanel/plugin.py:3019
-msgid "Setting Installed!"
-msgstr ""
+#~ msgid "Get Link"
+#~ msgstr "Ottieni link"
 
-#: tvPanel/plugin.py:3064
-msgid "Execution Progress:"
-msgstr ""
+#~ msgid "Select Oscam"
+#~ msgstr "Seleziona Oscam"
 
-#: tvPanel/plugin.py:3076
-msgid "Execution finished!!"
-msgstr ""
+#~ msgid "PLEASE SELECT..."
+#~ msgstr "SELEZIONA PREGO..."
 
-#: tvPanel/plugin.py:3131
-msgid "Put addon .ipk .tar.gz .deb and install from config path"
-msgstr ""
+#~ msgid "Folder Config Path tvManager"
+#~ msgstr "Percorso Config tvManager"
 
-#: tvPanel/plugin.py:3134 tvPanel/plugin.py:3240 tvPanel/plugin.py:3367
-msgid "Restart"
-msgstr ""
+#~ msgid "Cam tvManager"
+#~ msgstr "Cam tvManager"
 
-#: tvPanel/plugin.py:3135
-msgid "Remove"
-msgstr ""
+#~ msgid "TiVuStream Cam Manager..."
+#~ msgstr "TiVuStream Cam Manager..."
 
-#: tvPanel/plugin.py:3160
-msgid "Do you really want to install the selected Addon?"
-msgstr ""
+#~ msgid "TiVuStream Cam Manager"
+#~ msgstr "TiVuStream Cam Manager"
 
-#: tvPanel/plugin.py:3192
-#, python-format
-msgid "File: %s\n"
-"Installation failed!"
-msgstr ""
-
-#: tvPanel/plugin.py:3202
-msgid "Do you really want to remove selected?"
-msgstr ""
-
-#: tvPanel/plugin.py:3214
-msgid "Restart Enigma to load the installed plugin?"
-msgstr ""
-
-#: tvPanel/plugin.py:3318
-msgid "Do you want update plugin ?\n"
-"Please Reboot GUI after install!"
-msgstr ""
-
-#: tvPanel/plugin.py:3416 tvPanel/plugin.py:3418
-#, python-format
-msgid "Removing: %s"
-msgstr ""
-
-#: tvPanel/plugin.py:3619
-msgid "Config"
-msgstr ""
-
-#: tvPanel/plugin.py:3626
-msgid "Config Panel Addon"
-msgstr ""
-
-#: tvPanel/plugin.py:3654
-#, python-format
-msgid "Config Panel Addon\n"
-"Your current IP is %s"
-msgstr ""
-
-#: tvPanel/plugin.py:3662
-msgid "Auto Update Plugin"
-msgstr ""
-
-#: tvPanel/plugin.py:3662
-msgid "If Active: Automatic Update Plugin"
-msgstr ""
-
-#: tvPanel/plugin.py:3663
-msgid "Set the path to the Picons folder"
-msgstr ""
-
-#: tvPanel/plugin.py:3663
-msgid "Configure folder containing picons files"
-msgstr ""
-
-#: tvPanel/plugin.py:3664
-msgid "Format Size Picons"
-msgstr ""
-
-#: tvPanel/plugin.py:3664
-msgid "Configure format size Picons filter"
-msgstr ""
-
-#: tvPanel/plugin.py:3665
-msgid "Path Manual IPK"
-msgstr ""
-
-#: tvPanel/plugin.py:3665
-msgid "Path to the addon installation folder"
-msgstr ""
-
-#: tvPanel/plugin.py:3666
-msgid "Link in Extensions Menu"
-msgstr ""
-
-#: tvPanel/plugin.py:3666
-msgid "Link in Extensions button"
-msgstr ""
-
-#: tvPanel/plugin.py:3667
-msgid "Link in Main Menu"
-msgstr ""
-
-#: tvPanel/plugin.py:3668
-msgid "Link in Setup Menu"
-msgstr ""
-
-#: tvPanel/plugin.py:3703
-msgid "Device not detected!"
-msgstr ""
-
-#: tvPanel/plugin.py:3708
-msgid "Successfully saved configuration"
-msgstr ""
-
-#: tvPanel/plugin.py:3728
-msgid "Choose directory"
-msgstr ""
-
-#: tvPanel/plugin.py:3773 tvPanel/plugin.py:3835
-msgid "MMARK PICONS BLACK"
-msgstr ""
-
-#: tvPanel/plugin.py:3774 tvPanel/plugin.py:3837
-msgid "MMARK PICONS TRANSPARENT"
-msgstr ""
-
-#: tvPanel/plugin.py:3775 tvPanel/plugin.py:3839
-msgid "COLOMBO PICONS"
-msgstr ""
-
-#: tvPanel/plugin.py:3795 tvPanel/plugin.py:3861 tvPanel/plugin.py:4005
-#: tvPanel/plugin.py:4150
-msgid "Folder picons "
-msgstr ""
-
-#: tvPanel/plugin.py:3797 tvPanel/plugin.py:3863 tvPanel/plugin.py:4007
-#: tvPanel/plugin.py:4152
-msgid "Format size picons "
-msgstr ""
-
-#: tvPanel/plugin.py:3857 tvPanel/plugin.py:4001 tvPanel/plugin.py:4146
-#: tvPanel/plugin.py:4370 tvPanel/plugin.py:4500 tvPanel/plugin.py:4628
-#: tvPanel/plugin.py:4780 tvPanel/plugin.py:4910
-msgid "Load selected filter list, please wait ..."
-msgstr ""
-
-#: tvPanel/plugin.py:3941 tvPanel/plugin.py:4087 tvPanel/plugin.py:4233
-#: tvPanel/plugin.py:4440 tvPanel/plugin.py:4568 tvPanel/plugin.py:4720
-#: tvPanel/plugin.py:4851 tvPanel/plugin.py:4977
-msgid "Do you want to install?\n"
-"It could take a few minutes, wait .."
-msgstr ""
-
-#: tvPanel/plugin.py:4282 tvPanel/plugin.py:4345
-msgid "KODILITE"
-msgstr ""
-
-#: tvPanel/plugin.py:4283 tvPanel/plugin.py:4347
-msgid "PLUGINS"
-msgstr ""
-
-#: tvPanel/plugin.py:4284 tvPanel/plugin.py:4349
-msgid "PLUGINS ADULT"
-msgstr ""
-
-#: tvPanel/plugin.py:4285 tvPanel/plugin.py:4351
-msgid "SCRIPT"
-msgstr ""
-
-#: tvPanel/plugin.py:4286 tvPanel/plugin.py:4353
-msgid "REPOSITORY"
-msgstr ""
-
-#: tvPanel/plugin.py:4305 tvPanel/plugin.py:4372 tvPanel/plugin.py:4502
-#: tvPanel/plugin.py:4630 tvPanel/plugin.py:4784 tvPanel/plugin.py:4912
-msgid "Support on"
-msgstr ""
-
-#: tvPanel/plugin.py:4307 tvPanel/plugin.py:4374 tvPanel/plugin.py:4504
-#: tvPanel/plugin.py:4632 tvPanel/plugin.py:4786 tvPanel/plugin.py:4914
-msgid "linuxsat-support.com "
-msgstr ""
-
-#: tvPanel/plugin.py:4469 tvPanel/plugin.py:4599 tvPanel/plugin.py:4751
-#: tvPanel/plugin.py:4880 tvPanel/plugin.py:5008
-msgid "Installation"
-msgstr ""
-
-#: tvPanel/plugin.py:5035 tvPanel/plugin.py:5067 tvPanel/plugin.py:5069
-msgid "TiVuStream Addons"
-msgstr ""
-
-#: tvPanel/plugin.py:5068 tvPanel/plugin.py:5075
-msgid "TiVuStream Addons V."
-msgstr ""
-
-#: tvPanel/plugin.py:5069
-msgid "TiVuStream Panel"
-msgstr ""
-
-#: tvSettings/plugin.py:252 tvSettings/plugin.py:256 tvSettings/plugin.py:372
-#: tvSettings/plugin.py:395 tvSettings/plugin.py:515 tvSettings/plugin.py:540
-#: tvSettings/plugin.py:638 tvSettings/plugin.py:662 tvSettings/plugin.py:769
-#: tvSettings/plugin.py:793 tvSettings/plugin.py:900 tvSettings/plugin.py:924
-#: tvSettings/plugin.py:1028 tvSettings/plugin.py:1052
-#: tvSettings/plugin.py:1147 tvSettings/plugin.py:1170
-#: tvSettings/plugin.py:1266 tvSettings/plugin.py:1290
-#, python-format
-msgid "..:: TiVuStream Settings V. %s ::.."
-msgstr ""
-
-#: tvSettings/plugin.py:276
-msgid "Reorder Terrestrial channels with Lcn rules"
-msgstr ""
-
-#: tvSettings/plugin.py:1399
-msgid "TiVuStream Settings V."
-msgstr ""
-
-#: tvSettings/plugin.py:1400 tvSettings/plugin.py:1401
-msgid "TiVuStream Settings"
-msgstr ""
+#~ msgid "Installing: %s"
+#~ msgstr "Installazione: %s"
 
 #~ msgid "..:: tvStream Softcam Manager ::.."
 #~ msgstr "..:: tvStream Softcam Manager ::.."

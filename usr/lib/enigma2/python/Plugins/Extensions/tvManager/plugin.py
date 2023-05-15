@@ -386,9 +386,9 @@ class tvManager(Screen):
                 self.writeFile()
             except:
                 self.close()
-        # msg = (" %s " % _("and")).join(msg)
+        msg = (" %s " % _("and")).join(msg)
         # self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
-        mbox = _session.open(MessageBox, _('Please wait..'), MessageBox.TYPE_INFO, timeout=5)
+        mbox = _session.open(MessageBox, _('Please wait.. %s' % msg), MessageBox.TYPE_INFO, timeout=5)
         # self.session.nav.playService(self.oldService, adjust=False)
         self.session.nav.playService(self.oldService)
         self.EcmInfoPollTimer = eTimer()
