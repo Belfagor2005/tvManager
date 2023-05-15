@@ -28,7 +28,7 @@ import re
 import ssl
 import sys
 global skin_path
-
+from .. import _, sl
 
 def DreamOS():
     DreamOS = False
@@ -74,7 +74,7 @@ def b64decoder(s):
             print('outp2 ', outp)
         return outp
 
-from .. import _, sl
+
 sl= 'slManager'
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
@@ -106,10 +106,8 @@ def isFHD():
 def checkStr(txt):
     if PY3:
         if isinstance(type(txt), type(bytes())):
-        # if type(txt) == type(bytes()):
             txt = txt.decode('utf-8')
     else:
-        # if type(txt) == type(unicode()):
         if isinstance(type(txt), type(unicode())):
             txt = txt.encode('utf-8')
     return txt
@@ -297,7 +295,7 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'ok': self.closex,
                                                                   'showVirtualKeyboard': self.KeyText,
                                                                   'green': self.green,
-                                                                  'yellow': self.getcl,
+                                                                  'yellow': self.sendemm,
                                                                   'blue': self.resetcfg,
                                                                   'red': self.closex,
                                                                   'cancel': self.closex,
@@ -305,9 +303,9 @@ class tv_config(Screen, ConfigListScreen):
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
         self['key_yellow'] = Button(_(''))
-        self["key_blue"] = Button(_(''))
+        self["key_blue"] = Button(_('Send Oscam Emm'))
         self['key_green'].hide()
-        self['key_yellow'].hide()
+        # self['key_yellow'].hide()
         self['key_blue'].hide()
         self['info'] = Label('')
         self['description'] = Label('')
@@ -315,6 +313,16 @@ class tv_config(Screen, ConfigListScreen):
         # self.onLayoutFinish.append(self.layoutFinished)
         self.onShown.append(self.layoutFinished)
         # self.onFirstExecBegin.append(self.layoutFinished)
+
+    def sendemm(self):
+        try:
+            msg = (_("SEND EMM TO OSCAM"))
+            self.cmd1 = data_path + 'emm_sender.sh'
+            os.system('chmod 755 ' + self.cmd1)
+            os.system(self.cmd1)
+            self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
+        except Exception as e:
+            print('error on emm', str(e))
 
     def closex(self):
         self.close()
@@ -330,15 +338,15 @@ class tv_config(Screen, ConfigListScreen):
         if config.plugins.tvmanager.active.getValue():
             self['key_green'].setText(buttn)
             self['key_green'].show()
-            self['key_yellow'].setText(_('Get Link'))
-            self['key_yellow'].show()
+            # self['key_yellow'].setText(_('Get Link'))
+            # self['key_yellow'].show()
             self['key_blue'].setText(_('Reset'))
             self['key_blue'].show()
         else:
             self['key_green'].hide()
             self['key_green'].setText('')
-            self['key_yellow'].hide()
-            self['key_yellow'].setText('')
+            # self['key_yellow'].hide()
+            # self['key_yellow'].setText('')
             self['key_blue'].hide()
             self['key_blue'].setText('')
 
@@ -595,8 +603,8 @@ class tv_config(Screen, ConfigListScreen):
                         port = str(p)
                         user = str(u)
                         password = str(pw)
-                        password = password.replace('</b>','').replace('</span>','')
-                        password = password.replace('</div>','')
+                        password = password.replace('</b>', '').replace('</span>', '')
+                        password = password.replace('</div>', '')
                         password = password.replace('</h1>', '')
                         password = password.replace('</div>', '')
                 else:
