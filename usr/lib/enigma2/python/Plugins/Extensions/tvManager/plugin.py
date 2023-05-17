@@ -66,6 +66,7 @@ iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
+FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 _firstStarttvsman = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
@@ -568,10 +569,12 @@ class GetipklistTv(Screen):
         self['description'] = Label(_('Getting the list, please wait ...'))
         self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button(_(''))
+        self['key_green'] = Button(_('Load'))
         self['key_yellow'] = Button(_(''))
         self['key_blue'] = Button(_(''))
         self['key_green'].hide()
+        if os.path.exists(FILE_XML):
+            self['key_green'].show()
         self['key_yellow'].hide()
         self['key_blue'].hide()
         self.addon = 'emu'
@@ -584,7 +587,7 @@ class GetipklistTv(Screen):
             self.timer.callback.append(self.downloadxmlpage)
         self.timer.start(500, 1)
         self['actions'] = ActionMap(['OkCancelActions',
-                                     'ColorActions'], {'ok': self.okClicked, 'cancel': self.close}, -1)
+                                     'ColorActions'], {'ok': self.okClicked, 'cancel': self.close, 'green': self.loadpage}, -1)
         # self.onShown.append(self.get_list)
         # self.onShown.append(self.updateList)
 
@@ -598,6 +601,16 @@ class GetipklistTv(Screen):
         conthelp += " can contribute with a coffee\n\n"
         conthelp += "scan the qr code and donate € 1.00"
         return conthelp
+
+    def loadpage(self):
+        if os.path.exists(FILE_XML):
+            self.lists = []
+            del self.names[:]
+            del self.list[:]
+            self["list"].l.setList(self.list)
+            with open(FILE_XML, 'r') as f:
+                self.fileloc = f.read()
+            self._gotPageLoad(self.fileloc)
 
     def downloadxmlpage(self):
         url = str(FTP_XML)
