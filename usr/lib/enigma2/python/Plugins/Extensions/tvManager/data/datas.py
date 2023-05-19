@@ -317,7 +317,7 @@ class tv_config(Screen, ConfigListScreen):
     def sendemm(self):
         try:
             msg = []
-            msg.append(_("SEND EMM TO OSCAM"))
+            msg.append(_("WAIT...."))
             self.cmd1 = data_path + 'emm_sender.sh'
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
@@ -326,11 +326,16 @@ class tv_config(Screen, ConfigListScreen):
             os.system(self.cmd1)
             # os.system('sleep 5')
             if os.path.exists('/tmp/emm.txt'):
+                msg.append(_("READ EMM...."))
                 with open('/tmp/emm.txt') as f:
                     f = f.read()
-                    msg.append(f)
-            msg = (" %s " % _("\nEMM:\n")).join(msg)
-            self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+                    if f.startswith('82708'):
+                        msg.append(_("EMM:"))
+                        msg.append(f)
+                    else:
+                        msg.append('No Emm')
+                msg = (" %s " % _("\n")).join(msg)
+                self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
         except Exception as e:
             print('error on emm', str(e))
 

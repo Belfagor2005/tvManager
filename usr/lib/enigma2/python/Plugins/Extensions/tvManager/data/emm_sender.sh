@@ -36,6 +36,7 @@ while IFS= read -r label; do
                   curl -s -k --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch" >/dev/null
                fi
                sleep 1
+               # cp -rf $local_emm_file $loc_tmp
          done < $local_emm_file
       fi
       
