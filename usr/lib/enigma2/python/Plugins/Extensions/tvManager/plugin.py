@@ -56,7 +56,7 @@ if PY3:
     PY3 = True
 
 
-currversion = '1.8'
+currversion = '1.9'
 name_plug = 'Softcam_Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
@@ -98,6 +98,8 @@ def checkdir():
         __createdir('/usr/keys')
     if not os.path.exists(camscript):
         __createdir('/usr/camscript')
+
+
 checkdir()
 
 
@@ -389,7 +391,7 @@ class tvManager(Screen):
                 self.close()
         msg = (" %s " % _("and")).join(msg)
         # self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
-        mbox = _session.open(MessageBox, _('Please wait.. %s' % msg), MessageBox.TYPE_INFO, timeout=5)
+        _session.open(MessageBox, _('Please wait.. %s' % msg), MessageBox.TYPE_INFO, timeout=5)
         # self.session.nav.playService(self.oldService, adjust=False)
         self.session.nav.playService(self.oldService)
         self.EcmInfoPollTimer = eTimer()
@@ -521,7 +523,7 @@ class tvManager(Screen):
         alist.write(current + '\n')
         alist.close()
         # self.session.openWithCallback(self.callback, MessageBox, _('Autocam assigned to the current channel'), type=1, timeout=10)
-        mbox = _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
+        _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
         return
 
     def autoclean(self):

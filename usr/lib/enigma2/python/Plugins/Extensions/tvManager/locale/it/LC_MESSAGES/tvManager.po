@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tvManager TivuStream\n"
 "POT-Creation-Date: 2023-05-15 19:02+0200\n"
-"PO-Revision-Date: 2023-05-15 19:03+0200\n"
+"PO-Revision-Date: 2023-05-21 11:37+0200\n"
 "Last-Translator: \n"
 "Language-Team: lululla\n"
 "Language: it_IT\n"
@@ -784,7 +784,7 @@ msgstr "Attivare inserimento in File Cfg 3C"
 
 #: tvManager/data/datas.py:383
 msgid "If Active: Download/Reset Server Config"
-msgstr "Se Attivo: Scarica/Reset Server config"
+msgstr "Se Attivo: Scarica/Reset Config .serv"
 
 #: tvManager/data/datas.py:385
 msgid "Server Config"
@@ -792,11 +792,11 @@ msgstr "Server Config"
 
 #: tvManager/data/datas.py:386
 msgid "Server Link"
-msgstr ""
+msgstr "Url del Server"
 
 #: tvManager/data/datas.py:386
 msgid "Select Get Link"
-msgstr "Seleziona Link di scarico"
+msgstr "Seleziona Link Server"
 
 #: tvManager/data/datas.py:387
 msgid "Server URL"
@@ -804,11 +804,11 @@ msgstr "Server URL"
 
 #: tvManager/data/datas.py:387
 msgid "Server Url i.e. 012.345.678.900"
-msgstr "Server Url i.e. 012.345.678.900"
+msgstr "Url Server Es. 012.345.678.900"
 
 #: tvManager/data/datas.py:388
 msgid "Server Port"
-msgstr "Server Port"
+msgstr "Porta del Server"
 
 #: tvManager/data/datas.py:388
 msgid "Port"

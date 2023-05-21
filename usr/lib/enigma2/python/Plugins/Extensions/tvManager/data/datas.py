@@ -28,13 +28,7 @@ import re
 import ssl
 import sys
 global skin_path
-from .. import _, sl
-
-def DreamOS():
-    DreamOS = False
-    if os.path.exists('/var/lib/dpkg/status'):
-        DreamOS = True
-        return DreamOS
+from .. import _, sl, isDreamOS
 
 
 PY3 = sys.version_info.major >= 3
@@ -199,7 +193,7 @@ if isFHD():
     # skin_path=res_plugin_path + 'skins/fhd/'
     skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
 
-if DreamOS():
+if isDreamOS():
     skin_path = skin_path + 'dreamOs/'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
@@ -240,6 +234,35 @@ host = str(config.plugins.tvmanager.hostaddress.value)
 port = str(config.plugins.tvmanager.port.value)
 user = str(config.plugins.tvmanager.user.value)
 password = str(config.plugins.tvmanager.passw.value)
+
+
+def confPath():
+    cmd = 'find /usr -name "oscam.serv"'
+    res = os.popen(cmd).read()
+    if res == '':
+        cmd = 'find /var -name "oscam.serv"'
+        res = os.popen(cmd).read()
+        if res == '':
+            cmd = 'find /etc -name "oscam.serv"'
+            res = os.popen(cmd).read()
+            if res == '':
+                try:
+                    folders = listdir('/etc/tuxbox/config')
+                    for folder in folders:
+                        if folder.startswith('oscam'):
+                            cmd = 'find /etc/tuxbox/config/' + folder + ' -name "oscam.serv"'
+                            res = os.popen(cmd).read()
+                        if res == '':
+                            return None
+                except:
+                    return None
+            else:
+                return res.replace('\n', '')
+        else:
+            return res.replace('\n', '')
+    else:
+        return res.replace('\n', '')
+    return None
 
 
 def putlblcfg():
@@ -317,7 +340,7 @@ class tv_config(Screen, ConfigListScreen):
     def sendemm(self):
         try:
             msg = []
-            msg.append(_("WAIT...."))
+            msg.append(_("WAIT....\n.......\n"))
             self.cmd1 = data_path + 'emm_sender.sh'
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
@@ -326,16 +349,23 @@ class tv_config(Screen, ConfigListScreen):
             os.system(self.cmd1)
             # os.system('sleep 5')
             if os.path.exists('/tmp/emm.txt'):
-                msg.append(_("READ EMM...."))
+                msg.append(_("READ EMM....\n\n"))
                 with open('/tmp/emm.txt') as f:
                     f = f.read()
                     if f.startswith('82708'):
-                        msg.append(_("EMM:"))
+                        msg.append(_("CURRENT EMM IS:"))
                         msg.append(f)
+                        msg.append(_("emm saved to /tmp/emm.txt"))
                     else:
                         msg.append('No Emm')
                 msg = (" %s " % _("\n")).join(msg)
                 self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+                
+            # if os.path.exists('/tmp/command.sh'):
+                # chmod('/tmp/command.sh', 493)
+                # os.system('sh /tmp/command.sh')
+                # print('okkkkkkkkkk')
+
         except Exception as e:
             print('error on emm', str(e))
 
@@ -520,7 +550,7 @@ class tv_config(Screen, ConfigListScreen):
                     data = six.ensure_str(data)
                 print('=== Lnk ==== ', data)
                 self.timer = eTimer()
-                if DreamOS():
+                if isDreamOS():
                     self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
                 else:
                     self.timer.callback.append(self.load_getcl(data))
