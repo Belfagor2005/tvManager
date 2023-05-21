@@ -193,7 +193,7 @@ if isFHD():
     # skin_path=res_plugin_path + 'skins/fhd/'
     skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
 
-if isDreamOS():
+if isDreamOS:
     skin_path = skin_path + 'dreamOs/'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
@@ -340,7 +340,7 @@ class tv_config(Screen, ConfigListScreen):
     def sendemm(self):
         try:
             msg = []
-            msg.append(_("WAIT....\n.......\n"))
+            msg.append(_("\n....\n.......\n"))
             self.cmd1 = data_path + 'emm_sender.sh'
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
@@ -550,7 +550,7 @@ class tv_config(Screen, ConfigListScreen):
                     data = six.ensure_str(data)
                 print('=== Lnk ==== ', data)
                 self.timer = eTimer()
-                if isDreamOS():
+                if isDreamOS:
                     self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
                 else:
                     self.timer.callback.append(self.load_getcl(data))

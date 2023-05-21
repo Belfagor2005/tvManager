@@ -98,8 +98,6 @@ def checkdir():
         __createdir('/usr/keys')
     if not os.path.exists(camscript):
         __createdir('/usr/camscript')
-
-
 checkdir()
 
 
@@ -391,7 +389,7 @@ class tvManager(Screen):
                 self.close()
         msg = (" %s " % _("and")).join(msg)
         # self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
-        _session.open(MessageBox, _('Please wait.. %s' % msg), MessageBox.TYPE_INFO, timeout=5)
+        mbox = _session.open(MessageBox, _('Please wait.. %s' % msg), MessageBox.TYPE_INFO, timeout=5)
         # self.session.nav.playService(self.oldService, adjust=False)
         self.session.nav.playService(self.oldService)
         self.EcmInfoPollTimer = eTimer()
@@ -523,7 +521,7 @@ class tvManager(Screen):
         alist.write(current + '\n')
         alist.close()
         # self.session.openWithCallback(self.callback, MessageBox, _('Autocam assigned to the current channel'), type=1, timeout=10)
-        _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
+        mbox = _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
         return
 
     def autoclean(self):
