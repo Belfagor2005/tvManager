@@ -4,7 +4,7 @@
 # --------------------#
 #  coded by Lululla  #
 #   skin by MMark    #
-#     05/05/2023     #
+#     22/05/2023     #
 #      No Coppy      #
 # --------------------#
 from __future__ import print_function
@@ -190,13 +190,43 @@ skin_path = os.path.join(plugin_path, 'res/skins/hd/')
 
 
 if isFHD():
-    # skin_path=res_plugin_path + 'skins/fhd/'
+                                              
     skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
 
 if isDreamOS:
     skin_path = skin_path + 'dreamOs/'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+
+
+def cccamPath():
+    cmd = 'find /usr -name "CCcam.cfg"'
+    res = os.popen(cmd).read()
+    if res == '':
+        cmd = 'find /var -name "CCcam.cfg"'
+        res = os.popen(cmd).read()
+        if res == '':
+            cmd = 'find /etc -name "CCcam.cfg"'
+            res = os.popen(cmd).read()
+            if res == '':
+                try:
+                    folders = os.listdir('/etc/CCcam.cfg')
+                    for folder in folders:
+                        if folder.startswith('oscam'):
+                            cmd = 'find /etc/tuxbox/config/' + folder + ' -name "CCcam.cfg"'
+                            res = os.popen(cmd).read()
+                        if res == '':
+                            return None
+                except:
+                    return None
+            else:
+                return res.replace('\n', '')
+        else:
+            return res.replace('\n', '')
+    else:
+        return res.replace('\n', '')
+    return None
+
 
 Serverlive = [
     ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
@@ -210,8 +240,9 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server09'),
     ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server10'),
     ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
-    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12'), ]
+    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12')]
 
+# cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
           ('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
@@ -234,35 +265,6 @@ host = str(config.plugins.tvmanager.hostaddress.value)
 port = str(config.plugins.tvmanager.port.value)
 user = str(config.plugins.tvmanager.user.value)
 password = str(config.plugins.tvmanager.passw.value)
-
-
-def confPath():
-    cmd = 'find /usr -name "oscam.serv"'
-    res = os.popen(cmd).read()
-    if res == '':
-        cmd = 'find /var -name "oscam.serv"'
-        res = os.popen(cmd).read()
-        if res == '':
-            cmd = 'find /etc -name "oscam.serv"'
-            res = os.popen(cmd).read()
-            if res == '':
-                try:
-                    folders = listdir('/etc/tuxbox/config')
-                    for folder in folders:
-                        if folder.startswith('oscam'):
-                            cmd = 'find /etc/tuxbox/config/' + folder + ' -name "oscam.serv"'
-                            res = os.popen(cmd).read()
-                        if res == '':
-                            return None
-                except:
-                    return None
-            else:
-                return res.replace('\n', '')
-        else:
-            return res.replace('\n', '')
-    else:
-        return res.replace('\n', '')
-    return None
 
 
 def putlblcfg():
@@ -325,7 +327,7 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'back': self.closex}, -1)
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_(''))
-        self['key_yellow'] = Button(_('Send Oscam Emm'))
+        self['key_yellow'] = Button(_('Emm'))
         self["key_blue"] = Button(_('Default Config'))
         self['key_green'].hide()
         # self['key_yellow'].hide()
@@ -333,70 +335,79 @@ class tv_config(Screen, ConfigListScreen):
         self['info'] = Label('')
         self['description'] = Label('')
         self.createSetup()
-        # self.onLayoutFinish.append(self.layoutFinished)
+        # self.onLayoutFinish.append(self.showhide)
         self.onShown.append(self.layoutFinished)
         # self.onFirstExecBegin.append(self.layoutFinished)
 
     def sendemm(self):
-        try:
-            msg = []
-            msg.append(_("\n....\n.......\n"))
-            self.cmd1 = data_path + 'emm_sender.sh'
-            from os import access, X_OK
-            if not access(self.cmd1, X_OK):
-                chmod(self.cmd1, 493)
-            # os.system('chmod 755 ' + self.cmd1)
-            os.system(self.cmd1)
-            # os.system('sleep 5')
-            if os.path.exists('/tmp/emm.txt'):
-                msg.append(_("READ EMM....\n\n"))
-                with open('/tmp/emm.txt') as f:
-                    f = f.read()
-                    if f.startswith('82708'):
-                        msg.append(_("CURRENT EMM IS:"))
-                        msg.append(f)
-                        msg.append(_("emm saved to /tmp/emm.txt"))
+        self.showhide()               
+        if config.plugins.tvmanager.active.value is True:
+            self.getcl()
+        else:
+            try:
+                cmd = 'ps -A'
+                res = os.popen(cmd).read()
+                print('res: ', res)
+                if 'oscam' in res.lower():
+                    print('oscam exist')
+                    msg = []
+                    msg.append(_("\n....\n.......\n"))
+                    self.cmd1 = data_path + 'emm_sender.sh'
+                    from os import access, X_OK
+                    if not access(self.cmd1, X_OK):
+                        os.chmod(self.cmd1, 493)
+                    os.system(self.cmd1)
+                    if os.path.exists('/tmp/emm.txt'):
+                        msg.append(_("READ EMM....\n\n"))
+                        with open('/tmp/emm.txt') as f:
+                            f = f.read()
+                            if f.startswith('82708'):
+                                msg.append(_("CURRENT EMM IS:"))
+                                msg.append(f)
+                                msg.append(_("emm saved to /tmp/emm.txt"))
+                            else:
+                                msg.append('No Emm')
+                        msg = (" %s " % _("\n")).join(msg)
+                        self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+                        
+                    if os.path.exists('/tmp/command.sh'):
+                        os.chmod('/tmp/command.sh', 493)
+                        os.system('sh /tmp/command.sh')
+                        print('okkkkkkkkkk')
                     else:
-                        msg.append('No Emm')
-                msg = (" %s " % _("\n")).join(msg)
-                self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
-                
-            # if os.path.exists('/tmp/command.sh'):
-                # chmod('/tmp/command.sh', 493)
-                # os.system('sh /tmp/command.sh')
-                # print('okkkkkkkkkk')
-
-        except Exception as e:
-            print('error on emm', str(e))
+                        self.session.open(MessageBox, _("Oscam is not active"), MessageBox.TYPE_INFO, timeout=10)
+                        return
+            except Exception as e:
+                print('error on emm', str(e))
 
     def closex(self):
         self.close()
 
     def resetcfg(self):
-        if config.plugins.tvmanager.active.getValue():
+        if config.plugins.tvmanager.active.value is True:
             import shutil
             shutil.copy2(data_path + rstcfg, putlbl)
             os.system('chmod -R 755 %s' % putlbl)
             self.session.open(MessageBox, _('Reset') + ' ' + putlbl, type=MessageBox.TYPE_INFO, timeout=8)
 
     def showhide(self):
-        if config.plugins.tvmanager.active.getValue():
+        if config.plugins.tvmanager.active.value is True:
             self['key_green'].setText(buttn)
             self['key_green'].show()
-            # self['key_yellow'].setText(_('Get Link'))
-            # self['key_yellow'].show()
+            self['key_yellow'].setText(_('Get Link'))
+            self['key_yellow'].show()
             self['key_blue'].setText(_('Reset'))
             self['key_blue'].show()
         else:
             self['key_green'].hide()
             self['key_green'].setText('')
             # self['key_yellow'].hide()
-            # self['key_yellow'].setText('')
+            self['key_yellow'].setText('Emm')
             self['key_blue'].hide()
             self['key_blue'].setText('')
 
     def green(self):
-        if config.plugins.tvmanager.active.getValue():
+        if config.plugins.tvmanager.active.value is True:
             if putlbl == '/etc/CCcam.cfg':
                 self.CCcam()
             elif putlbl == '/etc/tuxbox/config/oscam.server':
@@ -418,6 +429,7 @@ class tv_config(Screen, ConfigListScreen):
         self.setTitle(self.setup_title)
         paypal = self.paypal2()
         self["paypal"].setText(paypal)
+        self.showhide()
 
     def createSetup(self):
         self.editListEntry = None
@@ -491,7 +503,8 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
-        cfgdok = open(dest, 'a', encoding='utf-8')
+        cfgdok = open(dest, 'a')
+        # cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n\n' + host + ' ' + port + ' ' + user + ' ' + pasw)
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -508,7 +521,8 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
-        cfgdok = open(dest, 'a', encoding='utf-8')
+        cfgdok = open(dest, 'a')
+        # cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n[reader]\nlabel = Server_' + host + '\nenable= 1\nprotocol = cccam\ndevice = ' + host + ',' + port + '\nuser = ' + user + '\npassword = ' + pasw + '\ninactivitytimeout = 30\ngroup = 3\ncccversion = 2.2.1\ncccmaxhops = 0\nccckeepalive = 1\naudisabled = 1\n\n')
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -532,7 +546,8 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
             return
         os.system('chmod -R 755 %s' % dest)
-        cfgdok = open(dest, 'a', encoding='utf-8')
+        cfgdok = open(dest, 'a')
+        # cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n[reader]\nlabel = Server_' + host + '\nenable= 1\nprotocol = cccam\ndevice = ' + host + ',' + port + '\nuser = ' + user + '\npassword = ' + pasw + '\ngroup = 3\ncccversion = 2.0.11\ndisablecrccws_only_for= 0500:032830\ncccmaxhops= 1\nccckeepalive= 1\naudisabled = 1\n\n')
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)

@@ -10,14 +10,14 @@ oscam_httpport=$(grep -ir "httpport" $oscam_config_dir"oscam.conf" | awk -F "=" 
 port=$(echo $oscam_httpport | sed -e 's|+||g')
 protocol=$(if echo $oscam_httpport | grep + >/dev/null; then echo "https"; else echo "http"; fi)
 
+# edit lululla
 # ip='127.0.0.1'
 ip=$(ifconfig eth0 | awk '/inet / { print $2 }' | sed -e s/addr://)
+#end edit lululla 
 
 caid='183E'
 atr_183e='3F FF 95 00 FF 91 81 71 FE 47 00 54 49 47 45 52 36 30 31 20 52 65 76 4D 38 37 14'
 atr_string='aHR0cDovL3M0YXVwZGF0ZXIub25lLnBsL1RJVlUvZW1t'
-loc_tmp='/tmp/emm.txt'
-command='/tmp/command.sh'
 
 if ! test $oscam_version_file; then echo "The file oscam.version is not in the /tmp directory. First run oscam and then this script, BYE!"; exit 0; fi
 
@@ -32,6 +32,16 @@ remote_emm_file=$(echo $atr_string | base64 -d)
 curl -s $remote_emm_file -o $local_emm_file
 curl -s --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth -k $protocol://$ip:$port/status.html | grep "Restart Reader" | sed -e 's|<TD CLASS="statuscol1"><A HREF="status.html?action=restart&amp;label=||g' | sed 's/^[ \t]*//' | awk -F "\"" '{ print ($1) }' >/tmp/active_readers.tmp
 
+#edit lululla
+loc_tmp='/tmp/emm.txt'
+command='/tmp/command.sh'
+cmnd1="#!/bin/sh"
+cmnd2="curl -s --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth $protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch"
+cmnd3="exit 0"
+echo -e "$cmnd1\n$cmnd2\n$cmnd3\n" >$command
+cp -rf $local_emm_file $loc_tmp
+# end edit lululla
+
 while IFS= read -r label; do
       curl -s --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth -k $protocol://$ip:$port/entitlements.html?label=$label >/tmp/"$label"_entitlements.html
       atr=$(cat /tmp/"$label"_entitlements.html | grep "\<TD COLSPAN=\"4\">" | awk -F "[<>]" '{ print ($7) }' | sed 's/.$//g')
@@ -40,14 +50,14 @@ while IFS= read -r label; do
          while IFS= read -r emm; do
                if echo $emm | grep "^82708E0000000000D3875411.\{270\}$" >/dev/null; then
                   curl -s -k --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch" >/dev/null 
-                  cmnd=$(curl -s -k --user ${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch)
-                  echo $cmnd >$command
+                  # # curl -s -k --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch" $command
+                  # cmnd=$"${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch"
+                  # cmnd=$(curl -s -k --user ${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch)
+                  # echo $cmnd >$command
                fi
                sleep 1
          done < $local_emm_file
       fi
 
 done < /tmp/active_readers.tmp
-
-cp -rf $local_emm_file $loc_tmp
 rm -rf /tmp/*.tmp /tmp/*.html

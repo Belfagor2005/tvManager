@@ -5,13 +5,12 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     09/05/2023     #
+#     23/05/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
-# from Components.PluginComponent import plugins
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.Button import Button
 from Components.FileList import FileList
@@ -33,7 +32,7 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
 from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from enigma import eListboxPythonMultiContent
-from enigma import eTimer, loadPNG
+from enigma import eTimer
 from enigma import gFont
 from os import mkdir, chmod
 from time import sleep
@@ -45,7 +44,7 @@ import six
 import sys
 import time
 
-global active, FTP_XML
+global active
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -246,6 +245,7 @@ class tvManager(Screen):
         else:
             self.BlueAction = SOFTCAM
             self["key_blue"].setText(_("SOFTCAM"))
+        return
 
     def ShowSoftcamCallback(self):
         pass
@@ -296,7 +296,7 @@ class tvManager(Screen):
             try:
                 with open(ECM_INFO) as f:
                     self["info"].text = f.read()
-                    return
+                    # return
             except IOError:
                 pass
         else:
@@ -356,19 +356,21 @@ class tvManager(Screen):
         if i < 0:
             return
         self.session.nav.stopService()
-        msg = []
+        # msg = []
         self.last = self.getLastIndex()
         self.var = self['list'].getSelectedIndex()
         # print('self var=== ', self.var)
         if self.last > -1:
             if self.last == self.var:
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
-                msg.append(_("RESTART CAM "))
+                # msg.append(_("RESTART CAM "))
+                mbox = _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
                 os.system(self.cmd1)
                 sleep(1)
             else:
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                msg.append(_("STOP & RESTART CAM "))
+                # msg.append(_("STOP & RESTART CAM "))
+                mbox = _session.open(MessageBox, _('Please wait..\nSTOP & RESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
                 os.system(self.cmd1)
                 sleep(1)
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
@@ -376,7 +378,8 @@ class tvManager(Screen):
         else:
             try:
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
-                msg.append(_("UP CAM 2"))
+                # msg.append(_("UP CAM 2"))
+                mbox = _session.open(MessageBox, _('Please wait..\nSTART UP CAM'), MessageBox.TYPE_INFO, timeout=5)
                 os.system(self.cmd1)
                 sleep(1)
             except:
@@ -387,9 +390,9 @@ class tvManager(Screen):
                 self.writeFile()
             except:
                 self.close()
-        msg = (" %s " % _("and")).join(msg)
-        # self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=5)
-        mbox = _session.open(MessageBox, _('Please wait.. %s' % msg), MessageBox.TYPE_INFO, timeout=5)
+        # msg = (' %s ' % _('and')).join(msg)
+        # mbox = _session.open(MessageBox, _('Please wait..'), MessageBox.TYPE_INFO, timeout=5)
+        # self.mbox = self.session.open(MessageBox, (_('Please wait, %s') % msg), MessageBox.TYPE_INFO, timeout=5)
         # self.session.nav.playService(self.oldService, adjust=False)
         self.session.nav.playService(self.oldService)
         self.EcmInfoPollTimer = eTimer()
@@ -399,14 +402,15 @@ class tvManager(Screen):
             self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
         self.EcmInfoPollTimer.start(200)
         self.readScripts()
-        return
 
     def writeFile(self):
-        if self.currCam is not None:
-            clist = open('/etc/clist.list', 'w', encoding='utf-8')
+        if self.currCam is not None or self.currCam != 'no':
+            # clist = open('/etc/clist.list', 'w', encoding='utf-8')
+            clist = open('/etc/clist.list', 'w')
             clist.write(self.currCam)
             clist.close()
-        stcam = open('/etc/startcam.sh', 'w', encoding='utf-8')
+        stcam = open('/etc/startcam.sh', 'w')
+        # stcam = open('/etc/startcam.sh', 'w', encoding='utf-8')
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
         os.system('chmod 755 /etc/startcam.sh &')
@@ -425,6 +429,7 @@ class tvManager(Screen):
         sleep(1)
         if os.path.exists(ECM_INFO):
             os.remove(ECM_INFO)
+        mbox = _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
         self['info'].setText('CAM STOPPED')
         try:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
@@ -432,7 +437,6 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
         self.session.nav.stopService()
         self.readScripts()
-        return
 
     def readScripts(self):
         scriptlist = []
@@ -488,7 +492,8 @@ class tvManager(Screen):
         else:
             FilCurr = '/etc/clist.list'
         try:
-            clist = open(FilCurr, 'r', encoding='utf-8')
+            clist = open(FilCurr, 'r')
+            # clist = open(FilCurr, 'r', encoding='utf-8')
         except:
             return
 
@@ -498,6 +503,7 @@ class tvManager(Screen):
             clist.close()
         return currCam
 
+    '''
     def autocam(self):
         current = None
         try:
@@ -547,6 +553,7 @@ class tvManager(Screen):
         myfile2.close()
         os.system('rm /etc/autocam.txt')
         os.system('cp /etc/autocam2.txt /etc/autocam.txt')
+        '''
 
     def cancel(self):
         # Utils.deletetmp()
@@ -621,7 +628,7 @@ class GetipklistTv(Screen):
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
     def errorLoad(self, error):
-        print(str(error))
+        # print(str(error))
         self['description'].setText(_('Try again later ...'))
         self.downloading = False
 
@@ -907,7 +914,8 @@ class Ipkremove(Screen):
             cmd = 'touch /etc/tmpfile'
             os.system(cmd)
             myfile = open('/var/lib/opkg/status', 'r')
-            f = open('/etc/tmpfile', 'w', encoding='utf-8')
+            # f = open('/etc/tmpfile', 'w', encoding='utf-8')
+            f = open('/etc/tmpfile', 'w')
             for line in myfile:
                 if line != ipkname:
                     f.write(line)
