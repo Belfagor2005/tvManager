@@ -15,9 +15,9 @@
     <widget source="list" render="Listbox" position="146,136" size="553,200" scrollbarMode="showOnDemand" enableWrapAround="1" scrollbarWidth="10" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#000b2049" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png">
         <convert type="TemplatedMultiContent">
             {"template": [
-                    MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (70, 40), png = 1), # index 1 is the pixmap   
-                    MultiContentEntryText(pos = (90, 3), size = (450, 45), flags = RT_HALIGN_LEFT, text = 0), # index 0 is the text name,
-                    MultiContentEntryText(pos = (580, 3), size = (165, 45), flags = RT_HALIGN_LEFT, text = 2), # index 0 is the text name,
+                    MultiContentEntryPixmapAlphaTest(pos = (5, 4), size = (70, 40), png = 1), # index 1 is the pixmap   
+                    MultiContentEntryText(pos = (90, 0), size = (450, 45), flags = RT_HALIGN_LEFT, text = 0), # index 0 is the text name,
+                    MultiContentEntryText(pos = (580, 0), size = (165, 45), flags = RT_HALIGN_LEFT, text = 2), # index 0 is the text name,
                 ],
              "fonts": [gFont("Regular", 28)],
              "itemHeight": 50

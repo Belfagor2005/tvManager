@@ -17,6 +17,7 @@ ip=$(ifconfig eth0 | awk '/inet / { print $2 }' | sed -e s/addr://)
 
 caid='183E'
 atr_183e='3F FF 95 00 FF 91 81 71 FE 47 00 54 49 47 45 52 36 30 31 20 52 65 76 4D 38 37 14'
+# atr_183d='3F FF 95 00 FF 91 81 71 FF 47 00 54 49 47 45 52 30 30 33 20 52 65 76 32 35 30 64'
 atr_string='aHR0cDovL3M0YXVwZGF0ZXIub25lLnBsL1RJVlUvZW1t'
 
 if ! test $oscam_version_file; then echo "The file oscam.version is not in the /tmp directory. First run oscam and then this script, BYE!"; exit 0; fi
