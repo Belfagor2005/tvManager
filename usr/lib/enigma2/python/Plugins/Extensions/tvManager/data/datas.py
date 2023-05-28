@@ -190,7 +190,7 @@ skin_path = os.path.join(plugin_path, 'res/skins/hd/')
 
 
 if isFHD():
-                                              
+
     skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
 
 if isDreamOS:
@@ -200,6 +200,7 @@ if os.path.exists(sl2):
 
 
 def cccamPath():
+    import os
     cmd = 'find /usr -name "CCcam.cfg"'
     res = os.popen(cmd).read()
     if res == '':
@@ -210,37 +211,45 @@ def cccamPath():
             res = os.popen(cmd).read()
             if res == '':
                 try:
-                    folders = os.listdir('/etc/CCcam.cfg')
+                    folders = os.listdir('/etc/tuxbox/')
                     for folder in folders:
                         if folder.startswith('oscam'):
                             cmd = 'find /etc/tuxbox/config/' + folder + ' -name "CCcam.cfg"'
                             res = os.popen(cmd).read()
+                            return '/etc/tuxbox/config/' + folder + "CCcam.cfg"
                         if res == '':
-                            return None
+                            return "/etc/CCcam.cfg"
                 except:
-                    return None
+                    return "/etc/CCcam.cfg"
             else:
-                return res.replace('\n', '')
+                return "/etc/CCcam.cfg"
         else:
-            return res.replace('\n', '')
+            return "/var/CCcam.cfg"
     else:
-        return res.replace('\n', '')
-    return None
-
+        return "/usr/CCcam.cfg"
+    return "/etc/CCcam.cfg"
 
 Serverlive = [
     ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
     ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
-    ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==', 'Server03'),
-    ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server04'),
-    ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server05'),
-    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server06'),
-    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2Ft', 'Server07'),
-    ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server08'),
-    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server09'),
-    ('aHR0cHM6Ly90ZXN0Y2xpbmUuY29tL2ZyZWUtY2NjYW0tc2VydmVyLnBocA==', 'Server10'),
-    ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
-    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server12')]
+    ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server03'),
+    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server04'),
+    ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server05'),
+    ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server06'),
+    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server07'),
+    ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server08'),
+    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server09'),
+    # ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server10'),
+    # ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
+    # ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server12'),
+    # ('aHR0cDovL2luZm9zYXQuc2F0dW5pdmVycy50di9jZ24vaW5kZXgxLnBocA==', 'Server13'),
+    # ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server14'),
+    # ('aHR0cDovL2luZm9zYXQuc2F0dW5pdmVycy50di9jZ24vc2VydmVyMi9pbmRleC5waHA=', 'Server15'),
+    # ('aHR0cHM6Ly9jY2NhbWh1Yi5jb20vY2NjYW1mcmVl', 'Server16'),
+    # ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=', 'Server17'),
+    # ('aHR0cHM6Ly93d3cuY2NjYW1wcmkubWUvY2NjYW00OGgucGhw', 'Server18'),
+    # ('aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=', 'Server19'),
+    ]
 
 # cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
@@ -340,7 +349,7 @@ class tv_config(Screen, ConfigListScreen):
         # self.onFirstExecBegin.append(self.layoutFinished)
 
     def sendemm(self):
-        self.showhide()               
+        self.showhide()
         if config.plugins.tvmanager.active.value is True:
             self.getcl()
         else:
@@ -369,7 +378,7 @@ class tv_config(Screen, ConfigListScreen):
                                 msg.append('No Emm')
                         msg = (" %s " % _("\n")).join(msg)
                         self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
-                        
+
                     if os.path.exists('/tmp/command.sh'):
                         os.chmod('/tmp/command.sh', 493)
                         os.system('sh /tmp/command.sh')
@@ -597,17 +606,30 @@ class tv_config(Screen, ConfigListScreen):
             elif 'cccamprima.com' in data.lower():
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
+            elif 'cccampri.me' in data.lower():
+                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?)<br>', data)
+
+            elif 'cccamfree.co' in data.lower():
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+
+            elif 'cccam-premium.co' in data.lower():
+                url1 = re.findall('<h3 style=.*?C: (.+?) (.+?) (.+?) (*?).*?</h3>', data)
+
             elif 'iptvcccam' in data.lower():
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
 
-            elif 'premium' in data.lower():
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
+            # elif 'premium' in data.lower():
+                # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccamia' in data:
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccameurop' in data.lower():
                 url1 = re.findall('C: (.+?) (.+?)</', data)
+
+
+            elif 'infosat' in data.lower():
+                url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
 
             elif 'cccamx' in data.lower():
                 # ">
@@ -625,8 +647,11 @@ class tv_config(Screen, ConfigListScreen):
             elif 'store' in data.lower():
                 url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
 
-            # elif 'cccam.net' in data.lower():
-                # url1 = re.findall('span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
+            elif 'cccamhub' in data.lower():
+                url1 = re.findall('id="cline">.*?C: (.+?) (.+?) (.+?) (.+?).*?</div>', data)
+
+            elif 'cccamsate' in data.lower():
+                url1 = re.findall('class="credentials.*?C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
             elif 'cccam.net' in data.lower():
                 url1 = re.findall('b>C: (.+?) (.+?) (.+?) (.+?)<b>', data)
@@ -635,7 +660,8 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
 
             elif 'cccambird' in data.lower():
-                url1 = re.findall('Cline</th>.*?C: (.+?) (.+?) (.+?) (.+?)</th></tr>', data)
+                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</th>', data)
+
             elif 'bosscccam' in data.lower():
                 url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.+?)</strong', data)
 
