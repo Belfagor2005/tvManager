@@ -358,50 +358,52 @@ class tvManager(Screen):
         self.session.nav.stopService()
         # msg = []
         self.last = self.getLastIndex()
-        self.var = self['list'].getSelectedIndex()
-        # print('self var=== ', self.var)
-        if self.last > -1:
-            if self.last == self.var:
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
-                # msg.append(_("RESTART CAM "))
-                mbox = _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
-                os.system(self.cmd1)
-                sleep(1)
+        self.last = self.getLastIndex()
+        if self['list'].getCurrent():
+            self.var = self['list'].getIndex()
+            # print('self var=== ', self.var)
+            if self.last > -1:
+                if self.last == self.var:
+                    self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
+                    # msg.append(_("RESTART CAM "))
+                    mbox = _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    os.system(self.cmd1)
+                    sleep(1)
+                else:
+                    self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+                    # msg.append(_("STOP & RESTART CAM "))
+                    mbox = _session.open(MessageBox, _('Please wait..\nSTOP & RESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    os.system(self.cmd1)
+                    sleep(1)
+                    self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
+                    os.system(self.cmd1)
             else:
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                # msg.append(_("STOP & RESTART CAM "))
-                mbox = _session.open(MessageBox, _('Please wait..\nSTOP & RESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
-                os.system(self.cmd1)
-                sleep(1)
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
-                os.system(self.cmd1)
-        else:
+                try:
+                    self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
+                    # msg.append(_("UP CAM 2"))
+                    mbox = _session.open(MessageBox, _('Please wait..\nSTART UP CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    os.system(self.cmd1)
+                    sleep(1)
+                except:
+                    self.close()
+            if self.last != self.var:
+                try:
+                    self.currCam = self.softcamslist[self.var][0]
+                    self.writeFile()
+                except:
+                    self.close()
+            # msg = (' %s ' % _('and')).join(msg)
+            # mbox = _session.open(MessageBox, _('Please wait..'), MessageBox.TYPE_INFO, timeout=5)
+            # self.mbox = self.session.open(MessageBox, (_('Please wait, %s') % msg), MessageBox.TYPE_INFO, timeout=5)
+            # self.session.nav.playService(self.oldService, adjust=False)
+            self.session.nav.playService(self.oldService)
+            self.EcmInfoPollTimer = eTimer()
             try:
-                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
-                # msg.append(_("UP CAM 2"))
-                mbox = _session.open(MessageBox, _('Please wait..\nSTART UP CAM'), MessageBox.TYPE_INFO, timeout=5)
-                os.system(self.cmd1)
-                sleep(1)
+                self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
             except:
-                self.close()
-        if self.last != self.var:
-            try:
-                self.currCam = self.softcamslist[self.var][0]
-                self.writeFile()
-            except:
-                self.close()
-        # msg = (' %s ' % _('and')).join(msg)
-        # mbox = _session.open(MessageBox, _('Please wait..'), MessageBox.TYPE_INFO, timeout=5)
-        # self.mbox = self.session.open(MessageBox, (_('Please wait, %s') % msg), MessageBox.TYPE_INFO, timeout=5)
-        # self.session.nav.playService(self.oldService, adjust=False)
-        self.session.nav.playService(self.oldService)
-        self.EcmInfoPollTimer = eTimer()
-        try:
-            self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
-        except:
-            self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
-        self.EcmInfoPollTimer.start(200)
-        self.readScripts()
+                self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
+            self.EcmInfoPollTimer.start(200)
+            self.readScripts()
 
     def writeFile(self):
         if self.currCam is not None or self.currCam != 'no':

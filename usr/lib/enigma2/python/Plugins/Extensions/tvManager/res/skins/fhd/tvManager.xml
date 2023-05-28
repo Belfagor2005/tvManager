@@ -12,7 +12,7 @@
 	<!-- Menu List -->
 	<!-- <widget name="list" position="28,811" size="580,237" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" zPosition="10" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#000b2049" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" /> -->
 	
-    <widget source="list" render="Listbox" position="28,805" size="747,250" scrollbarMode="showOnDemand" enableWrapAround="1" scrollbarWidth="10" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="green" backgroundColor="yellow" backgroundColorSelected="#00000000">
+    <widget source="list" render="Listbox" position="28,805" size="747,250" scrollbarMode="showOnDemand" enableWrapAround="1" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="green" backgroundColor="yellow" backgroundColorSelected="#00000000">
         <convert type="TemplatedMultiContent">
             {"template": [
                     MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (70, 40), png = 1), # index 1 is the pixmap   
