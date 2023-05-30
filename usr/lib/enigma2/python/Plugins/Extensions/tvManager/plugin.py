@@ -176,7 +176,7 @@ class tvManager(Screen):
         Screen.__init__(self, session)
         self.namelist = []
         self.softcamslist = []
-        self.ecminfo = GetEcmInfo()
+        # self.ecminfo = GetEcmInfo()
         try:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
@@ -283,12 +283,15 @@ class tvManager(Screen):
             self.session.open(MessageBox, 'tvAddon Panel Not Installed!!', type=MessageBox.TYPE_INFO, timeout=3)
 
     def setEcmInfo(self):
-        self.ecminfo = GetEcmInfo()
-        newEcmFound, ecmInfo = self.ecminfo.getEcm()
-        if newEcmFound:
-            self['info'].setText(''.join(ecmInfo))
-        else:
-            self.ecm()
+        try:
+            self.ecminfo = GetEcmInfo()
+            newEcmFound, ecmInfo = self.ecminfo.getEcm()
+            if newEcmFound:
+                self['info'].setText(''.join(ecmInfo))
+            else:
+                self.ecm()
+        except Exception as e:
+            print(e)
 
     def ecm(self):
         ecmf = ''
@@ -358,20 +361,19 @@ class tvManager(Screen):
         self.session.nav.stopService()
         # msg = []
         self.last = self.getLastIndex()
-        self.last = self.getLastIndex()
         if self['list'].getCurrent():
             self.var = self['list'].getIndex()
+            # self.var = self['list'].getSelectedIndex()
+            # # self.var = self['list'].getSelectionIndex()
             # print('self var=== ', self.var)
             if self.last > -1:
                 if self.last == self.var:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
-                    # msg.append(_("RESTART CAM "))
                     mbox = _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
                     os.system(self.cmd1)
                     sleep(1)
                 else:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                    # msg.append(_("STOP & RESTART CAM "))
                     mbox = _session.open(MessageBox, _('Please wait..\nSTOP & RESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
                     os.system(self.cmd1)
                     sleep(1)
@@ -380,7 +382,6 @@ class tvManager(Screen):
             else:
                 try:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
-                    # msg.append(_("UP CAM 2"))
                     mbox = _session.open(MessageBox, _('Please wait..\nSTART UP CAM'), MessageBox.TYPE_INFO, timeout=5)
                     os.system(self.cmd1)
                     sleep(1)
@@ -392,10 +393,6 @@ class tvManager(Screen):
                     self.writeFile()
                 except:
                     self.close()
-            # msg = (' %s ' % _('and')).join(msg)
-            # mbox = _session.open(MessageBox, _('Please wait..'), MessageBox.TYPE_INFO, timeout=5)
-            # self.mbox = self.session.open(MessageBox, (_('Please wait, %s') % msg), MessageBox.TYPE_INFO, timeout=5)
-            # self.session.nav.playService(self.oldService, adjust=False)
             self.session.nav.playService(self.oldService)
             self.EcmInfoPollTimer = eTimer()
             try:
