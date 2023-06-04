@@ -5,10 +5,10 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     23/05/2023     #
+#     01/06/2023     #
 # --------------------#
 from __future__ import print_function
-from . import _, sl
+from . import _, sl, isDreamOS, FTP_XML, FTP_CFG
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -44,7 +44,7 @@ import six
 import sys
 import time
 
-global active
+global active, skin_path
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -63,15 +63,12 @@ res_plugin_path = os.path.join(plugin_path, "res/")
 emu_plugin = os.path.join(plugin_path, "emu/")
 iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
-FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 _firstStarttvsman = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
 old_ecm_time = time.time()
 info = {}
-sl = 'slManager'
 ecm = ''
 data = EMPTY_ECM_INFO
 SOFTCAM = 0
@@ -97,6 +94,8 @@ def checkdir():
         __createdir('/usr/keys')
     if not os.path.exists(camscript):
         __createdir('/usr/camscript')
+
+
 checkdir()
 
 
@@ -119,12 +118,10 @@ def readCurrent_1():
 
 
 # =============== SCREEN PATH SETTING
+skin_path = os.path.join(res_plugin_path, "skins/hd/")
 if Utils.isFHD():
     skin_path = os.path.join(res_plugin_path, "skins/fhd/")
-else:
-    skin_path = os.path.join(res_plugin_path, "skins/hd/")
-sl = 'slManager'
-if Utils.DreamOS():
+if os.path.exists("/var/lib/dpkg/status"):
     skin_path = skin_path + 'dreamOs/'
 
 
@@ -167,13 +164,13 @@ if os.path.exists(sl2):
 
 class tvManager(Screen):
     def __init__(self, session, args=False):
+        Screen.__init__(self, session)
         self.session = session
         global _session
         _session = session
         skin = os.path.join(skin_path, 'tvManager.xml')
         with open(skin, 'r') as f:
             self.skin = f.read()
-        Screen.__init__(self, session)
         self.namelist = []
         self.softcamslist = []
         # self.ecminfo = GetEcmInfo()
@@ -294,16 +291,18 @@ class tvManager(Screen):
             print(e)
 
     def ecm(self):
-        ecmf = ''
-        if os.path.exists(ECM_INFO):
-            try:
-                with open(ECM_INFO) as f:
-                    self["info"].text = f.read()
-                    # return
-            except IOError:
-                pass
-        else:
-            self['info'].setText(ecmf)
+        try:
+            ecmf = ''
+            if os.path.exists(ECM_INFO):
+                try:
+                    with open(ECM_INFO) as f:
+                        self["info"].text = f.read()
+                except IOError:
+                    pass
+            else:
+                self['info'].setText(ecmf)
+        except Exception as e:
+            print('error ecm: ', e)
 
     def stopEcmInfoPollTimer(self):
         self.EcmInfoPollTimer.stop()
@@ -317,11 +316,7 @@ class tvManager(Screen):
             from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
-            # self.prombt('sh %s' % script)
             self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
-
-    def prombt(self, script):
-        self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
 
     def CfgInfo(self):
         self.session.open(InfoCfg)
@@ -331,7 +326,7 @@ class tvManager(Screen):
         self.session.open(tv_config)
 
     def cgdesc(self):
-        if len(self.namelist) > 0:
+        if len(self.namelist) > -1:
             self['description'].setText(_('Select a cam to run ...'))
         else:
             self['description'].setText(_('Install Cam first!!!'))
@@ -394,11 +389,11 @@ class tvManager(Screen):
                 except:
                     self.close()
             self.session.nav.playService(self.oldService)
-            self.EcmInfoPollTimer = eTimer()
-            try:
-                self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
-            except:
-                self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
+            # self.EcmInfoPollTimer = eTimer()
+            # try:
+                # self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
+            # except:
+                # self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
             self.EcmInfoPollTimer.start(200)
             self.readScripts()
 
@@ -438,50 +433,55 @@ class tvManager(Screen):
         self.readScripts()
 
     def readScripts(self):
-        scriptlist = []
-        pliste = []
-        pathscript = '/usr/camscript/'
-        for root, dirs, files in os.walk(pathscript):
-            for name in files:
-                scriptlist.append(name)
-        i = len(self.softcamslist)
-        del self.softcamslist[0:i]
-        png1 = LoadPixmap(cached=True,
-                path=resolveFilename(SCOPE_PLUGINS,
-                "Extensions/tvManager/res/img/{}".format('actcam.png')))
-        png2 = LoadPixmap(cached=True,
-                path=resolveFilename(SCOPE_PLUGINS,
-                "Extensions/tvManager/res/img/{}".format('defcam.png')))
-        for lines in scriptlist:
-            dat = pathscript + lines
-            sfile = open(dat, 'r')
-            for line in sfile:
-                if line[0:3] == 'OSD':
-                    nam = line[5:len(line) - 2]
-                    print('We are in tvManager and cam is type  = ', nam)
-                    if self.currCam is not None:
-                        if nam == self.currCam:
-                            # print('nam == self.currCam: ', nam)
-                            self.softcamslist.append((nam,  png1, '(Active)'))
-                            pliste.append((nam, '(Active)'))
-                        else:
-                            # print('nam != self.currCam: ', nam)
-                            self.softcamslist.append((nam, png2, ''))
-                            pliste.append((nam, ''))
-                    else:
-                        # print('self.currCam is None: ', nam)
-                        self.softcamslist.append((nam, png2, ''))
-                        pliste.append((nam, ''))
+        try:
+            scriptlist = []
+            pliste = []
+            s = 0
+            pathscript = '/usr/camscript/'
+            for root, dirs, files in os.walk(pathscript):
+                for name in files:
+                    scriptlist.append(name)
+                    s += 1
+            i = len(self.softcamslist)
+            del self.softcamslist[0:i]
+            png1 = LoadPixmap(cached=True,
+                    path=resolveFilename(SCOPE_PLUGINS,
+                    "Extensions/tvManager/res/img/{}".format('actcam.png')))
+            png2 = LoadPixmap(cached=True,
+                    path=resolveFilename(SCOPE_PLUGINS,
+                    "Extensions/tvManager/res/img/{}".format('defcam.png')))
+            if s >= 1:
+                for lines in scriptlist:
+                    dat = pathscript + lines
+                    sfile = open(dat, 'r')
+                    for line in sfile:
+                        if line[0:3] == 'OSD':
+                            nam = line[5:len(line) - 2]
+                            print('We are in tvManager and cam is type  = ', nam)
+                            if self.currCam is not None:
+                                if nam == self.currCam:
+                                    # print('nam == self.currCam: ', nam)
+                                    self.softcamslist.append((nam,  png1, '(Active)'))
+                                    pliste.append((nam, '(Active)'))
+                                else:
+                                    # print('nam != self.currCam: ', nam)
+                                    self.softcamslist.append((nam, png2, ''))
+                                    pliste.append((nam, ''))
+                            else:
+                                # print('self.currCam is None: ', nam)
+                                self.softcamslist.append((nam, png2, ''))
+                                pliste.append((nam, ''))
 
-            sfile.close()
-            self.softcamslist.sort(key=lambda i: i[2], reverse=True)
-            pliste.sort(key=lambda i: i[1], reverse=True)
-            print('self.softcamslist: ', self.softcamslist)
-            print('pliste: ', pliste)
-            self.namelist = pliste
-            # self['list'].l.setList(self.softcamslist)
-            self["list"].setList(self.softcamslist)
-        # return
+                    sfile.close()
+                    self.softcamslist.sort(key=lambda i: i[2], reverse=True)
+                    pliste.sort(key=lambda i: i[1], reverse=True)
+                    print('self.softcamslist: ', self.softcamslist)
+                    print('pliste: ', pliste)
+                    self.namelist = pliste
+                    # self['list'].l.setList(self.softcamslist)
+                    self["list"].setList(self.softcamslist)
+        except Exception as e:
+            print('error scriptlist: ', e)
 
     def readCurrent(self):
         currCam = ''
@@ -555,7 +555,6 @@ class tvManager(Screen):
         '''
 
     def cancel(self):
-        # Utils.deletetmp()
         self.close()
 
 
@@ -621,13 +620,11 @@ class GetipklistTv(Screen):
     def downloadxmlpage(self):
         url = str(FTP_XML)
         if six.PY3:
-            # url = six.binary_type(url,encoding="utf-8")
             url = url.encode()
-        # print('url softcam: ', url)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
     def errorLoad(self, error):
-        # print(str(error))
+        print(str(error))
         self['description'].setText(_('Try again later ...'))
         self.downloading = False
 
@@ -688,8 +685,7 @@ class GetipkTv(Screen):
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
-        self['actions'] = ActionMap(['OkCancelActions',
-                                     'ColorActions'], {'ok': self.message, 'cancel': self.close}, -1)
+        self['actions'] = ActionMap(['OkCancelActions'], {'ok': self.message, 'cancel': self.close}, -1)
         self.onLayoutFinish.append(self.start)
         # self.onShown.append(self.updateList)
 
@@ -773,7 +769,7 @@ class GetipkTv(Screen):
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)
-                if Utils.DreamOS():
+                if isDreamOS:
                     cmd = "wget -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
                     if "https" in str(self.com):
                         cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
@@ -795,6 +791,7 @@ class GetipkTv(Screen):
                 except OSError as e:
                     print("Error: %s : %s" % (f, e.strerror))
             self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
+
         except Exception as e:
             print(e)
 
@@ -1013,7 +1010,6 @@ def autostart(reason, session=None, **kwargs):
                 autoStartTimertvsman = AutoStartTimertvman(session)
             except:
                 print('except autostart')
-                pass
         else:
             print('pass autostart')
     return
@@ -1050,7 +1046,7 @@ def StartSetup(menuid):
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    if Utils.isFHD():
+    if isDreamOS:
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),

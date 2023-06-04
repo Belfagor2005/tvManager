@@ -5,10 +5,12 @@ from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 import gettext
 import os
-sl= 'slManager'
+sl = 'slManager'
 PluginLanguageDomain = 'tvManager'
 PluginLanguagePath = 'Extensions/tvManager/locale'
-
+FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
+global isDreamOS
 isDreamOS = False
 if os.path.exists("/var/lib/dpkg/status"):
     isDreamOS = True

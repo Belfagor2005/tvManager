@@ -36,13 +36,14 @@ class GetEcmInfo:
                 ecm = open(ECM_INFO, 'r').readlines()
             except:
                 ecm = ''
-            for line in ecm:
-                d = line.split(':', 1)
-                if len(d) > 1:
-                    info[d[0].strip()] = d[1].strip()
-            data = self.getText()
-            print(' -----------------data:  ', data)
-            return True
+            if ecm != '':
+                for line in ecm:
+                    d = line.split(':', 1)
+                    if len(d) > 1:
+                        info[d[0].strip()] = d[1].strip()
+                data = self.getText()
+                print(' -----------------data:  ', data)
+                return True
         else:
             info['ecminterval0'] = int(time.time()-ecm_time+0.5)
 
