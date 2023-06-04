@@ -8,7 +8,7 @@
 #     01/06/2023     #
 # --------------------#
 from __future__ import print_function
-from . import _, sl, isDreamOS, FTP_XML, FTP_CFG
+from . import _, sl, isDreamOS
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -64,6 +64,8 @@ emu_plugin = os.path.join(plugin_path, "emu/")
 iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
+FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 _firstStarttvsman = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
@@ -755,9 +757,9 @@ class GetipkTv(Screen):
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
                     os.remove(destipk)
-                cmd = "wget -U '%s' -c '%s' -O '%s';opkg install --force-reinstall %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
+                cmd = "wget -U '%s' -c '%s' -O '%s';opkg install --force-overwrite --force-downgrade %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
                 if "https" in str(self.com):
-                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';opkg install --force-reinstall %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
+                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';opkg install --force-overwrite --force-downgrade %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
                 self.session.open(Console, title='IPK Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
             if self.com.find('.tar.gz') != -1:
                 if fileExists(desttar):
