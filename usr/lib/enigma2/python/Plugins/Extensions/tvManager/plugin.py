@@ -226,8 +226,8 @@ class tvManager(Screen):
         self.onHide.append(self.stopEcmInfoPollTimer)
 
     def setBlueKey(self):
-        if self.currCam == 'no':
-            self["key_blue"].setText(_("Softcam"))
+        # if self.currCam == 'no':
+            # self["key_blue"].setText(_("Softcam"))
         if self.currCam is not None:
             print('self.currCam: ', self.currCam)
             if 'ccam' in self.currCam.lower():
@@ -328,7 +328,8 @@ class tvManager(Screen):
         self.session.open(tv_config)
 
     def cgdesc(self):
-        if len(self.namelist) > -1:
+        # if len(self.namelist) >= 0:
+        if self.currCam is not None or self.currCam != 'no':
             self['description'].setText(_('Select a cam to run ...'))
         else:
             self['description'].setText(_('Install Cam first!!!'))
@@ -342,28 +343,34 @@ class tvManager(Screen):
 
     def getLastIndex(self):
         a = 0
-        if len(self.namelist) > -1:
+        print('len(self.namelist)= ', len(self.namelist))
+        print('self.namelist= ', self.namelist)
+        if len(self.namelist) >= 0:
             for x in self.namelist[0]:
                 if x == self.currCam:
                     return a
                 a += 1
-        else:
-            return -1
-        return -1
+                print('aa=', a)
+        # else:
+            # return -1
+        # return -1
 
     def action(self):
         i = len(self.softcamslist)
-        if i < 0:
+        print('iiiii= ', i)
+        if i < 1:
             return
         self.session.nav.stopService()
         # msg = []
         self.last = self.getLastIndex()
+        print('self.last=', self.last)
         if self['list'].getCurrent():
             self.var = self['list'].getIndex()
             # self.var = self['list'].getSelectedIndex()
             # # self.var = self['list'].getSelectionIndex()
             # print('self var=== ', self.var)
-            if self.last > -1:
+            if self.last is not None:  # or self.last >= 1:
+            # if self.index >= 1:
                 if self.last == self.var:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
                     mbox = _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
@@ -413,31 +420,54 @@ class tvManager(Screen):
         return
 
     def stop(self):
-        self.EcmInfoPollTimer.stop()
-        last = self.getLastIndex()
-        if last > -1:
-            self.cmd1 = '/usr/camscript/' + self.softcamslist[last][0] + '.sh' + ' cam_down &'
-            os.system(self.cmd1)
-        else:
+        i = len(self.softcamslist)
+        print('iiiii= ', i)
+        if i < 1:
             return
-        self.currCam = 'no'
-        self.writeFile()
-        sleep(1)
-        if os.path.exists(ECM_INFO):
-            os.remove(ECM_INFO)
-        mbox = _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
-        self['info'].setText('CAM STOPPED')
-        try:
-            self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-        except:
-            self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-        self.session.nav.stopService()
-        self.readScripts()
+
+        if self.currCam is not None or self.currCam != 'no':
+
+            self.EcmInfoPollTimer.stop()
+            # last = self.getLastIndex()
+            self.last = self.getLastIndex()
+            print('self.last stop=', self.last)
+
+                # self.var = self['list'].getSelectedIndex()
+                # # self.var = self['list'].getSelectionIndex()
+                # print('self var=== ', self.var)
+            # if self.last and self.last is not None:  # or self.currCam != 'no':
+            if self.last is not None:  # or self.currCam != 'no':
+
+            # if self.last > 0:
+                # self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+                # os.system(self.cmd1)
+            # else:
+                # return
+                # if self.currCam is not None or self.currCam != 'no':
+                    self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+                    os.system(self.cmd1)
+
+                    self.currCam = 'no'
+                    self.writeFile()
+                    sleep(1)
+                    if os.path.exists(ECM_INFO):
+                        os.remove(ECM_INFO)
+                    mbox = _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    self['info'].setText('CAM STOPPED')
+                    try:
+                        self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
+                    except:
+                        self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
+                    self.session.nav.stopService()
+                    self.readScripts()
+#                else:
+#                    return
 
     def readScripts(self):
         try:
             scriptlist = []
             pliste = []
+            self.index = 0
             s = 0
             pathscript = '/usr/camscript/'
             for root, dirs, files in os.walk(pathscript):
@@ -469,10 +499,12 @@ class tvManager(Screen):
                                     # print('nam != self.currCam: ', nam)
                                     self.softcamslist.append((nam, png2, ''))
                                     pliste.append((nam, ''))
+                                self.index += 1
                             else:
                                 # print('self.currCam is None: ', nam)
                                 self.softcamslist.append((nam, png2, ''))
                                 pliste.append((nam, ''))
+                            self.index += 1
 
                     sfile.close()
                     self.softcamslist.sort(key=lambda i: i[2], reverse=True)
@@ -630,10 +662,10 @@ class GetipklistTv(Screen):
         self['description'].setText(_('Try again later ...'))
         self.downloading = False
 
-    def _gotPageLoad(self, data):
-        self.xml = str(data)
+    def _gotPageLoad(self, datas):
+        self.xml = str(datas)
         if six.PY3:
-            self.xml = six.ensure_str(data)
+            self.xml = six.ensure_str(datas)
         try:
             # regexC = '<plugins cont = "(.*?)"'
             regexC = '<plugins cont="(.*?)"'
