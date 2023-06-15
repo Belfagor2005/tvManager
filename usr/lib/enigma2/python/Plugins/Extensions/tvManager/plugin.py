@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     01/06/2023     #
+#     15/06/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl, isDreamOS
@@ -44,15 +44,21 @@ import six
 import sys
 import time
 
-global active, skin_path
+global active, skin_path, local
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
 if PY3:
+    from urllib.error import URLError
+    from urllib.request import urlopen, Request
+    from urllib.parse import urlparse
     unicode = str
     unichr = chr
     long = int
     PY3 = True
+else:
+    from urllib2 import urlopen, Request, URLError
+    from urlparse import urlparse
 
 
 currversion = '1.9'
@@ -67,6 +73,7 @@ FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 _firstStarttvsman = True
+local = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
 old_ecm_time = time.time()
@@ -117,6 +124,28 @@ def readCurrent_1():
             currCam = line
         clist.close()
     return currCam
+
+
+def make_request(url):
+    try:
+        import requests
+        link = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text
+        return link
+    except ImportError:
+        req = Request(url)
+        req.add_header('User-Agent', 'TVS')
+        response = urlopen(req, None, 7)
+        link = response.read().decode('utf-8')
+        response.close()
+        return link
+    except:
+        e = URLError
+        if hasattr(e, 'code'):
+            print('We failed with error code - %s.' % e.code)
+        if hasattr(e, 'reason'):
+            print('Reason: ', e.reason)
+        return
+    return
 
 
 # =============== SCREEN PATH SETTING
@@ -617,13 +646,17 @@ class GetipklistTv(Screen):
         self['key_yellow'].hide()
         self['key_blue'].hide()
         self.addon = 'emu'
+        self.url = ''
+        global local
+        local = False
         self.icount = 0
         self.downloading = False
+        self.xml = str(FTP_XML)
         self.timer = eTimer()
         if os.path.exists('/var/lib/dpkg/status'):
-            self.timer_conn = self.timer.timeout.connect(self.downloadxmlpage)
+            self.timer_conn = self.timer.timeout.connect(self._gotPageLoad)
         else:
-            self.timer.callback.append(self.downloadxmlpage)
+            self.timer.callback.append(self._gotPageLoad)
         self.timer.start(500, 1)
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions'], {'ok': self.okClicked, 'cancel': self.close, 'green': self.loadpage}, -1)
@@ -642,30 +675,41 @@ class GetipklistTv(Screen):
         return conthelp
 
     def loadpage(self):
+        global local
+        # local = False
         if os.path.exists(FILE_XML):
             self.lists = []
             del self.names[:]
             del self.list[:]
             self["list"].l.setList(self.list)
             with open(FILE_XML, 'r') as f:
-                self.fileloc = f.read()
-            self._gotPageLoad(self.fileloc)
+                self.xml = f.read()
+                local = True
+            self._gotPageLoad()
 
-    def downloadxmlpage(self):
-        url = str(FTP_XML)
-        if six.PY3:
-            url = url.encode()
-        getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
+    # def downloadxmlpage(self):
+        # url = str(FTP_XML)
+        # if six.PY3:
+            # url = url.encode()
+        # getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
-    def errorLoad(self, error):
-        print(str(error))
-        self['description'].setText(_('Try again later ...'))
-        self.downloading = False
+    # def errorLoad(self, error):
+        # print(str(error))
+        # self['description'].setText(_('Try again later ...'))
+        # self.downloading = False
 
-    def _gotPageLoad(self, datas):
-        self.xml = str(datas)
-        if six.PY3:
-            self.xml = six.ensure_str(datas)
+    # def _gotPageLoad(self, datas):
+        # self.xml = str(datas)
+        # if six.PY3:
+            # self.xml = six.ensure_str(datas)
+
+    def _gotPageLoad(self):
+        global local
+        if local is False:
+            self.xml = Utils.getUrl(self.xml)
+        # if PY3:
+            # url = six.ensure_str(self.xml)
+        print('data: ', self.xml)
         try:
             # regexC = '<plugins cont = "(.*?)"'
             regexC = '<plugins cont="(.*?)"'
