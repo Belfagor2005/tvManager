@@ -100,9 +100,11 @@ def checkdir():
     keys = '/usr/keys'
     camscript = '/usr/camscript'
     if not os.path.exists(keys):
-        __createdir('/usr/keys')
+        # __createdir('/usr/keys')
+        mkdir('/usr/keys')
     if not os.path.exists(camscript):
-        __createdir('/usr/camscript')
+        # __createdir('/usr/camscript')
+        mkdir('/usr/camscript')
 
 
 checkdir()
@@ -209,10 +211,10 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-        self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
-                                                                    '1': self.cccam,
-                                                                    '2': self.oscam
-                                                                    })
+        # self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
+                                                                    # '1': self.cccam,
+                                                                    # '2': self.oscam
+                                                                    # })
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
                                      'EPGSelectActions',
@@ -255,60 +257,58 @@ class tvManager(Screen):
         self.onHide.append(self.stopEcmInfoPollTimer)
 
     def setBlueKey(self):
-        # if self.currCam == 'no':
-            # self["key_blue"].setText(_("Softcam"))
-        if self.currCam is not None:
-            print('self.currCam: ', self.currCam)
-            if 'ccam' in self.currCam.lower():
-                if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                    self.BlueAction = CCCAMINFO
-                    self["key_blue"].setText(_("CCcamInfo"))
-            elif 'oscam' in self.currCam.lower():
-                if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                    self.BlueAction = OSCAMINFO
-                    self["key_blue"].setText(_("OscamInfo"))
-            else:
-                self.BlueAction = SOFTCAM
-                self["key_blue"].setText(_("SOFTCAM"))
-        else:
+        # if self.currCam is not None or self.currCam != 'no'::
+            # print('self.currCam: ', self.currCam)
+            # if 'ccam' in self.currCam.lower():
+                # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                    # self.BlueAction = CCCAMINFO
+                    # self["key_blue"].setText(_("CCcamInfo"))
+            # elif 'oscam' in self.currCam.lower():
+                # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                    # self.BlueAction = OSCAMINFO
+                    # self["key_blue"].setText(_("OscamInfo"))
+            # else:
+                # self.BlueAction = SOFTCAM
+                # self["key_blue"].setText(_("SOFTCAM"))
+        # else:
             self.BlueAction = SOFTCAM
             self["key_blue"].setText(_("SOFTCAM"))
-        return
+        # return
 
     def ShowSoftcamCallback(self):
         pass
 
     def Blue(self):
-        if self.BlueAction == CCCAMINFO:
-            if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-                self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
-        elif self.BlueAction == OSCAMINFO:
-            if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
-        else:
+        # if self.BlueAction == CCCAMINFO:
+            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
+                # self.session.openWithCallback(self.close, CCcamInfoMain)
+        # elif self.BlueAction == OSCAMINFO:
+            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                # self.session.openWithCallback(self.close, OscamStatus)
+        # else:
             self.BlueAction == SOFTCAM
             self.messagekd()
 
-    def cccam(self):
-        if 'ccam' in self.currCam.lower() and self.currCam != 'no':
-            if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-                self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
+    # def cccam(self):
+        # if 'ccam' in self.currCam.lower() and self.currCam != 'no':
+            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
+                # self.session.openWithCallback(self.close, CCcamInfoMain)
 
-    def oscam(self):
-        if 'oscam' in self.currCam.lower() and self.currCam != 'no':
-            if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
+    # def oscam(self):
+        # if 'oscam' in self.currCam.lower() and self.currCam != 'no':
+            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                # self.session.openWithCallback(self.close, OscamStatus)
 
-    def tvPanel(self):
-        if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/tvaddon'):
-            from Plugins.Extensions.tvaddon.plugin import Hometv
-            self.session.openWithCallback(self.close, Hometv)
-        else:
-            self.session.open(MessageBox, 'tvAddon Panel Not Installed!!', type=MessageBox.TYPE_INFO, timeout=3)
+    # def tvPanel(self):
+        # if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/tvaddon'):
+            # from Plugins.Extensions.tvaddon.plugin import Hometv
+            # self.session.openWithCallback(self.close, Hometv)
+        # else:
+            # self.session.open(MessageBox, 'tvAddon Panel Not Installed!!', type=MessageBox.TYPE_INFO, timeout=3)
 
     def setEcmInfo(self):
         try:
@@ -676,7 +676,6 @@ class GetipklistTv(Screen):
 
     def loadpage(self):
         global local
-        # local = False
         if os.path.exists(FILE_XML):
             self.lists = []
             del self.names[:]
@@ -687,28 +686,29 @@ class GetipklistTv(Screen):
                 local = True
             self._gotPageLoad()
 
-    # def downloadxmlpage(self):
-        # url = str(FTP_XML)
+    def downloadxmlpage(self):
+        url = str(FTP_XML)
+        if six.PY3:
+            # url = six.binary_type(url,encoding="utf-8")
+            url = url.encode()
+        # print('url softcam: ', url)
+        getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
+
+    def errorLoad(self, error):
+        print(str(error))
+        self['description'].setText(_('Try again later ...'))
+        self.downloading = False
+
+    # def _gotPageLoad(self, data):
+        # self.xml = str(data)
         # if six.PY3:
-            # url = url.encode()
-        # getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
-
-    # def errorLoad(self, error):
-        # print(str(error))
-        # self['description'].setText(_('Try again later ...'))
-        # self.downloading = False
-
-    # def _gotPageLoad(self, datas):
-        # self.xml = str(datas)
-        # if six.PY3:
-            # self.xml = six.ensure_str(datas)
-
+            # self.xml = six.ensure_str(data)
     def _gotPageLoad(self):
         global local
         if local is False:
-            self.xml = Utils.getUrl(self.xml)
-        # if PY3:
-            # url = six.ensure_str(self.xml)
+            self.xml = Utils.checkGZIP(self.xml)
+        if PY3:
+            url = six.ensure_str(self.xml)
         print('data: ', self.xml)
         try:
             # regexC = '<plugins cont = "(.*?)"'
@@ -716,7 +716,7 @@ class GetipklistTv(Screen):
             match = re.compile(regexC, re.DOTALL).findall(self.xml)
             for name in match:
                 # name = name.replace('_',' ').replace('-',' ')
-                name = Utils.checkStr(name)
+                name = Utils.ensure_str(name)
                 self.list.append(name)
                 self['description'].setText(_('Please select ...'))
             showlist(self.list, self['list'])
@@ -791,7 +791,7 @@ class GetipkTv(Screen):
         match = re.compile(regex, re.DOTALL).findall(data1)
         for name, url in match:
             name = name.replace('_', ' ').replace('-', ' ')
-            name = Utils.checkStr(name)
+            name = Utils.ensure_str(name)
             item = name + "###" + url
             items.append(item)
         items.sort()

@@ -58,6 +58,5 @@ fi
 sleep 1
 done < $local_emm_file
 fi
-
 done < /tmp/active_readers.tmp
 rm -rf /tmp/*.tmp /tmp/*.html

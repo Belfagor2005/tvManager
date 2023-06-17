@@ -70,6 +70,24 @@ if sys.version_info >= (2, 7, 9):
         sslContext = None
 
 
+def ensure_str(text, encoding='utf-8', errors='strict'):
+    if type(text) is str:
+        return text
+    if PY2:
+        if isinstance(text, unicode):
+            try:
+                return text.encode(encoding, errors)
+            except Exception:
+                return text.encode(encoding, 'ignore')
+    else: #PY3
+        if isinstance(text, bytes):
+            try:
+                return text.decode(encoding, errors)
+            except Exception:
+                return text.decode(encoding, 'ignore')
+    return text
+
+
 def checkGZIP(url):
     from io import StringIO
     import gzip
@@ -264,7 +282,7 @@ def getFreeSpace(path):
     try:
         moin_point = getMountPoint(path)
         device = getMointedDevice(moin_point)
-        print(moin_point+"|" + device)
+        print(moin_point + "|" + device)
         stat = os.statvfs(device)  # @UndefinedVariable
         print(stat)
         return sizeToString(stat.f_bfree*stat.f_bsize)
