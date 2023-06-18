@@ -110,22 +110,18 @@ def checkdir():
 checkdir()
 
 
-def readCurrent_1():
-    currCam = ''
-    FilCurr = ''
-    if fileExists('/etc/CurrentBhCamName'):
-        FilCurr = '/etc/CurrentBhCamName'
-    else:
-        FilCurr = '/etc/clist.list'
-    try:
-        clist = open(FilCurr, 'r')
-    except:
-        return
-    if clist is not None:
-        for line in clist:
-            currCam = line
-        clist.close()
-    return currCam
+def isRunning(pname):
+	pname = '\t' + pname
+	for f in os_listdir('/proc'):
+		try:
+			cmdline = open(os_path.join('/', 'proc', f, 'status'), 'r')
+			txt = cmdline.read()
+			cmdline.close()
+			if pname in txt:
+				return True
+		except IOError:
+			pass
+	return False
 
 
 def make_request(url):
@@ -1079,7 +1075,7 @@ def autostart(reason, session=None, **kwargs):
                 os.system("ln -sf /usr/bin /var/bin")
                 os.system("ln -sf /usr/keys /var/keys")
                 os.system("ln -sf /usr/scce /var/scce")
-                os.system("ln -sf /usr/camscript /var/camscript")
+                # os.system("ln -sf /usr/camscript /var/camscript")
                 os.system("sleep 2")
                 os.system("/etc/startcam.sh &")
                 os.system('sleep 2')
