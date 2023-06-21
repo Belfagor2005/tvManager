@@ -53,10 +53,11 @@ if echo $emm | grep "^82708E0000000000D3875411.\{270\}$" >/dev/null; then
 # size=len $emm
 # final_str=$emm[:$size - 4]
 # echo $final_str
-curl -s -k --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch" >/dev/null
+curl -s -k --user "${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=$loc_tmp&action=Launch" >/dev/null
 fi
 sleep 1
 done < $local_emm_file
 fi
 done < /tmp/active_readers.tmp
+
 rm -rf /tmp/*.tmp /tmp/*.html

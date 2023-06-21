@@ -1,5 +1,5 @@
 <!-- Skin tvManager 15/08/2020 -->
-<screen name="tvManager" position="0,0" size="1920,1080" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
+<screen name="tvManager" position="0,0" size="1920,1080" title="..::TiVuStream Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
 	<widget name="title" position="1086,740" size="820,51" font="Regular;30" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#20000000" transparent="0" zPosition="5" />
 	<widget name="description" position="24,740" size="752,50" font="Regular;30" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#20000000" transparent="0" zPosition="5" />
 	<widget name="info" position="788,805" size="704,250" font="Regular; 18" halign="left" foregroundColor="yellow" backgroundColor="#20000000" transparent="1" zPosition="5" />
@@ -23,7 +23,6 @@
             }
         </convert>
     </widget>
-    
     <!-- Colors -->
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="1535,820" size="30,30" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="1535,865" size="30,30" alphatest="blend" zPosition="5" />
