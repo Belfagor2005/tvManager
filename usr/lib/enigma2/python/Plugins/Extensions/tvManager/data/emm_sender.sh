@@ -27,7 +27,7 @@ if ! test $oscam_version_file; then echo "The file oscam.version is not in the /
 # cmnd=$(curl -s -k --user ${oscam_httpuser}":"${oscam_httppwd}" --anyauth "$protocol://$ip:$port/emm_running.html?label=$label&emmcaid=$caid&ep=$emm&emmfile=&action=Launch)
 
 local_emm_file=$oscam_config_dir"emm"
-remote_emm_file='http://s4aupdater.one.pl/TIVU/emm'
+remote_emm_file='https://pastebin.com/raw/bFC84eM3'
 echo $remote_emm_file
 
 curl -s $remote_emm_file -o $local_emm_file

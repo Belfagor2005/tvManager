@@ -146,6 +146,13 @@ def make_request(url):
     return
 
 
+def paypal():
+    conthelp = "If you like what I do you\n"
+    conthelp += "can contribute with a coffee\n"
+    conthelp += "scan the qr code and donate € 1.00"
+    return conthelp
+
+
 # =============== SCREEN PATH SETTING
 skin_path = os.path.join(res_plugin_path, "skins/hd/")
 if Utils.isFHD():
@@ -660,15 +667,9 @@ class GetipklistTv(Screen):
         # self.onShown.append(self.updateList)
 
     def updateList(self):
-        paypal = self.paypal2()
-        self["paypal"].setText(paypal)
+        payp = paypal()
+        self["paypal"].setText(payp)
         self["list"].setText(self.getcont())
-
-    def paypal2(self):
-        conthelp = "If you like what I do you\n"
-        conthelp += " can contribute with a coffee\n\n"
-        conthelp += "scan the qr code and donate € 1.00"
-        return conthelp
 
     def loadpage(self):
         global local
@@ -764,15 +765,9 @@ class GetipkTv(Screen):
         # self.onShown.append(self.updateList)
 
     def updateList(self):
-        paypal = self.paypal2()
-        self["paypal"].setText(paypal)
+        payp = paypal()
+        self["paypal"].setText(payp)
         self["list"].setText(self.getcont())
-
-    def paypal2(self):
-        conthelp = "If you like what I do you\n"
-        conthelp += " can contribute with a coffee\n\n"
-        conthelp += "scan the qr code and donate € 1.00"
-        return conthelp
 
     def start(self):
         xmlparse = self.xmlparse
@@ -918,15 +913,9 @@ class InfoCfg(Screen):
         return cont
 
     def updateList(self):
-        paypal = self.paypal2()
-        self["paypal"].setText(paypal)
+        payp = paypal()
+        self["paypal"].setText(payp)
         self["list"].setText(self.getcont())
-
-    def paypal2(self):
-        conthelp = "If you like what I do you\n"
-        conthelp += " can contribute with a coffee\n\n"
-        conthelp += "scan the qr code and donate € 1.00"
-        return conthelp
 
 
 sl2 = skin_path + sl + '.xml'

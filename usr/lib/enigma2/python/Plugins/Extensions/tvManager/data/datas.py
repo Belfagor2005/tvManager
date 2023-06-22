@@ -28,7 +28,7 @@ import re
 import ssl
 import sys
 global skin_path
-from .. import _, sl, isDreamOS
+from .. import _, sl, isDreamOS, paypal
 
 
 PY3 = sys.version_info.major >= 3
@@ -428,16 +428,10 @@ class tv_config(Screen, ConfigListScreen):
             elif putlbl == '/etc/tuxbox/config/ncam.server':
                 self.Ncam()
 
-    def paypal2(self):
-        conthelp = "If you like what I do you\n"
-        conthelp += " can contribute with a coffee\n\n"
-        conthelp += "scan the qr code and donate € 1.00"
-        return conthelp
-
     def layoutFinished(self):
         self.setTitle(self.setup_title)
-        paypal = self.paypal2()
-        self["paypal"].setText(paypal)
+        payp = paypal()
+        self["paypal"].setText(payp)
         self.showhide()
 
     def createSetup(self):

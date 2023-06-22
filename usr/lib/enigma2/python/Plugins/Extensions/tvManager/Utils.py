@@ -10,7 +10,10 @@ import os
 import re
 import base64
 from random import choice
-
+#Added for support of wqhd detection
+from enigma import getDesktop
+screenwidth = getDesktop(0).size()
+#End of code
 # from sys import version_info
 # pythonFull = float(str(sys.version_info.major) + '.' + str(sys.version_info.minor))
 pythonVer = sys.version_info.major
@@ -26,7 +29,7 @@ PY3 = sys.version_info[0] == 3
 PY34 = sys.version_info[0:2] >= (3, 4)
 PY39 = sys.version_info[0:2] >= (3, 9)
 
-# PY3 = sys.version_info.major >= 3
+PY3 = sys.version_info.major >= 3
 if PY3:
     bytes = bytes
     str = unicode = basestring = str
@@ -128,20 +131,22 @@ def getDesktopSize():
     return (s.width(), s.height())
 
 
+#Chaneg code for support of wqhd detection
 def isUHD():
-    desktopSize = getDesktopSize()
-    return desktopSize[0] == 3840
-
-
+    UHD = False
+    if screenwidth.width() == 2560:
+        UHD = True
+        return UHD
 def isFHD():
-    desktopSize = getDesktopSize()
-    return desktopSize[0] == 1920
-
+    if screenwidth.width() == 1920:
+        FHD = True
+        return FHD
 
 def isHD():
-    desktopSize = getDesktopSize()
-    return desktopSize[0] >= 1280 and desktopSize[0] < 1920
-
+    if screenwidth.width() == 1280:
+        HD = True
+        return HD
+#End of code change
 
 def DreamOS():
     DreamOS = False
