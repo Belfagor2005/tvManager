@@ -379,13 +379,13 @@ class tv_config(Screen, ConfigListScreen):
                         msg = (" %s " % _("\n")).join(msg)
                         self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
 
-                    if os.path.exists('/tmp/command.sh'):
-                        os.chmod('/tmp/command.sh', 493)
-                        os.system('sh /tmp/command.sh')
-                        print('okkkkkkkkkk')
-                    else:
-                        self.session.open(MessageBox, _("Oscam is not active"), MessageBox.TYPE_INFO, timeout=10)
-                        return
+                    # if os.path.exists('/tmp/command.sh'):
+                        # os.chmod('/tmp/command.sh', 493)
+                        # os.system('sh /tmp/command.sh')
+                        # print('okkkkkkkkkk')
+                else:
+                    self.session.open(MessageBox, _("Oscam is not active"), MessageBox.TYPE_INFO, timeout=10)
+                    return
             except Exception as e:
                 print('error on emm', str(e))
 

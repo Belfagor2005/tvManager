@@ -685,27 +685,19 @@ class GetipklistTv(Screen):
 
     def downloadxmlpage(self):
         url = str(FTP_XML)
-        if six.PY3:
-            # url = six.binary_type(url,encoding="utf-8")
-            url = url.encode()
-        # print('url softcam: ', url)
-        getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
+        getPage(str.encode(url)).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
     def errorLoad(self, error):
         print(str(error))
         self['description'].setText(_('Try again later ...'))
         self.downloading = False
 
-    # def _gotPageLoad(self, data):
-        # self.xml = str(data)
-        # if six.PY3:
-            # self.xml = six.ensure_str(data)
     def _gotPageLoad(self):
         global local
         if local is False:
             self.xml = Utils.checkGZIP(self.xml)
-        if PY3:
-            url = six.ensure_str(self.xml)
+        # if PY3:
+            # url = six.ensure_str(self.xml)
         print('data: ', self.xml)
         try:
             # regexC = '<plugins cont = "(.*?)"'
@@ -771,6 +763,13 @@ class GetipkTv(Screen):
 
     def start(self):
         xmlparse = self.xmlparse
+        # if PY3:
+            # n1 = xmlparse.find(self.selection.encode(), 0)
+            # n2 = xmlparse.find('</plugins>'.encode(), n1)
+        # else:
+            # n1 = xmlparse.find(self.selection, 0)
+            # n2 = xmlparse.find('</plugins>', n1)
+        
         n1 = xmlparse.find(self.selection, 0)
         n2 = xmlparse.find("</plugins>", n1)
         data1 = xmlparse[n1:n2]
