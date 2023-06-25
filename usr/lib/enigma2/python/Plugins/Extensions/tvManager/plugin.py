@@ -479,30 +479,30 @@ class tvManager(Screen):
             # if self.last and self.last is not None:  # or self.currCam != 'no':
             '''
             if self.last is not None:  # or self.currCam != 'no':
-            '''
-            # if self.last > 0:
-                # self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                # os.system(self.cmd1)
-            # else:
-                # return
-                # if self.currCam is not None or self.currCam != 'no':
-            '''
-                    self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                    os.system(self.cmd1)
+                '''
+                # if self.last > 0:
+                    # self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+                    # os.system(self.cmd1)
+                # else:
+                    # return
+                    # if self.currCam is not None or self.currCam != 'no':
+                    '''
+                self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
+                os.system(self.cmd1)
 
-                    self.currCam = 'no'
-                    self.writeFile()
-                    sleep(1)
-                    if os.path.exists(ECM_INFO):
-                        os.remove(ECM_INFO)
-                    mbox = _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
-                    self['info'].setText('CAM STOPPED')
-                    try:
-                        self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-                    except:
-                        self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-                    self.session.nav.stopService()
-                    self.readScripts()
+                self.currCam = 'no'
+                self.writeFile()
+                sleep(1)
+                if os.path.exists(ECM_INFO):
+                    os.remove(ECM_INFO)
+                mbox = _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
+                self['info'].setText('CAM STOPPED')
+                try:
+                    self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
+                except:
+                    self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
+                self.session.nav.stopService()
+                self.readScripts()
 
     def readScripts(self):
         try:
