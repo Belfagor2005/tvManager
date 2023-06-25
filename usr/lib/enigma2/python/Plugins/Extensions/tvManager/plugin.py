@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     15/06/2023     #
+#     25/06/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl, isDreamOS
@@ -61,7 +61,7 @@ else:
     from urlparse import urlparse
 
 
-currversion = '1.9'
+currversion = '2.0'
 name_plug = 'Softcam_Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
@@ -111,17 +111,17 @@ checkdir()
 
 
 def isRunning(pname):
-	pname = '\t' + pname
-	for f in os_listdir('/proc'):
-		try:
-			cmdline = open(os_path.join('/', 'proc', f, 'status'), 'r')
-			txt = cmdline.read()
-			cmdline.close()
-			if pname in txt:
-				return True
-		except IOError:
-			pass
-	return False
+    pname = '\t' + pname
+    for f in os.listdir('/proc'):
+        try:
+            cmdline = open(os.path.join('/', 'proc', f, 'status'), 'r')
+            txt = cmdline.read()
+            cmdline.close()
+            if pname in txt:
+                return True
+        except IOError:
+            pass
+    return False
 
 
 def make_request(url):
@@ -214,10 +214,12 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
+        '''
         # self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
                                                                     # '1': self.cccam,
                                                                     # '2': self.oscam
                                                                     # })
+        '''
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
                                      'EPGSelectActions',
@@ -260,6 +262,7 @@ class tvManager(Screen):
         self.onHide.append(self.stopEcmInfoPollTimer)
 
     def setBlueKey(self):
+        '''
         # if self.currCam is not None or self.currCam != 'no'::
             # print('self.currCam: ', self.currCam)
             # if 'ccam' in self.currCam.lower():
@@ -274,14 +277,15 @@ class tvManager(Screen):
                 # self.BlueAction = SOFTCAM
                 # self["key_blue"].setText(_("SOFTCAM"))
         # else:
-            self.BlueAction = SOFTCAM
-            self["key_blue"].setText(_("SOFTCAM"))
-        # return
+        '''
+        self.BlueAction = SOFTCAM
+        self["key_blue"].setText(_("SOFTCAM"))
 
     def ShowSoftcamCallback(self):
         pass
 
     def Blue(self):
+        '''
         # if self.BlueAction == CCCAMINFO:
             # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                 # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
@@ -291,9 +295,10 @@ class tvManager(Screen):
                 # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                 # self.session.openWithCallback(self.close, OscamStatus)
         # else:
-            self.BlueAction == SOFTCAM
-            self.messagekd()
-
+        '''
+        self.BlueAction == SOFTCAM
+        self.messagekd()
+    '''
     # def cccam(self):
         # if 'ccam' in self.currCam.lower() and self.currCam != 'no':
             # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
@@ -312,7 +317,7 @@ class tvManager(Screen):
             # self.session.openWithCallback(self.close, Hometv)
         # else:
             # self.session.open(MessageBox, 'tvAddon Panel Not Installed!!', type=MessageBox.TYPE_INFO, timeout=3)
-
+    '''
     def setEcmInfo(self):
         try:
             self.ecminfo = GetEcmInfo()
@@ -398,9 +403,11 @@ class tvManager(Screen):
         print('self.last=', self.last)
         if self['list'].getCurrent():
             self.var = self['list'].getIndex()
+            '''
             # self.var = self['list'].getSelectedIndex()
             # # self.var = self['list'].getSelectionIndex()
             # print('self var=== ', self.var)
+            '''
             if self.last is not None:  # or self.last >= 1:
             # if self.index >= 1:
                 if self.last == self.var:
@@ -430,11 +437,13 @@ class tvManager(Screen):
                 except:
                     self.close()
             self.session.nav.playService(self.oldService)
+            '''
             # self.EcmInfoPollTimer = eTimer()
             # try:
                 # self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
             # except:
                 # self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
+            '''
             self.EcmInfoPollTimer.start(200)
             self.readScripts()
 
@@ -463,19 +472,21 @@ class tvManager(Screen):
             # last = self.getLastIndex()
             self.last = self.getLastIndex()
             print('self.last stop=', self.last)
-
+            '''
                 # self.var = self['list'].getSelectedIndex()
                 # # self.var = self['list'].getSelectionIndex()
                 # print('self var=== ', self.var)
             # if self.last and self.last is not None:  # or self.currCam != 'no':
+            '''
             if self.last is not None:  # or self.currCam != 'no':
-
+            '''
             # if self.last > 0:
                 # self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
                 # os.system(self.cmd1)
             # else:
                 # return
                 # if self.currCam is not None or self.currCam != 'no':
+            '''
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
                     os.system(self.cmd1)
 
@@ -492,8 +503,6 @@ class tvManager(Screen):
                         self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
                     self.session.nav.stopService()
                     self.readScripts()
-#                else:
-#                    return
 
     def readScripts(self):
         try:
@@ -769,7 +778,6 @@ class GetipkTv(Screen):
         # else:
             # n1 = xmlparse.find(self.selection, 0)
             # n2 = xmlparse.find('</plugins>', n1)
-        
         n1 = xmlparse.find(self.selection, 0)
         n2 = xmlparse.find("</plugins>", n1)
         data1 = xmlparse[n1:n2]
