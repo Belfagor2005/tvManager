@@ -1,9 +1,10 @@
 #! /bin/bash
 
 clear
-# oscam_version=$(find /tmp/ -name oscam.version | sed -n 1p)
-oscam_config_dir='/etc/tuxbox/config/'
 atr_183e='3F FF 95 00 FF 91 81 71 FE 47 00 54 49 47 45 52 36 30 31 20 52 65 76 4D 38 37 14'
+oscam_version=$(find /tmp/ -name oscam.version | sed -n 1p)
+oscam_config_dir=$(grep -ir "ConfigDir" $oscam_version | awk -F ":      " '{ print $2 }')
+# oscam_config_dir='/etc/tuxbox/config/'
 oscam_user=$(grep -ir "httpuser" $oscam_config_dir"oscam.conf" | awk -F "=" '{ print ($2) }' | sed 's/^[ \t]*//')
 oscam_passwd=$(grep -ir "httppwd" $oscam_config_dir"oscam.conf" | awk -F "=" '{ print ($2) }' | sed 's/^[ \t]*//')
 oscam_httpport=$(grep -ir "httpport" $oscam_config_dir"oscam.conf" | awk -F "=" '{ print ($2) }' | sed 's/^[ \t]*//')
