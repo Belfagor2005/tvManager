@@ -357,17 +357,17 @@ class tv_config(Screen, ConfigListScreen):
                 cmd = 'ps -A'
                 res = os.popen(cmd).read()
                 print('res: ', res)
-                if 'oscam' in res.lower():
+                if 'oscam' in res.lower() or 'icam' in res.lower():
                     print('oscam exist')
                     msg = []
-                    msg.append(_("\n....\n.......\n"))
+                    msg.append(_("\n....\n.....\n"))
                     self.cmd1 = data_path + 'emm_sender.sh'
                     from os import access, X_OK
                     if not access(self.cmd1, X_OK):
                         os.chmod(self.cmd1, 493)
                     os.system(self.cmd1)
                     if os.path.exists('/tmp/emm.txt'):
-                        msg.append(_("READ EMM....\n\n"))
+                        msg.append(_("READ EMM....\n"))
                         with open('/tmp/emm.txt') as f:
                             f = f.read()
                             if f.startswith('82708'):
