@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     25/06/2023     #
+#     27/06/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl, isDreamOS
@@ -79,7 +79,6 @@ EMPTY_ECM_INFO = ('', '0', '0', '0')
 old_ecm_time = time.time()
 info = {}
 ecm = ''
-data = EMPTY_ECM_INFO
 SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2

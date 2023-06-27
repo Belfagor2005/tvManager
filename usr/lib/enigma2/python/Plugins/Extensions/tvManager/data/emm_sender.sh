@@ -14,19 +14,24 @@ curl -s --user "${oscam_user}":"${oscam_passwd}" --anyauth -k http://127.0.0.1:$
 while IFS= read -r label; do
 curl -s --user "${oscam_user}":"${oscam_passwd}" --anyauth -k http://127.0.0.1:$oscam_port/entitlements.html?label=$label >/tmp/"$label"_entitlements.html
 atr=$(cat /tmp/"$label"_entitlements.html | grep "\<TD COLSPAN=\"4\">" | awk -F "[<>]" '{ print ($7) }' | sed 's/.$//g')
+reader=$label
+atr_string='aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1pOS0RSVldU'
+emm_file=$(echo $atr_string | base64 -d)
+# if wget --spider ${emm_file} 2>/dev/null; then  # check the existence of an online file
+emmm=$(curl -s $emm_file)
+local_emm_file='/tmp/emm.txt'
+echo -e "$emmm" >$local_emm_file
 if [ "$atr_183e" == "$atr" ]; then
     echo "Send new emms to $label card"
-    reader=$label
-    atr_string='aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1pOS0RSVldU'
-    emm_file=$(echo $atr_string | base64 -d)
-    # if wget --spider ${emm_file} 2>/dev/null; then  # check the existence of an online file
-    emmm=$(curl -s $emm_file)
-    local_emm_file='/tmp/emm.txt'
-    echo -e "$emmm" >$local_emm_file
+    # reader=$label
+    # atr_string='aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1pOS0RSVldU'
+    # emm_file=$(echo $atr_string | base64 -d)
+    # # if wget --spider ${emm_file} 2>/dev/null; then  # check the existence of an online file
+    # emmm=$(curl -s $emm_file)
+    # local_emm_file='/tmp/emm.txt'
+    # echo -e "$emmm" >$local_emm_file
     curl -s -k --user $oscam_user:$oscam_passwd --anyauth "http://127.0.0.1:$oscam_port/emm_running.html?label=$reader&emmcaid=183E&ep=$emmm&action=Launch" >/dev/null
     fi
-    done < /tmp/active_readers.tmp
-    rm -rf /tmp/*.tmp /tmp/*.html
-    # else
-        # echo `date '+%Y-%m-%d %H:%M:%S'`": $emm_file file was not found !" >/dev/null
+done < /tmp/active_readers.tmp
+rm -rf /tmp/*.tmp /tmp/*.html
 exit 0

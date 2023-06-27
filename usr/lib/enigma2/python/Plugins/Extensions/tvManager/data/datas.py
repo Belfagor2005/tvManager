@@ -21,6 +21,7 @@ from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+from .. import _, sl, isDreamOS, paypal
 from random import choice
 from enigma import eTimer
 import os
@@ -28,7 +29,6 @@ import re
 import ssl
 import sys
 global skin_path
-from .. import _, sl, isDreamOS, paypal
 
 
 PY3 = sys.version_info.major >= 3
@@ -69,7 +69,7 @@ def b64decoder(s):
         return outp
 
 
-sl= 'slManager'
+sl = 'slManager'
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
 data_path = os.path.join(plugin_path, 'data/')
@@ -229,6 +229,7 @@ def cccamPath():
         return "/usr/CCcam.cfg"
     return "/etc/CCcam.cfg"
 
+
 Serverlive = [
     ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
     ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
@@ -264,7 +265,7 @@ config.plugins.tvmanager.active = ConfigYesNo(default=False)
 config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
 # config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
-config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='100.200.300.400'))
+config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='127.0.0.1'))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=15000))
 config.plugins.tvmanager.user = NoSave(ConfigText(default='Enter Username', visible_width=50, fixed_size=False))
 config.plugins.tvmanager.passw = NoSave(ConfigPassword(default='******', fixed_size=False, censor='*'))
@@ -357,7 +358,7 @@ class tv_config(Screen, ConfigListScreen):
                 cmd = 'ps -A'
                 res = os.popen(cmd).read()
                 print('res: ', res)
-                if 'oscam' in res.lower() or 'icam' in res.lower():
+                if 'oscam' in res.lower() or 'icam' in res.lower() or 'ncam' in res.lower():
                     print('oscam exist')
                     msg = []
                     msg.append(_("\n....\n.....\n"))
@@ -371,23 +372,43 @@ class tv_config(Screen, ConfigListScreen):
                         with open('/tmp/emm.txt') as f:
                             f = f.read()
                             if f.startswith('82708'):
-                                msg.append(_("CURRENT EMM IS:"))
+                                msg.append(_("CURRENT EMM IS:\n"))
                                 msg.append(f)
-                                msg.append(_("emm saved to /tmp/emm.txt"))
+                                msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
                             else:
                                 msg.append('No Emm')
                         msg = (" %s " % _("\n")).join(msg)
                         self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
-
-                    # if os.path.exists('/tmp/command.sh'):
-                        # os.chmod('/tmp/command.sh', 493)
-                        # os.system('sh /tmp/command.sh')
-                        # print('okkkkkkkkkk')
                 else:
-                    self.session.open(MessageBox, _("Oscam is not active"), MessageBox.TYPE_INFO, timeout=10)
-                    return
+                    self.session.openWithCallback(self.callMyMsg, MessageBox, _('Oscam is not active.Send Emm, Are you sure?'), MessageBox.TYPE_YESNO)
             except Exception as e:
                 print('error on emm', str(e))
+
+    def callMyMsg(self, answer=None):
+        if answer:
+            msg = []
+            msg.append(_("\n....\n.....\n"))
+            self.cmd1 = data_path + 'emm_sender.sh'
+            from os import access, X_OK
+            if not access(self.cmd1, X_OK):
+                os.chmod(self.cmd1, 493)
+            os.system(self.cmd1)
+            if os.path.exists('/tmp/emm.txt'):
+                msg.append(_("READ EMM....\n"))
+                with open('/tmp/emm.txt') as f:
+                    f = f.read()
+                    if f.startswith('82708'):
+                        msg.append(_("CURRENT EMM IS:\n"))
+                        msg.append(f)
+                        msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
+                    else:
+                        msg.append('No Emm')
+                msg = (" %s " % _("\n")).join(msg)
+                self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+            else:
+                self.session.open(MessageBox, _("No Action"), MessageBox.TYPE_INFO, timeout=5)
+        else:
+            self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
 
     def closex(self):
         self.close()
@@ -411,7 +432,7 @@ class tv_config(Screen, ConfigListScreen):
             self['key_green'].hide()
             self['key_green'].setText('')
             # self['key_yellow'].hide()
-            self['key_yellow'].setText('Emm')
+            self['key_yellow'].setText('Emm Send')
             self['key_blue'].hide()
             self['key_blue'].setText('')
 
@@ -620,7 +641,6 @@ class tv_config(Screen, ConfigListScreen):
 
             elif 'cccameurop' in data.lower():
                 url1 = re.findall('C: (.+?) (.+?)</', data)
-
 
             elif 'infosat' in data.lower():
                 url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)

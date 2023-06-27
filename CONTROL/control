@@ -5,7 +5,7 @@ OE: 2.0
 License: *
 Priority: optional
 Architecture: all
-Depends: 
+Depends:
 Maintainer: @lululla
 Description: tivustream tvmanager
 Source: tivustream
