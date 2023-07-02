@@ -34,6 +34,7 @@ from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from enigma import eListboxPythonMultiContent
 from enigma import eTimer
 from enigma import gFont
+from enigma import getDesktop
 from os import mkdir, chmod
 from time import sleep
 from twisted.web.client import getPage
@@ -154,16 +155,29 @@ def paypal():
 
 # =============== SCREEN PATH SETTING
 skin_path = os.path.join(res_plugin_path, "skins/hd/")
-if Utils.isFHD():
-    skin_path = os.path.join(res_plugin_path, "skins/fhd/")
-if os.path.exists("/var/lib/dpkg/status"):
+# if Utils.isFHD():
+    # skin_path = os.path.join(res_plugin_path, "skins/fhd/")
+# if os.path.exists("/var/lib/dpkg/status"):
+    # skin_path = skin_path + 'dreamOs/'
+
+screenwidth = getDesktop(0).size()
+if screenwidth.width() == 1920:
+    skin_path = res_plugin_path + 'skins/fhd/'
+if screenwidth.width() == 2560:
+    skin_path = res_plugin_path + 'skins/uhd/'
+
+if Utils.DreamOS():
     skin_path = skin_path + 'dreamOs/'
 
 
 class m2list(MenuList):
     def __init__(self, list):
         MenuList.__init__(self, list, True, eListboxPythonMultiContent)
-        if Utils.isFHD():
+        if screenwidth.width() == 2560:
+            self.l.setItemHeight(60)
+            textfont = int(46)
+            self.l.setFont(0, gFont('Regular', textfont))
+        elif screenwidth.width() == 1920:
             self.l.setItemHeight(50)
             textfont = int(34)
             self.l.setFont(0, gFont('Regular', textfont))
@@ -171,6 +185,17 @@ class m2list(MenuList):
             self.l.setItemHeight(50)
             textfont = int(22)
             self.l.setFont(0, gFont('Regular', textfont))
+
+
+def show_list_1(h):
+    res = [h]
+    if screenwidth.width() == 2560:
+        res.append(MultiContentEntryText(pos=(2, 0), size=(2000, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+    elif screenwidth.width() == 1920:
+        res.append(MultiContentEntryText(pos=(2, 0), size=(900, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+    else:
+        res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+    return res
 
 
 def showlist(datal, list):
@@ -181,15 +206,6 @@ def showlist(datal, list):
         plist.append(show_list_1(name))
         icount = icount + 1
         list.setList(plist)
-
-
-def show_list_1(h):
-    res = [h]
-    if Utils.isFHD():
-        res.append(MultiContentEntryText(pos=(2, 0), size=(900, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-    else:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
-    return res
 
 
 sl2 = skin_path + sl + '.xml'
@@ -518,10 +534,10 @@ class tvManager(Screen):
             del self.softcamslist[0:i]
             png1 = LoadPixmap(cached=True,
                     path=resolveFilename(SCOPE_PLUGINS,
-                    "Extensions/tvManager/res/img/{}".format('actcam.png')))
+                        "Extensions/tvManager/res/img/{}".format('actcam.png')))
             png2 = LoadPixmap(cached=True,
                     path=resolveFilename(SCOPE_PLUGINS,
-                    "Extensions/tvManager/res/img/{}".format('defcam.png')))
+                        "Extensions/tvManager/res/img/{}".format('defcam.png')))
             if s >= 1:
                 for lines in scriptlist:
                     dat = pathscript + lines
@@ -783,7 +799,7 @@ class GetipkTv(Screen):
         self.names = []
         self.urls = []
         items = []
-        # regex = '<plugin name = "(.*?)".*?url>(.*?)</url'
+        # regex = '<plugin name="(.*?)".*?url>(.*?)</url'
         regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
         match = re.compile(regex, re.DOTALL).findall(data1)
         for name, url in match:
@@ -821,12 +837,12 @@ class GetipkTv(Screen):
             self.dom = str(dom)
             # print('self.com---------------', self.com)
             # print('self.dom---------------', self.dom)
-            ipkpth = '/var/volatile/tmp'
+            ipkpth = '/tmp'
             destipk = ipkpth + '/download.ipk'
             desttar = ipkpth + '/download.tar.gz'
             destdeb = ipkpth + '/download.deb'
             self.timer = eTimer()
-
+            
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
                     os.remove(destipk)
@@ -845,6 +861,11 @@ class GetipkTv(Screen):
                 if fileExists(destdeb):
                     os.remove(destdeb)
                 if isDreamOS:
+                    cmd22 = 'find /usr/bin -name "wget"'
+                    res = os.popen(cmd22).read()
+                    if 'wget' not in res.lower():
+                        cmd23 = 'apt-get update && apt-get install wget'
+                        os.popen(cmd23)
                     cmd = "wget -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
                     if "https" in str(self.com):
                         cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
@@ -859,7 +880,7 @@ class GetipkTv(Screen):
 
     def addondel(self):
         try:
-            files = glob.glob('/var/volatile/tmp/download.*', recursive=False)
+            files = glob.glob('/tmp/download.*', recursive=False)
             for f in files:
                 try:
                     os.remove(f)
@@ -974,7 +995,7 @@ class Ipkremove(Screen):
         else:
             print('returnValue', returnValue)
             ipkname = returnValue[0]
-            cmd = 'ipkg remove ' + ipkname[:-1] + ' >/var/volatile/tmp/ipk.log'
+            cmd = 'ipkg remove ' + ipkname[:-1] + ' >/tmp/ipk.log'
             os.system(cmd)
             cmd = 'touch /etc/tmpfile'
             os.system(cmd)

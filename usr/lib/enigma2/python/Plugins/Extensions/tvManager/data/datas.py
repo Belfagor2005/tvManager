@@ -24,6 +24,7 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from .. import _, sl, isDreamOS, paypal
 from random import choice
 from enigma import eTimer
+from enigma import getDesktop
 import os
 import re
 import ssl
@@ -86,15 +87,14 @@ else:
     ssl._create_default_https_context = _create_unverified_https_context
 
 
-def getDesktopSize():
-    from enigma import getDesktop
-    s = getDesktop(0).size()
-    return (s.width(), s.height())
+# def getDesktopSize():
+    # from enigma import getDesktop
+    # s = getDesktop(0).size()
+    # return (s.width(), s.height())
 
-
-def isFHD():
-    desktopSize = getDesktopSize()
-    return desktopSize[0] == 1920
+# def isFHD():
+    # desktopSize = getDesktopSize()
+    # return desktopSize[0] == 1920
 
 
 def checkStr(txt):
@@ -187,14 +187,19 @@ def getUrl(url):
 
 
 skin_path = os.path.join(plugin_path, 'res/skins/hd/')
-
-
-if isFHD():
-
-    skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
-
+res_plugin_path = os.path.join(plugin_path, "res/")
+screenwidth = getDesktop(0).size()
+if screenwidth.width() == 1920:
+    skin_path = res_plugin_path + 'skins/fhd/'
+if screenwidth.width() == 2560:
+    skin_path = res_plugin_path + 'skins/uhd/'
 if isDreamOS:
     skin_path = skin_path + 'dreamOs/'
+
+# if isFHD():
+    # skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
+# if isDreamOS:
+    # skin_path = skin_path + 'dreamOs/'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
