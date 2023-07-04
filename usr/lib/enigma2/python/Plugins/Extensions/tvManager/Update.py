@@ -1,6 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
+PY3 = sys.version_info.major >= 3
+print("Update.py")
+
+
+def upd_done():
+    from os import popen
+    cmd01 = "wget http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar ; tar -xvf /tmp/tvmanager.tar -C /"
+    cmd02 = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar'; tar -xvf /tmp/tvmanager.tar -C /"
+    cmd22 = 'find /usr/bin -name "wget"'
+    res = popen(cmd22).read()
+    if 'wget' not in res.lower():
+        cmd23 = 'apt-get update && apt-get install wget'
+        popen(cmd23)
+    try:
+        popen(cmd02)
+    except:
+        popen(cmd01)
+    return
+
+
+'''
 import os
 import sys
 from twisted.web.client import downloadPage
@@ -38,3 +60,4 @@ def upd_last(fplug):
         os.system(cmd)
         os.remove('/tmp/tvmanager.tar')
     return
+'''
