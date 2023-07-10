@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 # --------------------#
-#  coded by Lululla  #
-#   skin by MMark    #
-#     22/05/2023     #
-#      No Coppy      #
+#  coded by Lululla   #
+#   skin by MMark     #
+#     10/07/2023      #
+#      No Coppy       #
 # --------------------#
 from __future__ import print_function
 from Components.ActionMap import ActionMap
@@ -363,7 +363,7 @@ class tv_config(Screen, ConfigListScreen):
                 cmd = 'ps -A'
                 res = os.popen(cmd).read()
                 print('res: ', res)
-                if 'oscam' in res.lower() or 'icam' in res.lower() or 'ncam' in res.lower():
+                if 'oscam' in res.lower() or 'icam' in res.lower() or 'ncam' in res.lower() or 'gcam' in res.lower():
                     print('oscam exist')
                     msg = []
                     msg.append(_("\n....\n.....\n"))
@@ -381,11 +381,13 @@ class tv_config(Screen, ConfigListScreen):
                                 msg.append(f)
                                 msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
                             else:
-                                msg.append('No Emm')
+                                msg.append('No Emm Read!')
                         msg = (" %s " % _("\n")).join(msg)
                         self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+                    else:
+                        self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=10)
                 else:
-                    self.session.openWithCallback(self.callMyMsg, MessageBox, _('Oscam is not active.Send Emm, Are you sure?'), MessageBox.TYPE_YESNO)
+                    self.session.openWithCallback(self.callMyMsg, MessageBox, _('The Cam is not active, send the command anyway?'), MessageBox.TYPE_YESNO)
             except Exception as e:
                 print('error on emm', str(e))
 
@@ -411,9 +413,9 @@ class tv_config(Screen, ConfigListScreen):
                 msg = (" %s " % _("\n")).join(msg)
                 self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
             else:
-                self.session.open(MessageBox, _("No Action"), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
         else:
-            self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
+            self.session.open(MessageBox, _("Command Cancelled"), MessageBox.TYPE_INFO, timeout=5)
 
     def closex(self):
         self.close()
