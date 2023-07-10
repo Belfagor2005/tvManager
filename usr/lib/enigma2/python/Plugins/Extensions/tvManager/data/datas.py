@@ -367,11 +367,12 @@ class tv_config(Screen, ConfigListScreen):
                     print('oscam exist')
                     msg = []
                     msg.append(_("\n....\n.....\n"))
-                    self.cmd1 = data_path + 'emm_sender.sh'
+                    self.cmd1 = data_path + 'emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
                     from os import access, X_OK
                     if not access(self.cmd1, X_OK):
                         os.chmod(self.cmd1, 493)
                     os.system(self.cmd1)
+                    os.system('sleep 3')
                     if os.path.exists('/tmp/emm.txt'):
                         msg.append(_("READ EMM....\n"))
                         with open('/tmp/emm.txt') as f:
@@ -436,12 +437,13 @@ class tv_config(Screen, ConfigListScreen):
             self['key_blue'].setText(_('Reset'))
             self['key_blue'].show()
         else:
-            self['key_green'].hide()
-            self['key_green'].setText('')
+            # self['key_green'].hide()
+            self['key_green'].setText('Force Emm Send')
+            self['key_green'].show()
             # self['key_yellow'].hide()
-            self['key_yellow'].setText('Emm Send')
-            self['key_blue'].hide()
+            self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
+            self['key_blue'].hide()
 
     def green(self):
         if config.plugins.tvmanager.active.value is True:
@@ -455,6 +457,29 @@ class tv_config(Screen, ConfigListScreen):
                 self.Oscam()
             elif putlbl == '/etc/tuxbox/config/ncam.server':
                 self.Ncam()
+        else:
+            msg = []
+            msg.append(_("\n....\n.....\n"))
+            self.cmd1 = data_path + 'emm_sender.sh'
+            from os import access, X_OK
+            if not access(self.cmd1, X_OK):
+                os.chmod(self.cmd1, 493)
+            os.system(self.cmd1)
+            os.system('sleep 3')
+            if os.path.exists('/tmp/emm.txt'):
+                msg.append(_("READ EMM....\n"))
+                with open('/tmp/emm.txt') as f:
+                    f = f.read()
+                    if f.startswith('82708'):
+                        msg.append(_("CURRENT EMM IS:\n"))
+                        msg.append(f)
+                        msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
+                    else:
+                        msg.append('No Emm')
+                msg = (" %s " % _("\n")).join(msg)
+                self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+            else:
+                self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
 
     def layoutFinished(self):
         self.setTitle(self.setup_title)
