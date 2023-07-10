@@ -341,10 +341,10 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'cancel': self.closex,
                                                                   'back': self.closex}, -1)
         self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button(_(''))
-        self['key_yellow'] = Button(_('Emm'))
-        self["key_blue"] = Button(_('Default Config'))
-        self['key_green'].hide()
+        self['key_green'] = Button(_('Force Emm Send'))
+        self['key_yellow'] = Button(_('Check Emm Send'))
+        self["key_blue"] = Button(_(''))
+        # self['key_green'].hide()
         # self['key_yellow'].hide()
         self['key_blue'].hide()
         self['info'] = Label('')
@@ -457,6 +457,8 @@ class tv_config(Screen, ConfigListScreen):
                 self.Oscam()
             elif putlbl == '/etc/tuxbox/config/ncam.server':
                 self.Ncam()
+            else:
+                return
         else:
             msg = []
             msg.append(_("\n....\n.....\n"))
@@ -482,10 +484,10 @@ class tv_config(Screen, ConfigListScreen):
                 self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
 
     def layoutFinished(self):
+        self.showhide()
         self.setTitle(self.setup_title)
         payp = paypal()
         self["paypal"].setText(payp)
-        self.showhide()
 
     def createSetup(self):
         self.editListEntry = None
