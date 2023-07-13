@@ -367,7 +367,7 @@ class tv_config(Screen, ConfigListScreen):
                     print('oscam exist')
                     msg = []
                     msg.append(_("\n....\n.....\n"))
-                    self.cmd1 = data_path + 'emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
+                    self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
                     from os import access, X_OK
                     if not access(self.cmd1, X_OK):
                         os.chmod(self.cmd1, 493)
@@ -396,7 +396,7 @@ class tv_config(Screen, ConfigListScreen):
         if answer:
             msg = []
             msg.append(_("\n....\n.....\n"))
-            self.cmd1 = data_path + 'emm_sender.sh'
+            self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)

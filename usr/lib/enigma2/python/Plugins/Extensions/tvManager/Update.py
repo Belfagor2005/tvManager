@@ -7,7 +7,7 @@ print("Update.py")
 
 
 def upd_done():
-    from os import popen, remove
+    from os import popen, system
     import os
     cmd01 = "wget http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar ; tar -xvf /tmp/tvmanager.tar -C /"
     cmd02 = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar'; tar -xvf /tmp/tvmanager.tar -C /"
@@ -20,7 +20,7 @@ def upd_done():
         popen(cmd02)
     except:
         popen(cmd01)
-    remove('/tmp/tvmanager.tar')
+    system('rm -rf /tmp/tvmanager.tar')
     return
 
 
