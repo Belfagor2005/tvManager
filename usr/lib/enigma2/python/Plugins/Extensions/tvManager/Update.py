@@ -8,13 +8,12 @@ print("Update.py")
 
 def upd_done():
     from os import popen, system
-    import os
     cmd01 = "wget http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar ; tar -xvf /tmp/tvmanager.tar -C /"
     cmd02 = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar'; tar -xvf /tmp/tvmanager.tar -C /"
     cmd22 = 'find /usr/bin -name "wget"'
     res = popen(cmd22).read()
     if 'wget' not in res.lower():
-        if os.path.exists('/etc/opkg')
+        if os.path.exists('/etc/opkg'):
             cmd23 = 'opkg update && opkg install wget'
         else:
             cmd23 = 'apt-get update && apt-get install wget'
