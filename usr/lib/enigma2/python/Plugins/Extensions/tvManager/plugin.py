@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     27/06/2023     #
+#     22/07/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl, isDreamOS
@@ -62,7 +62,7 @@ else:
     from urlparse import urlparse
 
 
-currversion = '2.0'
+currversion = '2.1'
 name_plug = 'Softcam_Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
@@ -100,13 +100,9 @@ def checkdir():
     keys = '/usr/keys'
     camscript = '/usr/camscript'
     if not os.path.exists(keys):
-        # __createdir('/usr/keys')
         mkdir('/usr/keys')
     if not os.path.exists(camscript):
-        # __createdir('/usr/camscript')
         mkdir('/usr/camscript')
-
-
 checkdir()
 
 
@@ -155,19 +151,16 @@ def paypal():
 
 # =============== SCREEN PATH SETTING
 skin_path = os.path.join(res_plugin_path, "skins/hd/")
-# if Utils.isFHD():
-    # skin_path = os.path.join(res_plugin_path, "skins/fhd/")
-# if os.path.exists("/var/lib/dpkg/status"):
-    # skin_path = skin_path + 'dreamOs/'
-
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 1920:
     skin_path = res_plugin_path + 'skins/fhd/'
 if screenwidth.width() == 2560:
     skin_path = res_plugin_path + 'skins/uhd/'
-
 if Utils.DreamOS():
     skin_path = skin_path + 'dreamOs/'
+sl2 = skin_path + sl + '.xml'
+if os.path.exists(sl2):
+    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
 
 class m2list(MenuList):
@@ -206,11 +199,6 @@ def showlist(datal, list):
         plist.append(show_list_1(name))
         icount = icount + 1
         list.setList(plist)
-
-
-sl2 = skin_path + sl + '.xml'
-if os.path.exists(sl2):
-    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
 
 class tvManager(Screen):
@@ -842,7 +830,7 @@ class GetipkTv(Screen):
             desttar = ipkpth + '/download.tar.gz'
             destdeb = ipkpth + '/download.deb'
             self.timer = eTimer()
-            
+
             if self.com.find('.ipk') != -1:
                 if fileExists(destipk):
                     os.remove(destipk)

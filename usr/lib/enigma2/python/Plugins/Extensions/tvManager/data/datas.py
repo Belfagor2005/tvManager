@@ -245,7 +245,7 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server07'),
     ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server08'),
     ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server09'),
-    # ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server10'),
+    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server10'),
     # ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
     # ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server12'),
     # ('aHR0cDovL2luZm9zYXQuc2F0dW5pdmVycy50di9jZ24vaW5kZXgxLnBocA==', 'Server13'),
@@ -690,7 +690,7 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'history' in data.lower():
-                url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title="CCcam server online and valid"></span>', data)
+                url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
 
             elif 'store' in data.lower():
                 url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)

@@ -10,7 +10,6 @@
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/qr-code.png" position="1444,240" size="320,320" zPosition="2" alphatest="on" />	
 	<widget name="paypal" position="1365,569" size="526,197" font="Regular;24" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2" />
 	<eLabel position="1360,141" size="540,639" backgroundColor="#80000000" zPosition="1" />	
-<!-- 	<eLabel position="1270,141" size="540,639" backgroundColor="#80000000" cornerRadius="20" zPosition="1" /> -->    
 	<!-- Menu List -->
 	<widget name="list" position="220,215" font="Regular;30" size="1030,667" halign="center" foregroundColor="#ffffff" backgroundColor="#20000000" transparent="1" zPosition="5" />
 	<!-- Colors 1220 -->
