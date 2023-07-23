@@ -372,7 +372,11 @@ class tv_config(Screen, ConfigListScreen):
                     if not access(self.cmd1, X_OK):
                         os.chmod(self.cmd1, 493)
                     os.system(self.cmd1)
-                    os.system('sleep 3')
+                    os.system('sleep 5')
+                    if not os.path.exists('/tmp/emm.txt'):
+                        import wget
+                        url = 'https://pastebin.com/raw/ZNKDRVWT'
+                        wget.download(url, '/tmp/emm.txt')
                     if os.path.exists('/tmp/emm.txt'):
                         msg.append(_("READ EMM....\n"))
                         with open('/tmp/emm.txt') as f:
@@ -401,6 +405,15 @@ class tv_config(Screen, ConfigListScreen):
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
             os.system(self.cmd1)
+            os.system('sleep 5')
+            if not os.path.exists('/tmp/emm.txt'):
+                import wget
+                url = 'https://pastebin.com/raw/ZNKDRVWT'
+                wget.download(url, '/tmp/emm.txt')
+                # try:
+                    # os.system("wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/ZNKDRVWT' -O '/tmp/emm.txt'")
+                # except:
+                    # os.system("wget 'https://pastebin.com/raw/ZNKDRVWT' -O '/tmp/emm.txt'")
             if os.path.exists('/tmp/emm.txt'):
                 msg.append(_("READ EMM....\n"))
                 with open('/tmp/emm.txt') as f:

@@ -19,8 +19,9 @@ emm_file=$(echo $atr_string | base64 -d)
 # if wget --spider ${emm_file} 2>/dev/null; then  # check the existence of an online file
 emmm=$(curl -s $emm_file)
 local_emm_file='/tmp/emm.txt'
-echo -e "$emmm" >$local_emm_file
-if [ "$atr_183e" == "$atr" ]; then
+# echo -e "$emmm" >$local_emm_file
+echo -e "$emmm" > '/tmp/emm.txt'
+if ["$atr_183e" == "$atr"]; then
     echo "Send new emms to $label card"
     curl -s -k --user $oscam_user:$oscam_passwd --anyauth "http://127.0.0.1:$oscam_port/emm_running.html?label=$reader&emmcaid=183E&ep=$emmm&action=Launch" >/dev/null
     fi
