@@ -29,6 +29,8 @@ import os
 import re
 import ssl
 import sys
+import subprocess
+
 global skin_path
 
 
@@ -236,26 +238,18 @@ def cccamPath():
 
 
 Serverlive = [
-    ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
-    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
-    ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server03'),
-    ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server04'),
-    ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server05'),
-    ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server06'),
-    ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server07'),
-    ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server08'),
-    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server09'),
-    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server10'),
-    # ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvbS9mcmVlLWNjY2FtLw==', 'Server11'),
-    # ('aHR0cHM6Ly9jY2NhbWVhZ2xlLmNvbS9mY2NhbS8=', 'Server12'),
-    # ('aHR0cDovL2luZm9zYXQuc2F0dW5pdmVycy50di9jZ24vaW5kZXgxLnBocA==', 'Server13'),
-    # ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZQ==', 'Server14'),
-    # ('aHR0cDovL2luZm9zYXQuc2F0dW5pdmVycy50di9jZ24vc2VydmVyMi9pbmRleC5waHA=', 'Server15'),
-    # ('aHR0cHM6Ly9jY2NhbWh1Yi5jb20vY2NjYW1mcmVl', 'Server16'),
-    # ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0=', 'Server17'),
-    # ('aHR0cHM6Ly93d3cuY2NjYW1wcmkubWUvY2NjYW00OGgucGhw', 'Server18'),
-    # ('aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=', 'Server19'),
-    ]
+              ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
+              ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
+              ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server03'),
+              ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server04'),
+              ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server05'),
+              ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server06'),
+              ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server07'),
+              ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server08'),
+              ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server09'),
+              ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server10'),
+              ('aHR0cDovL2NjY2FtLm5ldC9mcmVl', 'Server11'),
+              ('aHR0cDovL2NjY2FtLXByZW1pdW0uY28vZnJlZS1jY2NhbS8=', 'Server12')]
 
 # cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
@@ -409,7 +403,8 @@ class tv_config(Screen, ConfigListScreen):
             if not os.path.exists('/tmp/emm.txt'):
                 import wget
                 url = 'https://pastebin.com/raw/ZNKDRVWT'
-                wget.download(url, '/tmp/emm.txt')
+                # wget.download(url, '/tmp/emm.txt')
+                subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
                 # try:
                     # os.system("wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/ZNKDRVWT' -O '/tmp/emm.txt'")
                 # except:
@@ -640,7 +635,7 @@ class tv_config(Screen, ConfigListScreen):
                     self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
                 else:
                     self.timer.callback.append(self.load_getcl(data))
-                self.timer.start(300, 1)
+                self.timer.start(600, 1)
                 # self.load_getcl(data)
             except Exception as e:
                 print('getcl error: ', str(e))
@@ -650,7 +645,7 @@ class tv_config(Screen, ConfigListScreen):
     def load_getcl(self, data):
         global host, port, user, passw
         try:
-            data = checkStr(data)
+            # data = checkStr(data)
             url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
             if 'bosscccam' in data.lower():
                 url1 = re.findall('ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
@@ -674,8 +669,8 @@ class tv_config(Screen, ConfigListScreen):
             elif 'cccamfree.co' in data.lower():
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
-            elif 'cccam-premium.co' in data.lower():
-                url1 = re.findall('<h3 style=.*?C: (.+?) (.+?) (.+?) (*?).*?</h3>', data)
+            elif 'cccam-premium' in data.lower():
+                url1 = re.findall('C: (.+?) (.+?) (.+?) (*?)\n.*?</h3>', data)
 
             elif 'iptvcccam' in data.lower():
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
@@ -715,7 +710,7 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall('class="credentials.*?C: (.+?) (.+?) (.+?) (.+?)</b>', data)
 
             elif 'cccam.net' in data.lower():
-                url1 = re.findall('b>C: (.+?) (.+?) (.+?) (.+?)<b>', data)
+                url1 = re.findall('b>C: (.*?) (.*?) (.*?) (.*?)</b>', data)
 
             elif 'rogcam' in data.lower():
                 url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
