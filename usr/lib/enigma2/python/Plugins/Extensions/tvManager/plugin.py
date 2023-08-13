@@ -8,7 +8,7 @@
 #     22/07/2023     #
 # --------------------#
 from __future__ import print_function
-from . import _, sl, isDreamOS
+from . import _, sl, isDreamOS, paypal
 from . import Utils
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -85,17 +85,6 @@ CCCAMINFO = 1
 OSCAMINFO = 2
 
 
-def __createdir(list):
-    dir = ''
-    for line in list[1:].split('/'):
-        dir += '/' + line
-        if not os.path.exists(dir):
-            try:
-                mkdir(dir)
-            except:
-                print('Mkdir Failed', dir)
-
-
 def checkdir():
     keys = '/usr/keys'
     camscript = '/usr/camscript'
@@ -106,47 +95,51 @@ def checkdir():
 checkdir()
 
 
-def isRunning(pname):
-    pname = '\t' + pname
-    for f in os.listdir('/proc'):
-        try:
-            cmdline = open(os.path.join('/', 'proc', f, 'status'), 'r')
-            txt = cmdline.read()
-            cmdline.close()
-            if pname in txt:
-                return True
-        except IOError:
-            pass
-    return False
+# def __createdir(list):
+    # dir = ''
+    # for line in list[1:].split('/'):
+        # dir += '/' + line
+        # if not os.path.exists(dir):
+            # try:
+                # mkdir(dir)
+            # except:
+                # print('Mkdir Failed', dir)
 
 
-def make_request(url):
-    try:
-        import requests
-        link = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text
-        return link
-    except ImportError:
-        req = Request(url)
-        req.add_header('User-Agent', 'TVS')
-        response = urlopen(req, None, 7)
-        link = response.read().decode('utf-8')
-        response.close()
-        return link
-    except:
-        e = URLError
-        if hasattr(e, 'code'):
-            print('We failed with error code - %s.' % e.code)
-        if hasattr(e, 'reason'):
-            print('Reason: ', e.reason)
-        return
-    return
+# def isRunning(pname):
+    # pname = '\t' + pname
+    # for f in os.listdir('/proc'):
+        # try:
+            # cmdline = open(os.path.join('/', 'proc', f, 'status'), 'r')
+            # txt = cmdline.read()
+            # cmdline.close()
+            # if pname in txt:
+                # return True
+        # except IOError:
+            # pass
+    # return False
 
 
-def paypal():
-    conthelp = "If you like what I do you\n"
-    conthelp += "can contribute with a coffee\n"
-    conthelp += "scan the qr code and donate € 1.00"
-    return conthelp
+# def make_request(url):
+    # try:
+        # import requests
+        # link = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text
+        # return link
+    # except ImportError:
+        # req = Request(url)
+        # req.add_header('User-Agent', 'TVS')
+        # response = urlopen(req, None, 7)
+        # link = response.read().decode('utf-8')
+        # response.close()
+        # return link
+    # except:
+        # e = URLError
+        # if hasattr(e, 'code'):
+            # print('We failed with error code - %s.' % e.code)
+        # if hasattr(e, 'reason'):
+            # print('Reason: ', e.reason)
+        # return
+    # return
 
 
 # =============== SCREEN PATH SETTING
