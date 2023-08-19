@@ -10,6 +10,8 @@ oscam_httpport=$(grep -ir "httpport" $oscam_config_dir"oscam.conf" | awk -F "=" 
 oscam_port=$(echo $oscam_httpport | sed -e 's|+||g')
 # protocol=$(if echo $oscam_httpport | grep + >/dev/null; then echo "https"; else echo "http"; fi)
 curl -s --user "${oscam_user}":"${oscam_passwd}" --anyauth -k http://127.0.0.1:$oscam_port/status.html | grep "Restart Reader" | sed -e 's|<TD CLASS="statuscol1"><A HREF="status.html?action=restart&amp;label=||g' | sed 's/^[ \t]*//' | awk -F "\"" '{ print ($1) }' >/tmp/active_readers.tmp
+
+
 while IFS= read -r label; do
 curl -s --user "${oscam_user}":"${oscam_passwd}" --anyauth -k http://127.0.0.1:$oscam_port/entitlements.html?label=$label >/tmp/"$label"_entitlements.html
 atr=$(cat /tmp/"$label"_entitlements.html | grep "\<TD COLSPAN=\"4\">" | awk -F "[<>]" '{ print ($7) }' | sed 's/.$//g')
@@ -21,10 +23,13 @@ emmm=$(curl -s $emm_file)
 local_emm_file='/tmp/emm.txt'
 # echo -e "$emmm" >$local_emm_file
 echo -e "$emmm" > '/tmp/emm.txt'
+
+
 if ["$atr_183e" == "$atr"]; then
     echo "Send new emms to $label card"
     curl -s -k --user $oscam_user:$oscam_passwd --anyauth "http://127.0.0.1:$oscam_port/emm_running.html?label=$reader&emmcaid=183E&ep=$emmm&action=Launch" >/dev/null
-    fi
+fi
 done < /tmp/active_readers.tmp
+
 rm -rf /tmp/*.tmp /tmp/*.html
 exit 0

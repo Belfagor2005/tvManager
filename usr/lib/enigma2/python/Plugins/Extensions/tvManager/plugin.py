@@ -63,7 +63,7 @@ else:
 
 
 currversion = '2.1'
-name_plug = 'Softcam_Manager'
+name_plug = 'Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = os.path.join(plugin_path, "res/")
