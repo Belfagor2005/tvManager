@@ -1055,7 +1055,7 @@ class AutoStartTimertvman:
             Update.upd_done()
             _firstStarttvsman = False
         except Exception as e:
-            print('error tvmanager', str(e))
+            print('error Softcam Manager', str(e))
 
 
 def autostart(reason, session=None, **kwargs):
@@ -1091,7 +1091,7 @@ def menu(menuid, **kwargs):
     if menuid == 'cam':
         return [(_(name_plug),
                  boundFunction(main, showExtentionMenuOption=True),
-                 'SoftcamManager',
+                 'Softcam Manager',
                  -1)]
     else:
         return []
@@ -1110,7 +1110,7 @@ def StartSetup(menuid):
     if menuid == 'mainmenu':
         return [(name_plug,
                  main,
-                 'SoftcamManager',
+                 'Softcam Manager',
                  44)]
     else:
         return []

@@ -16,8 +16,8 @@
 	<!-- Colors 1220 -->
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="300,1265" size="30,30" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="298,1345" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="1145,1265" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_blue.png" position="1145,1345" size="30,30" alphatest="blend" zPosition="5" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="1620,1265" size="30,30" alphatest="blend" zPosition="5" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_blue.png" position="1620,1345" size="30,30" alphatest="blend" zPosition="5" />
 	<widget name="key_red" position="360,1252" size="400,52" font="Regular;40" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
 	<widget name="key_green" position="360,1332" size="400,52" font="Regular;40" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
 	<widget name="key_yellow" position="1206,1252" size="400,52" font="Regular;40" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
