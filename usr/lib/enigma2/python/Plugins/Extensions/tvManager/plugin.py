@@ -16,7 +16,6 @@ from Components.Button import Button
 from Components.FileList import FileList
 from Components.Label import Label
 from Components.MenuList import MenuList
-from Components.MultiContent import MultiContentEntryPixmapAlphaTest
 from Components.MultiContent import MultiContentEntryText
 from Components.Pixmap import Pixmap
 from Components.Sources.List import List
@@ -45,7 +44,7 @@ import six
 import sys
 import time
 
-global active, skin_path, local
+global active, skin_path, local, FTP_XML
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -72,6 +71,8 @@ iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+if os.path.exists('/var/lib/dpkg/info'):
+    FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 _firstStarttvsman = True
 local = True
@@ -92,6 +93,8 @@ def checkdir():
         mkdir('/usr/keys')
     if not os.path.exists(camscript):
         mkdir('/usr/camscript')
+
+
 checkdir()
 
 
@@ -149,7 +152,7 @@ if screenwidth.width() == 1920:
     skin_path = res_plugin_path + 'skins/fhd/'
 if screenwidth.width() == 2560:
     skin_path = res_plugin_path + 'skins/uhd/'
-if Utils.DreamOS():
+if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + 'dreamOs/'
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
@@ -227,6 +230,18 @@ class tvManager(Screen):
                                                       'green': self.action,
                                                       'info': self.CfgInfo,
                                                       'red': self.stop}, -1)
+        try:
+            from Plugins.GP4.geminioscaminfo.goscaminfo import OScamList
+            self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
+                                                   {'showEventInfo': self.callOscamStatus}, -1)
+        except:
+            pass
+        try:
+            from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+            self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
+                                                   {'showEventInfo': self.callOscamStatus}, -1)
+        except:
+            pass
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start'))
@@ -238,6 +253,7 @@ class tvManager(Screen):
         self['info'] = Label('')
         # self['list'] = m2list([])
         self["list"] = List([])
+        self.currCam = None
         self.currCam = self.readCurrent()
         self.readScripts()
         self.BlueAction = SOFTCAM
@@ -259,7 +275,7 @@ class tvManager(Screen):
 
     def setBlueKey(self):
         '''
-        # if self.currCam is not None or self.currCam != 'no'::
+        # if self.currCam is not None or self.currCam != 'None'::
             # print('self.currCam: ', self.currCam)
             # if 'ccam' in self.currCam.lower():
                 # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
@@ -296,7 +312,7 @@ class tvManager(Screen):
         self.messagekd()
     '''
     # def cccam(self):
-        # if 'ccam' in self.currCam.lower() and self.currCam != 'no':
+        # if 'ccam' in self.currCam.lower() and self.currCam != None:
             # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                 # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
                 # self.session.openWithCallback(self.close, CCcamInfoMain)
@@ -361,11 +377,52 @@ class tvManager(Screen):
         self.session.open(tv_config)
 
     def cgdesc(self):
-        # if len(self.namelist) >= 0:
-        if self.currCam is not None or self.currCam != 'no':
+        # try:
+        if len(self.namelist) >= 1:
+            print('self.currCam= ', self.currCam)
             self['description'].setText(_('Select a cam to run ...'))
         else:
             self['description'].setText(_('Install Cam first!!!'))
+            self.updateList()
+
+    def getcont(self):
+        cont = "Your Config' :\n"
+        arc = ''
+        arkFull = ''
+        libsssl = ''
+        arcx = os.popen('uname -m').read().strip('\n\r')
+        libs = os.popen('ls -l /usr/lib/libss*.*').read().strip('\n\r')
+        if arcx:
+            arc = arcx
+            print('arc= ', arc)
+        if self.arckget():
+            print('arkget= ', arkFull)
+            arkFull = self.arckget()
+        # img = os.popen('cat /etc/issue').read().strip('\n\r')
+        # ifg = os.popen('wget -qO - ifconfig.me').read().strip('\n\r')
+        # img = img.replace('\l', '')
+        if libs:
+            libsssl = libs
+        cont += ' ------------------------------------------ \n'
+        cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s' % (arc, arkFull, libsssl)
+        cont += ' ------------------------------------------ \n'
+        cont += ' Button Info for Other Info\n'
+        return cont
+
+    def arckget(self):
+        zarcffll = 'by Lululla'
+        try:
+            if os.path.exists('/var/lib/dpkg/info'):
+                zarcffll = os.popen('dpkg --print-architecture | grep -iE "arm|aarch64|mips|cortex|sh4|sh_4"').read().strip('\n\r')
+            else:
+                zarcffll = os.popen('opkg print-architecture | grep -iE "arm|aarch64|mips|cortex|h4|sh_4"').read().strip('\n\r')
+            return str(zarcffll)
+        except Exception as e:
+            print("Error ", e)
+
+    def updateList(self):
+        poPup = self.getcont()
+        _session.open(MessageBox, poPup, MessageBox.TYPE_INFO, timeout=10)
 
     def openTest(self):
         pass
@@ -376,8 +433,6 @@ class tvManager(Screen):
 
     def getLastIndex(self):
         a = 0
-        print('len(self.namelist)= ', len(self.namelist))
-        print('self.namelist= ', self.namelist)
         if len(self.namelist) >= 0:
             for x in self.namelist[0]:
                 if x == self.currCam:
@@ -390,7 +445,6 @@ class tvManager(Screen):
 
     def action(self):
         i = len(self.softcamslist)
-        print('iiiii= ', i)
         if i < 1:
             return
         self.session.nav.stopService()
@@ -405,15 +459,15 @@ class tvManager(Screen):
             # print('self var=== ', self.var)
             '''
             if self.last is not None:  # or self.last >= 1:
-            # if self.index >= 1:
+                # if self.index >= 1:
                 if self.last == self.var:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
-                    mbox = _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
                     os.system(self.cmd1)
                     sleep(1)
                 else:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                    mbox = _session.open(MessageBox, _('Please wait..\nSTOP & RESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    _session.open(MessageBox, _('Please wait..\nSTOP & RESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
                     os.system(self.cmd1)
                     sleep(1)
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
@@ -421,7 +475,7 @@ class tvManager(Screen):
             else:
                 try:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_up &'
-                    mbox = _session.open(MessageBox, _('Please wait..\nSTART UP CAM'), MessageBox.TYPE_INFO, timeout=5)
+                    _session.open(MessageBox, _('Please wait..\nSTART UP CAM'), MessageBox.TYPE_INFO, timeout=5)
                     os.system(self.cmd1)
                     sleep(1)
                 except:
@@ -444,12 +498,21 @@ class tvManager(Screen):
             self.readScripts()
 
     def writeFile(self):
-        if self.currCam is not None or self.currCam != 'no':
+        if self.currCam != 'None' or self.currCam is not None:
+            print('self.currCam= 2 ', self.currCam)
             # clist = open('/etc/clist.list', 'w', encoding='utf-8')
             clist = open('/etc/clist.list', 'w')
+            if sys.version_info[0] == 3:
+                clist = open('/etc/clist.list', 'r', encoding='UTF-8')
+            else:
+                clist = open('/etc/clist.list', 'r')
             clist.write(self.currCam)
             clist.close()
-        stcam = open('/etc/startcam.sh', 'w')
+        if sys.version_info[0] == 3:
+            stcam = open('/etc/startcam.sh', 'w', encoding='UTF-8')
+        else:
+            stcam = open('/etc/startcam.sh', 'w')
+        # stcam = open('/etc/startcam.sh', 'w')
         # stcam = open('/etc/startcam.sh', 'w', encoding='utf-8')
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
@@ -458,11 +521,11 @@ class tvManager(Screen):
 
     def stop(self):
         i = len(self.softcamslist)
-        print('iiiii= ', i)
         if i < 1:
             return
 
-        if self.currCam is not None or self.currCam != 'no':
+        if self.currCam != 'None' or self.currCam is not None:
+            print('self.currCam= 3 ', self.currCam)
 
             self.EcmInfoPollTimer.stop()
             # last = self.getLastIndex()
@@ -486,12 +549,12 @@ class tvManager(Screen):
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
                 os.system(self.cmd1)
 
-                self.currCam = 'no'
+                self.currCam = None
                 self.writeFile()
                 sleep(1)
                 if os.path.exists(ECM_INFO):
                     os.remove(ECM_INFO)
-                mbox = _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
+                _session.open(MessageBox, _('Please wait..\nSTOP CAM'), MessageBox.TYPE_INFO, timeout=5)
                 self['info'].setText('CAM STOPPED')
                 try:
                     self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
@@ -514,20 +577,25 @@ class tvManager(Screen):
             i = len(self.softcamslist)
             del self.softcamslist[0:i]
             png1 = LoadPixmap(cached=True,
-                    path=resolveFilename(SCOPE_PLUGINS,
-                        "Extensions/tvManager/res/img/{}".format('actcam.png')))
+                              path=resolveFilename(SCOPE_PLUGINS,
+                                                   "Extensions/tvManager/res/img/{}".format('actcam.png')))
             png2 = LoadPixmap(cached=True,
-                    path=resolveFilename(SCOPE_PLUGINS,
-                        "Extensions/tvManager/res/img/{}".format('defcam.png')))
+                              path=resolveFilename(SCOPE_PLUGINS,
+                                                   "Extensions/tvManager/res/img/{}".format('defcam.png')))
             if s >= 1:
                 for lines in scriptlist:
                     dat = pathscript + lines
-                    sfile = open(dat, 'r')
+                    # sfile = open(dat, 'r')
+                    if sys.version_info[0] == 3:
+                        sfile = open(dat, 'r', encoding='UTF-8')
+                    else:
+                        sfile = open(dat, 'r')
                     for line in sfile:
                         if line[0:3] == 'OSD':
                             nam = line[5:len(line) - 2]
                             print('We are in tvManager and cam is type  = ', nam)
-                            if self.currCam is not None:
+                            if self.currCam != 'None' or self.currCam is not None:
+                                print('self.currCam= 4 ', self.currCam)
                                 if nam == self.currCam:
                                     # print('nam == self.currCam: ', nam)
                                     self.softcamslist.append((nam,  png1, '(Active)'))
@@ -542,7 +610,6 @@ class tvManager(Screen):
                                 self.softcamslist.append((nam, png2, ''))
                                 pliste.append((nam, ''))
                             self.index += 1
-
                     sfile.close()
                     self.softcamslist.sort(key=lambda i: i[2], reverse=True)
                     pliste.sort(key=lambda i: i[1], reverse=True)
@@ -555,29 +622,34 @@ class tvManager(Screen):
             print('error scriptlist: ', e)
 
     def readCurrent(self):
-        currCam = ''
-        FilCurr = ''
+        currCam = None
+        self.FilCurr = ''
         if fileExists('/etc/CurrentBhCamName'):
-            FilCurr = '/etc/CurrentBhCamName'
+            self.FilCurr = '/etc/CurrentBhCamName'
         else:
-            FilCurr = '/etc/clist.list'
+            self.FilCurr = '/etc/clist.list'
         try:
-            clist = open(FilCurr, 'r')
-            # clist = open(FilCurr, 'r', encoding='utf-8')
+            # clist = open(self.FilCurr, 'r')
+            if sys.version_info[0] == 3:
+                clist = open(self.FilCurr, 'r', encoding='UTF-8')
+            else:
+                clist = open(self.FilCurr, 'r')
         except:
             return
-
         if clist is not None:
             for line in clist:
                 currCam = line
             clist.close()
         return currCam
 
-    '''
     def autocam(self):
         current = None
         try:
-            clist = open('/etc/clist.list', 'r', encoding='utf-8')
+            if sys.version_info[0] == 3:
+                clist = open(self.FilCurr, 'r', encoding='UTF-8')
+            else:
+                clist = open(self.FilCurr, 'r')
+            # clist = open('/etc/clist.list', 'r', encoding='utf-8')
             print('found list')
         except:
             return
@@ -588,24 +660,42 @@ class tvManager(Screen):
             clist.close()
         print('current =', current)
         if os.path.isfile('/etc/autocam.txt') is False:
-            alist = open('/etc/autocam.txt', 'w', encoding='utf-8')
+            if sys.version_info[0] == 3:
+                alist = open('/etc/autocam.txt', 'w', encoding='UTF-8')
+            else:
+                alist = open('/etc/autocam.txt', 'w')
+            # alist = open('/etc/autocam.txt', 'w', encoding='utf-8')
             alist.close()
         self.autoclean()
-        alist = open('/etc/autocam.txt', 'a', encoding='utf-8')
+
+        if sys.version_info[0] == 3:
+            alist = open('/etc/autocam.txt', 'a', encoding='UTF-8')
+        else:
+            alist = open('/etc/autocam.txt', 'a')
+        # alist = open('/etc/autocam.txt', 'a', encoding='utf-8')
         alist.write(self.oldService.toString() + '\n')
         self.last = self.getLastIndex()
         alist.write(current + '\n')
         alist.close()
         # self.session.openWithCallback(self.callback, MessageBox, _('Autocam assigned to the current channel'), type=1, timeout=10)
-        mbox = _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
+        _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
         return
 
     def autoclean(self):
         delemu = 'no'
         if os.path.isfile('/etc/autocam.txt') is False:
             return
-        myfile = open('/etc/autocam.txt', 'r')
-        myfile2 = open('/etc/autocam2.txt', 'w', encoding='utf-8')
+        if sys.version_info[0] == 3:
+            myfile = open('/etc/autocam.txt', 'r', encoding='UTF-8')
+        else:
+            myfile = open('/etc/autocam.txt', 'r')
+
+        if sys.version_info[0] == 3:
+            myfile2 = open('/etc/autocam2.txt', 'a', encoding='UTF-8')
+        else:
+            myfile2 = open('/etc/autocam2.txt', 'a')
+        # myfile = open('/etc/autocam.txt', 'r')
+        # myfile2 = open('/etc/autocam2.txt', 'w', encoding='utf-8')
         icount = 0
         for line in myfile.readlines():
             print('We are in tvManager line, self.oldService.toString() =', line, self.oldService.toString())
@@ -623,7 +713,6 @@ class tvManager(Screen):
         myfile2.close()
         os.system('rm /etc/autocam.txt')
         os.system('cp /etc/autocam2.txt /etc/autocam.txt')
-        '''
 
     def cancel(self):
         self.close()
@@ -703,7 +792,7 @@ class GetipklistTv(Screen):
             self.xml = Utils.checkGZIP(self.xml)
         # if PY3:
             # url = six.ensure_str(self.xml)
-        print('data: ', self.xml)
+        # print('data: ', self.xml)
         try:
             # regexC = '<plugins cont = "(.*?)"'
             regexC = '<plugins cont="(.*?)"'
@@ -904,27 +993,63 @@ class InfoCfg(Screen):
         self.onShown.append(self.updateList)
 
     def getcont(self):
-        cont = "Config Softcam Manager' :\n"
-        cont += "cccam_221\n"
-        cont += "/etc/cccam.cfg\n"
-        cont += "cccam_230\n"
-        cont += "/usr/cfmngr/cccam/cccam.cfg\n"
-        cont += "doscam_0.30\n"
-        cont += "/usr/cfmngr/doscam/doscam.cfg\n"
-        cont += "oscam/powervu/svn_yy.xx\n"
-        cont += "/usr/cfmngr/oscam/oscam.server\n"
-        cont += "oscamymod_yy.xx\n"
-        cont += "/usr/cfmngr/oscamymod/oscam.server\n"
-        cont += "wicardd_19\n"
-        cont += "/usr/cfmngr/wicardd/wicardd.conf\n"
-        cont += "mgcamd_1.38d\n"
-        cont += "/usr/keys/cccamd.list \n"
+        cont = "Your Config' :\n"
+        cont += "Config Softcam Manager(Oscam)' :\n"
+        cont += "Default folder:\n"
+        cont += "etc/tuxbox/config\n"
+        cont += ' ------------------------------------------ \n'
+        cont += ' ---- Type Oscam For Your Box--- \n'
+        # cont += "cccam_221\n"
+        # cont += "/etc/cccam.cfg\n"
+        # cont += "cccam_230\n"
+        # cont += "/usr/cfmngr/cccam/cccam.cfg\n"
+        # cont += "doscam_0.30\n"
+        # cont += "/usr/cfmngr/doscam/doscam.cfg\n"
+        # cont += "oscam/powervu/svn_yy.xx\n"
+        # cont += "/usr/cfmngr/oscam/oscam.server\n"
+        # cont += "oscamymod_yy.xx\n"
+        # cont += "/usr/cfmngr/oscamymod/oscam.server\n"
+        # cont += "wicardd_19\n"
+        # cont += "/usr/cfmngr/wicardd/wicardd.conf\n"
+        # cont += "mgcamd_1.38d\n"
+        # cont += "/usr/keys/cccamd.list \n"
+        # return cont
+        arc = ''
+        arkFull = ''
+        libsssl = ''
+        arcx = os.popen('uname -m').read().strip('\n\r')
+        libs = os.popen('ls -l /usr/lib/libss*.*').read().strip('\n\r')
+        if arcx:
+            arc = arcx
+            print('arc= ', arc)
+        if self.arckget():
+            print('arkget= ', arkFull)
+            arkFull = self.arckget()
+        # img = os.popen('cat /etc/issue').read().strip('\n\r')
+        # ifg = os.popen('wget -qO - ifconfig.me').read().strip('\n\r')
+        # img = img.replace('\l', '')
+        if libs:
+            libsssl = libs
+        cont += ' ------------------------------------------ \n'
+        cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s' % (arc, arkFull, libsssl)
+        cont += ' ------------------------------------------ \n'
         return cont
 
     def updateList(self):
         payp = paypal()
         self["paypal"].setText(payp)
         self["list"].setText(self.getcont())
+
+    def arckget(self):
+        zarcffll = 'by Lululla'
+        try:
+            if os.path.exists('/var/lib/dpkg/info'):
+                zarcffll = os.popen('dpkg --print-architecture | grep -iE "arm|aarch64|mips|cortex|sh4|sh_4"').read().strip('\n\r')
+            else:
+                zarcffll = os.popen('opkg print-architecture | grep -iE "arm|aarch64|mips|cortex|h4|sh_4"').read().strip('\n\r')
+            return str(zarcffll)
+        except Exception as e:
+            print("Error ", e)
 
 
 sl2 = skin_path + sl + '.xml'
