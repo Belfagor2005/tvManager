@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     22/07/2023     #
+#     07/09/2023     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl, isDreamOS, paypal
@@ -96,53 +96,6 @@ def checkdir():
 
 
 checkdir()
-
-
-# def __createdir(list):
-    # dir = ''
-    # for line in list[1:].split('/'):
-        # dir += '/' + line
-        # if not os.path.exists(dir):
-            # try:
-                # mkdir(dir)
-            # except:
-                # print('Mkdir Failed', dir)
-
-
-# def isRunning(pname):
-    # pname = '\t' + pname
-    # for f in os.listdir('/proc'):
-        # try:
-            # cmdline = open(os.path.join('/', 'proc', f, 'status'), 'r')
-            # txt = cmdline.read()
-            # cmdline.close()
-            # if pname in txt:
-                # return True
-        # except IOError:
-            # pass
-    # return False
-
-
-# def make_request(url):
-    # try:
-        # import requests
-        # link = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text
-        # return link
-    # except ImportError:
-        # req = Request(url)
-        # req.add_header('User-Agent', 'TVS')
-        # response = urlopen(req, None, 7)
-        # link = response.read().decode('utf-8')
-        # response.close()
-        # return link
-    # except:
-        # e = URLError
-        # if hasattr(e, 'code'):
-            # print('We failed with error code - %s.' % e.code)
-        # if hasattr(e, 'reason'):
-            # print('Reason: ', e.reason)
-        # return
-    # return
 
 
 # =============== SCREEN PATH SETTING
@@ -500,20 +453,16 @@ class tvManager(Screen):
     def writeFile(self):
         if self.currCam != 'None' or self.currCam is not None:
             print('self.currCam= 2 ', self.currCam)
-            # clist = open('/etc/clist.list', 'w', encoding='utf-8')
-            clist = open('/etc/clist.list', 'w')
             if sys.version_info[0] == 3:
-                clist = open('/etc/clist.list', 'r', encoding='UTF-8')
+                clist = open('/etc/clist.list', 'w', encoding='UTF-8')
             else:
-                clist = open('/etc/clist.list', 'r')
-            clist.write(self.currCam)
+                clist = open('/etc/clist.list', 'w')
+            clist.write(str(self.currCam))
             clist.close()
         if sys.version_info[0] == 3:
             stcam = open('/etc/startcam.sh', 'w', encoding='UTF-8')
         else:
             stcam = open('/etc/startcam.sh', 'w')
-        # stcam = open('/etc/startcam.sh', 'w')
-        # stcam = open('/etc/startcam.sh', 'w', encoding='utf-8')
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
         os.system('chmod 755 /etc/startcam.sh &')
@@ -525,12 +474,12 @@ class tvManager(Screen):
             return
 
         if self.currCam != 'None' or self.currCam is not None:
-            print('self.currCam= 3 ', self.currCam)
+            # print('self.currCam= 3 ', self.currCam)
 
             self.EcmInfoPollTimer.stop()
             # last = self.getLastIndex()
             self.last = self.getLastIndex()
-            print('self.last stop=', self.last)
+            # print('self.last stop=', self.last)
             '''
                 # self.var = self['list'].getSelectedIndex()
                 # # self.var = self['list'].getSelectionIndex()
@@ -585,7 +534,6 @@ class tvManager(Screen):
             if s >= 1:
                 for lines in scriptlist:
                     dat = pathscript + lines
-                    # sfile = open(dat, 'r')
                     if sys.version_info[0] == 3:
                         sfile = open(dat, 'r', encoding='UTF-8')
                     else:
@@ -607,14 +555,14 @@ class tvManager(Screen):
                                 self.index += 1
                             else:
                                 # print('self.currCam is None: ', nam)
-                                self.softcamslist.append((nam, png2, ''))
-                                pliste.append((nam, ''))
+                                self.softcamslist.append(nam, png2, '')
+                                pliste.append(nam, '')
                             self.index += 1
                     sfile.close()
                     self.softcamslist.sort(key=lambda i: i[2], reverse=True)
                     pliste.sort(key=lambda i: i[1], reverse=True)
-                    print('self.softcamslist: ', self.softcamslist)
-                    print('pliste: ', pliste)
+                    # print('self.softcamslist: ', self.softcamslist)
+                    # print('pliste: ', pliste)
                     self.namelist = pliste
                     # self['list'].l.setList(self.softcamslist)
                     self["list"].setList(self.softcamslist)
@@ -629,7 +577,6 @@ class tvManager(Screen):
         else:
             self.FilCurr = '/etc/clist.list'
         try:
-            # clist = open(self.FilCurr, 'r')
             if sys.version_info[0] == 3:
                 clist = open(self.FilCurr, 'r', encoding='UTF-8')
             else:
@@ -649,7 +596,6 @@ class tvManager(Screen):
                 clist = open(self.FilCurr, 'r', encoding='UTF-8')
             else:
                 clist = open(self.FilCurr, 'r')
-            # clist = open('/etc/clist.list', 'r', encoding='utf-8')
             print('found list')
         except:
             return
@@ -664,7 +610,6 @@ class tvManager(Screen):
                 alist = open('/etc/autocam.txt', 'w', encoding='UTF-8')
             else:
                 alist = open('/etc/autocam.txt', 'w')
-            # alist = open('/etc/autocam.txt', 'w', encoding='utf-8')
             alist.close()
         self.autoclean()
 
@@ -672,12 +617,10 @@ class tvManager(Screen):
             alist = open('/etc/autocam.txt', 'a', encoding='UTF-8')
         else:
             alist = open('/etc/autocam.txt', 'a')
-        # alist = open('/etc/autocam.txt', 'a', encoding='utf-8')
         alist.write(self.oldService.toString() + '\n')
         self.last = self.getLastIndex()
         alist.write(current + '\n')
         alist.close()
-        # self.session.openWithCallback(self.callback, MessageBox, _('Autocam assigned to the current channel'), type=1, timeout=10)
         _session.open(MessageBox, _('Autocam assigned to the current channel'), MessageBox.TYPE_INFO, timeout=5)
         return
 
@@ -691,11 +634,9 @@ class tvManager(Screen):
             myfile = open('/etc/autocam.txt', 'r')
 
         if sys.version_info[0] == 3:
-            myfile2 = open('/etc/autocam2.txt', 'a', encoding='UTF-8')
+            myfile2 = open('/etc/autocam2.txt', 'w', encoding='UTF-8')
         else:
-            myfile2 = open('/etc/autocam2.txt', 'a')
-        # myfile = open('/etc/autocam.txt', 'r')
-        # myfile2 = open('/etc/autocam2.txt', 'w', encoding='utf-8')
+            myfile2 = open('/etc/autocam2.txt', 'w')
         icount = 0
         for line in myfile.readlines():
             print('We are in tvManager line, self.oldService.toString() =', line, self.oldService.toString())
@@ -721,7 +662,7 @@ class tvManager(Screen):
 class GetipklistTv(Screen):
     def __init__(self, session):
         self.session = session
-        skin = os.path.join(skin_path, 'GetipklistTv.xml')
+        skin = os.path.join(skin_path, 'GetipkTv.xml')
         with open(skin, 'r') as f:
             self.skin = f.read()
         Screen.__init__(self, session)
@@ -763,7 +704,6 @@ class GetipklistTv(Screen):
     def updateList(self):
         payp = paypal()
         self["paypal"].setText(payp)
-        self["list"].setText(self.getcont())
 
     def loadpage(self):
         global local
@@ -778,6 +718,9 @@ class GetipklistTv(Screen):
             self._gotPageLoad()
 
     def downloadxmlpage(self):
+        FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+        if os.path.exists('/var/lib/dpkg/info'):
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'    
         url = str(FTP_XML)
         getPage(str.encode(url)).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
@@ -798,7 +741,6 @@ class GetipklistTv(Screen):
             regexC = '<plugins cont="(.*?)"'
             match = re.compile(regexC, re.DOTALL).findall(self.xml)
             for name in match:
-                # name = name.replace('_',' ').replace('-',' ')
                 name = Utils.ensure_str(name)
                 self.list.append(name)
                 self['description'].setText(_('Please select ...'))
@@ -810,7 +752,6 @@ class GetipklistTv(Screen):
 
     def okClicked(self):
         i = len(self.list)
-        print('iiiiii= ', i)
         if i < 0:
             return
         if self.downloading is True:
@@ -853,7 +794,6 @@ class GetipkTv(Screen):
     def updateList(self):
         payp = paypal()
         self["paypal"].setText(payp)
-        self["list"].setText(self.getcont())
 
     def start(self):
         xmlparse = self.xmlparse
@@ -888,7 +828,6 @@ class GetipkTv(Screen):
 
     def message(self):
         i = len(self.names)
-        print('iiiiii= ', i)
         if i < 0:
             return
         self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
@@ -905,8 +844,6 @@ class GetipkTv(Screen):
             # useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
             self.com = str(com)
             self.dom = str(dom)
-            # print('self.com---------------', self.com)
-            # print('self.dom---------------', self.dom)
             ipkpth = '/tmp'
             destipk = ipkpth + '/download.ipk'
             desttar = ipkpth + '/download.tar.gz'
@@ -930,7 +867,7 @@ class GetipkTv(Screen):
             if self.com.find('.deb') != -1:
                 if fileExists(destdeb):
                     os.remove(destdeb)
-                if isDreamOS:
+                if os.path.exists('/var/lib/dpkg/info'):
                     cmd22 = 'find /usr/bin -name "wget"'
                     res = os.popen(cmd22).read()
                     if 'wget' not in res.lower():
@@ -996,7 +933,7 @@ class InfoCfg(Screen):
         cont = "Your Config' :\n"
         cont += "Config Softcam Manager(Oscam)' :\n"
         cont += "Default folder:\n"
-        cont += "etc/tuxbox/config\n"
+        cont += "/etc/tuxbox/config\n"
         cont += ' ------------------------------------------ \n'
         cont += ' ---- Type Oscam For Your Box--- \n'
         # cont += "cccam_221\n"
@@ -1031,7 +968,7 @@ class InfoCfg(Screen):
         if libs:
             libsssl = libs
         cont += ' ------------------------------------------ \n'
-        cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s' % (arc, arkFull, libsssl)
+        cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s\n' % (arc, arkFull, libsssl)
         cont += ' ------------------------------------------ \n'
         return cont
 
@@ -1107,7 +1044,6 @@ class Ipkremove(Screen):
             cmd = 'touch /etc/tmpfile'
             os.system(cmd)
             myfile = open('/var/lib/opkg/status', 'r')
-            # f = open('/etc/tmpfile', 'w', encoding='utf-8')
             f = open('/etc/tmpfile', 'w')
             for line in myfile:
                 if line != ipkname:
@@ -1123,7 +1059,7 @@ class Ipkremove(Screen):
             os.system(cmd)
             f = open('/var/lib/opkg/status', 'r+')
             f.close()
-            return
+        return
 
     def callback(self, answer):
         print('answer:', answer)

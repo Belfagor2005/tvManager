@@ -343,6 +343,7 @@ class tv_config(Screen, ConfigListScreen):
         self['key_blue'].hide()
         self['info'] = Label('')
         self['description'] = Label('')
+        self['description'].setText(_('Wait please...'))
         self.createSetup()
         # self.onLayoutFinish.append(self.showhide)
         self.onShown.append(self.layoutFinished)
@@ -496,6 +497,7 @@ class tv_config(Screen, ConfigListScreen):
         self.setTitle(self.setup_title)
         payp = paypal()
         self["paypal"].setText(payp)
+        self['description'].setText(_('Select Your Choice'))
 
     def createSetup(self):
         self.editListEntry = None

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tvManager TivuStream\n"
-"POT-Creation-Date: 2023-05-15 19:02+0200\n"
-"PO-Revision-Date: 2023-05-21 11:37+0200\n"
+"POT-Creation-Date: 2023-09-08 19:24+0200\n"
+"PO-Revision-Date: 2023-09-08 19:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: lululla\n"
 "Language: it_IT\n"
@@ -709,266 +709,287 @@ msgstr ""
 msgid "Write-Debug"
 msgstr ""
 
-#: tvManager/data/GetEcmInfo.py:68
+#: tvManager/data/GetEcmInfo.py:69
 msgid "FTA"
 msgstr "FTA"
 
-#: tvManager/data/Utils.py:289
-#, python-format
-msgid "Status Internet: %s:%s -> OK"
-msgstr ""
-
-#: tvManager/data/Utils.py:293
-#, python-format
-msgid "Status Internet: %s:%s -> KO"
-msgstr ""
-
-#: tvManager/data/Utils.py:296
-msgid "Restart Check 1 Internet."
-msgstr ""
-
-#: tvManager/data/Utils.py:300
-msgid "Restart Check 2 Internet."
-msgstr ""
-
-#: tvManager/data/Utils.py:778
-#, python-format
-msgid ""
-"ReadUrl1:\n"
-"  url = %s"
-msgstr ""
-
-#: tvManager/data/Utils.py:1284
-msgid "Stream already added to bouquet"
-msgstr ""
-
-#: tvManager/data/Utils.py:1291
-msgid "Adding to bouquet failed"
-msgstr ""
-
-#: tvManager/data/datas.py:252 tvManager/data/datas.py:255
-#: tvManager/data/datas.py:258 tvManager/data/datas.py:261
-#: tvManager/data/datas.py:264 tvManager/data/datas.py:267
+#: tvManager/data/datas.py:286 tvManager/data/datas.py:289
+#: tvManager/data/datas.py:292 tvManager/data/datas.py:295
+#: tvManager/data/datas.py:298 tvManager/data/datas.py:301
 msgid "Write"
 msgstr "Scrivi"
 
-#: tvManager/data/datas.py:303 tvManager/plugin -~.py:682 -~.py:777 -~.py:912
-#: tvManager/plugin.py:570 tvManager/plugin.py:665 tvManager/plugin.py:800
+#: tvManager/data/datas.py:337 tvManager/plugin.py:677 tvManager/plugin.py:783
+#: tvManager/plugin.py:920
 msgid "Back"
 msgstr "Indietro"
 
-#: tvManager/data/datas.py:305
-msgid "Send Oscam Emm"
-msgstr "Invio Oscam Emm"
-
-#: tvManager/data/datas.py:306
-msgid "Default Config"
+#: tvManager/data/datas.py:338
+msgid "Force Emm Send"
 msgstr ""
 
-#: tvManager/data/datas.py:319
-msgid "SEND EMM TO OSCAM"
-msgstr "INVIO EMM ALLA OSCAM"
+#: tvManager/data/datas.py:339
+msgid "Check Emm Send"
+msgstr ""
 
-#: tvManager/data/datas.py:326
+#: tvManager/data/datas.py:346
+msgid "Wait please..."
+msgstr ""
+
+#: tvManager/data/datas.py:364 tvManager/data/datas.py:397
+#: tvManager/data/datas.py:473
+msgid ""
+"\n"
+"....\n"
+".....\n"
+msgstr ""
+
+#: tvManager/data/datas.py:376 tvManager/data/datas.py:414
+#: tvManager/data/datas.py:481
+msgid "READ EMM....\n"
+msgstr ""
+
+#: tvManager/data/datas.py:380 tvManager/data/datas.py:418
+#: tvManager/data/datas.py:485
+msgid "CURRENT EMM IS:\n"
+msgstr ""
+
+#: tvManager/data/datas.py:382 tvManager/data/datas.py:420
+#: tvManager/data/datas.py:487
+msgid ""
+"\n"
+"Current Emm saved to /tmp/emm.txt"
+msgstr ""
+
+#: tvManager/data/datas.py:385 tvManager/data/datas.py:423
+#: tvManager/data/datas.py:490
+msgid "\n"
+msgstr ""
+
+#: tvManager/data/datas.py:386 tvManager/data/datas.py:424
+#: tvManager/data/datas.py:491
 #, python-format
 msgid "Please wait, %s."
 msgstr ""
 
-#: tvManager/data/datas.py:338 tvManager/data/datas.py:346
+#: tvManager/data/datas.py:388
+msgid "File no exist /tmp/emm.txt"
+msgstr ""
+
+#: tvManager/data/datas.py:390
+msgid "The Cam is not active, send the command anyway?"
+msgstr ""
+
+#: tvManager/data/datas.py:426 tvManager/data/datas.py:493
+msgid ""
+"No Action!\n"
+"File no exist /tmp/emm.txt"
+msgstr ""
+
+#: tvManager/data/datas.py:428
+msgid "Command Cancelled"
+msgstr ""
+
+#: tvManager/data/datas.py:438 tvManager/data/datas.py:446
 msgid "Reset"
 msgstr "Reset"
 
-#: tvManager/data/datas.py:383
+#: tvManager/data/datas.py:444
+msgid "Get Link"
+msgstr "Ottieni link"
+
+#: tvManager/data/datas.py:500
+msgid "Select Your Choice"
+msgstr "Seleziona"
+
+#: tvManager/data/datas.py:505
 msgid "Activate Insert line in Config File:"
 msgstr "Attivare inserimento in File Cfg 3C"
 
-#: tvManager/data/datas.py:383
+#: tvManager/data/datas.py:505
 msgid "If Active: Download/Reset Server Config"
 msgstr "Se Attivo: Scarica/Reset Config .serv"
 
-#: tvManager/data/datas.py:385
+#: tvManager/data/datas.py:507
 msgid "Server Config"
 msgstr "Server Config"
 
-#: tvManager/data/datas.py:386
+#: tvManager/data/datas.py:508
 msgid "Server Link"
 msgstr "Url del Server"
 
-#: tvManager/data/datas.py:386
+#: tvManager/data/datas.py:508
 msgid "Select Get Link"
 msgstr "Seleziona Link Server"
 
-#: tvManager/data/datas.py:387
+#: tvManager/data/datas.py:509
 msgid "Server URL"
 msgstr "Server URL"
 
-#: tvManager/data/datas.py:387
+#: tvManager/data/datas.py:509
 msgid "Server Url i.e. 012.345.678.900"
 msgstr "Url Server Es. 012.345.678.900"
 
-#: tvManager/data/datas.py:388
+#: tvManager/data/datas.py:510
 msgid "Server Port"
 msgstr "Porta del Server"
 
-#: tvManager/data/datas.py:388
+#: tvManager/data/datas.py:510
 msgid "Port"
 msgstr "Port"
 
-#: tvManager/data/datas.py:389
+#: tvManager/data/datas.py:511
 msgid "Server Username"
 msgstr "Server Username"
 
-#: tvManager/data/datas.py:389
+#: tvManager/data/datas.py:511
 msgid "Username"
 msgstr "Username"
 
-#: tvManager/data/datas.py:390
+#: tvManager/data/datas.py:512
 msgid "Server Password"
 msgstr "Server Password"
 
-#: tvManager/data/datas.py:390
+#: tvManager/data/datas.py:512
 msgid "Password"
 msgstr "Password"
 
-#: tvManager/data/datas.py:438
+#: tvManager/data/datas.py:560
 msgid "Select CCcam"
 msgstr "Seleziona CCcam"
 
-#: tvManager/data/datas.py:449 tvManager/data/datas.py:466
-#: tvManager/data/datas.py:490
+#: tvManager/data/datas.py:571 tvManager/data/datas.py:589
+#: tvManager/data/datas.py:614
 msgid "Please Reset - No File CFG"
 msgstr "Prego Reset - nessun file di Config"
 
-#: tvManager/data/datas.py:455 tvManager/data/datas.py:472
-#: tvManager/data/datas.py:496
+#: tvManager/data/datas.py:578 tvManager/data/datas.py:596
+#: tvManager/data/datas.py:621
 msgid "Server Copy in "
 msgstr "Server copiato in "
 
-#: tvManager/data/datas.py:477
+#: tvManager/data/datas.py:601
 msgid "Select Ncam"
 msgstr "Seleziona Ncam"
 
-#: tvManager/plugin -~.py:270 tvManager/plugin.py:201
+#: tvManager/plugin.py:200
 msgid "Start"
 msgstr "Avvio"
 
-#: tvManager/plugin -~.py:271 tvManager/plugin.py:202
+#: tvManager/plugin.py:201
 msgid "Download"
 msgstr "Download"
 
-#: tvManager/plugin -~.py:272 tvManager/plugin.py:203
+#: tvManager/plugin.py:202
 msgid "Stop"
 msgstr "Stop"
 
-#: tvManager/plugin -~.py:273 -~.py:300 tvManager/plugin.py:204
-#: tvManager/plugin.py:231
+#: tvManager/plugin.py:203
 msgid "Softcam"
 msgstr "Softcam"
 
-#: tvManager/plugin -~.py:275 tvManager/plugin.py:206
+#: tvManager/plugin.py:205
 msgid "Scanning and retrieval list softcam ..."
 msgstr "Scansione e recupero lista softcam"
 
-#: tvManager/plugin -~.py:306 tvManager/plugin.py:237
-msgid "CCcamInfo"
-msgstr ""
-
-#: tvManager/plugin -~.py:310 tvManager/plugin.py:241
-msgid "OscamInfo"
-msgstr ""
-
-#: tvManager/plugin -~.py:313 -~.py:316 tvManager/plugin.py:244
 #: tvManager/plugin.py:247
 msgid "SOFTCAM"
 msgstr ""
 
-#: tvManager/plugin -~.py:389 tvManager/plugin.py:308
+#: tvManager/plugin.py:315
 msgid "Update SoftcamKeys from google search?"
 msgstr "Aggiornamento SoftcamKeys da ricerca google?"
 
-#: tvManager/plugin -~.py:398 -~.py:401 tvManager/plugin.py:317
-#: tvManager/plugin.py:320
+#: tvManager/plugin.py:323
 #, python-format
 msgid "Update Softcam.key: %s"
 msgstr "Aggiornamento SoftCam.Key: %s"
 
-#: tvManager/plugin -~.py:412 tvManager/plugin.py:331
+#: tvManager/plugin.py:336
 msgid "Select a cam to run ..."
 msgstr "Selezionare una cam da avviare ..."
 
-#: tvManager/plugin -~.py:414 tvManager/plugin.py:333
+#: tvManager/plugin.py:338
 msgid "Install Cam first!!!"
 msgstr "Installa prima una Cam!!!"
 
-#: tvManager/plugin -~.py:446 tvManager/plugin.py:365
-msgid "RESTART CAM "
+#: tvManager/plugin.py:418
+msgid ""
+"Please wait..\n"
+"RESTART CAM"
 msgstr ""
 
-#: tvManager/plugin -~.py:451 tvManager/plugin.py:370
-msgid "STOP & RESTART CAM "
+#: tvManager/plugin.py:423
+msgid ""
+"Please wait..\n"
+"STOP & RESTART CAM"
 msgstr ""
 
-#: tvManager/plugin -~.py:459 tvManager/plugin.py:378
-msgid "UP CAM 2"
+#: tvManager/plugin.py:431
+msgid ""
+"Please wait..\n"
+"START UP CAM"
 msgstr ""
 
-#: tvManager/plugin -~.py:470 tvManager/plugin.py:389
-msgid "and"
+#: tvManager/plugin.py:506
+msgid ""
+"Please wait..\n"
+"STOP CAM"
 msgstr ""
 
-#: tvManager/plugin -~.py:472
-msgid "Please wait.."
-msgstr ""
-
-#: tvManager/plugin -~.py:635 tvManager/plugin.py:523
+#: tvManager/plugin.py:624
 msgid "Autocam assigned to the current channel"
 msgstr "Autocam assegnato al canale corrente"
 
-#: tvManager/plugin -~.py:680 tvManager/plugin.py:568
+#: tvManager/plugin.py:675
 msgid "Getting the list, please wait ..."
 msgstr "Getting the list, please wait ..."
 
-#: tvManager/plugin -~.py:724 -~.py:743 tvManager/plugin.py:612
-#: tvManager/plugin.py:631
+#: tvManager/plugin.py:678
+msgid "Load"
+msgstr ""
+
+#: tvManager/plugin.py:729 tvManager/plugin.py:750
 msgid "Try again later ..."
 msgstr "Riprova piu tardi ..."
 
-#: tvManager/plugin -~.py:739 tvManager/plugin.py:627
+#: tvManager/plugin.py:746
 msgid "Please select ..."
-msgstr ""
+msgstr "Seleziona prego..."
 
-#: tvManager/plugin -~.py:775 tvManager/plugin.py:663
+#: tvManager/plugin.py:781
 msgid "Select and Install"
 msgstr "Seleziona e Installa"
 
-#: tvManager/plugin -~.py:830 tvManager/plugin.py:718
+#: tvManager/plugin.py:833
 msgid "Do you want to install?"
 msgstr "Vuoi installare?"
 
-#: tvManager/plugin -~.py:875 tvManager/plugin.py:763
+#: tvManager/plugin.py:882
 msgid "Unknow Image!"
 msgstr "Unknow Image!"
 
-#: tvManager/plugin -~.py:878 tvManager/plugin.py:766
+#: tvManager/plugin.py:885
 msgid "Download failur!"
 msgstr ""
 
-#: tvManager/plugin -~.py:890 tvManager/plugin.py:778
+#: tvManager/plugin.py:897
 msgid "All file Download are removed!"
-msgstr ""
+msgstr "Tutti i file scaricati sono stati rimossi!"
 
-#: tvManager/plugin -~.py:921 tvManager/plugin.py:809
+#: tvManager/plugin.py:929
 msgid "Path Configuration Folder"
-msgstr ""
+msgstr "Configurazione cartelle"
 
-#: tvManager/plugin -~.py:1068 tvManager/plugin.py:947
+#: tvManager/plugin.py:1097
 msgid "Softcam Manager"
 msgstr ""
 
-#: tvManager/plugin.py:391
-#, python-format
-msgid "Please wait.. %s"
-msgstr ""
+#~ msgid "Send Oscam Emm"
+#~ msgstr "Invio Oscam Emm"
+
+#~ msgid "SEND EMM TO OSCAM"
+#~ msgstr "INVIO EMM ALLA OSCAM"
 
 #~ msgid "CCcam"
 #~ msgstr "CCcam"
@@ -996,9 +1017,6 @@ msgstr ""
 
 #~ msgid "Link6"
 #~ msgstr "Link6"
-
-#~ msgid "Get Link"
-#~ msgstr "Ottieni link"
 
 #~ msgid "Select Oscam"
 #~ msgstr "Seleziona Oscam"
