@@ -44,7 +44,7 @@ import six
 import sys
 import time
 
-global active, skin_path, local, FTP_XML
+global active, skin_path, local
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -70,9 +70,10 @@ emu_plugin = os.path.join(plugin_path, "emu/")
 iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
-FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-if os.path.exists('/var/lib/dpkg/info'):
-    FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
+FTP_XML = ''
+# FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+# if os.path.exists('/var/lib/dpkg/info'):
+    # FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 _firstStarttvsman = True
 local = True
@@ -689,6 +690,10 @@ class GetipklistTv(Screen):
         local = False
         self.icount = 0
         self.downloading = False
+        if os.path.exists('/var/lib/dpkg/info'):
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'   
+        else:
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
         self.xml = str(FTP_XML)
         self.timer = eTimer()
         if os.path.exists('/var/lib/dpkg/status'):
@@ -718,9 +723,10 @@ class GetipklistTv(Screen):
             self._gotPageLoad()
 
     def downloadxmlpage(self):
-        FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
         if os.path.exists('/var/lib/dpkg/info'):
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'    
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'   
+        else:
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
         url = str(FTP_XML)
         getPage(str.encode(url)).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
