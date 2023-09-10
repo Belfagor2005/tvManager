@@ -3,7 +3,7 @@
 	<widget name="title" position="146,60" size="685,30" font="Regular;20" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
 	<widget name="description" position="151,98" size="676,45" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/main22.png" position="0,0" size="1280,720" zPosition="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="150,7" size="298,51" alphatest="blend" zPosition="5" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="143,6" size="289,52" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="146,86" size="686,5" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="146,606" size="686,5" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/PayPal.png" position="1002,34" size="156,77" zPosition="3" alphatest="on" />
@@ -12,7 +12,7 @@
 	<eLabel position="909,32" size="341,625" backgroundColor="#80000000" zPosition="1" />
     <!-- <eLabel position="855,32" size="392,550" backgroundColor="#80000000" cornerRadius="20" zPosition="1" /> -->
 	<!-- Menu List -->
-	<widget name="list" position="146,151" size="686,440" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/hd/sliderb.png" />
+	<widget name="list" position="146,151" size="686,440" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" />
 	<!-- Colors 1220 -->
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="146,630" size="20,20" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="146,670" size="20,20" alphatest="blend" zPosition="5" />

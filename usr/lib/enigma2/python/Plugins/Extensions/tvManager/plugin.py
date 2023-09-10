@@ -691,7 +691,7 @@ class GetipklistTv(Screen):
         self.icount = 0
         self.downloading = False
         if os.path.exists('/var/lib/dpkg/info'):
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'   
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
         else:
             FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
         self.xml = str(FTP_XML)
@@ -724,7 +724,7 @@ class GetipklistTv(Screen):
 
     def downloadxmlpage(self):
         if os.path.exists('/var/lib/dpkg/info'):
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'   
+            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
         else:
             FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
         url = str(FTP_XML)
@@ -936,27 +936,17 @@ class InfoCfg(Screen):
         self.onShown.append(self.updateList)
 
     def getcont(self):
-        cont = "Your Config' :\n"
-        cont += "Config Softcam Manager(Oscam)' :\n"
-        cont += "Default folder:\n"
-        cont += "/etc/tuxbox/config\n"
+        cont = " ---- Type Cam For Your Box--- \n"
+        # cont += "Default folder:\n"
         cont += ' ------------------------------------------ \n'
-        cont += ' ---- Type Oscam For Your Box--- \n'
-        # cont += "cccam_221\n"
-        # cont += "/etc/cccam.cfg\n"
-        # cont += "cccam_230\n"
-        # cont += "/usr/cfmngr/cccam/cccam.cfg\n"
-        # cont += "doscam_0.30\n"
-        # cont += "/usr/cfmngr/doscam/doscam.cfg\n"
-        # cont += "oscam/powervu/svn_yy.xx\n"
-        # cont += "/usr/cfmngr/oscam/oscam.server\n"
-        # cont += "oscamymod_yy.xx\n"
-        # cont += "/usr/cfmngr/oscamymod/oscam.server\n"
-        # cont += "wicardd_19\n"
-        # cont += "/usr/cfmngr/wicardd/wicardd.conf\n"
-        # cont += "mgcamd_1.38d\n"
-        # cont += "/usr/keys/cccamd.list \n"
-        # return cont
+        cont += '/etc/CCcam.cfg -> CCcam\n'
+        cont += '/etc/tuxbox/config/oscam.server -> Oscam\n'
+        cont += '/etc/tuxbox/config/Oscamicam/oscam.server -> Oscamicam\n'
+        cont += '/etc/tuxbox/config/oscam-emu/oscam.server -> oscam-emu\n'
+        cont += '/etc/tuxbox/config/ncam.server -> Ncam\n'
+        cont += '/etc/tuxbox/config/gcam.server -> Gcam\n'
+        cont += ' ------------------------------------------ \n'
+        cont += "Config Softcam Manager(Oscam):\n"
         arc = ''
         arkFull = ''
         libsssl = ''
