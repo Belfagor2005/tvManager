@@ -30,7 +30,7 @@ import re
 import ssl
 import sys
 import subprocess
-
+import codecs
 global skin_path
 
 
@@ -309,7 +309,7 @@ class tv_config(Screen, ConfigListScreen):
     def __init__(self, session):
         self.session = session
         skin = os.path.join(skin_path, 'tv_config.xml')
-        with open(skin, 'r') as f:
+        with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         Screen.__init__(self, session)
         self.setup_title = (name_plug)

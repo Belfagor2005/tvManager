@@ -37,6 +37,7 @@ from enigma import getDesktop
 from os import mkdir, chmod
 from time import sleep
 from twisted.web.client import getPage
+import codecs
 import glob
 import os
 import re
@@ -158,7 +159,7 @@ class tvManager(Screen):
         global _session
         _session = session
         skin = os.path.join(skin_path, 'tvManager.xml')
-        with open(skin, 'r') as f:
+        with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         self.namelist = []
         self.softcamslist = []
@@ -664,7 +665,7 @@ class GetipklistTv(Screen):
     def __init__(self, session):
         self.session = session
         skin = os.path.join(skin_path, 'GetipkTv.xml')
-        with open(skin, 'r') as f:
+        with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         Screen.__init__(self, session)
         self.names = []
@@ -775,7 +776,7 @@ class GetipkTv(Screen):
     def __init__(self, session, xmlparse, selection):
         self.session = session
         skin = os.path.join(skin_path, 'GetipkTv.xml')
-        with open(skin, 'r') as f:
+        with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         Screen.__init__(self, session)
         self.xmlparse = xmlparse
@@ -910,7 +911,7 @@ class InfoCfg(Screen):
     def __init__(self, session):
         self.session = session
         skin = os.path.join(skin_path, 'InfoCfg.xml')
-        with open(skin, 'r') as f:
+        with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         Screen.__init__(self, session)
         self.list = []
