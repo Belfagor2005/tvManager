@@ -32,8 +32,8 @@ import sys
 import subprocess
 import codecs
 global skin_path
-
-
+import base64
+sss = 'aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1U0ZU02RGpW'
 PY3 = sys.version_info.major >= 3
 if PY3:
     unicode = str
@@ -370,7 +370,8 @@ class tv_config(Screen, ConfigListScreen):
                     os.system('sleep 5')
                     if not os.path.exists('/tmp/emm.txt'):
                         import wget
-                        url = 'https://pastebin.com/raw/ZNKDRVWT'
+                        outp = base64.b64decode(sss)
+                        url = str(outp)
                         wget.download(url, '/tmp/emm.txt')
                     if os.path.exists('/tmp/emm.txt'):
                         msg.append(_("READ EMM....\n"))
@@ -403,7 +404,8 @@ class tv_config(Screen, ConfigListScreen):
             os.system('sleep 5')
             if not os.path.exists('/tmp/emm.txt'):
                 import wget
-                url = 'https://pastebin.com/raw/ZNKDRVWT'
+                outp = base64.b64decode(sss)
+                url = str(outp)
                 # wget.download(url, '/tmp/emm.txt')
                 subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
                 # try:
