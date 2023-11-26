@@ -95,8 +95,6 @@ def checkdir():
         mkdir('/usr/keys')
     if not os.path.exists(camscript):
         mkdir('/usr/camscript')
-
-
 checkdir()
 
 
@@ -319,9 +317,13 @@ class tvManager(Screen):
     def keysdownload(self, result):
         if result:
             script = ('%s/auto' % plugin_path)
+            # os.system("sed -i -e 's/\r$//' %s" % script)
+            # os.system("sed -i -e 's/^M$//' %s" % script)
+            os.system("os2unix %s" % script)
             from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
+            os.system("os2unix %s" % script)
             self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
 
     def CfgInfo(self):
@@ -1127,7 +1129,10 @@ def autostart(reason, session=None, **kwargs):
             print('session none')
             try:
                 print('ok started autostart')
-                os.system("mv /usr/bin/dccamd /usr/bin/dccamdOrig &")
+                if fileExists('/etc/init.d/dccamd'):
+                    os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
+                if fileExists('/usr/bin/dccamd'):
+                    os.system("mv /usr/bin/dccamd /usr/bin/dccamdOrig &")
                 os.system("ln -sf /usr/bin /var/bin")
                 os.system("ln -sf /usr/keys /var/keys")
                 os.system("ln -sf /usr/scce /var/scce")
@@ -1143,6 +1148,81 @@ def autostart(reason, session=None, **kwargs):
         else:
             print('pass autostart')
     return
+
+
+class DreamCCAuto:
+    def __init__(self):
+        self.readCurrent()
+
+    def readCurrent(self):
+        current = None
+        self.FilCurr = ''
+        if fileExists('/etc/CurrentBhCamName'):
+            self.FilCurr = '/etc/CurrentBhCamName'
+        else:
+            self.FilCurr = '/etc/clist.list'
+        try:
+            if sys.version_info[0] == 3:
+                clist = open(self.FilCurr, 'r', encoding='UTF-8')
+            else:
+                clist = open(self.FilCurr, 'r')
+        except:
+            return
+
+        if clist is not None:
+            for line in clist:
+                current = line
+            clist.close()
+        scriptliste = []
+        path = '/usr/camscript/'
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                scriptliste.append(name)
+
+        for lines in scriptliste:
+            dat = path + lines
+            datei = open(dat, 'r')
+            for line in datei:
+                if line[0:3] == 'OSD':
+                    nam = line[5:len(line) - 2]
+                    if current == nam:
+                        if fileExists('/etc/init.d/dccamd'):
+                            os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
+                        os.system('ln -sf /usr/bin /var/bin')
+                        os.system('ln -sf /usr/keys /var/keys')
+                        os.system('ln -sf /usr/scce /var/scce')
+                        os.system('ln -sf /usr/script /var/script')
+                        os.system("sleep 2")
+                        # os.system("/etc/startcam.sh &")
+                        print("*** running autostart ***")
+                        os.system(dat + ' cam_startup &')
+                        os.system('sleep 2')
+
+            datei.close()
+        else:
+            print('pass autostart')
+
+        return
+
+
+def autostartsoftcam(reason, session=None, **kwargs):
+    """called with reason=1 to during shutdown, with reason=0 at startup?"""
+    print("[Softcam] Started")
+    global DreamCC_auto
+    global autoStartTimertvsman
+    global _firstStarttvsman
+    if reason == 0:
+        print('reason 0')
+        if session is not None:
+            try:
+                if fileExists('/etc/init.d/dccamd'):
+                    os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
+                DreamCC_auto = DreamCCAuto()
+            except:
+                pass
+            print("*** running autostart ***")
+            _firstStarttvsman = True
+            autoStartTimertvsman = AutoStartTimertvman(session)
 
 
 def menu(menuid, **kwargs):
@@ -1179,6 +1259,7 @@ def Plugins(**kwargs):
     if isDreamOS:
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
-            PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
+            PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
+            # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main)]
