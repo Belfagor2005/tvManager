@@ -41,7 +41,7 @@ import codecs
 import glob
 import os
 import re
-import six
+# import six
 import sys
 import time
 
@@ -50,16 +50,20 @@ active = False
 _session = None
 PY3 = sys.version_info.major >= 3
 if PY3:
-    from urllib.error import URLError
-    from urllib.request import urlopen, Request
-    from urllib.parse import urlparse
+    # from urllib.error import URLError
+    # from urllib.request import urlopen
+    # from urllib.request import Request
+    # from urllib.parse import urlparse
     unicode = str
     unichr = chr
     long = int
     PY3 = True
 else:
-    from urllib2 import urlopen, Request, URLError
-    from urlparse import urlparse
+    # from urllib2 import URLError
+    # from urllib2 import urlopen
+    # from urllib2 import Request
+    # from urlparse import urlparse
+    pass
 
 
 currversion = '2.1'
@@ -72,9 +76,6 @@ iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, "data")
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 FTP_XML = ''
-# FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-# if os.path.exists('/var/lib/dpkg/info'):
-    # FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 _firstStarttvsman = True
 local = True
@@ -95,6 +96,8 @@ def checkdir():
         mkdir('/usr/keys')
     if not os.path.exists(camscript):
         mkdir('/usr/camscript')
+
+
 checkdir()
 
 
