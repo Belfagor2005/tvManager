@@ -195,7 +195,7 @@ if screenwidth.width() == 1920:
     skin_path = res_plugin_path + 'skins/fhd/'
 if screenwidth.width() == 2560:
     skin_path = res_plugin_path + 'skins/uhd/'
-if isDreamOS:
+if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + 'dreamOs/'
 
 # if isFHD():
@@ -241,15 +241,15 @@ Serverlive = [
               ('aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=', 'Server01'),
               ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server02'),
               ('aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=', 'Server03'),
-              ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server04'),
-              ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server05'),
-              ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server06'),
-              ('aHR0cHM6Ly9jY2NhbXguY29tL2dldENvZGUucGhw', 'Server07'),
-              ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server08'),
-              ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkLmNvbS9mcmVlY2NjYW0ucGhw', 'Server09'),
-              ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server10'),
-              ('aHR0cDovL2NjY2FtLm5ldC9mcmVl', 'Server11'),
-              ('aHR0cDovL2NjY2FtLXByZW1pdW0uY28vZnJlZS1jY2NhbS8=', 'Server12')]
+              ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server04'),
+              ('aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=', 'Server05'),
+              ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZWNjY2Ft', 'Server06'),
+              ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v', 'Server07')
+              ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server08'),
+              # ('aHR0cDovL2NjY2FtcHJpbWEuY29tL2ZyZWU1L2dldDIucGhw', 'Server04'),
+              # ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server05'),
+              ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server9'),
+              ]
 
 # cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
@@ -406,12 +406,7 @@ class tv_config(Screen, ConfigListScreen):
                 import wget
                 outp = base64.b64decode(sss)
                 url = str(outp)
-                # wget.download(url, '/tmp/emm.txt')
                 subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
-                # try:
-                    # os.system("wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/ZNKDRVWT' -O '/tmp/emm.txt'")
-                # except:
-                    # os.system("wget 'https://pastebin.com/raw/ZNKDRVWT' -O '/tmp/emm.txt'")
             if os.path.exists('/tmp/emm.txt'):
                 msg.append(_("READ EMM....\n"))
                 with open('/tmp/emm.txt') as f:
