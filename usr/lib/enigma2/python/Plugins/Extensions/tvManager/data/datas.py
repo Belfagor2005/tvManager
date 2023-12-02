@@ -197,11 +197,6 @@ if screenwidth.width() == 2560:
     skin_path = res_plugin_path + 'skins/uhd/'
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + 'dreamOs/'
-
-# if isFHD():
-    # skin_path = os.path.join(plugin_path, 'res/skins/fhd/')
-# if isDreamOS:
-    # skin_path = skin_path + 'dreamOs/'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
@@ -305,11 +300,11 @@ putlblcfg()
 
 class tv_config(Screen, ConfigListScreen):
     def __init__(self, session):
+        Screen.__init__(self, session)
         self.session = session
         skin = os.path.join(skin_path, 'tv_config.xml')
         with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
-        Screen.__init__(self, session)
         self.setup_title = (name_plug)
         self.onChangedEntry = []
         self.list = []
@@ -364,10 +359,19 @@ class tv_config(Screen, ConfigListScreen):
                     from os import access, X_OK
                     if not access(self.cmd1, X_OK):
                         os.chmod(self.cmd1, 493)
-                    os.system(self.cmd1)
+                    # os.system(self.cmd1)
+                    import subprocess
+                    # subprocess.check_output(['bash', self.cmd1])   
+                    try:
+                        subprocess.check_output(['bash', self.cmd1])
+                        # self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                    except subprocess.CalledProcessError as e:
+                        print(e.output)
+                        # self.session.open(MessageBox, _('SoftcamKeys Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                    
                     os.system('sleep 5')
                     if not os.path.exists('/tmp/emm.txt'):
-                        import wget
+                        # import wget
                         outp = base64.b64decode(sss)
                         url = str(outp)
                         wget.download(url, '/tmp/emm.txt')
@@ -398,13 +402,23 @@ class tv_config(Screen, ConfigListScreen):
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
-            os.system(self.cmd1)
+            # os.system(self.cmd1)
+            import subprocess
+            # subprocess.check_output(['bash', self.cmd1])
+            try:
+                subprocess.check_output(['bash', self.cmd1])
+                # self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
+            except subprocess.CalledProcessError as e:
+                print(e.output)
+                # self.session.open(MessageBox, _('SoftcamKeys Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
             os.system('sleep 5')
             if not os.path.exists('/tmp/emm.txt'):
-                import wget
                 outp = base64.b64decode(sss)
                 url = str(outp)
-                subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
+                try:
+                    subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
+                except subprocess.CalledProcessError as e:
+                    print(e.output)
             if os.path.exists('/tmp/emm.txt'):
                 msg.append(_("READ EMM....\n"))
                 with open('/tmp/emm.txt') as f:
@@ -470,7 +484,14 @@ class tv_config(Screen, ConfigListScreen):
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
-            os.system(self.cmd1)
+            # self.cmd2 = '. ' + self.cmd1
+            # os.system(self.cmd1)
+            import subprocess
+            # subprocess.check_output(['bash', self.cmd1])
+            try:
+                subprocess.check_output(['bash', self.cmd1])
+            except subprocess.CalledProcessError as e:
+                print(e.output)
             os.system('sleep 3')
             if os.path.exists('/tmp/emm.txt'):
                 msg.append(_("READ EMM....\n"))
@@ -628,7 +649,7 @@ class tv_config(Screen, ConfigListScreen):
                     data = six.ensure_str(data)
                 print('=== Lnk ==== ', data)
                 self.timer = eTimer()
-                if isDreamOS:
+                if os.path.exists('/var/lib/dpkg/info'):
                     self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
                 else:
                     self.timer.callback.append(self.load_getcl(data))

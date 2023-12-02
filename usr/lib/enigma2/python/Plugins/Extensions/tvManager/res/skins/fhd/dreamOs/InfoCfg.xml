@@ -1,25 +1,26 @@
-<!-- Skin InfoCFG 15/08/2020 -->
+<!-- Skin InfoCFG 01/12/2023 -->
 <screen name="InfoCfg" position="0,0" size="1920,1080" title="..::TiVuStream Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
-	<widget name="title" position="222,71" size="1025,54" font="Regular;30" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="description" position="220,155" size="1030,50" font="Regular;30" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/main2.png" position="0,-27" size="1920,1080" zPosition="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="228,14" size="279,50" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="220,130" size="1030,8" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="220,910" size="1030,8" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/PayPal.png" position="1517,157" size="156,75" zPosition="2" alphatest="on" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/qr-code.png" position="1444,240" size="320,320" zPosition="2" alphatest="on" />	
-	<widget name="paypal" position="1370,569" size="526,197" font="Regular;24" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2" />
-	<eLabel position="1362,141" size="540,639" backgroundColor="#80000000" zPosition="1" />	
-<!-- 	<eLabel position="1270,141" size="540,639" backgroundColor="#80000000" cornerRadius="20" zPosition="1" /> -->    
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/main2.png" position="0,0" size="1920,1080" zPosition="1" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png"   position="190,25" size="279,50" alphatest="blend" zPosition="5" />
+	<widget name="title" position="190,75" size="1025,50" font="Regular;34" halign="left" valign="center" foregroundColor="#808080" backgroundColor="black" transparent="1" zPosition="5" />
+	<widget name="description" position="180,155" size="1030,50" font="Regular;30" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	
+	<eLabel position="180,130" size="1030,5" backgroundColor="#303030" zPosition="5" />
+	<eLabel position="180,910" size="1030,5" backgroundColor="#303030" zPosition="5" />
+	<eLabel position="180,210" size="1030,2" backgroundColor="#303030" zPosition="5" />
 	<!-- Menu List -->
-	<widget name="list" position="220,215" size="1030,667" font="Regular;28" halign="left" foregroundColor="#ffffff" backgroundColor="#20000000" transparent="1" zPosition="5" />
-	<!-- Colors 1220 -->
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="220,945" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="220,1005" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="1220,945" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_blue.png" position="1220,1005" size="30,30" alphatest="blend" zPosition="5" />
-	<widget name="key_red" position="270,940" size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_green" position="270,1000" size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_yellow" position="905,940" size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_blue" position="905,1000" size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="list" position="180,230" size="1030,640" font="Regular;26" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" backgroundColor="#20000000" />
+	<eLabel position="1362,70" size="540,639" backgroundColor="#80000000" zPosition="1" cornerRadius="30" />	
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/PayPal.png" position="1560,110" size="156,75" zPosition="2" alphatest="on" />
+	<widget name="paypal" position="1370,540" size="526,197" font="Regular;24" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/qr-code.png" position="1470,210" size="320,320" zPosition="2" alphatest="on" />	
+    	<!-- Colors -->
+	<eLabel position="190,945"   size="30,30" backgroundColor="red"    cornerRadius="10" zPosition="5" />
+	<eLabel position="190,1005"  size="30,30" backgroundColor="green"  cornerRadius="10" zPosition="5" />
+	<eLabel position="1180,945"  size="30,30" backgroundColor="yellow" cornerRadius="10" zPosition="5" />
+	<eLabel position="1180,1005" size="30,30" backgroundColor="blue"   cornerRadius="10" zPosition="5" />
+	<widget name="key_red"    position="230,940"  size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_green"  position="230,1000" size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_yellow" position="865,940"  size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_blue"   position="865,1000" size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
 </screen>
+

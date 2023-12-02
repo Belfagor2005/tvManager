@@ -322,12 +322,14 @@ class tvManager(Screen):
             script = ('%s/auto' % plugin_path)
             # os.system("sed -i -e 's/\r$//' %s" % script)
             # os.system("sed -i -e 's/^M$//' %s" % script)
-            os.system("os2unix %s" % script)
+            # os.system("os2unix %s" % script)
             from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
-            os.system("os2unix %s" % script)
-            self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
+            # self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
+            import subprocess
+            subprocess.check_output(['bash', script])
+            self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
 
     def CfgInfo(self):
         self.session.open(InfoCfg)
