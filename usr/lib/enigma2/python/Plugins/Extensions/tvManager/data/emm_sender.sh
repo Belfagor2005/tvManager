@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # mod by lululla 24/06/2023
 clear
 atr_183e='3F FF 95 00 FF 91 81 71 FE 47 00 54 49 47 45 52 36 30 31 20 52 65 76 4D 38 37 14'

@@ -364,12 +364,12 @@ class tv_config(Screen, ConfigListScreen):
                     # subprocess.check_output(['bash', self.cmd1])   
                     try:
                         subprocess.check_output(['bash', self.cmd1])
-                        # self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                        self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
                     except subprocess.CalledProcessError as e:
                         print(e.output)
-                        # self.session.open(MessageBox, _('SoftcamKeys Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                        self.session.open(MessageBox, _('Card Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
                     
-                    os.system('sleep 5')
+                    os.system('sleep 3')
                     if not os.path.exists('/tmp/emm.txt'):
                         # import wget
                         outp = base64.b64decode(sss)
@@ -407,15 +407,17 @@ class tv_config(Screen, ConfigListScreen):
             # subprocess.check_output(['bash', self.cmd1])
             try:
                 subprocess.check_output(['bash', self.cmd1])
-                # self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
             except subprocess.CalledProcessError as e:
                 print(e.output)
-                # self.session.open(MessageBox, _('SoftcamKeys Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(MessageBox, _('Card Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
             os.system('sleep 5')
             if not os.path.exists('/tmp/emm.txt'):
                 outp = base64.b64decode(sss)
                 url = str(outp)
+                # cmd = 'wget -q --no-use-server-timestamps --no-clobber --timeout=5' + url + ' -O /tmp/emm.txt'
                 try:
+                    # subprocess.check_output(['bash', cmd])
                     subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
                 except subprocess.CalledProcessError as e:
                     print(e.output)
