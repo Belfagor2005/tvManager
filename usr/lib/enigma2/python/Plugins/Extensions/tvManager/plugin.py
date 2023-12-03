@@ -10,6 +10,7 @@
 from __future__ import print_function
 from . import _, sl, isDreamOS, paypal
 from . import Utils
+from .Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.Button import Button
@@ -853,47 +854,75 @@ class GetipkTv(Screen):
             com = self.urls[idx]
             self.prombt(com, dom)
 
+    def dowfil(self):
+        self.dest = '/tmp/' + self.downplug
+        if fileExists(self.dest):
+            os.remove(self.dest)
+        if PY3:
+            import urllib.request as urllib2
+            import http.cookiejar as cookielib
+        else:
+            import urllib2
+            import cookielib
+        headers = {'User-Agent': RequestAgent()}
+        cookie_jar = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie_jar))
+        urllib2.install_opener(opener)
+        try:
+            req = urllib2.Request(self.com, data=None, headers=headers)
+            handler = urllib2.urlopen(req, timeout=15)
+            data = handler.read()
+            with open(self.dest, 'wb') as f:
+                f.write(data)
+            print('MYDEBUG - download ok - URL: %s , filename: %s' % (self.com, self.dest))
+        except:
+            print('MYDEBUG - download failed - URL: %s , filename: %s' % (self.com, self.dest))
+            self.dest = ''
+        return self.dest
+
     def prombt(self, com, dom):
         try:
-            # useragent = "--header='User-Agent: QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)'"
             self.com = str(com)
             self.dom = str(dom)
-            ipkpth = '/tmp'
-            destipk = ipkpth + '/download.ipk'
-            desttar = ipkpth + '/download.tar.gz'
-            destdeb = ipkpth + '/download.deb'
             self.timer = eTimer()
-
+            extensionlist = self.com.split('.')
+            extension = extensionlist[-1]
+            self.downplug = self.com.split("/")[-1]
+            down = self.dowfil()
             if self.com.find('.ipk') != -1:
-                if fileExists(destipk):
-                    os.remove(destipk)
-                cmd = "wget -U '%s' -c '%s' -O '%s';opkg install --force-overwrite --force-downgrade %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
+                cmd = "opkg install --force-reinstall %s > /dev/null" % down
+                self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
+
+            if extension in ["gz", "bz2"] and tar == "tar":
+                self.command = ['']
+                # self.dest = self.dowfil()
+                if extension == "gz":
+                    self.command = ["tar -xzvf " + down + " -C /"]
+                elif extension == "bz2":
+                    self.command = ["tar -xjvf " + down + " -C /"]
+                cmd = "wget -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
                 if "https" in str(self.com):
-                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';opkg install --force-overwrite --force-downgrade %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destipk, destipk)
-                self.session.open(Console, title='IPK Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
-            if self.com.find('.tar.gz') != -1:
-                if fileExists(desttar):
-                    os.remove(desttar)
-                cmd = "wget -U '%s' -c '%s' -O '%s';tar -xzvf %s -C / > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), desttar, desttar)
-                if "https" in str(self.com):
-                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';tar -xzvf %s -C / > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), desttar, desttar)
-                self.session.open(Console, title='TAR GZ Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
-            if self.com.find('.deb') != -1:
-                if fileExists(destdeb):
-                    os.remove(destdeb)
-                if os.path.exists('/var/lib/dpkg/info'):
+                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
+                self.session.open(Console, title='Installation %s' % self.dom, cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
+
+            if extension == 'deb'):
+                if not os.path.exists('/var/lib/dpkg/status'):
+                    self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+                else:
                     cmd22 = 'find /usr/bin -name "wget"'
                     res = os.popen(cmd22).read()
                     if 'wget' not in res.lower():
                         cmd23 = 'apt-get update && apt-get install wget'
                         os.popen(cmd23)
-                    cmd = "wget -U '%s' -c '%s' -O '%s';apt-get install -f -y %s" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
-                    if "https" in str(self.com):
-                        # cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';dpkg -i %s > /dev/null" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
-                        cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';apt-get install -f -y %s" % ('Enigma2 - tvManager Plugin', str(self.com), destdeb, destdeb)
-                    self.session.open(Console, title='DEB Installation', cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
-                else:
-                    self.mbox = self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+                    cmd = 'dpkg -i %s' % down
+                    self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
+
+            if extension == 'zip':
+                cmd = ["wget -U '%s' -c '%s' -O '%s > /dev/null' " % (RequestAgent(), str(self.com), down)]
+                self.session.open(Console, _('Downloading: %s') % self.dom, cmd, closeOnSuccess=False)
+                self.session.open(MessageBox, _('Download file in /tmp successful!'), MessageBox.TYPE_INFO, timeout=5)
+                self.timer.start(1000, True)
+
             self.timer.start(500, 1)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
