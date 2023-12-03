@@ -905,7 +905,7 @@ class GetipkTv(Screen):
                     cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
                 self.session.open(Console, title='Installation %s' % self.dom, cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
 
-            if extension == 'deb'):
+            if extension == 'deb':
                 if not os.path.exists('/var/lib/dpkg/status'):
                     self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
                 else:
