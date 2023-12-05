@@ -21,7 +21,7 @@ from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
-from .. import _, sl, isDreamOS, paypal
+from .. import _, sl, paypal
 from random import choice
 from enigma import eTimer
 from enigma import getDesktop
@@ -368,8 +368,8 @@ class tv_config(Screen, ConfigListScreen):
                     except subprocess.CalledProcessError as e:
                         print(e.output)
                         self.session.open(MessageBox, _('Card Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
-                    
-                    os.system('sleep 3')
+
+                    os.system('sleep 5')
                     if not os.path.exists('/tmp/emm.txt'):
                         # import wget
                         outp = base64.b64decode(sss)

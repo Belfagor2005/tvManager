@@ -182,6 +182,7 @@ class tvManager(Screen):
                                      'MenuActions'], {'ok': self.action,
                                                       'cancel': self.close,
                                                       'menu': self.configtv,
+                                                                                
                                                       'blue': self.Blue,
                                                       'yellow': self.download,
                                                       'green': self.action,
@@ -272,6 +273,9 @@ class tvManager(Screen):
         # if 'ccam' in self.currCam.lower() and self.currCam != None:
             # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                 # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
+                                                                                    
+
+                      
                 # self.session.openWithCallback(self.close, CCcamInfoMain)
 
     # def oscam(self):
@@ -279,6 +283,13 @@ class tvManager(Screen):
             # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                 # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                 # self.session.openWithCallback(self.close, OscamStatus)
+                        
+                         
+                        
+                         
+                            
+             
+                  
 
     # def tvPanel(self):
         # if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/tvaddon'):
@@ -568,14 +579,14 @@ class tvManager(Screen):
                                 self.softcamslist.append(nam, png2, '')
                                 pliste.append(nam, '')
                             self.index += 1
-                    sfile.close()
-                    self.softcamslist.sort(key=lambda i: i[2], reverse=True)
-                    pliste.sort(key=lambda i: i[1], reverse=True)
-                    # print('self.softcamslist: ', self.softcamslist)
-                    # print('pliste: ', pliste)
-                    self.namelist = pliste
-                    # self['list'].l.setList(self.softcamslist)
-                    self["list"].setList(self.softcamslist)
+                sfile.close()
+                self.softcamslist.sort(key=lambda i: i[2], reverse=True)
+                pliste.sort(key=lambda i: i[1], reverse=True)
+                # print('self.softcamslist: ', self.softcamslist)
+                # print('pliste: ', pliste)
+                self.namelist = pliste
+                # self['list'].l.setList(self.softcamslist)
+                self["list"].setList(self.softcamslist)
         except Exception as e:
             print('error scriptlist: ', e)
 
@@ -627,6 +638,7 @@ class tvManager(Screen):
             alist = open('/etc/autocam.txt', 'a', encoding='UTF-8')
         else:
             alist = open('/etc/autocam.txt', 'a')
+                                                                 
         alist.write(self.oldService.toString() + '\n')
         self.last = self.getLastIndex()
         alist.write(current + '\n')
@@ -889,6 +901,16 @@ class GetipkTv(Screen):
             extension = extensionlist[-1]
             self.downplug = self.com.split("/")[-1]
             down = self.dowfil()
+            from os import popen
+            cmd22 = 'find /usr/bin -name "wget"'
+            res = popen(cmd22).read()
+            if 'wget' not in res.lower():
+                wget = ''
+                if os.path.exists('/var/lib/dpkg/info'):
+                    cmd23 = 'apt-get update && apt-get install wget'
+                else:
+                    cmd23 = 'opkg update && opkg install wget'
+                popen(cmd23)
             if self.com.find('.ipk') != -1:
                 cmd = "opkg install --force-reinstall %s > /dev/null" % down
                 self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
@@ -921,8 +943,6 @@ class GetipkTv(Screen):
                 cmd = ["wget -U '%s' -c '%s' -O '%s > /dev/null' " % (RequestAgent(), str(self.com), down)]
                 self.session.open(Console, _('Downloading: %s') % self.dom, cmd, closeOnSuccess=False)
                 self.session.open(MessageBox, _('Download file in /tmp successful!'), MessageBox.TYPE_INFO, timeout=5)
-                self.timer.start(1000, True)
-
             self.timer.start(500, 1)
         except:
             self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
@@ -968,13 +988,13 @@ class InfoCfg(Screen):
         self['key_yellow'].hide()
         self['key_blue'].hide()
         self.setTitle(_(title_plug))
+
         self['title'] = Label(_(title_plug))
         self['description'] = Label(_('Path Configuration Folder'))
         self.onShown.append(self.updateList)
 
     def getcont(self):
         cont = " ---- Type Cam For Your Box--- \n"
-        # cont += "Default folder:\n"
         cont += ' ------------------------------------------ \n'
         cont += '/etc/CCcam.cfg -> CCcam\n'
         cont += '/etc/tuxbox/config/oscam.server -> Oscam\n'
@@ -1021,6 +1041,7 @@ class InfoCfg(Screen):
         except Exception as e:
             print("Error ", e)
 
+                   
 
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
@@ -1226,11 +1247,11 @@ class DreamCCAuto:
                         os.system('ln -sf /usr/keys /var/keys')
                         os.system('ln -sf /usr/scce /var/scce')
                         os.system('ln -sf /usr/script /var/script')
-                        os.system("sleep 2")
-                        # os.system("/etc/startcam.sh &")
-                        print("*** running autostart ***")
-                        os.system(dat + ' cam_startup &')
+                        os.system("/etc/startcam.sh &")
                         os.system('sleep 2')
+                        print("*** running autostart ***")
+                        # os.system(dat + ' cam_startup &')
+                        # os.system('sleep 2')
 
             datei.close()
         else:
@@ -1293,7 +1314,7 @@ def Plugins(**kwargs):
     if isDreamOS:
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
-            PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
-            # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
+            # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
+            PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main)]
