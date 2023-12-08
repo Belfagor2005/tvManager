@@ -47,14 +47,11 @@ def b64decoder(s):
     import base64
     s = str(s).strip()
     try:
-        # return base64.b64decode(s)
         outp = base64.b64decode(s)
         print('outp1 ', outp)
         if PY3:
             outp = outp.decode('utf-8')
             print('outp2 ', outp)
-        return outp
-
     except TypeError:
         padding = len(s) % 4
         if padding == 1:
@@ -68,8 +65,8 @@ def b64decoder(s):
         print('outp1 ', outp)
         if PY3:
             outp = outp.decode('utf-8')
-            print('outp2 ', outp)
-        return outp
+            print('outp3 ', outp)
+    return outp
 
 
 sl = 'slManager'
@@ -87,16 +84,6 @@ except AttributeError:
     pass
 else:
     ssl._create_default_https_context = _create_unverified_https_context
-
-
-# def getDesktopSize():
-    # from enigma import getDesktop
-    # s = getDesktop(0).size()
-    # return (s.width(), s.height())
-
-# def isFHD():
-    # desktopSize = getDesktopSize()
-    # return desktopSize[0] == 1920
 
 
 def checkStr(txt):
@@ -242,7 +229,10 @@ Serverlive = [
               ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v', 'Server07'),
               ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server08'),
               ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server9'),
+              ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server10'),
+              ('aHR0cHM6Ly9jY2NhbWF6b24uY29tL2ZyZWUvZ2V0LnBocA==', 'Server11'),
               ]
+
 
 # cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
@@ -708,7 +698,6 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
 
             elif 'cccamx' in data.lower():
-                # ">
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccamiptv' in data.lower():
@@ -743,6 +732,14 @@ class tv_config(Screen, ConfigListScreen):
 
             elif '15days' in data.lower():
                 url1 = re.findall('">C: (.*?) (.*?) (.*?) (.+?)</th></tr>', data)
+                
+            elif 'cccamfrei' in data.lower():
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+
+            elif 'cccamazon' in data.lower():
+                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+
+
             print('===========data=========', url1)
 
             if url1 != '':
