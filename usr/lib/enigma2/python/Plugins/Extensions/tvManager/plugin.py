@@ -1247,7 +1247,7 @@ class DreamCCAuto:
                         os.system('ln -sf /usr/keys /var/keys')
                         os.system('ln -sf /usr/scce /var/scce')
                         os.system('ln -sf /usr/script /var/script')
-                        os.system("/etc/startcam.sh &")
+                        os.system("/etc/startcam.sh")
                         os.system('sleep 2')
                         print("*** running autostart ***")
                         # os.system(dat + ' cam_startup &')
