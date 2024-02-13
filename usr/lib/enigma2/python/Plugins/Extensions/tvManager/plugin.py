@@ -922,9 +922,9 @@ class GetipkTv(Screen):
                     self.command = ["tar -xzvf " + down + " -C /"]
                 elif extension == "bz2":
                     self.command = ["tar -xjvf " + down + " -C /"]
-                cmd = "wget -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
+                cmd = "wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
                 if "https" in str(self.com):
-                    cmd = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
+                    cmd = "wget --no-cache --no-dns-cache --no-check-certificate -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
                 self.session.open(Console, title='Installation %s' % self.dom, cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
 
             if extension == 'deb':
@@ -940,7 +940,7 @@ class GetipkTv(Screen):
                     self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
 
             if extension == 'zip':
-                cmd = ["wget -U '%s' -c '%s' -O '%s > /dev/null' " % (RequestAgent(), str(self.com), down)]
+                cmd = ["wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s --post-data='action=purge' > /dev/null' " % (RequestAgent(), str(self.com), down)]
                 self.session.open(Console, _('Downloading: %s') % self.dom, cmd, closeOnSuccess=False)
                 self.session.open(MessageBox, _('Download file in /tmp successful!'), MessageBox.TYPE_INFO, timeout=5)
             self.timer.start(500, 1)
