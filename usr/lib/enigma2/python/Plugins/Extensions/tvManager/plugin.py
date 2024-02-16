@@ -30,6 +30,7 @@ from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
+from Components.Sources.StaticText import StaticText
 from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from enigma import eListboxPythonMultiContent
 from enigma import eTimer
@@ -88,6 +89,7 @@ ecm = ''
 SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
+AgentRequest = RequestAgent()
 
 
 def checkdir():
@@ -158,7 +160,7 @@ class tvManager(Screen):
     def __init__(self, session, args=False):
         Screen.__init__(self, session)
         self.session = session
-        global _session
+        global _session, BlueAction
         _session = session
         skin = os.path.join(skin_path, 'tvManager.xml')
         with codecs.open(skin, "r", encoding="utf-8") as f:
@@ -182,30 +184,30 @@ class tvManager(Screen):
                                      'MenuActions'], {'ok': self.action,
                                                       'cancel': self.close,
                                                       'menu': self.configtv,
-                                                                                
                                                       'blue': self.Blue,
                                                       'yellow': self.download,
                                                       'green': self.action,
                                                       'info': self.CfgInfo,
                                                       'red': self.stop}, -1)
-        try:
-            from Plugins.GP4.geminioscaminfo.goscaminfo import OScamList
-            self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
-                                                   {'showEventInfo': self.callOscamStatus}, -1)
-        except:
-            pass
-        try:
-            from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-            self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
-                                                   {'showEventInfo': self.callOscamStatus}, -1)
-        except:
-            pass
+        # try:
+            # from Plugins.GP4.geminioscaminfo.goscaminfo import OScamList
+            # self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
+                                                   # {'showEventInfo': self.callOscamStatus}, -1)
+        # except:
+            # pass
+        # try:
+            # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+            # self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
+                                                   # {'showEventInfo': self.callOscamStatus}, -1)
+        # except:
+            # pass
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
-        self['key_blue'] = Button(_('Softcam'))
+        self['key_blue'] = Button(_('Info'))
+        # self['key_blue'].hide()
         self['description'] = Label()
         self['description'].setText(_('Scanning and retrieval list softcam ...'))
         self['info'] = Label('')
@@ -214,7 +216,7 @@ class tvManager(Screen):
         self.currCam = None
         self.currCam = self.readCurrent()
         self.readScripts()
-        self.BlueAction = SOFTCAM
+        BlueAction = 'SOFTCAM'
         self.timer = eTimer()
         try:
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
@@ -230,74 +232,76 @@ class tvManager(Screen):
         self.onShown.append(self.ecm)
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
+        # self["key_blue"] = StaticText()
+        # self.onShown.append(self.blueButton)
+        # self.onLayoutFinish(self.setBlueKey)
 
     def setBlueKey(self):
-        '''
-        # if self.currCam is not None or self.currCam != 'None'::
-            # print('self.currCam: ', self.currCam)
-            # if 'ccam' in self.currCam.lower():
-                # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                    # self.BlueAction = CCCAMINFO
-                    # self["key_blue"].setText(_("CCcamInfo"))
-            # elif 'oscam' in self.currCam.lower():
-                # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                    # self.BlueAction = OSCAMINFO
-                    # self["key_blue"].setText(_("OscamInfo"))
-            # else:
-                # self.BlueAction = SOFTCAM
-                # self["key_blue"].setText(_("SOFTCAM"))
-        # else:
-        '''
-        self.BlueAction = SOFTCAM
-        self["key_blue"].setText(_("SOFTCAM"))
+        global BlueAction
+
+        if self.currCam and self.currCam != 'None' or self.currCam is not None:
+            print('self.currCam= 77 ', self.currCam)
+            self["key_blue"].setText("Info")
+            
+            nim = str(self.currCam.lower())
+            if 'ccam' in nim:
+                if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                    BlueAction = 'CCCAMINFO'
+                    # self['key_blue'] = Button(_('CCcamInfo'))
+
+                elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyc'):
+                    from Screens.CCcamInfo import CCcamInfoMain
+                    BlueAction = 'CCCAMINFOMAIN'
+                    # self['key_blue'] = Button(_('CCcamInfo'))
+
+            elif 'oscam' in nim:
+                if os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyc'):
+                    from Screens.OScamInfo import OSCamInfo
+                    BlueAction = 'OSCAMINFO'
+                    # self['key_blue'] = Button(_('OscamInfo'))
+                    
+                elif os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                    from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                    BlueAction = 'OSCAMSTATUS'
+                    # self['key_blue'] = Button(_('OscamStatus'))
+            else:
+                BlueAction = 'SOFTCAM'
+                # self['key_blue'] = Button(_('SOFTCAM'))
+        else:
+            BlueAction = 'SOFTCAM'
+            # self['key_blue'] = Button(_('SOFTCAM'))
+            self["key_blue"].setText(_("Softcam"))
+            
+        # self["key_blue"].show()
 
     def ShowSoftcamCallback(self):
         pass
 
     def Blue(self):
-        '''
-        # if self.BlueAction == CCCAMINFO:
-            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-                # self.session.openWithCallback(self.close, CCcamInfoMain)
-        # elif self.BlueAction == OSCAMINFO:
-            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                # self.session.openWithCallback(self.close, OscamStatus)
-        # else:
-        '''
-        self.BlueAction == SOFTCAM
-        self.messagekd()
-    '''
-    # def cccam(self):
-        # if 'ccam' in self.currCam.lower() and self.currCam != None:
-            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-                                                                                    
+        if BlueAction == 'CCCAMINFO':
+            if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
+                # self.session.open(CCcamInfoMain)
+                self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
 
-                      
-                # self.session.openWithCallback(self.close, CCcamInfoMain)
+        elif BlueAction == 'CCCAMINFOMAIN':
+            from Screens.CCcamInfo import CCcamInfoMain
+            # self.session.open(CCcamInfoMain)
+            self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
 
-    # def oscam(self):
-        # if 'oscam' in self.currCam.lower() and self.currCam != 'no':
-            # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                # self.session.openWithCallback(self.close, OscamStatus)
-                        
-                         
-                        
-                         
-                            
-             
-                  
+        elif BlueAction == 'OSCAMSTATUS':
+            if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
 
-    # def tvPanel(self):
-        # if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/tvaddon'):
-            # from Plugins.Extensions.tvaddon.plugin import Hometv
-            # self.session.openWithCallback(self.close, Hometv)
-        # else:
-            # self.session.open(MessageBox, 'tvAddon Panel Not Installed!!', type=MessageBox.TYPE_INFO, timeout=3)
-    '''
+        elif BlueAction == 'OSCAMINFO':
+            from Screens.OScamInfo import OSCamInfo
+            # self.session.open(OSCamInfo)
+            self.session.openWithCallback(self.ShowSoftcamCallback, OSCamInfo)
+        else:
+            BlueAction == 'SOFTCAM'
+            self.messagekd()
+
     def setEcmInfo(self):
         try:
             self.ecminfo = GetEcmInfo()
@@ -638,7 +642,6 @@ class tvManager(Screen):
             alist = open('/etc/autocam.txt', 'a', encoding='UTF-8')
         else:
             alist = open('/etc/autocam.txt', 'a')
-                                                                 
         alist.write(self.oldService.toString() + '\n')
         self.last = self.getLastIndex()
         alist.write(current + '\n')
@@ -915,6 +918,9 @@ class GetipkTv(Screen):
                 cmd = "opkg install --force-reinstall %s > /dev/null" % down
                 self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
 
+            if len(extensionlist) > 1:
+                tar = extensionlist[-2]
+
             if extension in ["gz", "bz2"] and tar == "tar":
                 self.command = ['']
                 # self.dest = self.dowfil()
@@ -1041,7 +1047,6 @@ class InfoCfg(Screen):
         except Exception as e:
             print("Error ", e)
 
-                   
 
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
