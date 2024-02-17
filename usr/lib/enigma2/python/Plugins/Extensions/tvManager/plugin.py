@@ -206,7 +206,7 @@ class tvManager(Screen):
         self['key_green'] = Button(_('Start'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
-        self['key_blue'] = Button(_('SOFTCAM'))
+        self['key_blue'] = Button(_('Softcam'))
         # self['key_blue'].hide()
         self['description'] = Label()
         self['description'].setText(_('Scanning and retrieval list softcam ...'))
@@ -238,39 +238,45 @@ class tvManager(Screen):
 
     def setBlueKey(self):
         global BlueAction
-
+        self.currCam = self.readCurrent()
         if self.currCam and self.currCam != 'None' or self.currCam is not None:
             print('self.currCam= 77 ', self.currCam)
             self["key_blue"].setText("Info")
             
             nim = str(self.currCam.lower())
             if 'ccam' in nim:
-                if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                    BlueAction = 'CCCAMINFO'
-                    # self['key_blue'] = Button(_('CCcamInfo'))
+                try:
+                    if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                        BlueAction = 'CCCAMINFO'
+                        # self['key_blue'] = Button(_('CCcamInfo'))
 
-                elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyc'):
-                    from Screens.CCcamInfo import CCcamInfoMain
-                    BlueAction = 'CCCAMINFOMAIN'
-                    # self['key_blue'] = Button(_('CCcamInfo'))
+                    elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyc'):
+                        from Screens.CCcamInfo import CCcamInfoMain
+                        BlueAction = 'CCCAMINFOMAIN'
+                        # self['key_blue'] = Button(_('CCcamInfo'))
+                except ImportError:
+                    pass
 
             elif 'oscam' in nim:
-                if os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyc'):
-                    from Screens.OScamInfo import OSCamInfo
-                    BlueAction = 'OSCAMINFO'
-                    # self['key_blue'] = Button(_('OscamInfo'))
-                    
-                elif os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                    from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                    BlueAction = 'OSCAMSTATUS'
-                    # self['key_blue'] = Button(_('OscamStatus'))
-            # else:
-                # BlueAction = 'SOFTCAM'
-                # # self['key_blue'] = Button(_('SOFTCAM'))
+                try:
+                    if os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyc'):
+                        from Screens.OScamInfo import OSCamInfo
+                        BlueAction = 'OSCAMINFO'
+                        # self['key_blue'] = Button(_('OscamInfo'))
+                        
+                    elif os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                        from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                        BlueAction = 'OSCAMSTATUS'
+                        # self['key_blue'] = Button(_('OscamStatus'))
+                except ImportError:
+                    pass
+            else:
+                BlueAction = 'SOFTCAM'
+                self['key_blue'] = Button(_('Softcam'))
         else:
             BlueAction = 'SOFTCAM'
             # self['key_blue'] = Button(_('SOFTCAM'))
-            self["key_blue"].setText(_("Softcam"))
+            self["key_blue"].setText("Softcam")
             
         # self["key_blue"].show()
 
