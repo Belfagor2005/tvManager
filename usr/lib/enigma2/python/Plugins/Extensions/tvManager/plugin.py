@@ -206,7 +206,7 @@ class tvManager(Screen):
         self['key_green'] = Button(_('Start'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
-        self['key_blue'] = Button(_('Info'))
+        self['key_blue'] = Button(_('SOFTCAM'))
         # self['key_blue'].hide()
         self['description'] = Label()
         self['description'].setText(_('Scanning and retrieval list softcam ...'))
@@ -264,9 +264,9 @@ class tvManager(Screen):
                     from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                     BlueAction = 'OSCAMSTATUS'
                     # self['key_blue'] = Button(_('OscamStatus'))
-            else:
-                BlueAction = 'SOFTCAM'
-                # self['key_blue'] = Button(_('SOFTCAM'))
+            # else:
+                # BlueAction = 'SOFTCAM'
+                # # self['key_blue'] = Button(_('SOFTCAM'))
         else:
             BlueAction = 'SOFTCAM'
             # self['key_blue'] = Button(_('SOFTCAM'))
@@ -930,7 +930,7 @@ class GetipkTv(Screen):
                     self.command = ["tar -xjvf " + down + " -C /"]
                 cmd = "wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
                 if "https" in str(self.com):
-                    cmd = "wget --no-cache --no-dns-cache --no-check-certificate -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
+                    cmd = "wget --no-check-certificate --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
                 self.session.open(Console, title='Installation %s' % self.dom, cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
 
             if extension == 'deb':
