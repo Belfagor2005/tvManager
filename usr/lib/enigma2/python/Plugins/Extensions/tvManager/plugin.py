@@ -732,7 +732,7 @@ class GetipklistTv(Screen):
             self.timer.callback.append(self._gotPageLoad)
         self.timer.start(500, 1)
         self['actions'] = ActionMap(['OkCancelActions',
-                                     'ColorActions'], {'ok': self.okClicked, 'cancel': self.close, 'green': self.loadpage}, -1)
+                                     'ColorActions'], {'ok': self.okClicked, 'cancel': self.close, 'green': self.loadpage, 'red': self.close}, -1)
         # self.onShown.append(self.get_list)
         # self.onShown.append(self.updateList)
 
