@@ -30,7 +30,7 @@ from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
-from Components.Sources.StaticText import StaticText
+# from Components.Sources.StaticText import StaticText
 from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from enigma import eListboxPythonMultiContent
 from enigma import eTimer
@@ -89,6 +89,7 @@ ecm = ''
 SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
+global BlueAction
 AgentRequest = RequestAgent()
 
 
@@ -201,9 +202,10 @@ class tvManager(Screen):
                                                    # {'showEventInfo': self.callOscamStatus}, -1)
         # except:
             # pass
+
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
-        self['key_green'] = Button(_('Start'))
+        self['key_green'] = Button(_('Start/Restart'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
         self['key_blue'] = Button(_('Softcam'))
@@ -217,6 +219,7 @@ class tvManager(Screen):
         self.currCam = self.readCurrent()
         self.readScripts()
         BlueAction = 'SOFTCAM'
+        self.setBlueKey()
         self.timer = eTimer()
         try:
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
@@ -233,80 +236,85 @@ class tvManager(Screen):
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
         # self["key_blue"] = StaticText()
-        # self.onShown.append(self.blueButton)
+        # self.onShown.append(self.setBlueKey)
         # self.onLayoutFinish(self.setBlueKey)
 
     def setBlueKey(self):
         global BlueAction
         self.currCam = self.readCurrent()
-        if self.currCam and self.currCam != 'None' or self.currCam is not None:
-            print('self.currCam= 77 ', self.currCam)
-            self["key_blue"].setText("Info")
-            
+        print('self.currCam= 77 ', self.currCam)
+        self["key_blue"].setText("Softcam")
+        if self.currCam and self.currCam is not None or self.currCam != '':
             nim = str(self.currCam.lower())
             if 'ccam' in nim:
-                try:
-                    if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
-                        BlueAction = 'CCCAMINFO'
-                        # self['key_blue'] = Button(_('CCcamInfo'))
+                if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
+                    BlueAction = 'CCCAMINFO'
+                    self["key_blue"].setText("CCCAMINFO")
 
-                    elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyc'):
-                        from Screens.CCcamInfo import CCcamInfoMain
-                        BlueAction = 'CCCAMINFOMAIN'
-                        # self['key_blue'] = Button(_('CCcamInfo'))
-                except ImportError:
-                    pass
+                elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyc'):
+                    # from Screens.CCcamInfo import CCcamInfoMain
+                    BlueAction = 'CCCAMINFOMAIN'
+                    self["key_blue"].setText("CCCAMINFO")
+
+                elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyo'):
+                    # from Screens.CCcamInfo import CCcamInfoMain
+                    BlueAction = 'CCCAMINFOMAIN'
+                    self["key_blue"].setText("CCCAMINFO")
 
             elif 'oscam' in nim:
-                try:
-                    if os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyc'):
-                        from Screens.OScamInfo import OSCamInfo
-                        BlueAction = 'OSCAMINFO'
-                        # self['key_blue'] = Button(_('OscamInfo'))
-                        
-                    elif os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                        from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                        BlueAction = 'OSCAMSTATUS'
-                        # self['key_blue'] = Button(_('OscamStatus'))
-                except ImportError:
-                    pass
-            else:
-                BlueAction = 'SOFTCAM'
-                self['key_blue'] = Button(_('Softcam'))
+                if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
+                    # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                    BlueAction = 'OSCAMSTATUS'
+                    self["key_blue"].setText("OSCAMSTATUS")
+
+                elif os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyc'):
+                    # from Screens.OScamInfo import OSCamInfo
+                    BlueAction = 'OSCAMINFO'
+                    self["key_blue"].setText("OSCAMINFO")
+
+                elif os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyo'):
+                    # from Screens.OScamInfo import OSCamInfo
+                    BlueAction = 'OSCAMINFO'
+                    self["key_blue"].setText("OSCAMINFO")
         else:
             BlueAction = 'SOFTCAM'
-            # self['key_blue'] = Button(_('SOFTCAM'))
             self["key_blue"].setText("Softcam")
-            
-        # self["key_blue"].show()
+        print('Blue=', BlueAction)
 
     def ShowSoftcamCallback(self):
         pass
 
     def Blue(self):
+        if BlueAction == 'SOFTCAM':
+            self.messagekd()
+
         if BlueAction == 'CCCAMINFO':
             if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                 from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-                # self.session.open(CCcamInfoMain)
                 self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
 
-        elif BlueAction == 'CCCAMINFOMAIN':
+        if BlueAction == 'CCCAMINFOMAIN':
             from Screens.CCcamInfo import CCcamInfoMain
-            # self.session.open(CCcamInfoMain)
-            self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
+            # self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
+            self.session.open(CCcamInfoMain)
 
-        elif BlueAction == 'OSCAMSTATUS':
+        if BlueAction == 'OSCAMSTATUS':
             if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                 from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
+                # self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
+                self.session.open(OscamStatus)
 
-        elif BlueAction == 'OSCAMINFO':
-            from Screens.OScamInfo import OSCamInfo
-            # self.session.open(OSCamInfo)
-            self.session.openWithCallback(self.ShowSoftcamCallback, OSCamInfo)
+        if BlueAction == 'OSCAMINFO':
+            try:
+                from Screens.OScamInfo import OSCamInfo
+                # self.session.openWithCallback(self.ShowSoftcamCallback, OSCamInfo)
+                self.session.open(OSCamInfo)
+            except ImportError:
+                from Screens.OScamInfo import OscamInfoMenu
+                # self.session.openWithCallback(self.ShowSoftcamCallback, OSCamInfo)
+                self.session.open(OscamInfoMenu)
         else:
-            BlueAction == 'SOFTCAM'
-            self.messagekd()
+            return
 
     def setEcmInfo(self):
         try:
@@ -597,6 +605,7 @@ class tvManager(Screen):
                 self.namelist = pliste
                 # self['list'].l.setList(self.softcamslist)
                 self["list"].setList(self.softcamslist)
+                self.setBlueKey()
         except Exception as e:
             print('error scriptlist: ', e)
 
@@ -914,7 +923,7 @@ class GetipkTv(Screen):
             cmd22 = 'find /usr/bin -name "wget"'
             res = popen(cmd22).read()
             if 'wget' not in res.lower():
-                wget = ''
+                # wget = ''
                 if os.path.exists('/var/lib/dpkg/info'):
                     cmd23 = 'apt-get update && apt-get install wget'
                 else:
