@@ -92,6 +92,31 @@ OSCAMINFO = 2
 global BlueAction
 AgentRequest = RequestAgent()
 
+try:
+    from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
+except ImportError:
+    pass
+
+try:
+    from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+except ImportError:
+    pass
+
+try:
+    from Screens.OScamInfo import OSCamInfo
+except ImportError:
+    pass
+
+try:
+    from Screens.CCcamInfo import CCcamInfoMain
+except ImportError:
+    pass
+
+try:
+    from Screens.OScamInfo import OscamInfoMenu
+except ImportError:
+    pass
+
 
 def checkdir():
     keys = '/usr/keys'
@@ -117,6 +142,10 @@ if os.path.exists('/var/lib/dpkg/info'):
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+
+if not os.path.exists('/etc/clist.list'):
+    with open('/etc/clist.list', 'w'):
+        print('/etc/clist.list as been create')
 
 
 class m2list(MenuList):
@@ -202,7 +231,6 @@ class tvManager(Screen):
                                                    # {'showEventInfo': self.callOscamStatus}, -1)
         # except:
             # pass
-
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start/Restart'))
@@ -245,8 +273,8 @@ class tvManager(Screen):
         print('self.currCam= 77 ', self.currCam)
         self["key_blue"].setText("Softcam")
         if self.currCam and self.currCam is not None or self.currCam != '':
-            nim = str(self.currCam.lower())
-            if 'ccam' in nim:
+            nim = str(self.currCam)
+            if 'ccam' in nim.lower():
                 if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/CCcamInfo")):
                     BlueAction = 'CCCAMINFO'
                     self["key_blue"].setText("CCCAMINFO")
@@ -261,7 +289,7 @@ class tvManager(Screen):
                     BlueAction = 'CCCAMINFOMAIN'
                     self["key_blue"].setText("CCCAMINFO")
 
-            elif 'oscam' in nim:
+            elif 'oscam' in nim.lower():
                 if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                     # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                     BlueAction = 'OSCAMSTATUS'
@@ -490,7 +518,7 @@ class tvManager(Screen):
             self.readScripts()
 
     def writeFile(self):
-        if self.currCam != 'None' or self.currCam is not None:
+        if self.currCam != '' or self.currCam is not None:
             print('self.currCam= 2 ', self.currCam)
             if sys.version_info[0] == 3:
                 clist = open('/etc/clist.list', 'w', encoding='UTF-8')
@@ -498,6 +526,7 @@ class tvManager(Screen):
                 clist = open('/etc/clist.list', 'w')
             clist.write(str(self.currCam))
             clist.close()
+
         if sys.version_info[0] == 3:
             stcam = open('/etc/startcam.sh', 'w', encoding='UTF-8')
         else:
@@ -505,6 +534,7 @@ class tvManager(Screen):
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
         os.system('chmod 755 /etc/startcam.sh &')
+
         return
 
     def stop(self):
@@ -514,7 +544,6 @@ class tvManager(Screen):
 
         if self.currCam != 'None' or self.currCam is not None:
             # print('self.currCam= 3 ', self.currCam)
-
             self.EcmInfoPollTimer.stop()
             # last = self.getLastIndex()
             self.last = self.getLastIndex()
@@ -534,6 +563,7 @@ class tvManager(Screen):
                     # return
                     # if self.currCam is not None or self.currCam != 'no':
                     '''
+
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
                 os.system(self.cmd1)
 
@@ -616,22 +646,24 @@ class tvManager(Screen):
             self.FilCurr = '/etc/CurrentBhCamName'
         else:
             self.FilCurr = '/etc/clist.list'
-        try:
-            if sys.version_info[0] == 3:
-                clist = open(self.FilCurr, 'r', encoding='UTF-8')
-            else:
-                clist = open(self.FilCurr, 'r')
-        except:
-            return
-        if clist is not None:
-            for line in clist:
-                currCam = line
-            clist.close()
+        if os.stat(self.FilCurr).st_size > 0:
+            try:
+                if sys.version_info[0] == 3:
+                    clist = open(self.FilCurr, 'r', encoding='UTF-8')
+                else:
+                    clist = open(self.FilCurr, 'r')
+            except:
+                return
+            if clist is not None:
+                for line in clist:
+                    currCam = line
+                clist.close()
         return currCam
 
     def autocam(self):
         current = None
         try:
+
             if sys.version_info[0] == 3:
                 clist = open(self.FilCurr, 'r', encoding='UTF-8')
             else:
@@ -643,6 +675,7 @@ class tvManager(Screen):
         if clist is not None:
             for line in clist:
                 current = line
+
             clist.close()
         print('current =', current)
         if os.path.isfile('/etc/autocam.txt') is False:
@@ -690,6 +723,7 @@ class tvManager(Screen):
                 continue
             myfile2.write(line)
             icount = icount + 1
+
         myfile.close()
         myfile2.close()
         os.system('rm /etc/autocam.txt')
