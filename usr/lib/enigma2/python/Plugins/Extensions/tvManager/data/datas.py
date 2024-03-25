@@ -21,6 +21,7 @@ from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+from Components.Sources.StaticText import StaticText
 from .. import _, sl, paypal
 from random import choice
 from enigma import eTimer
@@ -147,7 +148,7 @@ ListAgent = [
           'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25',
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10',
-          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3'
+          'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko ) Version/5.1 Mobile/9B176 Safari/7534.48.3',
           ]
 
 
@@ -233,7 +234,6 @@ Serverlive = [
               ('aHR0cHM6Ly9jY2NhbWF6b24uY29tL2ZyZWUvZ2V0LnBocA==', 'Server11'),
               ]
 
-
 # cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
@@ -296,14 +296,20 @@ class tv_config(Screen, ConfigListScreen):
         with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         self.setup_title = (name_plug)
+        self['title'] = Label(_(name_plug))                                           
+        self["key_red"] = StaticText(_("Back"))
+        self["key_green"] = StaticText("")
+        self["key_yellow"] = StaticText("")
+        self["key_blue"] = StaticText("")
+        self['description'] = Label('')
+        self['info'] = Label('')
+        self['info'].setText(_('Wait please...'))
         self.onChangedEntry = []
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
-        self['title'] = Label(_(name_plug))
         self["paypal"] = Label()
         self['actions'] = ActionMap(['OkCancelActions',
                                      'DirectionActions',
-                                     'setupActions',
                                      'ColorActions',
                                      'VirtualKeyboardActions',
                                      'MenuActions',
@@ -317,23 +323,27 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'red': self.closex,
                                                                   'cancel': self.closex,
                                                                   'back': self.closex}, -1)
-        self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button(_('Force Emm Send'))
-        self['key_yellow'] = Button(_('Check Emm Send'))
-        self["key_blue"] = Button(_(''))
-        # self['key_green'].hide()
-        # self['key_yellow'].hide()
-        self['key_blue'].hide()
-        self['info'] = Label('')
-        self['description'] = Label('')
-        self['description'].setText(_('Wait please...'))
+        if config.plugins.nssaddon.active.value:
+            self['key_green'].setText(buttn)
+            self['key_yellow'].setText(_('Get Link'))
+            self['key_blue'].setText(_('Reset'))
+        else:
+            self['key_green'].setText('Force Emm Send')
+            self['key_yellow'].setText('Check Emm Send')
+            self['key_blue'].setText('')
         self.createSetup()
-        # self.onLayoutFinish.append(self.showhide)
-        self.onShown.append(self.layoutFinished)
-        # self.onFirstExecBegin.append(self.layoutFinished)
+        if self.selectionChanged not in self["config"].onSelectionChanged:
+            self["config"].onSelectionChanged.append(self.selectionChanged)
+        self.selectionChanged()
+        self.onLayoutFinish.append(self.layoutFinished)
+
+    def layoutFinished(self):
+        self.setTitle(self.setup_title)
+        payp = paypal()
+        self["paypal"].setText(payp)
+        self['info'].setText(_('Select Your Choice'))
 
     def sendemm(self):
-        self.showhide()
         if config.plugins.tvmanager.active.value is True:
             self.getcl()
         else:
@@ -351,7 +361,7 @@ class tv_config(Screen, ConfigListScreen):
                         os.chmod(self.cmd1, 493)
                     # os.system(self.cmd1)
                     import subprocess
-                    # subprocess.check_output(['bash', self.cmd1])   
+                    # subprocess.check_output(['bash', self.cmd1])
                     try:
                         subprocess.check_output(['bash', self.cmd1])
                         self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
@@ -363,8 +373,10 @@ class tv_config(Screen, ConfigListScreen):
                     if not os.path.exists('/tmp/emm.txt'):
                         # import wget
                         outp = base64.b64decode(sss)
-                        url = str(outp)
-                        wget.download(url, '/tmp/emm.txt')
+                        # url = str(outp)
+                        cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/U4eM6DjV' -O '/tmp/emm.txt'"
+                        # wget.download(url, '/tmp/emm.txt')
+                        os.system(cmmnd)
                     if os.path.exists('/tmp/emm.txt'):
                         msg.append(_("READ EMM....\n"))
                         with open('/tmp/emm.txt') as f:
@@ -392,9 +404,7 @@ class tv_config(Screen, ConfigListScreen):
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
-            # os.system(self.cmd1)
             import subprocess
-            # subprocess.check_output(['bash', self.cmd1])
             try:
                 subprocess.check_output(['bash', self.cmd1])
                 self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
@@ -439,21 +449,15 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Reset') + ' ' + putlbl, type=MessageBox.TYPE_INFO, timeout=8)
 
     def showhide(self):
-        if config.plugins.tvmanager.active.value is True:
+        if config.plugins.nssaddon.active.value:
             self['key_green'].setText(buttn)
-            self['key_green'].show()
             self['key_yellow'].setText(_('Get Link'))
-            self['key_yellow'].show()
             self['key_blue'].setText(_('Reset'))
-            self['key_blue'].show()
         else:
-            # self['key_green'].hide()
             self['key_green'].setText('Force Emm Send')
-            self['key_green'].show()
-            # self['key_yellow'].hide()
             self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
-            self['key_blue'].hide()
+        return
 
     def green(self):
         if config.plugins.tvmanager.active.value is True:
@@ -476,10 +480,7 @@ class tv_config(Screen, ConfigListScreen):
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
-            # self.cmd2 = '. ' + self.cmd1
-            # os.system(self.cmd1)
             import subprocess
-            # subprocess.check_output(['bash', self.cmd1])
             try:
                 subprocess.check_output(['bash', self.cmd1])
             except subprocess.CalledProcessError as e:
@@ -499,13 +500,6 @@ class tv_config(Screen, ConfigListScreen):
                 self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
             else:
                 self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
-
-    def layoutFinished(self):
-        self.showhide()
-        self.setTitle(self.setup_title)
-        payp = paypal()
-        self["paypal"].setText(payp)
-        self['description'].setText(_('Select Your Choice'))
 
     def createSetup(self):
         self.editListEntry = None
@@ -542,6 +536,14 @@ class tv_config(Screen, ConfigListScreen):
         self.createSetup()
         self.getcl()
 
+    def keyDown(self):
+        self['config'].instance.moveSelection(self['config'].instance.moveDown)
+        self.createSetup()
+
+    def keyUp(self):
+        self['config'].instance.moveSelection(self['config'].instance.moveUp)
+        self.createSetup()
+
     def VirtualKeyBoardCallback(self, callback=None):
         if callback is not None and len(callback):
             self['config'].getCurrent()[1].value = callback
@@ -552,9 +554,14 @@ class tv_config(Screen, ConfigListScreen):
         from Screens.Setup import SetupSummary
         return SetupSummary
 
+    def selectionChanged(self):
+        # self["info"].setText(self["config"].getCurrent()[2])
+        self.showhide()
+
     def changedEntry(self):
         for x in self.onChangedEntry:
             x()
+        self.selectionChanged()
 
     def getCurrentEntry(self):
         return self['config'].getCurrent()[0]
@@ -732,14 +739,12 @@ class tv_config(Screen, ConfigListScreen):
 
             elif '15days' in data.lower():
                 url1 = re.findall('">C: (.*?) (.*?) (.*?) (.+?)</th></tr>', data)
-                
+
             elif 'cccamfrei' in data.lower():
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccamazon' in data.lower():
                 url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
-
-
             print('===========data=========', url1)
 
             if url1 != '':
