@@ -750,8 +750,8 @@ class GetipklistTv(Screen):
         self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
         self['key_green'] = Button(_('Load'))
-        self['key_yellow'] = Button(_(''))
-        self['key_blue'] = Button(_(''))
+        self['key_yellow'] = Button()
+        self['key_blue'] = Button()
         self['key_green'].hide()
         if os.path.exists(FILE_XML):
             self['key_green'].show()
@@ -860,9 +860,9 @@ class GetipkTv(Screen):
         self['description'] = Label(_('Select and Install'))
         self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button(_(''))
-        self['key_yellow'] = Button(_(''))
-        self['key_blue'] = Button(_(''))
+        self['key_green'] = Button()
+        self['key_yellow'] = Button()
+        self['key_blue'] = Button()
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
@@ -1036,9 +1036,9 @@ class InfoCfg(Screen):
                                                        'red': self.close}, -1)
         self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button(_(''))
-        self['key_yellow'] = Button(_(''))
-        self['key_blue'] = Button(_(''))
+        self['key_green'] = Button()
+        self['key_yellow'] = Button()
+        self['key_blue'] = Button()
         self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
@@ -1368,7 +1368,7 @@ def Plugins(**kwargs):
     if isDreamOS:
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
-            # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
-            PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostart),
+            PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
+            # PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], fnc=autostart),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main)]

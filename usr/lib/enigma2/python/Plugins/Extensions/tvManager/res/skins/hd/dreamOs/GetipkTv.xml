@@ -1,5 +1,5 @@
 <!-- Skin GetIPK 15/08/2020 -->
-<screen name="GetipkTv" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#20000000" flags="wfNoBorder">
+<screen name="GetipkTv" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
 	<widget name="title" position="146,60" size="685,30" font="Regular;20" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
 	<widget name="description" position="151,98" size="676,45" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/main22.png" position="0,0" size="1280,720" zPosition="1" />

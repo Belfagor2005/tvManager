@@ -1,5 +1,5 @@
 <!-- Skin tvCFG 17/08/2022 -->
-<screen name="tvCfg" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#20000000" flags="wfNoBorder">
+<screen name="tvCfg" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
 	<widget name="title" position="146,60" size="685,30" font="Regular;20" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
 	<widget name="info" position="149,544" size="686,49" font="Regular;20" halign="center" foregroundColor="yellow" backgroundColor="#20000000" transparent="1" zPosition="5" />
 	<widget name="description" position="151,98" size="676,45" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	

@@ -323,7 +323,7 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'red': self.closex,
                                                                   'cancel': self.closex,
                                                                   'back': self.closex}, -1)
-        if config.plugins.nssaddon.active.value:
+        if config.plugins.tvmanager.active.value:
             self['key_green'].setText(buttn)
             self['key_yellow'].setText(_('Get Link'))
             self['key_blue'].setText(_('Reset'))
@@ -449,7 +449,7 @@ class tv_config(Screen, ConfigListScreen):
             self.session.open(MessageBox, _('Reset') + ' ' + putlbl, type=MessageBox.TYPE_INFO, timeout=8)
 
     def showhide(self):
-        if config.plugins.nssaddon.active.value:
+        if config.plugins.tvmanager.active.value:
             self['key_green'].setText(buttn)
             self['key_yellow'].setText(_('Get Link'))
             self['key_blue'].setText(_('Reset'))

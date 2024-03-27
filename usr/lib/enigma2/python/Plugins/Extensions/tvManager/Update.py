@@ -8,8 +8,8 @@ print("Update.py")
 
 def upd_done():
     from os import popen, system
-    cmd01 = "wget --no-cache --no-dns-cache http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /"
-    cmd02 = "wget --no-check-certificate --no-cache --no-dns-cache -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar' --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /"
+    cmd01 = "wget --no-cache --no-dns-cache http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar"
+    cmd02 = "wget --no-check-certificate --no-cache --no-dns-cache -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar' --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar"
     cmd22 = 'find /usr/bin -name "wget"'
     res = popen(cmd22).read()
     if 'wget' not in res.lower():
