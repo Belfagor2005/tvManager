@@ -641,15 +641,12 @@ class tv_config(Screen, ConfigListScreen):
     def getcl(self):
         try:
             data1 = str(config.plugins.tvmanager.Server.value)
-            print(data1)
             data = b64decoder(data1)
-            print('data2 ', data)
             try:
                 data = getUrl(data)
                 if PY3:
                     import six
                     data = six.ensure_str(data)
-                print('=== Lnk ==== ', data)
                 self.timer = eTimer()
                 if os.path.exists('/var/lib/dpkg/info'):
                     self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))

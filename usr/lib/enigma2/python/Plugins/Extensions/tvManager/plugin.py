@@ -52,19 +52,11 @@ active = False
 _session = None
 PY3 = sys.version_info.major >= 3
 if PY3:
-    # from urllib.error import URLError
-    # from urllib.request import urlopen
-    # from urllib.request import Request
-    # from urllib.parse import urlparse
     unicode = str
     unichr = chr
     long = int
     PY3 = True
 else:
-    # from urllib2 import URLError
-    # from urllib2 import urlopen
-    # from urllib2 import Request
-    # from urlparse import urlparse
     pass
 
 
@@ -220,18 +212,6 @@ class tvManager(Screen):
                                                       'green': self.action,
                                                       'info': self.CfgInfo,
                                                       'red': self.stop}, -1)
-        # try:
-            # from Plugins.GP4.geminioscaminfo.goscaminfo import OScamList
-            # self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
-                                                   # {'showEventInfo': self.callOscamStatus}, -1)
-        # except:
-            # pass
-        # try:
-            # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-            # self['actionsoscamstatus'] = ActionMap(['InfobarEPGActions'],
-                                                   # {'showEventInfo': self.callOscamStatus}, -1)
-        # except:
-            # pass
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['key_green'] = Button(_('Start/Restart'))
@@ -264,9 +244,6 @@ class tvManager(Screen):
         self.onShown.append(self.ecm)
         self.onShown.append(self.setBlueKey)
         self.onHide.append(self.stopEcmInfoPollTimer)
-        # self["key_blue"] = StaticText()
-        # self.onShown.append(self.setBlueKey)
-        # self.onLayoutFinish(self.setBlueKey)
 
     def setBlueKey(self):
         global BlueAction, runningcam
@@ -281,29 +258,24 @@ class tvManager(Screen):
                     self["key_blue"].setText("CCCAMINFO")
 
                 elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyc'):
-                    # from Screens.CCcamInfo import CCcamInfoMain
                     BlueAction = 'CCCAMINFOMAIN'
                     self["key_blue"].setText("CCCAMINFO")
 
                 elif os.path.exists('/usr/lib/enigma2/python/Screens/CCcamInfo.pyo'):
-                    # from Screens.CCcamInfo import CCcamInfoMain
                     BlueAction = 'CCCAMINFOMAIN'
                     self["key_blue"].setText("CCCAMINFO")
 
             elif 'oscam' in nim.lower():
                 runningcam = "oscam"
                 if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
-                    # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                     BlueAction = 'OSCAMSTATUS'
                     self["key_blue"].setText("OSCAMSTATUS")
 
                 elif os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyc'):
-                    # from Screens.OScamInfo import OSCamInfo
                     BlueAction = 'OSCAMINFO'
                     self["key_blue"].setText("OSCAMINFO")
 
                 elif os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyo'):
-                    # from Screens.OScamInfo import OSCamInfo
                     BlueAction = 'OSCAMINFO'
                     self["key_blue"].setText("OSCAMINFO")
         else:
@@ -325,23 +297,19 @@ class tvManager(Screen):
 
         if BlueAction == 'CCCAMINFOMAIN':
             from Screens.CCcamInfo import CCcamInfoMain
-            # self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
             self.session.open(CCcamInfoMain)
 
         if BlueAction == 'OSCAMSTATUS':
             if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                 from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                # self.session.openWithCallback(self.ShowSoftcamCallback, OscamStatus)
                 self.session.open(OscamStatus)
 
         if BlueAction == 'OSCAMINFO':
             try:
                 from Screens.OScamInfo import OSCamInfo
-                # self.session.openWithCallback(self.ShowSoftcamCallback, OSCamInfo)
                 self.session.open(OSCamInfo)
             except ImportError:
                 from Screens.OScamInfo import OscamInfoMenu
-                # self.session.openWithCallback(self.ShowSoftcamCallback, OSCamInfo)
                 self.session.open(OscamInfoMenu)
         else:
             return
@@ -380,13 +348,9 @@ class tvManager(Screen):
     def keysdownload(self, result):
         if result:
             script = ('%s/auto' % plugin_path)
-            # os.system("sed -i -e 's/\r$//' %s" % script)
-            # os.system("sed -i -e 's/^M$//' %s" % script)
-            # os.system("os2unix %s" % script)
             from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
-            # self.session.open(Console, _('Update Softcam.key: %s') % script, ['%s' % script])
             import subprocess
             subprocess.check_output(['bash', script])
             self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
@@ -400,7 +364,6 @@ class tvManager(Screen):
 
     def cgdesc(self):
         if len(self.namelist) >= 1:
-            print('self.currCam= ', self.currCam)
             self['description'].setText(_('Select a cam to run ...'))
         else:
             self['description'].setText(_('Install Cam first!!!'))
@@ -419,9 +382,6 @@ class tvManager(Screen):
         if self.arckget():
             print('arkget= ', arkFull)
             arkFull = self.arckget()
-        # img = os.popen('cat /etc/issue').read().strip('\n\r')
-        # ifg = os.popen('wget -qO - ifconfig.me').read().strip('\n\r')
-        # img = img.replace('\l', '')
         if libs:
             libsssl = libs
         cont += ' ------------------------------------------ \n'
@@ -497,7 +457,6 @@ class tvManager(Screen):
                     # pass
 
             if self.last is not None:  # or self.last >= 1:
-                # if self.index >= 1:
                 if self.last == self.var:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
                     _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
@@ -546,7 +505,6 @@ class tvManager(Screen):
         stcam.write('#!/bin/sh\n' + self.cmd1)
         stcam.close()
         os.system('chmod 755 /etc/startcam.sh &')
-
         return
 
     def stop(self):
@@ -557,25 +515,9 @@ class tvManager(Screen):
         if self.currCam != 'None' or self.currCam is not None:
             self.EcmInfoPollTimer.stop()
             self.last = self.getLastIndex()
-            '''
-                # self.var = self['list'].getSelectedIndex()
-                # # self.var = self['list'].getSelectionIndex()
-                # print('self var=== ', self.var)
-            # if self.last and self.last is not None:  # or self.currCam != 'no':
-            '''
             if self.last is not None:  # or self.currCam != 'no':
-                '''
-                # if self.last > 0:
-                    # self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
-                    # os.system(self.cmd1)
-                # else:
-                    # return
-                    # if self.currCam is not None or self.currCam != 'no':
-                    '''
-
                 self.cmd1 = '/usr/camscript/' + self.softcamslist[self.last][0] + '.sh' + ' cam_down &'
                 os.system(self.cmd1)
-
                 self.currCam = None
                 self.writeFile()
                 sleep(1)
@@ -623,17 +565,13 @@ class tvManager(Screen):
                             nam = line[5:len(line) - 2]
                             print('We are in tvManager and cam is type  = ', nam)
                             if self.currCam != 'None' or self.currCam is not None:
-                                print('self.currCam= 4 ', self.currCam)
                                 if nam == self.currCam:
-                                    # print('nam == self.currCam: ', nam)
                                     self.softcamslist.append((nam,  png1, '(Active)'))
                                     pliste.append((nam, '(Active)'))
                                 else:
-                                    # print('nam != self.currCam: ', nam)
                                     self.softcamslist.append((nam, png2, ''))
                                     pliste.append((nam, ''))
                             else:
-                                # print('self.currCam is None: ', nam)
                                 self.softcamslist.append(nam, png2, '')
                                 pliste.append(nam, '')
                             self.index += 1
@@ -1095,6 +1033,11 @@ class InfoCfg(Screen):
         except Exception as e:
             print("Error ", e)
 
+    def Down(self):
+        self['text'].pageDown()
+
+    def Up(self):
+        self['text'].pageUp()
 
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
