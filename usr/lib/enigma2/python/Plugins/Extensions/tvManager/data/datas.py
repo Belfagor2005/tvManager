@@ -23,6 +23,7 @@ from Tools.Directories import fileExists
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Components.Sources.StaticText import StaticText
 from .. import _, sl, paypal
+from ..plugin import runningcam
 from random import choice
 from enigma import eTimer
 from enigma import getDesktop
@@ -296,7 +297,7 @@ class tv_config(Screen, ConfigListScreen):
         with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
         self.setup_title = (name_plug)
-        self['title'] = Label(_(name_plug))                                           
+        self['title'] = Label(_(name_plug))
         self["key_red"] = StaticText(_("Back"))
         self["key_green"] = StaticText("")
         self["key_yellow"] = StaticText("")
@@ -348,49 +349,51 @@ class tv_config(Screen, ConfigListScreen):
             self.getcl()
         else:
             try:
-                cmd = 'ps -A'
-                res = os.popen(cmd).read()
-                print('res: ', res)
-                if 'oscam' in res.lower() or 'icam' in res.lower() or 'ncam' in res.lower() or 'gcam' in res.lower():
-                    print('oscam exist')
-                    msg = []
-                    msg.append(_("\n....\n.....\n"))
-                    self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
-                    from os import access, X_OK
-                    if not access(self.cmd1, X_OK):
-                        os.chmod(self.cmd1, 493)
-                    # os.system(self.cmd1)
-                    import subprocess
-                    # subprocess.check_output(['bash', self.cmd1])
-                    try:
-                        subprocess.check_output(['bash', self.cmd1])
-                        self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
-                    except subprocess.CalledProcessError as e:
-                        print(e.output)
-                        self.session.open(MessageBox, _('Card Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                print('runningcam=', runningcam)
+                if runningcam == 'oscam':
+                    cmd = 'ps -T'
+                    res = os.popen(cmd).read()
+                    print('res: ', res)
+                    if 'oscam' in res.lower() or 'icam' in res.lower() or 'ncam' in res.lower() or 'gcam' in res.lower():
+                        print('oscam exist')
+                        msg = []
+                        msg.append(_("\n....\n.....\n"))
+                        self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
+                        from os import access, X_OK
+                        if not access(self.cmd1, X_OK):
+                            os.chmod(self.cmd1, 493)
+                        # os.system(self.cmd1)
+                        import subprocess
+                        # subprocess.check_output(['bash', self.cmd1])
+                        try:
+                            subprocess.check_output(['bash', self.cmd1])
+                            self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
+                        except subprocess.CalledProcessError as e:
+                            print(e.output)
+                            self.session.open(MessageBox, _('Card Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
 
-                    os.system('sleep 5')
-                    if not os.path.exists('/tmp/emm.txt'):
-                        # import wget
-                        outp = base64.b64decode(sss)
-                        # url = str(outp)
-                        cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/U4eM6DjV' -O '/tmp/emm.txt'"
-                        # wget.download(url, '/tmp/emm.txt')
-                        os.system(cmmnd)
-                    if os.path.exists('/tmp/emm.txt'):
-                        msg.append(_("READ EMM....\n"))
-                        with open('/tmp/emm.txt') as f:
-                            f = f.read()
-                            if f.startswith('82708'):
-                                msg.append(_("CURRENT EMM IS:\n"))
-                                msg.append(f)
-                                msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
-                            else:
-                                msg.append('No Emm Read!')
-                        msg = (" %s " % _("\n")).join(msg)
-                        self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
-                    else:
-                        self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=10)
+                        os.system('sleep 5')
+                        if not os.path.exists('/tmp/emm.txt'):
+                            # import wget
+                            outp = base64.b64decode(sss)
+                            # url = str(outp)
+                            cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/U4eM6DjV' -O '/tmp/emm.txt'"
+                            # wget.download(url, '/tmp/emm.txt')
+                            os.system(cmmnd)
+                        if os.path.exists('/tmp/emm.txt'):
+                            msg.append(_("READ EMM....\n"))
+                            with open('/tmp/emm.txt') as f:
+                                f = f.read()
+                                if f.startswith('82708'):
+                                    msg.append(_("CURRENT EMM IS:\n"))
+                                    msg.append(f)
+                                    msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
+                                else:
+                                    msg.append('No Emm Read!')
+                            msg = (" %s " % _("\n")).join(msg)
+                            self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+                        else:
+                            self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=10)
                 else:
                     self.session.openWithCallback(self.callMyMsg, MessageBox, _('The Cam is not active, send the command anyway?'), MessageBox.TYPE_YESNO)
             except Exception as e:
@@ -442,7 +445,7 @@ class tv_config(Screen, ConfigListScreen):
         self.close()
 
     def resetcfg(self):
-        if config.plugins.tvmanager.active.value is True:
+        if config.plugins.tvmanager.active.value:
             import shutil
             shutil.copy2(data_path + rstcfg, putlbl)
             os.system('chmod -R 755 %s' % putlbl)
@@ -460,7 +463,7 @@ class tv_config(Screen, ConfigListScreen):
         return
 
     def green(self):
-        if config.plugins.tvmanager.active.value is True:
+        if config.plugins.tvmanager.active.value:
             if putlbl == '/etc/CCcam.cfg':
                 self.CCcam()
             elif putlbl == '/etc/tuxbox/config/oscam.server':
@@ -505,7 +508,7 @@ class tv_config(Screen, ConfigListScreen):
         self.editListEntry = None
         self.list = []
         self.list.append(getConfigListEntry(_('Activate Insert line in Config File:'), config.plugins.tvmanager.active, _('If Active: Download/Reset Server Config')))
-        if config.plugins.tvmanager.active.getValue():
+        if config.plugins.tvmanager.active:
             self.list.append(getConfigListEntry(_('Server Config'), config.plugins.tvmanager.cfgfile, putlbl))
             self.list.append(getConfigListEntry(_('Server Link'), config.plugins.tvmanager.Server, _('Select Get Link')))
             self.list.append(getConfigListEntry(_('Server URL'), config.plugins.tvmanager.hostaddress, _('Server Url i.e. 012.345.678.900')))

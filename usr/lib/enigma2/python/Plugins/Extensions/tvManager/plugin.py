@@ -47,7 +47,7 @@ import re
 import sys
 import time
 
-global active, skin_path, local
+global active, skin_path, local, runningcam
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -146,6 +146,7 @@ if os.path.exists(sl2):
 if not os.path.exists('/etc/clist.list'):
     with open('/etc/clist.list', 'w'):
         print('/etc/clist.list as been create')
+        os.system('chmod 755 /etc/clist.list &')
 
 
 class m2list(MenuList):
@@ -268,7 +269,7 @@ class tvManager(Screen):
         # self.onLayoutFinish(self.setBlueKey)
 
     def setBlueKey(self):
-        global BlueAction
+        global BlueAction, runningcam
         self.currCam = self.readCurrent()
         print('self.currCam= 77 ', self.currCam)
         self["key_blue"].setText("Softcam")
@@ -290,6 +291,7 @@ class tvManager(Screen):
                     self["key_blue"].setText("CCCAMINFO")
 
             elif 'oscam' in nim.lower():
+                runningcam = "oscam"
                 if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
                     # from Plugins.Extensions.OscamStatus.plugin import OscamStatus
                     BlueAction = 'OSCAMSTATUS'
@@ -397,7 +399,6 @@ class tvManager(Screen):
         self.session.open(tv_config)
 
     def cgdesc(self):
-        # try:
         if len(self.namelist) >= 1:
             print('self.currCam= ', self.currCam)
             self['description'].setText(_('Select a cam to run ...'))
@@ -406,7 +407,7 @@ class tvManager(Screen):
             self.updateList()
 
     def getcont(self):
-        cont = "Your Config' :\n"
+        cont = "Your Config':\n"
         arc = ''
         arkFull = ''
         libsssl = ''
@@ -478,6 +479,23 @@ class tvManager(Screen):
             # # self.var = self['list'].getSelectionIndex()
             # print('self var=== ', self.var)
             '''
+            cmdx = 'chmod 755 /usr/camscript/*.*'  # + self.softcamslist[self.var][0] + '.sh'
+            os.system(cmdx)
+            curCam = self.readCurrent()
+            if self.last is not None:
+                try:
+                    foldcurr = '/usr/bin/' + str(curCam)
+                    os.chmod(foldcurr, 0o755)
+                except OSError:
+                    pass
+
+            # import glob
+            # for i in glob.glob(os.path.join('/usr/camscript', '*.sh')):
+                # try:
+                    # os.chmod(i, 0o755)
+                # except OSError:
+                    # pass
+
             if self.last is not None:  # or self.last >= 1:
                 # if self.index >= 1:
                 if self.last == self.var:
@@ -507,13 +525,6 @@ class tvManager(Screen):
                 except:
                     self.close()
             self.session.nav.playService(self.oldService)
-            '''
-            # self.EcmInfoPollTimer = eTimer()
-            # try:
-                # self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
-            # except:
-                # self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
-            '''
             self.EcmInfoPollTimer.start(200)
             self.readScripts()
 
@@ -524,6 +535,7 @@ class tvManager(Screen):
                 clist = open('/etc/clist.list', 'w', encoding='UTF-8')
             else:
                 clist = open('/etc/clist.list', 'w')
+            os.system('chmod 755 /etc/clist.list &')
             clist.write(str(self.currCam))
             clist.close()
 
@@ -543,11 +555,8 @@ class tvManager(Screen):
             return
 
         if self.currCam != 'None' or self.currCam is not None:
-            # print('self.currCam= 3 ', self.currCam)
             self.EcmInfoPollTimer.stop()
-            # last = self.getLastIndex()
             self.last = self.getLastIndex()
-            # print('self.last stop=', self.last)
             '''
                 # self.var = self['list'].getSelectedIndex()
                 # # self.var = self['list'].getSelectionIndex()
@@ -579,6 +588,8 @@ class tvManager(Screen):
                 except:
                     self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
                 self.session.nav.stopService()
+                global BlueAction
+                BlueAction = 'SOFTCAM'
                 self.readScripts()
 
     def readScripts(self):
@@ -621,7 +632,6 @@ class tvManager(Screen):
                                     # print('nam != self.currCam: ', nam)
                                     self.softcamslist.append((nam, png2, ''))
                                     pliste.append((nam, ''))
-                                self.index += 1
                             else:
                                 # print('self.currCam is None: ', nam)
                                 self.softcamslist.append(nam, png2, '')
@@ -630,10 +640,7 @@ class tvManager(Screen):
                 sfile.close()
                 self.softcamslist.sort(key=lambda i: i[2], reverse=True)
                 pliste.sort(key=lambda i: i[1], reverse=True)
-                # print('self.softcamslist: ', self.softcamslist)
-                # print('pliste: ', pliste)
                 self.namelist = pliste
-                # self['list'].l.setList(self.softcamslist)
                 self["list"].setList(self.softcamslist)
                 self.setBlueKey()
         except Exception as e:
@@ -660,6 +667,7 @@ class tvManager(Screen):
                 clist.close()
         return currCam
 
+    '''
     def autocam(self):
         current = None
         try:
@@ -728,6 +736,7 @@ class tvManager(Screen):
         myfile2.close()
         os.system('rm /etc/autocam.txt')
         os.system('cp /etc/autocam2.txt /etc/autocam.txt')
+        '''
 
     def cancel(self):
         self.close()
@@ -812,9 +821,6 @@ class GetipklistTv(Screen):
         global local
         if local is False:
             self.xml = Utils.checkGZIP(self.xml)
-        # if PY3:
-            # url = six.ensure_str(self.xml)
-        # print('data: ', self.xml)
         try:
             # regexC = '<plugins cont = "(.*?)"'
             regexC = '<plugins cont="(.*?)"'
@@ -876,12 +882,6 @@ class GetipkTv(Screen):
 
     def start(self):
         xmlparse = self.xmlparse
-        # if PY3:
-            # n1 = xmlparse.find(self.selection.encode(), 0)
-            # n2 = xmlparse.find('</plugins>'.encode(), n1)
-        # else:
-            # n1 = xmlparse.find(self.selection, 0)
-            # n2 = xmlparse.find('</plugins>', n1)
         n1 = xmlparse.find(self.selection, 0)
         n2 = xmlparse.find("</plugins>", n1)
         data1 = xmlparse[n1:n2]
@@ -957,7 +957,6 @@ class GetipkTv(Screen):
             cmd22 = 'find /usr/bin -name "wget"'
             res = popen(cmd22).read()
             if 'wget' not in res.lower():
-                # wget = ''
                 if os.path.exists('/var/lib/dpkg/info'):
                     cmd23 = 'apt-get update && apt-get install wget'
                 else:
@@ -1147,7 +1146,7 @@ class Ipkremove(Screen):
         else:
             print('returnValue', returnValue)
             ipkname = returnValue[0]
-            cmd = 'ipkg remove ' + ipkname[:-1] + ' >/tmp/ipk.log'
+            cmd = 'opkg remove ' + ipkname[:-1] + ' >/var/volatile/tmp/ipk.log'
             os.system(cmd)
             cmd = 'touch /etc/tmpfile'
             os.system(cmd)
@@ -1242,12 +1241,12 @@ def autostart(reason, session=None, **kwargs):
                     os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
                 if fileExists('/usr/bin/dccamd'):
                     os.system("mv /usr/bin/dccamd /usr/bin/dccamdOrig &")
-                os.system("ln -sf /usr/bin /var/bin")
-                os.system("ln -sf /usr/keys /var/keys")
-                os.system("ln -sf /usr/scce /var/scce")
-                # os.system("ln -sf /usr/camscript /var/camscript")
-                os.system("sleep 2")
-                os.system("/etc/startcam.sh &")
+                os.system('ln -sf /usr/bin /var/bin')
+                os.system('ln -sf /usr/keys /var/keys')
+                os.system('ln -sf /usr/scce /var/scce')
+                # os.system('ln -sf /usr/camscript /var/camscript')
+                os.system('sleep 2')
+                os.system('/etc/startcam.sh &')
                 os.system('sleep 2')
                 print("*** running autostart ***")
                 _firstStarttvsman = True
