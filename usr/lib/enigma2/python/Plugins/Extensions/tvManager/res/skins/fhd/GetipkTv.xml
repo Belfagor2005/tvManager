@@ -14,13 +14,19 @@
 	<!-- Menu List -->
 	<widget name="list" position="180,230" size="1030,640" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" />
     	<!-- Colors -->
-	<eLabel position="190,945"   size="30,30" backgroundColor="red"    cornerRadius="10" zPosition="5" />
-	<eLabel position="190,1005"  size="30,30" backgroundColor="green"  cornerRadius="10" zPosition="5" />
-	<eLabel position="1180,945"  size="30,30" backgroundColor="yellow" cornerRadius="10" zPosition="5" />
-	<eLabel position="1180,1005" size="30,30" backgroundColor="blue"   cornerRadius="10" zPosition="5" />
-	<widget name="key_red"    position="230,940"  size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_green"  position="230,1000" size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_yellow" position="865,940"  size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_blue"   position="865,1000" size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<eLabel position="190,948" size="30,30" backgroundColor="red" cornerRadius="10" zPosition="5" />
+	<eLabel position="190,1010" size="30,30" backgroundColor="green" cornerRadius="10" zPosition="5" />
+	<eLabel position="1180,948" size="30,30" backgroundColor="yellow" cornerRadius="10" zPosition="5" />
+	<eLabel position="1180,1010" size="30,30" backgroundColor="blue" cornerRadius="10" zPosition="5" />
+	
+	<eLabel backgroundColor="red" cornerRadius="3" position="190,979" size="200,6" zPosition="11" />
+	<eLabel backgroundColor="green" cornerRadius="3" position="190,1041" size="200,6" zPosition="11" />
+	<eLabel backgroundColor="yellow" cornerRadius="3" position="1010,979" size="200,6" zPosition="11" />
+	<eLabel backgroundColor="blue" cornerRadius="3" position="1012,1043" size="200,6" zPosition="11" />
+	
+	<widget name="key_red" position="230,940" size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_green" position="230,1000" size="300,40" font="Regular;30" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_yellow" position="865,940" size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_blue" position="865,1000" size="300,40" font="Regular;30" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
 </screen>
 

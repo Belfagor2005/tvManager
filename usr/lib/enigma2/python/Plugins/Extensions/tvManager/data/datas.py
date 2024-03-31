@@ -302,9 +302,6 @@ class tv_config(Screen, ConfigListScreen):
         self["key_green"] = StaticText("")
         self["key_yellow"] = StaticText("")
         self["key_blue"] = StaticText("")
-        self['description'] = Label('')
-        self['info'] = Label('')
-        self['info'].setText(_('Wait please...'))
         self.onChangedEntry = []
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
@@ -324,7 +321,7 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'red': self.closex,
                                                                   'cancel': self.closex,
                                                                   'back': self.closex}, -1)
-        if config.plugins.tvmanager.active.value:
+        if config.plugins.tvmanager.active.value is True:
             self['key_green'].setText(buttn)
             self['key_yellow'].setText(_('Get Link'))
             self['key_blue'].setText(_('Reset'))
@@ -332,6 +329,9 @@ class tv_config(Screen, ConfigListScreen):
             self['key_green'].setText('Force Emm Send')
             self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
+        self['description'] = Label('')                                
+        self['info'] = Label('')
+        self['info'].setText(_('Wait please...'))
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)
@@ -350,6 +350,9 @@ class tv_config(Screen, ConfigListScreen):
         else:
             try:
                 print('runningcam=', runningcam)
+                if runningcam == None:
+                    return
+                # if runningcam == 'oscam' or runningcam == 'ncam':
                 if runningcam == 'oscam':
                     cmd = 'ps -T'
                     res = os.popen(cmd).read()
@@ -445,14 +448,14 @@ class tv_config(Screen, ConfigListScreen):
         self.close()
 
     def resetcfg(self):
-        if config.plugins.tvmanager.active.value:
+        if config.plugins.tvmanager.active.value is True:
             import shutil
             shutil.copy2(data_path + rstcfg, putlbl)
             os.system('chmod -R 755 %s' % putlbl)
             self.session.open(MessageBox, _('Reset') + ' ' + putlbl, type=MessageBox.TYPE_INFO, timeout=8)
 
     def showhide(self):
-        if config.plugins.tvmanager.active.value:
+        if config.plugins.tvmanager.active.value is True:
             self['key_green'].setText(buttn)
             self['key_yellow'].setText(_('Get Link'))
             self['key_blue'].setText(_('Reset'))
@@ -463,7 +466,7 @@ class tv_config(Screen, ConfigListScreen):
         return
 
     def green(self):
-        if config.plugins.tvmanager.active.value:
+        if config.plugins.tvmanager.active.value is True:
             if putlbl == '/etc/CCcam.cfg':
                 self.CCcam()
             elif putlbl == '/etc/tuxbox/config/oscam.server':
@@ -477,38 +480,41 @@ class tv_config(Screen, ConfigListScreen):
             else:
                 return
         else:
-            msg = []
-            msg.append(_("\n....\n.....\n"))
-            self.cmd1 = data_path + 'emm_sender.sh'
-            from os import access, X_OK
-            if not access(self.cmd1, X_OK):
-                os.chmod(self.cmd1, 493)
-            import subprocess
-            try:
-                subprocess.check_output(['bash', self.cmd1])
-            except subprocess.CalledProcessError as e:
-                print(e.output)
-            os.system('sleep 3')
-            if os.path.exists('/tmp/emm.txt'):
-                msg.append(_("READ EMM....\n"))
-                with open('/tmp/emm.txt') as f:
-                    f = f.read()
-                    if f.startswith('82708'):
-                        msg.append(_("CURRENT EMM IS:\n"))
-                        msg.append(f)
-                        msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
-                    else:
-                        msg.append('No Emm')
-                msg = (" %s " % _("\n")).join(msg)
-                self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+            if runningcam == 'oscam':
+                msg = []
+                msg.append(_("\n....\n.....\n"))
+                self.cmd1 = data_path + 'emm_sender.sh'
+                from os import access, X_OK
+                if not access(self.cmd1, X_OK):
+                    os.chmod(self.cmd1, 493)
+                import subprocess
+                try:
+                    subprocess.check_output(['bash', self.cmd1])
+                except subprocess.CalledProcessError as e:
+                    print(e.output)
+                os.system('sleep 3')
+                if os.path.exists('/tmp/emm.txt'):
+                    msg.append(_("READ EMM....\n"))
+                    with open('/tmp/emm.txt') as f:
+                        f = f.read()
+                        if f.startswith('82708'):
+                            msg.append(_("CURRENT EMM IS:\n"))
+                            msg.append(f)
+                            msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
+                        else:
+                            msg.append('No Emm')
+                    msg = (" %s " % _("\n")).join(msg)
+                    self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+                else:
+                    self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
             else:
-                self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(MessageBox, _("No Action!\nOscam not active"), MessageBox.TYPE_INFO, timeout=5)
 
     def createSetup(self):
         self.editListEntry = None
         self.list = []
         self.list.append(getConfigListEntry(_('Activate Insert line in Config File:'), config.plugins.tvmanager.active, _('If Active: Download/Reset Server Config')))
-        if config.plugins.tvmanager.active:
+        if config.plugins.tvmanager.active.value:
             self.list.append(getConfigListEntry(_('Server Config'), config.plugins.tvmanager.cfgfile, putlbl))
             self.list.append(getConfigListEntry(_('Server Link'), config.plugins.tvmanager.Server, _('Select Get Link')))
             self.list.append(getConfigListEntry(_('Server URL'), config.plugins.tvmanager.hostaddress, _('Server Url i.e. 012.345.678.900')))
