@@ -95,11 +95,6 @@ except ImportError:
     pass
 
 try:
-    from Screens.OScamInfo import OSCamInfo
-except ImportError:
-    pass
-
-try:
     from Screens.CCcamInfo import CCcamInfoMain
 except ImportError:
     pass
@@ -115,9 +110,22 @@ except ImportError:
     pass
 
 try:
-    from Screens.NcamInfo import NcamInfoMenu
+    from .data.NcamInfo import NcamInfoMenu
 except ImportError:
-    pass   
+    pass
+
+try:
+    from .data.OScamInfo import OscamInfoMenu
+except ImportError:
+    pass
+
+try:
+    from .data.CCcamInfo import CCcamInfoMain
+except ImportError:
+    pass
+
+
+
 def checkdir():
     keys = '/usr/keys'
     camscript = '/usr/camscript'
@@ -222,7 +230,7 @@ class tvManager(Screen):
                                                       'red': self.stop}, -1)
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
-        self['key_green'] = Button(_('Start/Restart'))
+        self['key_green'] = Button(_('Start'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
         self['key_blue'] = Button(_('Softcam'))
@@ -286,7 +294,6 @@ class tvManager(Screen):
                 elif os.path.exists('/usr/lib/enigma2/python/Screens/OScamInfo.pyo'):
                     BlueAction = 'OSCAMINFO'
                     self["key_blue"].setText("OSCAMINFO")
-
             elif 'ncam' in nim.lower():
                 runningcam = "ncam"
                 # if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus")):
@@ -300,15 +307,18 @@ class tvManager(Screen):
                 elif os.path.exists('/usr/lib/enigma2/python/Screens/NcamInfo.pyo'):
                     BlueAction = 'NCAMINFO'
                     self["key_blue"].setText("NCAMINFO")
+
         else:
             BlueAction = 'SOFTCAM'
+            # runningcam = None
             self["key_blue"].setText("Softcam")
-        print('Blue=', BlueAction)
+        print('Blue2=', BlueAction)
 
     def ShowSoftcamCallback(self):
         pass
 
     def Blue(self):
+        print('Blue2=', BlueAction)
         if BlueAction == 'SOFTCAM':
             self.messagekd()
 
@@ -463,7 +473,6 @@ class tvManager(Screen):
         if i < 1:
             return
         self.session.nav.stopService()
-        # msg = []
         self.last = self.getLastIndex()
         print('self.last=', self.last)
         if self['list'].getCurrent():
