@@ -5,7 +5,7 @@
 #  coded by Lululla  #
 #   skin by MMark    #
 #     update to      #
-#     07/09/2023     #
+#     02/04/2024     #
 # --------------------#
 from __future__ import print_function
 from . import _, sl, isDreamOS, paypal
@@ -209,7 +209,7 @@ class tvManager(Screen):
         self['key_green'] = Button(_('Start'))
         self['key_yellow'] = Button(_('Download'))
         self['key_red'] = Button(_('Stop'))
-        self['key_blue'] = Button(_('Softcam'))
+        self['key_blue'] = Label(_('Softcam'))
         # self['key_blue'].hide()
         self['description'] = Label()
         self['description'].setText(_('Scanning and retrieval list softcam ...'))
@@ -246,34 +246,24 @@ class tvManager(Screen):
             nim = str(self.currCam)
             if 'ccam' in nim.lower():
                 runningcam = "cccam"
-                if os.path.exists(data_path + '/CCcamInfo.pyo'):
+                if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     BlueAction = 'CCCAMINFO'
                     self["key_blue"].setText("CCCAMINFO")
-
-                elif os.path.exists(data_path + '/CCcamInfo.pyc'):
-                    BlueAction = 'CCCAMINFO'
-                    self["key_blue"].setText("CCCAMINFO")
-
             elif 'oscam' in nim.lower():
                 runningcam = "oscam"
-                if os.path.exists(data_path + "/OscamInfo.pyo"):
+                if os.path.exists(data_path + "/OscamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     BlueAction = 'OSCAMINFO'
                     self["key_blue"].setText("OSCAMINFO")
-
-                elif os.path.exists(data_path + '/OScamInfo.pyc'):
-                    BlueAction = 'OSCAMINFO'
-                    self["key_blue"].setText("OSCAMINFO")
-
+            elif 'movicam' in nim.lower():
+                runningcam = "movicam"
+                if os.path.exists(data_path + "/OscamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
+                    BlueAction = 'MOVICAMINFO'
+                    self["key_blue"].setText("MOVICAMINFO")
             elif 'ncam' in nim.lower():
                 runningcam = "ncam"
-                if os.path.exists(data_path + "/NcamInfo.pyo"):
+                if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     BlueAction = 'NCAMINFO'
                     self["key_blue"].setText("NCAMINFO")
-
-                elif os.path.exists(data_path + '/NcamInfo.pyc'):
-                    BlueAction = 'NCAMINFO'
-                    self["key_blue"].setText("NCAMINFO")
-
         else:
             BlueAction = 'SOFTCAM'
             # runningcam = None
@@ -287,24 +277,27 @@ class tvManager(Screen):
         print('Blue2=', BlueAction)
         if BlueAction == 'SOFTCAM':
             self.messagekd()
-
         if BlueAction == 'CCCAMINFO':
             try:
-                # from .data.CCcamInfo import CCcamInfoMain
-                self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
+                self.session.open(CCcamInfoMain)
+                # self.session.openWithCallback(self.ShowSoftcamCallback, CCcamInfoMain)
             except ImportError:
                 pass
 
         if BlueAction == 'OSCAMINFO':
             try:
-                # from .data.OScamInfo import OscamInfoMenu
+                self.session.open(OscamInfoMenu)
+            except ImportError:
+                pass
+
+        if BlueAction == 'MOVICAMINFO':
+            try:
                 self.session.open(OscamInfoMenu)
             except ImportError:
                 pass
 
         if BlueAction == 'NCAMINFO':
             try:
-                # from .data.NcamInfo import NcamInfoMenu
                 self.session.open(NcamInfoMenu)
             except ImportError:
                 pass
@@ -427,7 +420,6 @@ class tvManager(Screen):
             return
         self.session.nav.stopService()
         self.last = self.getLastIndex()
-        print('self.last=', self.last)
         if self['list'].getCurrent():
             self.var = self['list'].getIndex()
             '''
@@ -441,16 +433,11 @@ class tvManager(Screen):
             if self.last is not None:
                 try:
                     foldcurr = '/usr/bin/' + str(curCam)
+                    foldscrpt = '/usr/camscript/' + str(curCam) + '.sh'
                     os.chmod(foldcurr, 0o755)
+                    os.chmod(foldscrpt, 0o755)
                 except OSError:
                     pass
-
-            # import glob
-            # for i in glob.glob(os.path.join('/usr/camscript', '*.sh')):
-                # try:
-                    # os.chmod(i, 0o755)
-                # except OSError:
-                    # pass
 
             if self.last is not None:  # or self.last >= 1:
                 if self.last == self.var:
