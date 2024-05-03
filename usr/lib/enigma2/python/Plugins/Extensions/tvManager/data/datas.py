@@ -298,10 +298,10 @@ class tv_config(Screen, ConfigListScreen):
             self.skin = f.read()
         self.setup_title = (name_plug)
         self['title'] = Label(_(name_plug))
-        self["key_red"] = StaticText(_("Back"))
-        self["key_green"] = StaticText("")
-        self["key_yellow"] = StaticText("")
-        self["key_blue"] = StaticText("")
+        self["key_red"] = Label(_("Back"))
+        self["key_green"] = Label("")
+        self["key_yellow"] = Label("")
+        self["key_blue"] = Label("")
         self.onChangedEntry = []
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
