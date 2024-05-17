@@ -1,21 +1,13 @@
 #!/bin/sh
 echo "****************************************"
-echo "*             tvManager installed      *"
-echo "*                                      *"
-echo "*       Enjoy our plugin               *"
+echo "*Please .. Restart Enigma2 *"
 echo "****************************************"
-echo "*   Please .. Restarting Enigma2       *"
-echo "*     all right reserved               *"
-echo "*          no copy                     *"
+echo "* Enjoy our plugin *"
 echo "****************************************"
-
-cmd22='/usr/bin/wget'
-cmd23=$(apt-get update && apt-get install wget)
-if [ -f $cmd22 ]; then
-    echo "wget exist"
-else apt-get update && apt-get install wget
-fi
-
-wget --no-check-certificate --no-cache --no-dns-cache -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O /tmp/tvmanager.tar --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar
-
+echo "* All Rights Reserved *"
+echo "* © 2024 - Lululla *"
+echo "****************************************"
+#init 4
+#killall -9 enigma2 > /dev/null 2>&1
+#init 3
 exit 0
