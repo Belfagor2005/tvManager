@@ -159,7 +159,7 @@ class m2list(MenuList):
 def show_list_1(h):
     res = [h]
     if screenwidth.width() == 2560:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(2000, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(1200, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     elif screenwidth.width() == 1920:
         res.append(MultiContentEntryText(pos=(2, 0), size=(900, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     else:
@@ -977,7 +977,7 @@ class InfoCfg(Screen):
         self.setTitle(_(title_plug))
 
         self['title'] = Label(_(title_plug))
-        self['description'] = Label(_('Path Configuration Folder'))
+        # self['description'] = Label(_('Path Configuration Folder'))
         self.onShown.append(self.updateList)
 
     def getcont(self):
@@ -1150,12 +1150,12 @@ class AutoStartTimertvman:
 
     def __init__(self, session):
         self.session = session
-        global _firstStarttvsman
         print("*** running AutoStartTimertvman ***")
         if _firstStarttvsman:
             self.runUpdate()
 
     def runUpdate(self):
+        global _firstStarttvsman
         print("*** running update ***")
         try:
             from . import Update

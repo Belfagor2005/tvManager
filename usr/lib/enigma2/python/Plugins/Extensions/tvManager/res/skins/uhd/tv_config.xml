@@ -11,16 +11,15 @@
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/qr-code.png" position="2014,240" size="320,320" zPosition="2" alphatest="on" />	
 	<widget name="paypal" position="1899,782" size="526,197" font="Regular;24" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2" />
 	<eLabel position="1890,141" size="540,639" backgroundColor="#80000000" zPosition="1" transparent="1" />	
-<!-- 	<eLabel position="1270,141" size="540,639" backgroundColor="#80000000" cornerRadius="20" zPosition="1" /> -->    
 	<!-- Menu List -->
 	<widget name="config" position="242,292" size="1372,773" font="Regular;40" itemHeight="66" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvaddon/res/pics/sliderb.png" />
 	<!-- Colors 1220 -->
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="250,1265" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="250,1345" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="1570,1265" size="30,30" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_blue.png" position="1570,1345" size="30,30" alphatest="blend" zPosition="5" />
-	<widget name="key_red" position="310,1252" size="400,52" font="Regular;40" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_green" position="310,1332" size="400,52" font="Regular;40" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_yellow" position="1156,1252" size="400,52" font="Regular;40" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_blue" position="1156,1332" size="400,52" font="Regular;40" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<eLabel backgroundColor="red" cornerRadius="3" position="311,1302" size="400,6" zPosition="11" />
+	<eLabel backgroundColor="green" cornerRadius="3" position="311,1388" size="400,6" zPosition="11" />
+	<eLabel backgroundColor="yellow" cornerRadius="3" position="1161,1303" size="400,6" zPosition="11" />
+	<eLabel backgroundColor="blue" cornerRadius="3" position="1160,1388" size="400,6" zPosition="11" />
+	<widget name="key_red" position="310,1252" size="400,52" font="Regular;40" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_green" position="310,1332" size="400,52" font="Regular;40" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_yellow" position="1156,1252" size="400,52" font="Regular;40" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_blue" position="1156,1332" size="400,52" font="Regular;40" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
 </screen>

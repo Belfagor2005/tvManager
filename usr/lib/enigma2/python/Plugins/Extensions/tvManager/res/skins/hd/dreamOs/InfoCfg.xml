@@ -1,7 +1,7 @@
 <!-- Skin InfoCFG 15/08/2020 -->
-<screen name="InfoCfg" position="0,0" size="1280,720" title="..::TiVuStream Panel Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
+<screen name="InfoCfg" position="center,center" size="1280,720" title="..::TiVuStream Cam Manager::.." backgroundColor="#ff000000" flags="wfNoBorder">
 	<widget name="title" position="146,60" size="685,30" font="Regular;20" halign="left" valign="center" foregroundColor="#002a79b8" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="description" position="151,98" size="676,45" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	
+	<!-- <widget name="description" position="151,98" size="676,45" font="Regular;20" halign="center" valign="center" foregroundColor="yellow" backgroundColor="#202020" transparent="0" zPosition="5" />	 -->
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/main22.png" position="0,0" size="1280,720" zPosition="1" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="143,6" size="289,52" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="146,86" size="686,5" alphatest="blend" zPosition="5" />
@@ -10,17 +10,15 @@
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/qr-codehd.png" position="973,115" size="225,225" zPosition="2" alphatest="on" />	
 	<widget name="paypal" position="917,346" size="324,300" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2" />	
 	<eLabel position="909,32" size="341,625" backgroundColor="#80000000" zPosition="1" />
-    <!-- <eLabel position="855,32" size="392,550" backgroundColor="#80000000" cornerRadius="20" zPosition="1" /> -->
 	<!-- Menu List -->
-	<widget name="list" position="146,151" size="686,440" font="Regular;20" halign="center" foregroundColor="#ffffff" backgroundColor="#20000000" transparent="1" zPosition="5" />
+	<widget name="list" position="146,96" size="686,495" font="Regular;20" halign="center" foregroundColor="#ffffff" backgroundColor="#20000000" transparent="1" zPosition="5" />
 	<!-- Colors 1220 -->
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_red.png" position="146,630" size="20,20" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_green.png" position="146,670" size="20,20" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_yellow.png" position="813,630" size="20,20" alphatest="blend" zPosition="5" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/key_blue.png" position="813,670" size="20,20" alphatest="blend" zPosition="5" />
-	<widget name="key_red" position="180,626" size="200,26" font="Regular;20" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_green" position="180,666" size="200,26" font="Regular;20" halign="left" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_yellow" position="603,626" size="200,26" font="Regular;20" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
-	<widget name="key_blue" position="603,666" size="200,26" font="Regular;20" halign="right" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<eLabel backgroundColor="red" cornerRadius="3" position="181,652" size="200,6" zPosition="11" />
+	<eLabel backgroundColor="green" cornerRadius="3" position="180,692" size="200,6" zPosition="11" />
+	<eLabel backgroundColor="yellow" cornerRadius="3" position="605,650" size="200,6" zPosition="11" />
+	<eLabel backgroundColor="blue" cornerRadius="3" position="603,693" size="200,6" zPosition="11" />
+	<widget name="key_red" position="180,626" size="200,26" font="Regular;20" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_green" position="180,666" size="200,26" font="Regular;20" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_yellow" position="603,626" size="200,26" font="Regular;20" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
+	<widget name="key_blue" position="603,666" size="200,26" font="Regular;20" halign="center" valign="center" backgroundColor="#20000000" zPosition="5" transparent="1" />
 </screen>
-
