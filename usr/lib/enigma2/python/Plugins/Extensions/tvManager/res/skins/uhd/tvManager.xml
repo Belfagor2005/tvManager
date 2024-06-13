@@ -16,7 +16,7 @@
                     MultiContentEntryText(pos = (620, 0), size = (280, 50), flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER, text=2, color=0x72d000, color_sel=0xffffff, backcolor_sel=0x0066cc), # index 2 is the text name,
                 ],
              "fonts": [gFont("Regular", 38)],
-             "itemHeight": 54
+             "itemHeight": 60
             }
         </convert>
     </widget>
@@ -28,14 +28,14 @@
         <convert type="ClockToText">Format:%A</convert>
     </widget>
     <!-- Colors -->
-	<eLabel backgroundColor="red" cornerRadius="3" position="2163,1185" size="400,6" zPosition="11" />
-	<eLabel backgroundColor="green" cornerRadius="3" position="2163,1253" size="400,6" zPosition="11" />
-	<eLabel backgroundColor="yellow" cornerRadius="3" position="2163,1323" size="400,6" zPosition="11" />
-	<eLabel backgroundColor="blue" cornerRadius="3" position="2158,1388" size="400,6" zPosition="11" />
-	<widget name="key_red" position="2160,1128" size="400,60" font="Regular; 40" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="key_green" position="2160,1194" size="400,60" font="Regular; 40" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="key_yellow" position="2160,1264" size="400,60" font="Regular; 40" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="key_blue" position="2160,1333" size="400,60" font="Regular; 40" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
-	<eLabel text="MENU" position="2160,1400" size="150,35" font="Regular;32" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5" />
-	<eLabel text="INFO" position="2407,1400" size="150,35" font="Regular;32" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5" />
+	<eLabel backgroundColor="red" cornerRadius="3" position="2163,1170" size="400,6" zPosition="11" />
+	<eLabel backgroundColor="green" cornerRadius="3" position="2163,1238" size="400,6" zPosition="11" />
+	<eLabel backgroundColor="yellow" cornerRadius="3" position="2163,1303" size="400,6" zPosition="11" />
+	<eLabel backgroundColor="blue" cornerRadius="3" position="2158,1368" size="400,6" zPosition="11" />
+	<widget name="key_red" position="2160,1113" size="400,60" font="Regular; 36" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
+	<widget name="key_green" position="2160,1179" size="400,60" font="Regular; 36" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
+	<widget name="key_yellow" position="2160,1244" size="400,60" font="Regular; 36" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
+	<widget name="key_blue" position="2160,1308" size="400,60" font="Regular; 36" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
+	<eLabel text="MENU" position="2160,1380" size="150,37" font="Regular;32" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5" />
+	<eLabel text="INFO" position="2407,1380" size="150,37" font="Regular;32" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5" />
 </screen>
