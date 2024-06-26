@@ -8,7 +8,7 @@
 #     02/04/2024     #
 # --------------------#
 from __future__ import print_function
-from . import _, sl, isDreamOS, paypal
+from . import _, sl, paypal
 from . import Utils
 from .Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
@@ -123,10 +123,10 @@ checkdir()
 # =============== SCREEN PATH SETTING
 skin_path = os.path.join(res_plugin_path, "skins/hd/")
 screenwidth = getDesktop(0).size()
-if screenwidth.width() == 1920:
-    skin_path = res_plugin_path + 'skins/fhd/'
 if screenwidth.width() == 2560:
     skin_path = res_plugin_path + 'skins/uhd/'
+if screenwidth.width() == 1920:
+    skin_path = res_plugin_path + 'skins/fhd/'
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + 'dreamOs/'
 sl2 = skin_path + sl + '.xml'
@@ -159,9 +159,9 @@ class m2list(MenuList):
 def show_list_1(h):
     res = [h]
     if screenwidth.width() == 2560:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(1200, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(1000, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     elif screenwidth.width() == 1920:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(900, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(800, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     else:
         res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
@@ -173,7 +173,7 @@ def showlist(datal, list):
     for line in datal:
         name = datal[icount]
         plist.append(show_list_1(name))
-        icount = icount + 1
+        icount += 1
         list.setList(plist)
 
 
@@ -1303,7 +1303,7 @@ def StartSetup(menuid):
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    if isDreamOS:
+    if os.path.exists("/var/lib/dpkg/status"):
         iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
