@@ -8,7 +8,7 @@
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="9,1097" size="2560,8" alphatest="blend" zPosition="5" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sep.png" position="0,1433" size="2560,8" alphatest="blend" zPosition="5" />	
 	<!-- Menu List -->
-    <widget source="list" render="Listbox" position="122,1121" size="900,300" scrollbarMode="showOnDemand" foregroundColor="#00a0a0a0" backgroundColorSelected="#00000000" enableWrapAround="1" transparent="1" zPosition="5">
+    <widget source="list" render="Listbox" position="122,1121" size="900,300" scrollbarMode="showOnDemand" foregroundColor="#00a0a0a0" backgroundColorSelected="#0b2049" enableWrapAround="1" transparent="1" zPosition="5">
         <convert type="TemplatedMultiContent">
             {"template": [
                     MultiContentEntryPixmapAlphaTest(pos=(5, 4), size=(70, 40), png=1), # index 1 is the pixmap   
