@@ -7,6 +7,7 @@ changelog='Fix screen'
 ##############################################################
 
 TMPPATH=/tmp/tvManager-main
+FILEPATH=/tmp/main.tar.gz
 
 if [ ! -d /usr/lib64 ]; then
 	PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/tvManager
@@ -59,6 +60,9 @@ echo ""
 
 ## Remove tmp directory
 [ -r $TMPPATH ] && rm -f $TMPPATH > /dev/null 2>&1
+
+## Remove tmp directory
+[ -r $FILEPATH ] && rm -f $FILEPATH > /dev/null 2>&1
 
 ## Remove old plugin directory
 [ -r $PLUGINPATH ] && rm -rf $PLUGINPATH
