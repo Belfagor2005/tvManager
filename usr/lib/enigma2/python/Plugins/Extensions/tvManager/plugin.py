@@ -27,16 +27,18 @@ from Screens.InputBox import Input
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import fileExists
-from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+from Tools.Directories import (fileExists ,resolveFilename, SCOPE_PLUGINS)
 from Tools.LoadPixmap import LoadPixmap
 # from Components.Sources.StaticText import StaticText
-from enigma import RT_HALIGN_LEFT, RT_VALIGN_CENTER
-from enigma import eListboxPythonMultiContent
-from enigma import eTimer
-from enigma import gFont
-from enigma import getDesktop
-from os import mkdir, chmod
+from enigma import (
+    RT_HALIGN_LEFT,
+    RT_VALIGN_CENTER,
+    eListboxPythonMultiContent,
+    eTimer,
+    gFont,
+    getDesktop,
+)
+from os import (mkdir, chmod)
 from time import sleep
 from twisted.web.client import getPage
 import codecs

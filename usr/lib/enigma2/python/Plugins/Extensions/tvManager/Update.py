@@ -8,21 +8,25 @@ print("Update.py")
 
 
 def upd_done():
-    cmd01 = "wget --no-cache --no-dns-cache http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar"
-    cmd02 = "wget --no-check-certificate --no-cache --no-dns-cache -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar' --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar"
-    cmd22 = 'find /usr/bin -name "wget"'
-    res = os.popen(cmd22).read()
-    if 'wget' not in res.lower():
-        if os.path.exists('/etc/opkg'):
-            cmd23 = 'opkg update && opkg install wget'
-        else:
-            cmd23 = 'apt-get update && apt-get install wget'
-        os.popen(cmd23)
-    try:
-        os.popen(cmd02)
-    except:
-        os.popen(cmd01)
-    os.system('rm -rf /tmp/tvmanager.tar')
+    from os import popen, system
+    installUrl = 'https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh'
+    cmd00 = 'wget -q "--no-check-certificate" ' + installUrl + ' -O - | /bin/sh'
+    popen(cmd00)
+    # cmd01 = "wget --no-cache --no-dns-cache http://patbuweb.com/tvManager/tvmanager.tar -O /tmp/tvmanager.tar --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar"
+    # cmd02 = "wget --no-check-certificate --no-cache --no-dns-cache -U 'Enigma2 - tvmanager Plugin' -c 'http://patbuweb.com/tvManager/tvmanager.tar' -O '/tmp/tvmanager.tar' --post-data='action=purge';tar -xvf /tmp/tvmanager.tar -C /;rm -rf /tmp/tvmanager.tar"
+    # cmd22 = 'find /usr/bin -name "wget"'
+    # res = os.popen(cmd22).read()
+    # if 'wget' not in res.lower():
+        # if os.path.exists('/etc/opkg'):
+            # cmd23 = 'opkg update && opkg install wget'
+        # else:
+            # cmd23 = 'apt-get update && apt-get install wget'
+        # os.popen(cmd23)
+    # try:
+        # os.popen(cmd02)
+    # except:
+        # os.popen(cmd01)
+    # os.system('rm -rf /tmp/tvmanager.tar')
     return
 
 
