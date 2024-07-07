@@ -65,7 +65,7 @@ echo ""
 [ -r $FILEPATH ] && rm -f $FILEPATH > /dev/null 2>&1
 
 ## Remove old plugin directory
-[ -r $PLUGINPATH ] && rm -rf $PLUGINPATH
+# [ -r $PLUGINPATH ] && rm -rf $PLUGINPATH
 
 # Download and install plugin
 # check depends packges
