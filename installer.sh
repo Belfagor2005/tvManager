@@ -14,7 +14,14 @@ if [ ! -d /usr/lib64 ]; then
 else
 	PLUGINPATH=/usr/lib64/enigma2/python/Plugins/Extensions/tvManager
 fi
+## Remove tmp directory
+[ -r $TMPPATH ] && rm -f $TMPPATH > /dev/null 2>&1
 
+## Remove tmp directory
+[ -r $FILEPATH ] && rm -f $FILEPATH > /dev/null 2>&1
+
+## Remove old plugin directory
+[ -r $PLUGINPATH ] && rm -rf $PLUGINPATH
 # check depends packges
 if [ -f /var/lib/dpkg/status ]; then
    STATUS=/var/lib/dpkg/status
@@ -58,14 +65,6 @@ else
 fi
 echo ""
 
-## Remove tmp directory
-[ -r $TMPPATH ] && rm -f $TMPPATH > /dev/null 2>&1
-
-## Remove tmp directory
-[ -r $FILEPATH ] && rm -f $FILEPATH > /dev/null 2>&1
-
-## Remove old plugin directory
-[ -r $PLUGINPATH ] && rm -rf $PLUGINPATH
 
 # Download and install plugin
 # check depends packges
