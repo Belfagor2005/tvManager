@@ -10,6 +10,7 @@
 from __future__ import print_function
 from . import _, sl, paypal
 from . import Utils
+from .Console import Console
 from .Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -22,12 +23,12 @@ from Components.Pixmap import Pixmap
 from Components.Sources.List import List
 from Plugins.Plugin import PluginDescriptor
 from Screens.ChoiceBox import ChoiceBox
-from Screens.Console import Console
+# from Screens.Console import Console
 from Screens.InputBox import Input
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import (fileExists ,resolveFilename, SCOPE_PLUGINS)
+from Tools.Directories import (fileExists, resolveFilename, SCOPE_PLUGINS)
 from Tools.LoadPixmap import LoadPixmap
 # from Components.Sources.StaticText import StaticText
 from enigma import (
@@ -48,6 +49,8 @@ import re
 # import six
 import sys
 import time
+import json
+from datetime import datetime
 
 global active, skin_path, local, runningcam
 active = False
@@ -62,7 +65,7 @@ else:
     pass
 
 
-currversion = '2.1'
+currversion = '2.2'
 name_plug = 'Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
@@ -73,7 +76,9 @@ data_path = os.path.join(plugin_path, "data")
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 FTP_XML = ''
 FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
-_firstStarttvsman = True
+installer_url = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0JlbGZhZ29yMjAwNS90dk1hbmFnZXIvbWFpbi9pbnN0YWxsZXIuc2g='
+developer_url = 'aHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9CZWxmYWdvcjIwMDUvdHZNYW5hZ2Vy'
+# _firstStarttvsman = True
 local = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
@@ -960,27 +965,103 @@ class InfoCfg(Screen):
             self.skin = f.read()
         Screen.__init__(self, session)
         self.list = []
+        self.setTitle(_(title_plug))
         self['list'] = Label('')
-        self['actions'] = ActionMap(['WizardActions',
-                                     'OkCancelActions',
+        self['actions'] = ActionMap(['OkCancelActions',
+                                     'ColorActions',
                                      'DirectionActions',
-                                     'ColorActions'], {'ok': self.close,
-                                                       'back': self.close,
-                                                       'cancel': self.close,
-                                                       'red': self.close}, -1)
+                                     'HotkeyActions',
+                                     'InfobarEPGActions',
+                                     'ChannelSelectBaseActions'], {'ok': self.close,
+                                                                   'back': self.close,
+                                                                   'cancel': self.close,
+                                                                   'yellow': self.update_me,
+                                                                   'green': self.update_dev,
+                                                                   'yellow_long': self.update_dev,
+                                                                   'info_long': self.update_dev,
+                                                                   'infolong': self.update_dev,
+                                                                   'showEventInfoPlugin': self.update_dev,
+                                                                   'red': self.close}, -1)
         self["paypal"] = Label()
         self['key_red'] = Button(_('Back'))
-        self['key_green'] = Button()
-        self['key_yellow'] = Button()
+        self['key_green'] = Button(_('Force Update'))
+        self['key_yellow'] = Button(_('Update'))
         self['key_blue'] = Button()
-        self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
-        self.setTitle(_(title_plug))
+        self['key_green'].hide()
 
+        self.Update = False
+        self.timer = eTimer()
+        if os.path.exists('/var/lib/dpkg/status'):
+            self.timer_conn = self.timer.timeout.connect(self.check_vers)
+        else:
+            self.timer.callback.append(self.check_vers)
+        self.timer.start(500, 1)
         self['title'] = Label(_(title_plug))
         # self['description'] = Label(_('Path Configuration Folder'))
         self.onShown.append(self.updateList)
+
+    def check_vers(self):
+        remote_version = '0.0'
+        remote_changelog = ''
+        req = Utils.Request(Utils.b64decoder(installer_url), headers={'User-Agent': 'Mozilla/5.0'})
+        page = Utils.urlopen(req).read()
+        if PY3:
+            data = page.decode("utf-8")
+        else:
+            data = page.encode("utf-8")
+        if data:
+            lines = data.split("\n")
+            for line in lines:
+                if line.startswith("version"):
+                    remote_version = line.split("=")
+                    remote_version = line.split("'")[1]
+                if line.startswith("changelog"):
+                    remote_changelog = line.split("=")
+                    remote_changelog = line.split("'")[1]
+                    break
+        self.new_version = remote_version
+        self.new_changelog = remote_changelog
+        # if float(currversion) < float(remote_version):
+        if currversion < remote_version:
+            self.Update = True
+            # self.new_version = remote_version
+            # self.new_changelog = remote_changelog
+            # updatestr = title_plug
+            # cvrs = 'New version %s is available' % self.new_version
+            # cvrt = 'Changelog: %s\n\nPress yellow button to start updating' % self.new_changelog
+            # self['info'].setText(updatestr)
+            # self['pth'].setText(cvrs)
+            # self['pform'].setText(cvrt)
+            self['key_yellow'].show()
+            self['key_green'].show()
+            self.mbox = self.session.open(MessageBox, _('New version %s is available\n\nChangelog: %s\n\nPress yellow button to start updating') % (self.new_version, self.new_changelog), MessageBox.TYPE_INFO, timeout=5)
+
+    def update_me(self):
+        if self.Update is True:
+            self.session.openWithCallback(self.install_update, MessageBox, _("New version %s is available.\n\nChangelog: %s \n\nDo you want to install it now?") % (self.new_version, self.new_changelog), MessageBox.TYPE_YESNO)
+        else:
+            self.session.open(MessageBox, _("Congrats! You already have the latest version..."),  MessageBox.TYPE_INFO, timeout=4)
+
+    def update_dev(self):
+        req = Utils.Request(Utils.b64decoder(developer_url), headers={'User-Agent': 'Mozilla/5.0'})
+        page = Utils.urlopen(req).read()
+        data = json.loads(page)
+        remote_date = data['pushed_at']
+        strp_remote_date = datetime.strptime(remote_date, '%Y-%m-%dT%H:%M:%SZ')
+        remote_date = strp_remote_date.strftime('%Y-%m-%d')
+        self.session.openWithCallback(self.install_update, MessageBox, _("Do you want to install update ( %s ) now?") % (remote_date), MessageBox.TYPE_YESNO)
+
+    def install_update(self, answer=False):
+        if answer:
+            self.session.open(Console, 'Upgrading...', cmdlist=('wget -q "--no-check-certificate" ' + Utils.b64decoder(installer_url) + ' -O - | /bin/sh'), finishedCallback=self.myCallback, closeOnSuccess=False)
+        else:
+            self.session.open(MessageBox, _("Update Aborted!"),  MessageBox.TYPE_INFO, timeout=3)
+
+    def myCallback(self, result=None):
+        print('result:', result)
+        return
 
     def getcont(self):
         cont = " ---- Type Cam For Your Box--- \n"
@@ -1148,30 +1229,30 @@ def mainmenu(menuid):
                  None)]
 
 
-class AutoStartTimertvman:
+# class AutoStartTimertvman:
 
-    def __init__(self, session):
-        self.session = session
-        print("*** running AutoStartTimertvman ***")
-        if _firstStarttvsman:
-            self.runUpdate()
+    # def __init__(self, session):
+        # self.session = session
+        # print("*** running AutoStartTimertvman ***")
+        # if _firstStarttvsman:
+            # self.runUpdate()
 
-    def runUpdate(self):
-        global _firstStarttvsman
-        print("*** running update ***")
-        try:
-            from . import Update
-            Update.upd_done()
-            _firstStarttvsman = False
-        except Exception as e:
-            print('error Softcam Manager', str(e))
+    # def runUpdate(self):
+        # global _firstStarttvsman
+        # print("*** running update ***")
+        # try:
+            # from . import Update
+            # Update.upd_done()
+            # _firstStarttvsman = False
+        # except Exception as e:
+            # print('error Softcam Manager', str(e))
 
 
 def autostart(reason, session=None, **kwargs):
     """called with reason=1 to during shutdown, with reason=0 at startup?"""
     print("[Softcam] Started")
-    global autoStartTimertvsman
-    global _firstStarttvsman
+    # global autoStartTimertvsman
+    # global _firstStarttvsman
     if reason == 0:
         print('reason 0')
         if session is not None:
@@ -1190,8 +1271,8 @@ def autostart(reason, session=None, **kwargs):
                 os.system('/etc/startcam.sh &')
                 os.system('sleep 2')
                 print("*** running autostart ***")
-                _firstStarttvsman = True
-                autoStartTimertvsman = AutoStartTimertvman(session)
+                # _firstStarttvsman = True
+                # autoStartTimertvsman = AutoStartTimertvman(session)
             except:
                 print('except autostart')
         else:
@@ -1259,7 +1340,7 @@ def autostartsoftcam(reason, session=None, **kwargs):
     print("[Softcam] Started")
     global DreamCC_auto
     global autoStartTimertvsman
-    global _firstStarttvsman
+    # global _firstStarttvsman
     if reason == 0:
         print('reason 0')
         if session is not None:
@@ -1269,9 +1350,9 @@ def autostartsoftcam(reason, session=None, **kwargs):
                 DreamCC_auto = DreamCCAuto()
             except:
                 pass
-            print("*** running autostart ***")
-            _firstStarttvsman = True
-            autoStartTimertvsman = AutoStartTimertvman(session)
+            # print("*** running autostart ***")
+            # _firstStarttvsman = True
+            # autoStartTimertvsman = AutoStartTimertvman(session)
 
 
 def menu(menuid, **kwargs):
