@@ -903,7 +903,7 @@ class GetipkTv(Screen):
                     cmd23 = 'opkg update && opkg install wget'
                 popen(cmd23)
             if self.com.find('.ipk') != -1:
-                cmd = "opkg install --force-reinstall %s > /dev/null" % down
+                cmd = "opkg --force-reinstall --force-overwrite install %s > /dev/null" % down
                 self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
 
             if len(extensionlist) > 1:
