@@ -8,33 +8,40 @@
 #      No Coppy       #
 # --------------------#
 from __future__ import print_function
+from .. import _, sl, paypal
+from ..plugin import runningcam
+
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
-from Components.config import ConfigNumber, ConfigSelection, ConfigYesNo
-from Components.config import ConfigSubsection, ConfigPassword
-from Components.config import config, ConfigText
-from Components.config import getConfigListEntry, NoSave
+from Components.config import (
+    ConfigNumber,
+    ConfigSelection,
+    ConfigYesNo,
+    ConfigSubsection, ConfigPassword
+    config,
+    ConfigText,
+    getConfigListEntry,
+    NoSave,
+)
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
-from Tools.Directories import fileExists
-from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 from Components.Sources.StaticText import StaticText
-from .. import _, sl, paypal
-from ..plugin import runningcam
 from random import choice
-from enigma import eTimer
-from enigma import getDesktop
+from enigma import (eTimer, getDesktop)
+import base64
 import os
 import re
 import ssl
 import sys
 import subprocess
 import codecs
+
 global skin_path
-import base64
+
 sss = 'aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1U0ZU02RGpW'
 PY3 = sys.version_info.major >= 3
 if PY3:

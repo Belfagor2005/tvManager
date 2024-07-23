@@ -2,8 +2,8 @@
 
 ## setup command=wget -q "--no-check-certificate" https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh -O - | /bin/sh
 ## Only This 2 lines to edit with new version ######
-version='2.2'
-changelog='Fix Upgrade'
+version='2.3'
+changelog='Fix Utils, Screen'
 ##
 TMPPATH=/tmp/tvManager-main
 FILEPATH=/tmp/main.tar.gz

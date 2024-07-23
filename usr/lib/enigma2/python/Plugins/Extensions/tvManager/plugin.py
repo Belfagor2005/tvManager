@@ -9,10 +9,11 @@
 # --------------------#
 from __future__ import print_function
 from . import _, sl, paypal
-from . import Utils
-from .Console import Console
-from .Utils import RequestAgent
+from .data import Utils
+from .data.Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
+from .data.Console import Console
+
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.Button import Button
 from Components.FileList import FileList
@@ -65,7 +66,7 @@ else:
     pass
 
 
-currversion = '2.2'
+currversion = '2.3'
 name_plug = 'Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
@@ -168,9 +169,9 @@ def show_list_1(h):
     if screenwidth.width() == 2560:
         res.append(MultiContentEntryText(pos=(2, 0), size=(1000, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     elif screenwidth.width() == 1920:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(800, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(780, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     else:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(660, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(MultiContentEntryText(pos=(2, 0), size=(780, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
 
 
@@ -396,7 +397,7 @@ class tvManager(Screen):
         cont += ' ------------------------------------------ \n'
         cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s' % (arc, arkFull, libsssl)
         cont += ' ------------------------------------------ \n'
-        cont += ' Button Info for Other Info\n'
+        cont += 'Button Info for Other Info\n'
         return cont
 
     def arckget(self):
@@ -1227,25 +1228,6 @@ def mainmenu(menuid):
                  startConfig,
                  'Softcam Manager',
                  None)]
-
-
-# class AutoStartTimertvman:
-
-    # def __init__(self, session):
-        # self.session = session
-        # print("*** running AutoStartTimertvman ***")
-        # if _firstStarttvsman:
-            # self.runUpdate()
-
-    # def runUpdate(self):
-        # global _firstStarttvsman
-        # print("*** running update ***")
-        # try:
-            # from . import Update
-            # Update.upd_done()
-            # _firstStarttvsman = False
-        # except Exception as e:
-            # print('error Softcam Manager', str(e))
 
 
 def autostart(reason, session=None, **kwargs):
