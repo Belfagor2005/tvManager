@@ -29,7 +29,7 @@ from Components.config import (
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
-from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
+from Tools.Directories import (fileExists, resolveFilename, SCOPE_PLUGINS)
 from Components.Sources.StaticText import StaticText
 from random import choice
 from enigma import (eTimer, getDesktop)
@@ -87,6 +87,15 @@ skin_path = plugin_path
 sl2 = skin_path + sl + '.xml'
 if os.path.exists(sl2):
     os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
+skin_path = os.path.join(plugin_path, 'res/skins/hd/')
+res_plugin_path = os.path.join(plugin_path, "res/")
+screenwidth = getDesktop(0).size()
+if screenwidth.width() == 2560:
+    skin_path = res_plugin_path + 'skins/uhd/'
+if screenwidth.width() == 1920:
+    skin_path = res_plugin_path + 'skins/fhd/'
+if os.path.exists('/var/lib/dpkg/info'):
+    skin_path = skin_path + 'dreamOs/'
 
 try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -183,19 +192,6 @@ def getUrl(url):
         except Exception as e:
             print("Error: %s." % str(e))
     return content
-
-
-skin_path = os.path.join(plugin_path, 'res/skins/hd/')
-res_plugin_path = os.path.join(plugin_path, "res/")
-screenwidth = getDesktop(0).size()
-if screenwidth.width() == 2560:
-    skin_path = res_plugin_path + 'skins/uhd/'
-if screenwidth.width() == 1920:
-    skin_path = res_plugin_path + 'skins/fhd/'
-if os.path.exists('/var/lib/dpkg/info'):
-    skin_path = skin_path + 'dreamOs/'
-if os.path.exists(sl2):
-    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
 
 
 def cccamPath():
@@ -676,7 +672,6 @@ class tv_config(Screen, ConfigListScreen):
     def load_getcl(self, data):
         global host, port, user, passw
         try:
-
             # data = checkStr(data)
             url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
             if 'bosscccam' in data.lower():
