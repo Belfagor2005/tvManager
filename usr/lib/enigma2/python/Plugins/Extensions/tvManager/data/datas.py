@@ -19,7 +19,8 @@ from Components.config import (
     ConfigNumber,
     ConfigSelection,
     ConfigYesNo,
-    ConfigSubsection, ConfigPassword
+    ConfigSubsection,
+    ConfigPassword,
     config,
     ConfigText,
     getConfigListEntry,
@@ -336,7 +337,7 @@ class tv_config(Screen, ConfigListScreen):
             self['key_green'].setText('Force Emm Send')
             self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
-        self['description'] = Label('')                                
+        self['description'] = Label('')
         self['info'] = Label('')
         self['info'].setText(_('Wait please...'))
         self.createSetup()
