@@ -11,7 +11,6 @@ import re
 import ssl
 import base64
 # import chardet
-import requests
 from random import choice
 from Components.config import config
 try:
@@ -37,6 +36,7 @@ PY34 = sys.version_info[0:2] >= (3, 4)
 PY39 = sys.version_info[0:2] >= (3, 9)
 PY3 = sys.version_info.major >= 3
 if PY3:
+    # import chardet
     bytes = bytes
     unicode = str
     range = range
@@ -47,12 +47,14 @@ if PY3:
 
 if PY2:
     str = str
+    range = xrange
     from urllib import quote
     from urllib2 import urlopen
     from urllib2 import Request
     from urllib2 import HTTPError, URLError
 
 
+import requests
 requests.packages.urllib3.disable_warnings(
     requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
@@ -161,7 +163,6 @@ if sslverify:
             if self.hostname:
                 ClientTLSOptions(self.hostname, ctx)
             return ctx
-
 
 def ssl_urlopen(url):
     if sslContext:
@@ -755,7 +756,7 @@ try:
     from Plugins.Extensions.IMDb.plugin import main as imdb
     is_imdb = True
 except Exception as e:
-    # print('error: ', e)
+    print('error: ', e)
     is_imdb = False
 
 
@@ -1302,8 +1303,7 @@ def normalize(title):
 def get_safe_filename(filename, fallback=''):
     '''Convert filename to safe filename'''
     import unicodedata
-    import six
-    import re
+    import six, re
     name = filename.replace(' ', '_').replace('/', '_')
     if isinstance(name, six.text_type):
         name = name.encode('utf-8')
