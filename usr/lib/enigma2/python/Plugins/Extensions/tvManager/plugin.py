@@ -227,7 +227,7 @@ class tvManager(Screen):
         # self['key_blue'].hide()
         self['description'] = Label()
         self['description'].setText(_('Scanning and retrieval list softcam ...'))
-        self['info'] = Label('')
+        self['info'] = Label()
         # self['list'] = m2list([])
         self["list"] = List([])
         self.currCam = None
@@ -240,7 +240,7 @@ class tvManager(Screen):
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
         except:
             self.timer.callback.append(self.cgdesc)
-        self.timer.start(500, 1)
+        self.timer.start(300, 1)
         self.EcmInfoPollTimer = eTimer()
         try:
             self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
@@ -254,7 +254,7 @@ class tvManager(Screen):
     def setBlueKey(self):
         global BlueAction, runningcam
         self.currCam = self.readCurrent()
-        print('self.currCam= 77 ', self.currCam)
+        # print('self.currCam= 77 ', self.currCam)
         self["key_blue"].setText("Softcam")
         if self.currCam and self.currCam is not None or self.currCam != '':
             nim = str(self.currCam)
@@ -672,7 +672,6 @@ class tvManager(Screen):
                 continue
             myfile2.write(line)
             icount = icount + 1
-
         myfile.close()
         myfile2.close()
         os.system('rm /etc/autocam.txt')
@@ -841,7 +840,6 @@ class GetipkTv(Screen):
         for item in items:
             name = item.split('###')[0]
             url = item.split('###')[1]
-
             self.names.append(name)
             self.urls.append(url)
         showlist(self.names, self['list'])
@@ -967,7 +965,7 @@ class InfoCfg(Screen):
         Screen.__init__(self, session)
         self.list = []
         self.setTitle(_(title_plug))
-        self['list'] = Label('')
+        self['list'] = Label()
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
                                      'DirectionActions',
@@ -1368,8 +1366,6 @@ def StartSetup(menuid):
 
 def Plugins(**kwargs):
     iconpic = 'logo.png'
-    # if os.path.exists("/var/lib/dpkg/status"):
-        # iconpic = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/pics/logo.png")
     return [PluginDescriptor(name=_(name_plug), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART], needsRestart=True, fnc=autostartsoftcam),
             PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
