@@ -8,7 +8,7 @@
 #     02/04/2024     #
 # --------------------#
 from __future__ import print_function
-from . import _, sl, paypal
+from . import _, sl, paypal, wgetsts
 from .data import Utils
 from .data.Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
@@ -113,6 +113,12 @@ try:
     if os.path.isfile(resolveFilename(SCOPE_PLUGINS, 'Extensions/CCcamInfo/plugin.pyc')):
         from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
 except ImportError:
+    pass
+
+
+try:
+    wgetsts()
+except:
     pass
 
 
@@ -225,8 +231,7 @@ class tvManager(Screen):
         self['key_red'] = Button(_('Stop'))
         self['key_blue'] = Label(_('Softcam'))
         # self['key_blue'].hide()
-        self['description'] = Label()
-        self['description'].setText(_('Scanning and retrieval list softcam ...'))
+        self['description'] = Label(_('Scanning and retrieval list softcam ...'))
         self['info'] = Label()
         # self['list'] = m2list([])
         self["list"] = List([])
@@ -256,30 +261,24 @@ class tvManager(Screen):
         self.currCam = self.readCurrent()
         # print('self.currCam= 77 ', self.currCam)
         self["key_blue"].setText("Softcam")
-        if self.currCam and self.currCam is not None or self.currCam != '':
+        if self.currCam and self.currCam is not None:
             nim = str(self.currCam)
+            if 'oscam' in nim.lower():
+                runningcam = "oscam"
+                if os.path.exists(data_path + "/OscamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
+                    BlueAction = 'OSCAMINFO'
+                    self["key_blue"].setText("OSCAMINFO")
             if 'ccam' in nim.lower():
                 runningcam = "cccam"
                 if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     BlueAction = 'CCCAMINFO'
                     self["key_blue"].setText("CCCAMINFO")
-                elif os.path.isfile(resolveFilename(SCOPE_PLUGINS, 'Extensions/CCcamInfo/plugin.pyc')):
-                    # from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-                    # self.session.open(CCcamInfoMain)
-                    BlueAction = 'CCCAMINFO'
-                    self["key_blue"].setText("CCCAMINFO")
-
-            elif 'oscam' in nim.lower():
-                runningcam = "oscam"
-                if os.path.exists(data_path + "/OscamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
-                    BlueAction = 'OSCAMINFO'
-                    self["key_blue"].setText("OSCAMINFO")
-            elif 'movicam' in nim.lower():
-                runningcam = "movicam"
-                if os.path.exists(data_path + "/OscamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
-                    BlueAction = 'MOVICAMINFO'
-                    self["key_blue"].setText("MOVICAMINFO")
-            elif 'ncam' in nim.lower():
+            # elif 'movicam' in nim.lower():
+                # runningcam = "movicam"
+                # if os.path.exists(data_path + "/OscamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
+                    # BlueAction = 'MOVICAMINFO'
+                    # self["key_blue"].setText("MOVICAMINFO")
+            if 'ncam' in nim.lower():
                 runningcam = "ncam"
                 if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     BlueAction = 'NCAMINFO'
@@ -845,115 +844,164 @@ class GetipkTv(Screen):
         showlist(self.names, self['list'])
 
     def message(self):
-        i = len(self.names)
-        if i < 0:
-            return
-        self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
+        idx = self["list"].getSelectionIndex()
+        self.url = self.urls[idx]
+        n1 = self.url.rfind("/")
+        self.plug = self.url[(n1 + 1):]
+        self.iname = ''
+        if ".deb" in self.plug:
+            if not os.path.exists('/var/lib/dpkg/info'):
+                self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+                return
+            n2 = self.plug.find("_", 0)
+            self.iname = self.plug[:n2]
 
-    def selclicked(self, result):
-        if result:
-            idx = self["list"].getSelectedIndex()
-            dom = self.names[idx]
-            com = self.urls[idx]
-            self.prombt(com, dom)
+        if ".ipk" in self.plug:
+            if os.path.exists('/var/lib/dpkg/info'):
+                self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+                return
+            n2 = self.plug.find("_", 0)
+            self.iname = self.plug[:n2]
+        elif ".zip" in self.plug:
+            self.iname = self.plug
+        elif ".tar" in self.plug or ".gz" in self.plug or "bz2" in self.plug:
+            self.iname = self.plug
 
-    def dowfil(self):
-        self.dest = '/tmp/' + self.downplug
-        if fileExists(self.dest):
-            os.remove(self.dest)
-        if PY3:
-            import urllib.request as urllib2
-            import http.cookiejar as cookielib
-        else:
-            import urllib2
-            import cookielib
-        headers = {'User-Agent': RequestAgent()}
-        cookie_jar = cookielib.CookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie_jar))
-        urllib2.install_opener(opener)
-        try:
-            req = urllib2.Request(self.com, data=None, headers=headers)
-            handler = urllib2.urlopen(req, timeout=15)
-            data = handler.read()
-            with open(self.dest, 'wb') as f:
-                f.write(data)
-            print('MYDEBUG - download ok - URL: %s , filename: %s' % (self.com, self.dest))
-        except:
-            print('MYDEBUG - download failed - URL: %s , filename: %s' % (self.com, self.dest))
-            self.dest = ''
-        return self.dest
+        self.session.openWithCallback(self.okClicked, MessageBox, _("Do you want to install %s?") % self.iname, MessageBox.TYPE_YESNO)
 
-    def prombt(self, com, dom):
-        try:
-            self.com = str(com)
-            self.dom = str(dom)
-            self.timer = eTimer()
-            extensionlist = self.com.split('.')
-            extension = extensionlist[-1]
-            self.downplug = self.com.split("/")[-1]
-            down = self.dowfil()
-            from os import popen
-            cmd22 = 'find /usr/bin -name "wget"'
-            res = popen(cmd22).read()
-            if 'wget' not in res.lower():
-                if os.path.exists('/var/lib/dpkg/info'):
-                    cmd23 = 'apt-get update && apt-get install wget'
-                else:
-                    cmd23 = 'opkg update && opkg install wget'
-                popen(cmd23)
-            if self.com.find('.ipk') != -1:
-                cmd = "opkg --force-reinstall --force-overwrite install %s > /dev/null" % down
-                self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
+    def okClicked(self, answer=False):
+        if answer:
+            dest = "/tmp"
+            # cmd1 = "wget -P '" + dest + "' '" + self.url + "'"
+            cmd1 = ("wget --no-check-certificate -U '%s' -P '" + dest + "' '" + self.url + "'") % AgentRequest
+            if ".deb" in self.plug:
+                cmd2 = "dpkg -i '/tmp/" + self.plug + "'"
+            if ".ipk" in self.plug:
+                cmd2 = "opkg install --force-reinstall --force-overwrite '/tmp/" + self.plug + "'"
+            elif ".zip" in self.plug:
+                cmd2 = "unzip -o -q '/tmp/" + self.plug + "' -d /"
 
-            if len(extensionlist) > 1:
-                tar = extensionlist[-2]
+            elif ".tar" in self.plug and "gz" in self.plug:
+                cmd2 = "tar -xvf '/tmp/" + self.plug + "' -C /"
 
-            if extension in ["gz", "bz2"] and tar == "tar":
-                self.command = ['']
-                # self.dest = self.dowfil()
-                if extension == "gz":
-                    self.command = ["tar -xzvf " + down + " -C /"]
-                elif extension == "bz2":
-                    self.command = ["tar -xjvf " + down + " -C /"]
-                cmd = "wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
-                if "https" in str(self.com):
-                    cmd = "wget --no-check-certificate --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
-                self.session.open(Console, title='Installation %s' % self.dom, cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
+            elif ".bz2" in self.plug and "gz" in self.plug:
+                cmd2 = "tar -xjvf '/tmp/" + self.plug + "' -C /"
 
-            if extension == 'deb':
-                if not os.path.exists('/var/lib/dpkg/status'):
-                    self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
-                else:
-                    cmd22 = 'find /usr/bin -name "wget"'
-                    res = os.popen(cmd22).read()
-                    if 'wget' not in res.lower():
-                        cmd23 = 'apt-get update && apt-get install wget'
-                        os.popen(cmd23)
-                    cmd = 'dpkg -i %s' % down
-                    self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
+            cmd3 = "rm '/tmp/" + self.plug + "'"
+            cmd = cmd1 + " && " + cmd2 + " && " + cmd3
+            title = (_("Installing %s\nPlease Wait...") % self.iname)
+            self.session.open(Console, _(title), [cmd], closeOnSuccess=False)
 
-            if extension == 'zip':
-                cmd = ["wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s --post-data='action=purge' > /dev/null' " % (RequestAgent(), str(self.com), down)]
-                self.session.open(Console, _('Downloading: %s') % self.dom, cmd, closeOnSuccess=False)
-                self.session.open(MessageBox, _('Download file in /tmp successful!'), MessageBox.TYPE_INFO, timeout=5)
-            self.timer.start(500, 1)
-        except:
-            self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
-            # self.addondel()
-            return
+    # def message(self):
+        # i = len(self.names)
+        # if i < 0:
+            # return
+        # self.session.openWithCallback(self.selclicked, MessageBox, _('Do you want to install?'), MessageBox.TYPE_YESNO)
 
-    def addondel(self):
-        try:
-            files = glob.glob('/tmp/download.*', recursive=False)
-            for f in files:
-                try:
-                    os.remove(f)
-                except OSError as e:
-                    print("Error: %s : %s" % (f, e.strerror))
-            self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
+    # def selclicked(self, result):
+        # if result:
+            # idx = self["list"].getSelectedIndex()
+            # dom = self.names[idx]
+            # com = self.urls[idx]
+            # self.prombt(com, dom)
 
-        except Exception as e:
-            print(e)
+    # def dowfil(self):
+        # self.dest = '/tmp/' + self.downplug
+        # if fileExists(self.dest):
+            # os.remove(self.dest)
+        # if PY3:
+            # import urllib.request as urllib2
+            # import http.cookiejar as cookielib
+        # else:
+            # import urllib2
+            # import cookielib
+        # headers = {'User-Agent': RequestAgent()}
+        # cookie_jar = cookielib.CookieJar()
+        # opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie_jar))
+        # urllib2.install_opener(opener)
+        # try:
+            # req = urllib2.Request(self.com, data=None, headers=headers)
+            # handler = urllib2.urlopen(req, timeout=15)
+            # data = handler.read()
+            # with open(self.dest, 'wb') as f:
+                # f.write(data)
+            # print('MYDEBUG - download ok - URL: %s , filename: %s' % (self.com, self.dest))
+        # except:
+            # print('MYDEBUG - download failed - URL: %s , filename: %s' % (self.com, self.dest))
+            # self.dest = ''
+        # return self.dest
+
+    # def prombt(self, com, dom):
+        # try:
+            # self.com = str(com)
+            # self.dom = str(dom)
+            # self.timer = eTimer()
+            # extensionlist = self.com.split('.')
+            # extension = extensionlist[-1]
+            # self.downplug = self.com.split("/")[-1]
+            # down = self.dowfil()
+            # from os import popen
+            # cmd22 = 'find /usr/bin -name "wget"'
+            # res = popen(cmd22).read()
+            # if 'wget' not in res.lower():
+                # if os.path.exists('/var/lib/dpkg/info'):
+                    # cmd23 = 'apt-get update && apt-get install wget'
+                # else:
+                    # cmd23 = 'opkg update && opkg install wget'
+                # popen(cmd23)
+            # if self.com.find('.ipk') != -1:
+                # cmd = "opkg --force-reinstall --force-overwrite install %s > /dev/null" % down
+                # self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
+
+            # if len(extensionlist) > 1:
+                # tar = extensionlist[-2]
+
+            # if extension in ["gz", "bz2"] and tar == "tar":
+                # self.command = ['']
+                # # self.dest = self.dowfil()
+                # if extension == "gz":
+                    # self.command = ["tar -xzvf " + down + " -C /"]
+                # elif extension == "bz2":
+                    # self.command = ["tar -xjvf " + down + " -C /"]
+                # cmd = "wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
+                # if "https" in str(self.com):
+                    # cmd = "wget --no-check-certificate --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s' --post-data='action=purge';%s > /dev/null" % (AgentRequest, str(self.com), down, self.command[0])
+                # self.session.open(Console, title='Installation %s' % self.dom, cmdlist=[cmd, 'sleep 5'])  # , finishedCallback=self.msgipkinst)
+
+            # if extension == 'deb':
+                # if not os.path.exists('/var/lib/dpkg/status'):
+                    # self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
+                # else:
+                    # cmd22 = 'find /usr/bin -name "wget"'
+                    # res = os.popen(cmd22).read()
+                    # if 'wget' not in res.lower():
+                        # cmd23 = 'apt-get update && apt-get install wget'
+                        # os.popen(cmd23)
+                    # cmd = 'dpkg -i %s' % down
+                    # self.session.open(Console, _('Downloading-installing: %s') % self.dom, [cmd], closeOnSuccess=False)
+
+            # if extension == 'zip':
+                # cmd = ["wget --no-cache --no-dns-cache -U '%s' -c '%s' -O '%s --post-data='action=purge' > /dev/null' " % (RequestAgent(), str(self.com), down)]
+                # self.session.open(Console, _('Downloading: %s') % self.dom, cmd, closeOnSuccess=False)
+                # self.session.open(MessageBox, _('Download file in /tmp successful!'), MessageBox.TYPE_INFO, timeout=5)
+            # self.timer.start(500, 1)
+        # except:
+            # self.mbox = self.session.open(MessageBox, _('Download failur!'), MessageBox.TYPE_INFO, timeout=5)
+            # # self.addondel()
+            # return
+
+    # def addondel(self):
+        # try:
+            # files = glob.glob('/tmp/download.*', recursive=False)
+            # for f in files:
+                # try:
+                    # os.remove(f)
+                # except OSError as e:
+                    # print("Error: %s : %s" % (f, e.strerror))
+            # self.mbox = self.session.open(MessageBox, _('All file Download are removed!'), MessageBox.TYPE_INFO, timeout=5)
+
+        # except Exception as e:
+            # print(e)
 
 
 class InfoCfg(Screen):
@@ -986,9 +1034,9 @@ class InfoCfg(Screen):
         self['key_green'] = Button(_('Force Update'))
         self['key_yellow'] = Button(_('Update'))
         self['key_blue'] = Button()
+        self['key_green'].hide()
         self['key_yellow'].hide()
         self['key_blue'].hide()
-        self['key_green'].hide()
 
         self.Update = False
         self.timer = eTimer()
@@ -1084,9 +1132,6 @@ class InfoCfg(Screen):
         if self.arckget():
             print('arkget= ', arkFull)
             arkFull = self.arckget()
-        # img = os.popen('cat /etc/issue').read().strip('\n\r')
-        # ifg = os.popen('wget -qO - ifconfig.me').read().strip('\n\r')
-        # img = img.replace('\l', '')
         if libs:
             libsssl = libs
         cont += ' ------------------------------------------ \n'
@@ -1128,20 +1173,7 @@ class Ipkremove(Screen):
         self['list'] = FileList('/', matchingPattern='^.*\\.(png|avi|mp3|mpeg|ts)')
         self['pixmap'] = Pixmap()
         self['list'] = Input('1234', maxSize=True, type=Input.NUMBER)
-        self['actions'] = NumberActionMap(['WizardActions', 'InputActions'], {'ok': self.ok,
-                                                                              'back': self.close,
-                                                                              'left': self.keyLeft,
-                                                                              'right': self.keyRight,
-                                                                              '1': self.keyNumberGlobal,
-                                                                              '2': self.keyNumberGlobal,
-                                                                              '3': self.keyNumberGlobal,
-                                                                              '4': self.keyNumberGlobal,
-                                                                              '5': self.keyNumberGlobal,
-                                                                              '6': self.keyNumberGlobal,
-                                                                              '7': self.keyNumberGlobal,
-                                                                              '8': self.keyNumberGlobal,
-                                                                              '9': self.keyNumberGlobal,
-                                                                              '0': self.keyNumberGlobal}, -1)
+        self['actions'] = NumberActionMap(['WizardActions', 'InputActions'], {'ok': self.ok, 'back': self.close, '0': self.keyNumberGlobal}, -1)
         self.onShown.append(self.openTest)
 
     def openTest(self):
@@ -1192,11 +1224,11 @@ class Ipkremove(Screen):
     def callback(self, answer):
         print('answer:', answer)
 
-    def keyLeft(self):
-        self['list'].left()
+    # def keyLeft(self):
+        # self['list'].left()
 
-    def keyRight(self):
-        self['list'].right()
+    # def keyRight(self):
+        # self['list'].right()
 
     def ok(self):
         selection = self['list'].getSelection()

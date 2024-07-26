@@ -21,10 +21,10 @@
         	</convert>
     	</widget>
     <!-- Clock -->
-    <widget backgroundColor="#101010" font="Regular; 38" foregroundColor="#60cefe" halign="right" position="1681,745" render="Label" size="200,51" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
+    <widget backgroundColor="#101010" font="Regular; 36" foregroundColor="#60cefe" halign="right" position="1700,745" render="Label" size="200,51" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
         <convert type="ClockToText">Format:%H:%M:%S</convert>
     </widget>
-    <widget backgroundColor="#101010" font="Regular; 38" foregroundColor="#60cefe" halign="right" position="1514,745" render="Label" size="200,51" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
+    <widget backgroundColor="#101010" font="Regular; 36" foregroundColor="#60cefe" halign="right" position="1500,745" render="Label" size="200,51" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
         <convert type="ClockToText">Format:%A</convert>
     </widget>
     	<!-- Colors -->
