@@ -45,7 +45,7 @@ class GetEcmInfo:
                 print(' -----------------data:  ', data)
                 return True
         else:
-            info['ecminterval0'] = int(time.time()-ecm_time+0.5)
+            info['ecminterval0'] = int(time.time() - ecm_time + 0.5)
 
     def getEcm(self):
         return (self.pollEcmData(), ecm)
@@ -66,7 +66,7 @@ class GetEcmInfo:
             if using:
                 # CCcam
                 if using == 'fta':
-                    self.textvalue = _("FTA")
+                    self.textvalue = "FTA"
                 elif using == 'emu':
                     self.textvalue = "EMU (%ss)" % (info.get('ecm time', '?'))
                 else:
@@ -115,7 +115,7 @@ class GetEcmInfo:
                             if 'msec' in line:
                                 line = line.split(' ')
                                 if line[0]:
-                                    time = " (%ss)" % (float(line[0])/1000)
+                                    time = " (%ss)" % (float(line[0]) / 1000)
                                     continue
                         self.textvalue = source + time
                     else:
@@ -132,7 +132,7 @@ class GetEcmInfo:
                             if response:
                                 # wicardd - type 1
                                 response = response.split(' ')
-                                self.textvalue = "%s (%ss)" % (response[4], float(response[0])/1000)
+                                self.textvalue = "%s (%ss)" % (response[4], float(response[0]) / 1000)
                             else:
                                 self.textvalue = ""
             decCI = info.get('caid', info.get('CAID', '0'))

@@ -303,9 +303,9 @@ class tv_config(Screen, ConfigListScreen):
         self.setup_title = (name_plug)
         self['title'] = Label(_(name_plug))
         self["key_red"] = Label(_("Back"))
-        self["key_green"] = Label("")
-        self["key_yellow"] = Label("")
-        self["key_blue"] = Label("")
+        self["key_green"] = Label()
+        self["key_yellow"] = Label()
+        self["key_blue"] = Label()
         self.onChangedEntry = []
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
@@ -333,9 +333,8 @@ class tv_config(Screen, ConfigListScreen):
             self['key_green'].setText('Force Emm Send')
             self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
-        self['description'] = Label('')
-        self['info'] = Label('')
-        self['info'].setText(_('Wait please...'))
+        self['description'] = Label()
+        self['info'] = Label(_('Wait please...'))
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)

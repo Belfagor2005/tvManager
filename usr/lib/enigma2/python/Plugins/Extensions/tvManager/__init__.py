@@ -56,3 +56,6 @@ else:
             return gettext.gettext(txt)
 localeInit()
 language.addCallback(localeInit)
+
+installer_url = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0JlbGZhZ29yMjAwNS90dk1hbmFnZXIvbWFpbi9pbnN0YWxsZXIuc2g='
+developer_url = 'aHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9CZWxmYWdvcjIwMDUvdHZNYW5hZ2Vy'
