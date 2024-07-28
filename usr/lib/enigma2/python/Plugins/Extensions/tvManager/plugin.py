@@ -124,7 +124,7 @@ if screenwidth.width() == 2560:
 if screenwidth.width() == 1920:
     skin_path = res_plugin_path + 'skins/fhd/'
 else:
-    skin_path = os.path.join(res_plugin_path, "skins/hd/")     
+    skin_path = os.path.join(res_plugin_path, "skins/hd/")
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + 'dreamOs/'
 
@@ -1135,7 +1135,7 @@ def mainmenu(menu_id):
                  startConfig,
                  'Softcam Manager',
                  None)]
-    else:                             
+    else:
         return []
 
 
