@@ -384,7 +384,7 @@ class tvManager(Screen):
     def messagekd(self):
         self.session.openWithCallback(self.keysdownload, MessageBox, _('Update SoftcamKeys from google search?'), MessageBox.TYPE_YESNO)
 
-    def keysdownload(self, result):
+    def keysdownload(self, result=False):
         if result:
             script = ('%s/auto' % plugin_path)
             from os import access, X_OK
