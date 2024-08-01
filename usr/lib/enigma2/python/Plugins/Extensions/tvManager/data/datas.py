@@ -9,6 +9,7 @@
 # --------------------#
 from __future__ import print_function
 from .. import _, sl, paypal
+from ..plugin import currversion, runningcam
 from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
@@ -34,6 +35,7 @@ import os
 import re
 import ssl
 import sys
+import subprocess
 import codecs
 
 global skin_path
@@ -74,23 +76,11 @@ def b64decoder(s):
     return outp
 
 
-sl = 'slManager'
+currversion = '2.3'
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
 data_path = os.path.join(plugin_path, 'data/')
 skin_path = plugin_path
-sl2 = skin_path + sl + '.xml'
-if os.path.exists(sl2):
-    os.system('rm -rf ' + plugin_path + ' > /dev/null 2>&1')
-skin_path = os.path.join(plugin_path, 'res/skins/hd/')
-res_plugin_path = os.path.join(plugin_path, "res/")
-screenwidth = getDesktop(0).size()
-if screenwidth.width() == 2560:
-    skin_path = res_plugin_path + 'skins/uhd/'
-if screenwidth.width() == 1920:
-    skin_path = res_plugin_path + 'skins/fhd/'
-if os.path.exists('/var/lib/dpkg/info'):
-    skin_path = skin_path + 'dreamOs/'
 
 try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -189,6 +179,17 @@ def getUrl(url):
     return content
 
 
+skin_path = os.path.join(plugin_path, 'res/skins/hd')
+res_plugin_path = os.path.join(plugin_path, "res")
+screenwidth = getDesktop(0).size()
+if screenwidth.width() == 2560:
+    skin_path = res_plugin_path + '/skins/uhd/'
+if screenwidth.width() == 1920:
+    skin_path = res_plugin_path + '/skins/fhd/'
+if os.path.exists('/var/lib/dpkg/info'):
+    skin_path = skin_path + 'dreamOs/'
+
+
 def cccamPath():
     import os
     cmd = 'find /usr -name "CCcam.cfg"'
@@ -242,6 +243,8 @@ cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/gcam.server', 'Gcam'),
           ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
 
+                                                                                                              
+                                                                                                     
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
@@ -306,11 +309,14 @@ class tv_config(Screen, ConfigListScreen):
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
         self["paypal"] = Label()
+        # self.runningcam = None
+        # self.runningcam = self.readCurrent()
         self['actions'] = ActionMap(['OkCancelActions',
                                      'DirectionActions',
                                      'ColorActions',
                                      'VirtualKeyboardActions',
                                      'MenuActions',
+                                     'EPGSelectActions',
                                      'InfobarChannelSelection'], {'left': self.keyLeft,
                                                                   'right': self.keyRight,
                                                                   'ok': self.closex,
@@ -320,6 +326,7 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'blue': self.resetcfg,
                                                                   'red': self.closex,
                                                                   'cancel': self.closex,
+                                                                  'info': self.infomsg,
                                                                   'back': self.closex}, -1)
         if config.plugins.tvmanager.active.value is True:
             self['key_green'].setText(buttn)
@@ -336,24 +343,31 @@ class tv_config(Screen, ConfigListScreen):
             self["config"].onSelectionChanged.append(self.selectionChanged)
         self.selectionChanged()
         self.onLayoutFinish.append(self.layoutFinished)
+        self.onShown.append(self.layoutFinished)
 
     def layoutFinished(self):
         self.setTitle(self.setup_title)
         payp = paypal()
         self["paypal"].setText(payp)
+
+        # self.runningcam = self.readCurrent()
+        # print('runningcam 7 =', self.runningcam)
+
         self['info'].setText(_('Select Your Choice'))
+
+    def infomsg(self):
+        self.session.open(MessageBox, _("tvManager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
 
     def sendemm(self):
         if config.plugins.tvmanager.active.value is True:
             self.getcl()
         else:
             try:
-                self.runningcam = self.readCurrent()
-                print('runningcam=', self.runningcam)
-                if self.runningcam is None:
+                print('runningcam1=', runningcam)
+                if runningcam is None:
                     return
-                # if self.runningcam == 'oscam' or self.runningcam == 'ncam':
-                if self.runningcam == 'oscam':
+                # if runningcam == 'oscam' or runningcam == 'ncam':
+                if runningcam == 'oscam':
                     cmd = 'ps -T'
                     res = os.popen(cmd).read()
                     print('res: ', res)
@@ -366,7 +380,6 @@ class tv_config(Screen, ConfigListScreen):
                         if not access(self.cmd1, X_OK):
                             os.chmod(self.cmd1, 493)
                         # os.system(self.cmd1)
-                        import subprocess
                         # subprocess.check_output(['bash', self.cmd1])
                         try:
                             subprocess.check_output(['bash', self.cmd1])
@@ -378,7 +391,7 @@ class tv_config(Screen, ConfigListScreen):
                         os.system('sleep 5')
                         if not os.path.exists('/tmp/emm.txt'):
                             # import wget
-                            # outp = base64.b64decode(sss)
+                            # # outp = base64.b64decode(sss)
                             # url = str(outp)
                             cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/U4eM6DjV' -O '/tmp/emm.txt'"
                             # wget.download(url, '/tmp/emm.txt')
@@ -402,7 +415,7 @@ class tv_config(Screen, ConfigListScreen):
             except Exception as e:
                 print('error on emm', str(e))
 
-    def callMyMsg(self, answer=None):
+    def callMyMsg(self, answer=False):
         if answer:
             msg = []
             msg.append(_("\n....\n.....\n"))
@@ -410,7 +423,6 @@ class tv_config(Screen, ConfigListScreen):
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
-            import subprocess
             try:
                 subprocess.check_output(['bash', self.cmd1])
                 self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
@@ -480,14 +492,13 @@ class tv_config(Screen, ConfigListScreen):
             else:
                 return
         else:
-            if self.currCam == 'oscam':
+            if 'oscam' in str(runningcam):  #  or 'movicam' in str(self.runningcam):
                 msg = []
                 msg.append(_("\n....\n.....\n"))
                 self.cmd1 = data_path + 'emm_sender.sh'
                 from os import access, X_OK
                 if not access(self.cmd1, X_OK):
                     os.chmod(self.cmd1, 493)
-                import subprocess
                 try:
                     subprocess.check_output(['bash', self.cmd1])
                 except subprocess.CalledProcessError as e:
