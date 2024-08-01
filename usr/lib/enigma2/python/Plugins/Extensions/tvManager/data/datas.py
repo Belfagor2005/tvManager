@@ -28,6 +28,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import (fileExists, resolveFilename, SCOPE_PLUGINS)
+from Components.Sources.StaticText import StaticText
 from random import choice
 from enigma import (eTimer, getDesktop)
 import base64
@@ -301,10 +302,12 @@ class tv_config(Screen, ConfigListScreen):
             self.skin = f.read()
         self.setup_title = (name_plug)
         self['title'] = Label(_(name_plug))
-        self["key_red"] = Label(_("Back"))
-        self["key_green"] = Label()
-        self["key_yellow"] = Label()
-        self["key_blue"] = Label()
+        self["key_red"] = StaticText(_("Back"))
+        self["key_green"] = StaticText("")
+        self["key_yellow"] = StaticText("")
+        self["key_blue"] = StaticText("")
+        self['description'] = Label('')
+        self['info'] = Label(_('Wait please...'))
         self.onChangedEntry = []
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
@@ -336,14 +339,12 @@ class tv_config(Screen, ConfigListScreen):
             self['key_green'].setText('Force Emm Send')
             self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
-        self['description'] = Label()
-        self['info'] = Label(_('Wait please...'))
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)
         self.selectionChanged()
         self.onLayoutFinish.append(self.layoutFinished)
-        self.onShown.append(self.layoutFinished)
+        # self.onShown.append(self.layoutFinished)
 
     def layoutFinished(self):
         self.setTitle(self.setup_title)
