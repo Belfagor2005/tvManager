@@ -64,7 +64,7 @@ name_plug = 'Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 res_plugin_path = os.path.join(plugin_path, "res")
-emu_plugin = os.path.join(plugin_path, "emu/")
+emu_plugin = os.path.join(plugin_path, "emu")
 iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = plugin_path + '/data'
 dir_work = '/usr/lib/enigma2/python/Screens'
@@ -80,8 +80,32 @@ ecm = ''
 SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
+global BlueAction
 AgentRequest = RequestAgent()
 runningcam = None
+
+try:
+    from .data.NcamInfo import NcamInfoMenu
+except ImportError:
+    pass
+
+try:
+    from .data.OScamInfo import OscamInfoMenu
+except ImportError:
+    pass
+
+
+try:
+    from .data.CCcamInfo import CCcamInfoMain
+except ImportError:
+    pass
+
+try:
+    if os.path.isfile(resolveFilename(SCOPE_PLUGINS, 'Extensions/CCcamInfo/plugin.pyc')):
+        from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
+except ImportError:
+    pass
+
 
 '''
 # try:
@@ -118,11 +142,10 @@ def checkdir():
 checkdir()
 
 # =============== SCREEN PATH SETTING
-skin_path = os.path.join(res_plugin_path, "skins/hd")
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
     skin_path = res_plugin_path + '/skins/uhd/'
-if screenwidth.width() == 1920:
+elif screenwidth.width() == 1920:
     skin_path = res_plugin_path + '/skins/fhd/'
 else:
     skin_path = os.path.join(res_plugin_path, "skins/hd/")
@@ -178,7 +201,7 @@ class tvManager(Screen):
     def __init__(self, session):
         Screen.__init__(self, session)
         self.session = session
-        global _session, runningcam  # , BlueAction
+        global _session, BlueAction, runningcam
         _session = session
         # BlueAction = 'SOFTCAM'
         # runningcam = None
@@ -248,7 +271,6 @@ class tvManager(Screen):
         if self.curCam and self.curCam is not None:
             nim = str(self.curCam).lower()
             print('nim lower=', nim)
-            # try:
             if 'oscam' in nim:
                 print('oscam in nim')
                 runningcam = "oscam"
@@ -256,10 +278,11 @@ class tvManager(Screen):
                     print('existe OScamInfo')
                     BlueAction = 'OSCAMINFO'
                     self["key_blue"].setText("OSCAMINFO")
-                elif os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
-                    print('existe OScamInfo')
-                    BlueAction = 'OSCAMINFO'
-                    self["key_blue"].setText("OSCAMINFO")
+
+                # elif os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
+                    # print('existe OScamInfo')
+                    # BlueAction = 'OSCAMINFO'
+                    # self["key_blue"].setText("OSCAMINFO")
 
             if 'cccam' in nim:
                 runningcam = "cccam"
@@ -267,10 +290,10 @@ class tvManager(Screen):
                     print('existe CCcamInfo')
                     BlueAction = 'CCCAMINFO'
                     self["key_blue"].setText("CCCAMINFO")
-                elif os.path.exists(dir_work + "/CCcamInfo.pyo") or os.path.exists(dir_work + '/CCcamInfo.pyc'):
-                    print('existe CCcamInfo')
-                    BlueAction = 'CCCAMINFO'
-                    self["key_blue"].setText("CCCAMINFO")
+                # elif os.path.exists(dir_work + "/CCcamInfo.pyo") or os.path.exists(dir_work + '/CCcamInfo.pyc'):
+                    # print('existe CCcamInfo')
+                    # BlueAction = 'CCCAMINFO'
+                    # self["key_blue"].setText("CCCAMINFO")
 
             if 'movicam' in nim:
                 print('movicam in nim')
@@ -279,27 +302,25 @@ class tvManager(Screen):
                     print('existe movicamInfo')
                     BlueAction = 'OSCAMINFO'
                     self["key_blue"].setText("OSCAMINFO")
-                elif os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
-                    print('existe movicamInfo')
-                    BlueAction = 'OSCAMINFO'
-                    self["key_blue"].setText("OSCAMINFO")
+                # elif os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
+                    # print('existe movicamInfo')
+                    # BlueAction = 'OSCAMINFO'
+                    # self["key_blue"].setText("OSCAMINFO")
             if 'ncam' in nim:
                 runningcam = "ncam"
                 if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     print('existe NcamInfo')
                     BlueAction = 'NCAMINFO'
                     self["key_blue"].setText("NCAMINFO")
-                elif os.path.exists(dir_work + "/NcamInfo.pyo") or os.path.exists(dir_work + '/NcamInfo.pyc'):
-                    print('existe NcamInfo')
-                    BlueAction = 'NCAMINFO'
-                    self["key_blue"].setText("NCAMINFO")
+                # elif os.path.exists(dir_work + "/NcamInfo.pyo") or os.path.exists(dir_work + '/NcamInfo.pyc'):
+                    # print('existe NcamInfo')
+                    # BlueAction = 'NCAMINFO'
+                    # self["key_blue"].setText("NCAMINFO")
         else:
             BlueAction = 'SOFTCAM'
             runningcam = 'softcam'
             self["key_blue"].setText("Softcam")
 
-            # except Exception as e:
-                # print('error import infocam:', e)
             print('self.curCam= 11 ', self.curCam)
             print('BlueAction= 11 ', BlueAction)
             print('runningcam= 11 ', runningcam)
@@ -307,12 +328,13 @@ class tvManager(Screen):
     def Blue(self):
         if BlueAction == 'SOFTCAM':
             self.messagekd()
-        if BlueAction == 'OSCAMINFO':  #  or BlueAction == 'MOVICAMINFO':
+
+        if BlueAction == 'OSCAMINFO':  # or BlueAction == 'MOVICAMINFO':
             try:
-                if os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
-                    from Screens.OScamInfo import OscamInfoMenu
-                    self.session.open(OscamInfoMenu)
-                elif os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
+                # if os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
+                    # from Screens.OScamInfo import OscamInfoMenu
+                    # self.session.open(OscamInfoMenu)
+                if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     from .data.OScamInfo import OscamInfoMenu
                     self.session.open(OscamInfoMenu)
             except ImportError:
@@ -320,10 +342,10 @@ class tvManager(Screen):
 
         if BlueAction == 'CCCAMINFO':
             try:
-                if os.path.exists(dir_work + "/CCcamInfo.pyo") or os.path.exists(dir_work + '/CCcamInfo.pyc'):
-                    from Screens.CCcamInfo import CCcamInfoMain
-                    self.session.open(CCcamInfoMain)
-                elif os.path.exists(data_path + "/CCcamInfo.pyo") or os.path.exists(data_path + '/CCcamInfo.pyc'):
+                # if os.path.exists(dir_work + "/CCcamInfo.pyo") or os.path.exists(dir_work + '/CCcamInfo.pyc'):
+                    # from Screens.CCcamInfo import CCcamInfoMain
+                    # self.session.open(CCcamInfoMain)
+                if os.path.exists(data_path + "/CCcamInfo.pyo") or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     from .data.CCcamInfo import CCcamInfoMain
                     self.session.open(CCcamInfoMain)
             except ImportError:
@@ -331,10 +353,10 @@ class tvManager(Screen):
 
         if BlueAction == 'NCAMINFO':
             try:
-                if os.path.exists(dir_work + "/NcamInfo.pyo") or os.path.exists(dir_work + '/NcamInfo.pyc'):
-                    from Screens.NcamInfo import NcamInfoMenu
-                    self.session.open(NcamInfoMenu)
-                elif os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
+                # if os.path.exists(dir_work + "/NcamInfo.pyo") or os.path.exists(dir_work + '/NcamInfo.pyc'):
+                    # from Screens.NcamInfo import NcamInfoMenu
+                    # self.session.open(NcamInfoMenu)
+                if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     from .data.NcamInfo import NcamInfoMenu
                     self.session.open(NcamInfoMenu)
             except ImportError:
@@ -563,6 +585,7 @@ class tvManager(Screen):
         i = len(self.softcamslist)
         if i < 1:
             return
+        global BlueAction, runningcam
         print('Blue3=', BlueAction)
         if self.curCam != 'None' or self.curCam is not None:
             self.EcmInfoPollTimer.stop()
@@ -582,8 +605,8 @@ class tvManager(Screen):
                 except:
                     self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
                 self.session.nav.stopService()
-                # BlueAction = 'SOFTCAM'
-                # runningcam = 'softcam'
+                BlueAction = 'SOFTCAM'
+                runningcam = 'softcam'
                 self.readScripts()
 
     def readScripts(self):
