@@ -1338,7 +1338,7 @@ def autostartsoftcam(reason, session=None, **kwargs):
 
 
 def menu(menuid, **kwargs):
-    return [(name_plug, main(), 'Softcam Manager', 44)] if menuid == "cam" else []
+    return [(name_plug, main, 'Softcam Manager', 44)] if menuid == "cam" else []
     # if menuid == 'cam':
         # return [(_(name_plug),
                  # boundFunction(main, showExtentionMenuOption=True),
@@ -1358,7 +1358,7 @@ def main(session, **kwargs):
 
 
 def StartSetup(menuid, **kwargs):
-    return [(name_plug, main(), 'Softcam Manager', 44)] if menuid == "mainmenu" else []
+    return [(name_plug, main, 'Softcam Manager', 44)] if menuid == "mainmenu" else []
     # if menuid == 'mainmenu':
         # from Tools.BoundFunction import boundFunction
         # return [(name_plug,
