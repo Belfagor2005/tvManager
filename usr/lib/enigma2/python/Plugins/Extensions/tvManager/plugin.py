@@ -480,6 +480,7 @@ class tvManager(Screen):
         arc = ''
         arkFull = ''
         libsssl = ''
+        python = os.popen('python -V').read().strip('\n\r')
         arcx = os.popen('uname -m').read().strip('\n\r')
         libs = os.popen('ls -l /usr/lib/libss*.*').read().strip('\n\r')
         if arcx:
@@ -491,7 +492,7 @@ class tvManager(Screen):
         if libs:
             libsssl = libs
         cont += ' ------------------------------------------ \n'
-        cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s' % (arc, arkFull, libsssl)
+        cont += 'Cpu: %s\nArchitecture info: %s\nPython V.%s\nLibssl(oscam):\n%s' % (arc, arkFull, python, libsssl)
         cont += ' ------------------------------------------ \n'
         cont += 'Button Info for Other Info\n'
         return cont
