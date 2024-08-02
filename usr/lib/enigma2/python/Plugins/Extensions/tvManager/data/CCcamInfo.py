@@ -5,12 +5,15 @@
 # from Screens.InfoBar import InfoBar
 # TOGGLE_SHOW = InfoBar.toggleShow
 # modded by lululla 20240314
-from .. import _
-from Components.ActionMap import (ActionMap, NumberActionMap, HelpableActionMap)
+from Components.ActionMap import (
+    ActionMap,
+    NumberActionMap,
+    HelpableActionMap,
+)
 from Components.Console import Console
 from Components.Label import Label
 from Components.MenuList import MenuList
-from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend
+from Components.MultiContent import (MultiContentEntryText, MultiContentEntryPixmapAlphaBlend)
 from Components.ScrollLabel import ScrollLabel
 from Components.Sources.StaticText import StaticText
 from Components.config import (
@@ -32,8 +35,8 @@ from Tools.Directories import (
     SCOPE_GUISKIN,
     SCOPE_CURRENT_SKIN,
     resolveFilename,
-    fileReadLines,
-    fileWriteLines,
+    # fileReadLines,
+    # fileWriteLines,
 )
 from Tools.LoadPixmap import LoadPixmap
 from base64 import b64encode
@@ -50,24 +53,25 @@ from glob import glob
 from os import (listdir, remove, rename, system, path)
 from os.path import (dirname, exists, isfile)
 from skin import getSkinFactor  # parameters
+
+# add lululla
+from sys import _getframe as getframe
+from errno import ENOENT
+from enigma import eGetEnigmaDebugLvl
+DEFAULT_MODULE_NAME = __name__.split(".")[-1]
+forceDebug = eGetEnigmaDebugLvl() > 4
+# pathExists = exists
 import requests
-import sys
-PY3 = sys.version_info.major >= 3
-if PY3:
-    from urllib.parse import urlparse, urlunparse
-else:
-    from urlparse import urlparse, urlunparse
-
-
-global Counter
+from urllib.parse import urlparse, urlunparse
+from Plugins.Extensions.tvManager.data import CCcamPrioMaker
+from Plugins.Extensions.tvManager.data import CCcamOrganizer
 
 VERSION = "V3"
 DATE = "14.03.2024"
 CFG = "/etc/CCcam.cfg"
 CFG_path = '/etc'
+global Counter
 Counter = 0
-
-
 AuthHeaders = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
 }
@@ -197,7 +201,7 @@ def getConfigValue(l):
         while ret.endswith(" "):
             ret = ret[:-1]
 
-    return str(ret)
+    return ret
 
 
 def notBlackListed(entry):
@@ -229,6 +233,8 @@ menu_list = [
     _("Menu config"),
     _("Local box"),
     _("Remote box"),
+    _("CCcam Prio Maker"),
+    _("CCcam Organizer"),
     _("Free memory"),
     _("Switch config"),
     _("About")]
@@ -271,6 +277,8 @@ config.cccamlineedit.port = NoSave(ConfigNumber())
 config.cccamlineedit.username = NoSave(ConfigText(fixed_size=False))
 config.cccamlineedit.password = NoSave(ConfigText(fixed_size=False))
 config.cccamlineedit.deskey = NoSave(ConfigNumber())
+config.cccaminfo.blacklist = ConfigText(default="/etc/enigma2/CCcamInfo.blacklisted", fixed_size=False)
+config.cccaminfo.profiles = ConfigText(default="/etc/enigma2/CCcamInfo.profiles", fixed_size=False)
 
 
 class CCcamList(MenuList):
@@ -546,7 +554,8 @@ class CCcamInfoMain(Screen):
         if config.cccaminfo.profile.value == "":
             self.readConfig()
         else:
-            self.url = str(config.cccaminfo.profile.value)
+            self.url = config.cccaminfo.profile.value
+
         self["actions"] = NumberActionMap(["CCcamInfoActions"],
                                           {"1": self.keyNumberGlobal,
                                            "2": self.keyNumberGlobal,
@@ -675,6 +684,12 @@ class CCcamInfoMain(Screen):
 
             elif sel == _("Remote box"):
                 self.session.openWithCallback(self.profileSelected, CCcamInfoRemoteBoxMenu)
+
+            elif sel == _("CCcam Prio Maker"):
+                self.session.openWithCallback(self.workingFinished, CCcamPrioMaker.Ccprio_Setup)
+
+            elif sel == _("CCcam Organizer"):
+                self.session.openWithCallback(self.workingFinished, CCcamOrganizer.OrganizerMenu)
 
             elif sel == _("Free memory"):
                 if not self.Console:
@@ -1040,6 +1055,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                                    "incUphop": (self.incUphop, _("increase uphop by 1")),
                                                    "decUphop": (self.decUphop, _("decrease uphop by 1")),
                                                    "ok": (self.getServer, _("get the cards' server"))}, -1)
+
         self.onLayoutFinish.append(self.getProviders)
         self["key_red"] = Label(_("Cancel"))
         self["actions"] = ActionMap(["CCcamInfoActions"], {"cancel": self.close, "red": self.close}, -1)
@@ -1206,10 +1222,8 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                         if int(down) > 0:
                                             reshare = reshareList[i]
                                             reshare += 1
-                                            '''
-                                            if caidprovider == "05021700":
-                                                print "re: %d" %(reshare)
-                                            '''
+                                            # if caidprovider == "05021700":
+                                            #   print "re: %d" %(reshare)
                                             reshareList[i] = reshare
                                             numberofreshare = 0
                                             numberofreshare = reshare
@@ -1223,14 +1237,12 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                     self.hostList.append(hostname)
                                     self.caidList.append(caidprovider)
                                     totalcards += 1
-                                    '''
-                                    maxdown = list[6]
-                                    while maxdown.startswith(" "):
-                                        maxdown = maxdown[1:]
-                                        down = maxdown
-                                    if int(down)>0:
-                                        resharecards +=1
-                                    '''
+                                    # maxdown = list[6]
+                                    # while maxdown.startswith(" "):
+                                    #   maxdown = maxdown[1:]
+                                    #   down = maxdown
+                                    # if int(down)>0:
+                                    #   resharecards +=1
         self.instance.setTitle("%s (%s %d) %s %s" % (_("Share View"), _("Total cards:"), totalcards, _("Hops:"), ulevel))
         self["title"].setText("%s (%s %d) %s %s" % (_("Share View"), _("Total cards:"), totalcards, _("Hops:"), ulevel))
         self["list"].setList(shareList)
@@ -1823,6 +1835,7 @@ class CCcamInfoMenuConfig(Screen):
         # self["list"] = CCcamMenuList([])
         self["list"] = CCcamConfigList([])
         self.getBlacklistedMenuEntries()
+
         self["actions"] = ActionMap(["CCcamInfoActions"],
                                     {"ok": self.changeState,
                                      "cancel": self.close,
@@ -1886,3 +1899,38 @@ class CCcamInfoMenuConfig(Screen):
         if callback:
             config.cccaminfo.blacklist.value = ("%s/CCcamInfo.blacklisted" % callback).replace("//", "/")
             config.cccaminfo.blacklist.save()
+
+
+def fileReadLines(filename, default=None, source=DEFAULT_MODULE_NAME, debug=False):
+    lines = None
+    try:
+        with open(filename) as fd:
+            lines = fd.read().splitlines()
+        msg = "Read"
+    except OSError as err:
+        if err.errno != ENOENT:  # ENOENT - No such file or directory.
+            print("[%s] Error %d: Unable to read lines from file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
+        lines = default
+        msg = "Default"
+    if debug or forceDebug:
+        length = len(lines) if lines else 0
+        print("[%s] Line %d: %s %d lines from file '%s'." % (source, getframe(1).f_lineno, msg, length, filename))
+    return lines
+
+
+def fileWriteLines(filename, lines, source=DEFAULT_MODULE_NAME, debug=False):
+    try:
+        with open(filename, "w") as fd:
+            if isinstance(lines, list):
+                lines.append("")
+                lines = "\n".join(lines)
+            fd.write(lines)
+        msg = "Wrote"
+        result = 1
+    except OSError as err:
+        print("[%s] Error %d: Unable to write %d lines to file '%s'!  (%s)" % (source, err.errno, len(lines), filename, err.strerror))
+        msg = "Failed to write"
+        result = 0
+    if debug or forceDebug:
+        print("[%s] Line %d: %s %d lines to file '%s'." % (source, getframe(1).f_lineno, msg, len(lines), filename))
+    return result
