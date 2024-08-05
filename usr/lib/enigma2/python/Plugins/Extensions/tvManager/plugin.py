@@ -347,7 +347,6 @@ class tvManager(Screen):
                     print('[cccam] OScamInfo')
                     self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     # self.session.open(OscamInfoMenu)
-                    pass
             except Exception as e:
                 print('[cccam] OScamInfo e:', e)
                 pass
@@ -364,7 +363,6 @@ class tvManager(Screen):
                     print('[cccam] CCcamInfo')
                     self.session.openWithCallback(self.callbackx, CCcamInfoMain)
                     # self.session.open(CCcamInfoMain)
-                    pass
             except Exception as e:
                 print('[cccam] cccaminfo e:', e)
                 pass
@@ -381,7 +379,6 @@ class tvManager(Screen):
                     print('[cccam] NcamInfo')
                     self.session.openWithCallback(self.callbackx, NcamInfoMenu)
                     # self.session.open(NcamInfoMenu)
-                    pass
             except Exception as e:
                 print('[cccam] NcamInfo e:', e)
                 pass
@@ -398,7 +395,6 @@ class tvManager(Screen):
                     print('[cccam] MOVICAMINFO')
                     self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     # self.session.open(OscamInfoMenu)
-                    pass
             except Exception as e:
                 print('[cccam] MOVICAMINFO e:', e)
                 pass
@@ -416,28 +412,34 @@ class tvManager(Screen):
     def cccam(self):
         try:
             from Screens.CCcamInfo import CCcamInfoMain
-            self.session.open(CCcamInfoMain)
+            self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+            # self.session.open(CCcamInfoMain)
         except ImportError:
             from .data.CCcamInfo import CCcamInfoMain
-            self.session.open(CCcamInfoMain)
+            self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+            # self.session.open(CCcamInfoMain)
             pass
 
     def oscam(self):
         try:
             from Screens.OScamInfo import OscamInfoMenu
-            self.session.open(OscamInfoMenu)
+            self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+            # self.session.open(OscamInfoMenu)
         except ImportError:
             from .data.OScamInfo import OscamInfoMenu
-            self.session.open(OscamInfoMenu)
+            self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+            # self.session.open(OscamInfoMenu)
             pass
 
     def ncam(self):
         try:
             from Screens.NcamInfo import NcamInfoMenu
-            self.session.open(NcamInfoMenu)
+            self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+            # self.session.open(NcamInfoMenu)
         except ImportError:
             from .data.NcamInfo import NcamInfoMenu
-            self.session.open(NcamInfoMenu)
+            self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+            # self.session.open(NcamInfoMenu)
             pass
 
     def setEcmInfo(self):
