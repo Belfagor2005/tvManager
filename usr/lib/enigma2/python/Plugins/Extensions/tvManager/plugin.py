@@ -13,7 +13,7 @@ from . import _, paypal, wgetsts, installer_url, developer_url
 from .data import Utils
 from .data.Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
-from .data.Console import Console
+from .Console import Console
 
 # enigma lib import
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -783,7 +783,6 @@ class tvManager(Screen):
             myfile2 = open('/etc/autocam2.txt', 'w')
         icount = 0
         for line in myfile.readlines():
-                                                                                                           
             if line[:-1] == self.oldService.toString():
                 delemu = 'yes'
                 icount = icount + 1
@@ -1181,7 +1180,6 @@ class InfoCfg(Screen):
         arkFull = ''
         libsssl = ''
         arcx = os.popen('uname -m').read().strip('\n\r')
-                                                           
         libs = os.popen('ls -l /usr/lib/libss*.*').read().strip('\n\r')
         if arcx:
             arc = arcx
