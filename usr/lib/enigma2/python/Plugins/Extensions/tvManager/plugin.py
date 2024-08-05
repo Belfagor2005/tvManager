@@ -95,7 +95,6 @@ try:
 except ImportError:
     pass
 
-
 try:
     from .data.CCcamInfo import CCcamInfoMain
 except ImportError:
@@ -111,21 +110,25 @@ except ImportError:
 '''
 
 '''
-# try:
-    # from Screens.NcamInfo import NcamInfoMenu
-# except ImportError:
-    # pass
+try:
+    from Screens.NcamInfo import NcamInfoMenu
+except ImportError:
+    from .data.NcamInfo import NcamInfoMenu
+    pass
 
-# try:
-    # from Screens.OScamInfo import OscamInfoMenu
-# except ImportError:
-    # pass
+try:
+    from Screens.OScamInfo import OscamInfoMenu
+except ImportError:
+    from .data.OScamInfo import OscamInfoMenu
+    pass
 
-# try:
-    # from Screens.CCcamInfo import CCcamInfoMain
-# except ImportError:
-    # pass
+try:
+    from Screens.CCcamInfo import CCcamInfoMain
+except ImportError:
+    from .data.CCcamInfo import CCcamInfoMain
+    pass
 '''
+
 
 try:
     wgetsts()
@@ -152,7 +155,7 @@ if screenwidth.width() == 2560:
 elif screenwidth.width() == 1920:
     skin_path = res_plugin_path + '/skins/fhd/'
 else:
-    skin_path = os.path.join(res_plugin_path, "skins/hd")
+    skin_path = os.path.join(res_plugin_path, "/skins/hd/")
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + '/dreamOs/'
 
@@ -336,13 +339,17 @@ class tvManager(Screen):
             try:
                 try:
                     from Screens.OScamInfo import OscamInfoMenu
-                    self.session.open(OscamInfoMenu)
+                    print('[cccam] OScamInfo')
+                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    # self.session.open(OscamInfoMenu)
                 except ImportError:
                     from .data.OScamInfo import OscamInfoMenu
-                    self.session.open(OscamInfoMenu)
+                    print('[cccam] OScamInfo')
+                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    # self.session.open(OscamInfoMenu)
                     pass
             except Exception as e:
-                print('OScamInfo e:', e)
+                print('[cccam] OScamInfo e:', e)
                 pass
 
         elif 'cccam' in str(self.curCam).lower():
@@ -350,13 +357,16 @@ class tvManager(Screen):
                 try:
                     from Screens.CCcamInfo import CCcamInfoMain
                     print('[cccam] CCcamInfo')
-                    self.session.open(CCcamInfoMain)
+                    self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                    # self.session.open(CCcamInfoMain)
                 except ImportError:
                     from .data.CCcamInfo import CCcamInfoMain
-                    self.session.open(CCcamInfoMain)
+                    print('[cccam] CCcamInfo')
+                    self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                    # self.session.open(CCcamInfoMain)
                     pass
             except Exception as e:
-                print('cccaminfo e:', e)
+                print('[cccam] cccaminfo e:', e)
                 pass
 
         elif 'ncam' in str(self.curCam).lower():
@@ -364,13 +374,16 @@ class tvManager(Screen):
                 try:
                     from Screens.NcamInfo import NcamInfoMenu
                     print('[cccam] NcamInfo')
-                    self.session.open(NcamInfoMenu)
+                    self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+                    # self.session.open(NcamInfoMenu)
                 except ImportError:
                     from .data.NcamInfo import NcamInfoMenu
-                    self.session.open(NcamInfoMenu)
+                    print('[cccam] NcamInfo')
+                    self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+                    # self.session.open(NcamInfoMenu)
                     pass
             except Exception as e:
-                print('NcamInfo e:', e)
+                print('[cccam] NcamInfo e:', e)
                 pass
 
         elif 'movicam' in str(self.curCam).lower():
@@ -378,20 +391,27 @@ class tvManager(Screen):
                 try:
                     from Screens.OScamInfo import OscamInfoMenu
                     print('[cccam] MOVICAMINFO')
-                    self.session.open(OscamInfoMenu)
+                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    # self.session.open(OscamInfoMenu)
                 except ImportError:
                     from .data.OScamInfo import OscamInfoMenu
-                    self.session.open(OscamInfoMenu)
+                    print('[cccam] MOVICAMINFO')
+                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    # self.session.open(OscamInfoMenu)
                     pass
             except Exception as e:
-                print('MOVICAMINFO e:', e)
+                print('[cccam] MOVICAMINFO e:', e)
                 pass
         else:
-            # return
-            self.BlueAction = 'SOFTCAM'
-            # runningcam = 'softcam'
-            self["key_blue"].setText("Softcam")
-            self.messagekd()
+            return
+            # self.BlueAction = 'SOFTCAM'
+            # # runningcam = 'softcam'
+            # self["key_blue"].setText("Softcam")
+            # self.messagekd()
+
+    def callbackx(self, call=None):
+        print('call:', call)
+        pass
 
     def cccam(self):
         try:
@@ -763,6 +783,7 @@ class tvManager(Screen):
             myfile2 = open('/etc/autocam2.txt', 'w')
         icount = 0
         for line in myfile.readlines():
+                                                                                                           
             if line[:-1] == self.oldService.toString():
                 delemu = 'yes'
                 icount = icount + 1
@@ -1160,6 +1181,7 @@ class InfoCfg(Screen):
         arkFull = ''
         libsssl = ''
         arcx = os.popen('uname -m').read().strip('\n\r')
+                                                           
         libs = os.popen('ls -l /usr/lib/libss*.*').read().strip('\n\r')
         if arcx:
             arc = arcx
