@@ -5,6 +5,12 @@
 # from Screens.InfoBar import InfoBar
 # TOGGLE_SHOW = InfoBar.toggleShow
 # modded by lululla 20240314
+
+from __future__ import print_function
+
+from . import CCcamPrioMaker
+from . import CCcamOrganizer
+
 from Components.ActionMap import (
     ActionMap,
     NumberActionMap,
@@ -62,9 +68,12 @@ DEFAULT_MODULE_NAME = __name__.split(".")[-1]
 forceDebug = eGetEnigmaDebugLvl() > 4
 # pathExists = exists
 import requests
-from urllib.parse import urlparse, urlunparse
-from Plugins.Extensions.tvManager.data import CCcamPrioMaker
-from Plugins.Extensions.tvManager.data import CCcamOrganizer
+
+
+try:
+    from urllib.parse import urlparse, urlunparse
+except:
+    from urlparse import urlparse, urlunparse
 
 VERSION = "V3"
 DATE = "14.03.2024"
@@ -206,7 +215,7 @@ def getConfigValue(l):
 
 def notBlackListed(entry):
     try:
-        f = open(config.cccaminfo.blacklist.value)
+        f = open(config.cccaminfo.blacklist.value, "r")
         content = f.read().split("\n")
         f.close()
     except OSError:
@@ -267,7 +276,7 @@ def getConfigNameAndContent(fileName):
     else:
         name = fileName.replace(CFG_path + "/", "")
 
-    return name, content
+    return (name, content)
 
 
 config.cccamlineedit = ConfigSubsection()
@@ -541,9 +550,9 @@ def CCcamMenuConfigListEntry(name, blacklisted):
 class CCcamInfoMain(Screen):
     def __init__(self, session):
         Screen.__init__(self, session)
-        self.setTitle(_("CCcam Info"))
         self.session = session
         # self["menu"] = CCcamMenuList([])
+        self.setTitle(_("CCcam Info"))
         self["menu"] = CCcamList([])
         self.working = False
         self.Console = Console()
@@ -607,7 +616,7 @@ class CCcamInfoMain(Screen):
         password = None
 
         try:
-            f = open(CFG)
+            f = open(CFG, 'r')
 
             for l in f:
                 if l.startswith('WEBINFO LISTEN PORT :'):
@@ -755,19 +764,19 @@ class CCcamInfoMain(Screen):
         self.keyNumberGlobal(self["menu"].getSelectedIndex())
 
     def up(self):
-        if not self.working:
+        if self.working is False:
             self["menu"].up()
 
     def down(self):
-        if not self.working:
+        if self.working is False:
             self["menu"].down()
 
     def left(self):
-        if not self.working:
+        if self.working is False:
             self["menu"].pageUp()
 
     def right(self):
-        if not self.working:
+        if self.working is False:
             self["menu"].pageDown()
 
     def getWebpageError(self, error=""):
@@ -1032,7 +1041,6 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
         self.uphop = -1
         self.working = True
         self["list"] = CCcamShareViewList([])
-        # self["list"] = CCcamMenuList([])
         self["uphops"] = Label()
         self["cards"] = Label()
         self["providers"] = Label()
@@ -1061,11 +1069,12 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
         self["actions"] = ActionMap(["CCcamInfoActions"], {"cancel": self.close, "red": self.close}, -1)
 
     def exit(self):
-        if not self.working:
+        if self.working is False:
             self.close()
 
     def getProviders(self):
-        getPage(self.url + "/providers", self.readProvidersCallback, self.readError)
+        # getPage(self.url + "/providers", self.readProvidersCallback, self.readError)
+        getPage(self.url + "/providers").addCallback(self.readProvidersCallback).addErrback(self.readError)
 
     def readError(self, error=None):
         self.session.open(MessageBox, _("Error reading webpage!"), MessageBox.TYPE_ERROR)
@@ -1131,7 +1140,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                     numberofcards = count
                                     providername = self.providers.get(caidprovider, 'Multiple Providers given')
                                     # if providername == 'Multiple Providers given':
-                                    #   print caidprovider
+                                        # print caidprovider
                                     numberofreshare = 0
                                     if int(down) > 0:
                                         resharecards += 1
@@ -1200,7 +1209,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                         numberofcards = count
                                         providername = self.providers.get(caidprovider, 'Multiple Providers given')
                                         # if providername == 'Multiple Providers given':
-                                        #   print caidprovider
+                                            # print caidprovider
 
                                         numberofreshare = 0
                                         if int(down) > 0:
@@ -1223,7 +1232,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                             reshare = reshareList[i]
                                             reshare += 1
                                             # if caidprovider == "05021700":
-                                            #   print "re: %d" %(reshare)
+                                                # print "re: %d" %(reshare)
                                             reshareList[i] = reshare
                                             numberofreshare = 0
                                             numberofreshare = reshare
@@ -1237,12 +1246,14 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                                     self.hostList.append(hostname)
                                     self.caidList.append(caidprovider)
                                     totalcards += 1
+                                    '''
                                     # maxdown = list[6]
                                     # while maxdown.startswith(" "):
-                                    #   maxdown = maxdown[1:]
-                                    #   down = maxdown
-                                    # if int(down)>0:
-                                    #   resharecards +=1
+                                        # maxdown = maxdown[1:]
+                                        # down = maxdown
+                                    # if int(down) > 0:
+                                        # resharecards += 1
+                                    '''
         self.instance.setTitle("%s (%s %d) %s %s" % (_("Share View"), _("Total cards:"), totalcards, _("Hops:"), ulevel))
         self["title"].setText("%s (%s %d) %s %s" % (_("Share View"), _("Total cards:"), totalcards, _("Hops:"), ulevel))
         self["list"].setList(shareList)
@@ -1269,7 +1280,8 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                             providername = list[3]
                             caidprovider = self.formatCaidProvider(caid, provider)
                             self.providers.setdefault(caidprovider, providername)
-        getPage(self.url + "/shares", self.readSharesCallback, self.readError)
+        # getPage(self.url + "/shares", self.readSharesCallback, self.readError)
+        getPage(self.url + "/shares").addCallback(self.readSharesCallback).addErrback(self.readError)
 
     def formatCaidProvider(self, caid, provider):
         pos = provider.find(",")
@@ -1597,7 +1609,7 @@ class CCcamInfoShareInfo(Screen):
         self.onLayoutFinish.append(self.readShares)
 
     def exit(self):
-        if not self.working:
+        if self.working is False:
             self.close()
 
     def readShares(self):
@@ -1660,28 +1672,28 @@ class CCcamInfoShareInfo(Screen):
         self.working = False
 
     def uhopsPlus(self):
-        if not self.working:
+        if self.working is False:
             self.uphops += 1
             if self.uphops > 9:
                 self.uphops = -1
             self.refreshList()
 
     def uhopsMinus(self):
-        if not self.working:
+        if self.working is False:
             self.uphops -= 1
             if self.uphops < -1:
                 self.uphops = 9
             self.refreshList()
 
     def maxdownPlus(self):
-        if not self.working:
+        if self.working is False:
             self.maxdown += 1
             if self.maxdown > 9:
                 self.maxdown = -1
             self.refreshList()
 
     def maxdownMinus(self):
-        if not self.working:
+        if self.working is False:
             self.maxdown -= 1
             if self.maxdown < -1:
                 self.maxdown = 9

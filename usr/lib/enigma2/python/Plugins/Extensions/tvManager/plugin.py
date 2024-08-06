@@ -272,18 +272,25 @@ class tvManager(Screen):
     def setBlueKey(self):
         global runningcam
         self.curCam = self.readCurrent()
-        self.BlueAction = 'SOFTCAM'
+        # self.BlueAction = 'SOFTCAM'
+        # runningcam = 'softcam'
+        print('self.curCam= 10 ', self.curCam)
+        print('self.BlueAction= 10 ', self.BlueAction)
+        print('runningcam= 10 ', runningcam)
         self["key_blue"].setText("Softcam")
         if self.curCam is not None:
             nim = str(self.curCam).lower()
             print('nim lower=', nim)
-            if 'oscam' in str(self.curCam).lower():
+
+            if 'oscam' in self.curCam.lower():
                 print('oscam in nim')
                 runningcam = "oscam"
+                self["key_blue"].setText("OSCAMINFO")
+                self.BlueAction = 'OSCAMINFO'
                 if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     print('existe OScamInfo')
-                    self.BlueAction = 'OSCAMINFO'
-                    self["key_blue"].setText("OSCAMINFO")
+                    # self.BlueAction = 'OSCAMINFO'
+                    # self["key_blue"].setText("OSCAMINFO")
                 '''
                 # elif os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
                     # print('existe OScamInfo')
@@ -292,10 +299,19 @@ class tvManager(Screen):
                 '''
             if 'cccam' in str(self.curCam).lower():
                 runningcam = "cccam"
-                if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
+                self.BlueAction = 'CCCAMINFO'
+                self["key_blue"].setText("CCCAMINFO")
+                if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
+                    if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
+                        print('existe CCcamInfo')
+                        # self.BlueAction = 'CCCAMINFO'
+                        # self["key_blue"].setText("CCCAMINFO")
+
+                elif os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     print('existe CCcamInfo')
-                    self.BlueAction = 'CCCAMINFO'
-                    self["key_blue"].setText("CCCAMINFO")
+                    # self.BlueAction = 'CCCAMINFO'
+                    # self["key_blue"].setText("CCCAMINFO")
+
                 '''
                 # elif os.path.exists(dir_work + "/CCcamInfo.pyo") or os.path.exists(dir_work + '/CCcamInfo.pyc'):
                     # print('existe CCcamInfo')
@@ -306,28 +322,26 @@ class tvManager(Screen):
             if 'movicam' in str(self.curCam).lower():
                 print('movicam in nim')
                 runningcam = "movicam"
+                self.BlueAction = 'MOVICAMINFO'
+                self["key_blue"].setText("MOVICAMINFO")
                 if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     print('existe movicamInfo')
-                    self.BlueAction = 'MOVICAMINFO'
-                    self["key_blue"].setText("MOVICAMINFO")
+                    # self.BlueAction = 'MOVICAMINFO'
+                    # self["key_blue"].setText("MOVICAMINFO")
 
             if 'ncam' in str(self.curCam).lower():
                 runningcam = "ncam"
+                self.BlueAction = 'NCAMINFO'
                 if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     print('existe NcamInfo')
-                    self.BlueAction = 'NCAMINFO'
-                    self["key_blue"].setText("NCAMINFO")
+                    # self.BlueAction = 'NCAMINFO'
+                    # self["key_blue"].setText("NCAMINFO")
                 '''
                 # elif os.path.exists(dir_work + "/NcamInfo.pyo") or os.path.exists(dir_work + '/NcamInfo.pyc'):
                     # print('existe NcamInfo')
                     # self.BlueAction = 'NCAMINFO'
                     # self["key_blue"].setText("NCAMINFO")
                 '''
-
-        # else:
-            # self.BlueAction = 'SOFTCAM'
-            # runningcam = 'softcam'
-            # self["key_blue"].setText("Softcam")
 
         print('self.curCam= 11 ', self.curCam)
         print('self.BlueAction= 11 ', self.BlueAction)
@@ -339,46 +353,49 @@ class tvManager(Screen):
             try:
                 try:
                     from Screens.OScamInfo import OscamInfoMenu
-                    print('[cccam] OScamInfo')
-                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
-                    # self.session.open(OscamInfoMenu)
+                    print('[cccam 1] OScamInfo')
+                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    self.session.open(OscamInfoMenu)
                 except ImportError:
                     from .data.OScamInfo import OscamInfoMenu
-                    print('[cccam] OScamInfo')
-                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
-                    # self.session.open(OscamInfoMenu)
+                    print('[cccam 2] OScamInfo')
+                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    self.session.open(OscamInfoMenu)
             except Exception as e:
                 print('[cccam] OScamInfo e:', e)
                 pass
 
-        elif 'cccam' in str(self.curCam).lower():
+        # elif 'cccam' in str(self.curCam).lower():
+        elif 'ccam' in str(self.curCam).lower():
             try:
-                try:
+                if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
+                    from .data.CCcamInfoPli import CCcamInfoMain
+                    print('[cccam 1] CCcamInfo')
+                    # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                    self.session.open(CCcamInfoMain)
+                else:
                     from Screens.CCcamInfo import CCcamInfoMain
-                    print('[cccam] CCcamInfo')
-                    self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                    # self.session.open(CCcamInfoMain)
-                except ImportError:
-                    from .data.CCcamInfo import CCcamInfoMain
-                    print('[cccam] CCcamInfo')
-                    self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                    # self.session.open(CCcamInfoMain)
-            except Exception as e:
-                print('[cccam] cccaminfo e:', e)
-                pass
+                    print('[cccam 12] CCcamInfo')
+                    # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                    self.session.open(CCcamInfoMain)
+            except ImportError:
+                from .data.CCcamInfo import CCcamInfoMain
+                print('[cccam 2] CCcamInfo')
+                self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                # self.session.open(CCcamInfoMain)
 
         elif 'ncam' in str(self.curCam).lower():
             try:
                 try:
                     from Screens.NcamInfo import NcamInfoMenu
-                    print('[cccam] NcamInfo')
-                    self.session.openWithCallback(self.callbackx, NcamInfoMenu)
-                    # self.session.open(NcamInfoMenu)
+                    print('[cccam 1] NcamInfo')
+                    # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+                    self.session.open(NcamInfoMenu)
                 except ImportError:
                     from .data.NcamInfo import NcamInfoMenu
-                    print('[cccam] NcamInfo')
-                    self.session.openWithCallback(self.callbackx, NcamInfoMenu)
-                    # self.session.open(NcamInfoMenu)
+                    print('[cccam 2] NcamInfo')
+                    # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+                    self.session.open(NcamInfoMenu)
             except Exception as e:
                 print('[cccam] NcamInfo e:', e)
                 pass
@@ -387,23 +404,19 @@ class tvManager(Screen):
             try:
                 try:
                     from Screens.OScamInfo import OscamInfoMenu
-                    print('[cccam] MOVICAMINFO')
-                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
-                    # self.session.open(OscamInfoMenu)
+                    print('[cccam 1] MOVICAMINFO')
+                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    self.session.open(OscamInfoMenu)
                 except ImportError:
                     from .data.OScamInfo import OscamInfoMenu
-                    print('[cccam] MOVICAMINFO')
-                    self.session.openWithCallback(self.callbackx, OscamInfoMenu)
-                    # self.session.open(OscamInfoMenu)
+                    print('[cccam 2] MOVICAMINFO')
+                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+                    self.session.open(OscamInfoMenu)
             except Exception as e:
                 print('[cccam] MOVICAMINFO e:', e)
                 pass
         else:
             return
-            # self.BlueAction = 'SOFTCAM'
-            # # runningcam = 'softcam'
-            # self["key_blue"].setText("Softcam")
-            # self.messagekd()
 
     def callbackx(self, call=None):
         print('call:', call)
@@ -411,36 +424,38 @@ class tvManager(Screen):
 
     def cccam(self):
         try:
-            from Screens.CCcamInfo import CCcamInfoMain
-            self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-            # self.session.open(CCcamInfoMain)
+            if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
+                if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
+                    from .data.CCcamInfoPli import CCcamInfoMain
+                    self.session.open(CCcamInfoMain)
+            else:
+                from Screens.CCcamInfo import CCcamInfoMain
+                # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                self.session.open(CCcamInfoMain)
         except ImportError:
             from .data.CCcamInfo import CCcamInfoMain
-            self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-            # self.session.open(CCcamInfoMain)
-            pass
+            # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+            self.session.open(CCcamInfoMain)
 
     def oscam(self):
         try:
             from Screens.OScamInfo import OscamInfoMenu
-            self.session.openWithCallback(self.callbackx, OscamInfoMenu)
-            # self.session.open(OscamInfoMenu)
+            # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+            self.session.open(OscamInfoMenu)
         except ImportError:
             from .data.OScamInfo import OscamInfoMenu
-            self.session.openWithCallback(self.callbackx, OscamInfoMenu)
-            # self.session.open(OscamInfoMenu)
-            pass
+            # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
+            self.session.open(OscamInfoMenu)
 
     def ncam(self):
         try:
             from Screens.NcamInfo import NcamInfoMenu
-            self.session.openWithCallback(self.callbackx, NcamInfoMenu)
-            # self.session.open(NcamInfoMenu)
+            # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+            self.session.open(NcamInfoMenu)
         except ImportError:
             from .data.NcamInfo import NcamInfoMenu
-            self.session.openWithCallback(self.callbackx, NcamInfoMenu)
-            # self.session.open(NcamInfoMenu)
-            pass
+            # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
+            self.session.open(NcamInfoMenu)
 
     def setEcmInfo(self):
         try:
