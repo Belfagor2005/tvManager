@@ -304,9 +304,9 @@ class tvManager(Screen):
                     print('existe NcamInfo')
                     # self.BlueAction = 'NCAMINFO'
                     # self["key_blue"].setText("NCAMINFO")
-        print('self.curCam= 11 ', self.curCam)
-        print('self.BlueAction= 11 ', self.BlueAction)
-        print('runningcam= 11 ', runningcam)
+        print('[setBlueKey] self.curCam= 11 ', self.curCam)
+        print('[setBlueKey] self.BlueAction= 11 ', self.BlueAction)
+        print('[setBlueKey] runningcam= 11 ', runningcam)
 
     def Blue(self):
         print('[cccam] self.BlueAction are:', self.BlueAction)
@@ -373,6 +373,7 @@ class tvManager(Screen):
                     print('[cccam 2] MOVICAMINFO')
                     # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     self.session.open(OscamInfoMenu)
+                        
             except Exception as e:
                 print('[cccam] MOVICAMINFO e:', e)
                 pass
@@ -455,6 +456,8 @@ class tvManager(Screen):
             from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
+            if os.path.exists('/usr/keys/SoftCam.Key'):
+                os.system('rm -rf /usr/keys/SoftCam.Key')
             import subprocess
             subprocess.check_output(['bash', script])
             self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
