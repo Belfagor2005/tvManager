@@ -48,7 +48,8 @@ import time
 import json
 from datetime import datetime
 
-global active, skin_path, local, runningcam
+global active, skin_path, local
+global _session, runningcam
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -108,27 +109,6 @@ try:
 except ImportError:
     pass
 '''
-
-'''
-try:
-    from Screens.NcamInfo import NcamInfoMenu
-except ImportError:
-    from .data.NcamInfo import NcamInfoMenu
-    pass
-
-try:
-    from Screens.OScamInfo import OscamInfoMenu
-except ImportError:
-    from .data.OScamInfo import OscamInfoMenu
-    pass
-
-try:
-    from Screens.CCcamInfo import CCcamInfoMain
-except ImportError:
-    from .data.CCcamInfo import CCcamInfoMain
-    pass
-'''
-
 
 try:
     wgetsts()
@@ -289,35 +269,21 @@ class tvManager(Screen):
                 self.BlueAction = 'OSCAMINFO'
                 if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     print('existe OScamInfo')
-                    # self.BlueAction = 'OSCAMINFO'
-                    # self["key_blue"].setText("OSCAMINFO")
-                '''
-                # elif os.path.exists(dir_work + "/OScamInfo.pyo") or os.path.exists(dir_work + '/OScamInfo.pyc'):
-                    # print('existe OScamInfo')
-                    # self.BlueAction = 'OSCAMINFO'
-                    # self["key_blue"].setText("OSCAMINFO")
-                '''
+
             if 'cccam' in str(self.curCam).lower():
                 runningcam = "cccam"
                 self.BlueAction = 'CCCAMINFO'
                 self["key_blue"].setText("CCCAMINFO")
-                if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
-                    if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
-                        print('existe CCcamInfo')
-                        # self.BlueAction = 'CCCAMINFO'
-                        # self["key_blue"].setText("CCCAMINFO")
+                # if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
+                    # if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
+                        # print('existe CCcamInfo')
+                        # # self.BlueAction = 'CCCAMINFO'
+                        # # self["key_blue"].setText("CCCAMINFO")
 
-                elif os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
+                if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     print('existe CCcamInfo')
                     # self.BlueAction = 'CCCAMINFO'
                     # self["key_blue"].setText("CCCAMINFO")
-
-                '''
-                # elif os.path.exists(dir_work + "/CCcamInfo.pyo") or os.path.exists(dir_work + '/CCcamInfo.pyc'):
-                    # print('existe CCcamInfo')
-                    # self.BlueAction = 'CCCAMINFO'
-                    # self["key_blue"].setText("CCCAMINFO")
-                '''
 
             if 'movicam' in str(self.curCam).lower():
                 print('movicam in nim')
@@ -332,17 +298,12 @@ class tvManager(Screen):
             if 'ncam' in str(self.curCam).lower():
                 runningcam = "ncam"
                 self.BlueAction = 'NCAMINFO'
+                self["key_blue"].setText("NCAMINFO")
+                print('ncam in nim')
                 if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     print('existe NcamInfo')
                     # self.BlueAction = 'NCAMINFO'
                     # self["key_blue"].setText("NCAMINFO")
-                '''
-                # elif os.path.exists(dir_work + "/NcamInfo.pyo") or os.path.exists(dir_work + '/NcamInfo.pyc'):
-                    # print('existe NcamInfo')
-                    # self.BlueAction = 'NCAMINFO'
-                    # self["key_blue"].setText("NCAMINFO")
-                '''
-
         print('self.curCam= 11 ', self.curCam)
         print('self.BlueAction= 11 ', self.BlueAction)
         print('runningcam= 11 ', runningcam)
@@ -368,12 +329,12 @@ class tvManager(Screen):
         # elif 'cccam' in str(self.curCam).lower():
         elif 'ccam' in str(self.curCam).lower():
             try:
-                if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
-                    from .data.CCcamInfoPli import CCcamInfoMain
-                    print('[cccam 1] CCcamInfo')
-                    # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                    self.session.open(CCcamInfoMain)
-                else:
+                # if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
+                    # from .data.CCcamInfoPli import CCcamInfoMain
+                    # print('[cccam 1] CCcamInfo')
+                    # # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                    # self.session.open(CCcamInfoMain)
+                # else:
                     from Screens.CCcamInfo import CCcamInfoMain
                     print('[cccam 12] CCcamInfo')
                     # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
@@ -381,8 +342,8 @@ class tvManager(Screen):
             except ImportError:
                 from .data.CCcamInfo import CCcamInfoMain
                 print('[cccam 2] CCcamInfo')
-                self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                # self.session.open(CCcamInfoMain)
+                # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+                self.session.open(CCcamInfoMain)
 
         elif 'ncam' in str(self.curCam).lower():
             try:
@@ -424,11 +385,11 @@ class tvManager(Screen):
 
     def cccam(self):
         try:
-            if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
-                if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
-                    from .data.CCcamInfoPli import CCcamInfoMain
-                    self.session.open(CCcamInfoMain)
-            else:
+            # if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
+                # if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
+                    # from .data.CCcamInfoPli import CCcamInfoMain
+                    # self.session.open(CCcamInfoMain)
+            # else:
                 from Screens.CCcamInfo import CCcamInfoMain
                 # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
                 self.session.open(CCcamInfoMain)
@@ -972,7 +933,6 @@ class GetipkTv(Screen):
         self.names = []
         self.urls = []
         items = []
-        # regex = '<plugin name="(.*?)".*?url>(.*?)</url'
         regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
         match = re.compile(regex, re.DOTALL).findall(data1)
         for name, url in match:
@@ -1183,7 +1143,6 @@ class InfoCfg(Screen):
 
     def getcont(self):
         cont = " ---- Type Cam For Your Box--- \n"
-
         cont += ' ------------------------------------------ \n'
         cont += '/etc/CCcam.cfg -> CCcam\n'
         cont += '/etc/tuxbox/config/oscam.server -> Oscam\n'

@@ -5,12 +5,10 @@
 # from Screens.InfoBar import InfoBar
 # TOGGLE_SHOW = InfoBar.toggleShow
 # modded by lululla 20240314
-
 from __future__ import print_function
 
 from . import CCcamPrioMaker
 from . import CCcamOrganizer
-
 from Components.ActionMap import (
     ActionMap,
     NumberActionMap,
@@ -64,19 +62,22 @@ from skin import getSkinFactor  # parameters
 from sys import _getframe as getframe
 from errno import ENOENT
 from enigma import eGetEnigmaDebugLvl
+import requests
+import os
+from urllib.parse import urlparse, urlunparse
+# try:
+    # from urllib.parse import urlparse, urlunparse
+# except:
+    # from urlparse import urlparse, urlunparse
+
+
 DEFAULT_MODULE_NAME = __name__.split(".")[-1]
 forceDebug = eGetEnigmaDebugLvl() > 4
 # pathExists = exists
-import requests
 
 
-try:
-    from urllib.parse import urlparse, urlunparse
-except:
-    from urlparse import urlparse, urlunparse
-
-VERSION = "V3"
-DATE = "14.03.2024"
+VERSION = "V4"
+DATE = "07.08.2024"
 CFG = "/etc/CCcam.cfg"
 CFG_path = '/etc'
 global Counter
@@ -215,7 +216,7 @@ def getConfigValue(l):
 
 def notBlackListed(entry):
     try:
-        f = open(config.cccaminfo.blacklist.value, "r")
+        f = open(config.cccaminfo.blacklist.value)
         content = f.read().split("\n")
         f.close()
     except OSError:
@@ -276,7 +277,7 @@ def getConfigNameAndContent(fileName):
     else:
         name = fileName.replace(CFG_path + "/", "")
 
-    return (name, content)
+    return name, content
 
 
 config.cccamlineedit = ConfigSubsection()
@@ -616,7 +617,7 @@ class CCcamInfoMain(Screen):
         password = None
 
         try:
-            f = open(CFG, 'r')
+            f = open(CFG)
 
             for l in f:
                 if l.startswith('WEBINFO LISTEN PORT :'):
@@ -1073,8 +1074,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
             self.close()
 
     def getProviders(self):
-        # getPage(self.url + "/providers", self.readProvidersCallback, self.readError)
-        getPage(self.url + "/providers").addCallback(self.readProvidersCallback).addErrback(self.readError)
+        getPage(self.url + "/providers", self.readProvidersCallback, self.readError)
 
     def readError(self, error=None):
         self.session.open(MessageBox, _("Error reading webpage!"), MessageBox.TYPE_ERROR)
@@ -1280,8 +1280,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
                             providername = list[3]
                             caidprovider = self.formatCaidProvider(caid, provider)
                             self.providers.setdefault(caidprovider, providername)
-        # getPage(self.url + "/shares", self.readSharesCallback, self.readError)
-        getPage(self.url + "/shares").addCallback(self.readSharesCallback).addErrback(self.readError)
+        getPage(self.url + "/shares", self.readSharesCallback, self.readError)
 
     def formatCaidProvider(self, caid, provider):
         pos = provider.find(",")
