@@ -255,8 +255,8 @@ class Ccprio_Setup(Screen, ConfigListScreen):
         from Screens.Setup import SetupSummary
         return SetupSummary
 
-
+global CCPrioMaker_session
 def CCPrioMakerAutostart(session=None):
     if config.plugins.ccprio.autostart.value and CCPrioMaker_session and session:
-        # global CCPrioMaker_session
+        global CCPrioMaker_session
         CCPrioMaker_session = CCPrioMaker(session)
