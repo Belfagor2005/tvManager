@@ -36,8 +36,15 @@ PRIOLIST_D.append("P: 1702:000000")
 PRIOLIST_D.append("P: 1722:000000")
 PRIOLIST_D.append("P: 1833:000000")
 PRIOLIST_D.append("P: 0500:000000")
+
 global CCPrioMaker_session
 CCPrioMaker_session = None
+
+
+def CCPrioMakerAutostart(session=None):
+    global CCPrioMaker_session
+    if config.plugins.ccprio.autostart.value and CCPrioMaker_session and session:
+        CCPrioMaker_session = CCPrioMaker(session)
 
 
 def cleanup_r(val):
@@ -254,9 +261,3 @@ class Ccprio_Setup(Screen, ConfigListScreen):
     def createSummary(self):
         from Screens.Setup import SetupSummary
         return SetupSummary
-
-global CCPrioMaker_session
-def CCPrioMakerAutostart(session=None):
-    if config.plugins.ccprio.autostart.value and CCPrioMaker_session and session:
-        global CCPrioMaker_session
-        CCPrioMaker_session = CCPrioMaker(session)
