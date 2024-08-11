@@ -12,7 +12,7 @@
 	<eLabel position="909,32" size="341,625" backgroundColor="#80000000" zPosition="1" />
     <!-- <eLabel position="855,32" size="392,550" backgroundColor="#80000000" cornerRadius="20" zPosition="1" /> -->
 	<!-- Menu List -->
-	<widget name="list" position="146,151" size="686,440" font="Regular;20" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" />
+	<widget name="list" position="146,151" size="686,440" font="Regular;28" itemHeight="40" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/sliderb.png" />
 	<!-- Colors 1220 -->
 	<eLabel backgroundColor="red" cornerRadius="3" position="181,652" size="200,6" zPosition="11" />
 	<eLabel backgroundColor="green" cornerRadius="3" position="180,692" size="200,6" zPosition="11" />

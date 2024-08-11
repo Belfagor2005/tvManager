@@ -42,11 +42,12 @@ from time import sleep
 from twisted.web.client import getPage
 import codecs
 import os
-import re
+# import re
 import sys
 import time
 import json
 from datetime import datetime
+from xml.dom import minidom
 
 global active, skin_path, local
 global _session, runningcam
@@ -254,15 +255,15 @@ class tvManager(Screen):
         self.curCam = self.readCurrent()
         # self.BlueAction = 'SOFTCAM'
         # runningcam = 'softcam'
-        print('self.curCam= 10 ', self.curCam)
-        print('self.BlueAction= 10 ', self.BlueAction)
-        print('runningcam= 10 ', runningcam)
+        # print('self.curCam= 10 ', self.curCam)
+        # print('self.BlueAction= 10 ', self.BlueAction)
+        # print('runningcam= 10 ', runningcam)
         self["key_blue"].setText("Softcam")
         if self.curCam is not None:
             nim = str(self.curCam).lower()
             print('nim lower=', nim)
 
-            if 'oscam' in self.curCam.lower():
+            if 'oscam' in str(self.curCam).lower():
                 print('oscam in nim')
                 runningcam = "oscam"
                 self["key_blue"].setText("OSCAMINFO")
@@ -274,16 +275,9 @@ class tvManager(Screen):
                 runningcam = "cccam"
                 self.BlueAction = 'CCCAMINFO'
                 self["key_blue"].setText("CCCAMINFO")
-                # if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
-                    # if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
-                        # print('existe CCcamInfo')
-                        # # self.BlueAction = 'CCCAMINFO'
-                        # # self["key_blue"].setText("CCCAMINFO")
 
                 if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     print('existe CCcamInfo')
-                    # self.BlueAction = 'CCCAMINFO'
-                    # self["key_blue"].setText("CCCAMINFO")
 
             if 'movicam' in str(self.curCam).lower():
                 print('movicam in nim')
@@ -292,8 +286,6 @@ class tvManager(Screen):
                 self["key_blue"].setText("MOVICAMINFO")
                 if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     print('existe movicamInfo')
-                    # self.BlueAction = 'MOVICAMINFO'
-                    # self["key_blue"].setText("MOVICAMINFO")
 
             if 'ncam' in str(self.curCam).lower():
                 runningcam = "ncam"
@@ -302,8 +294,6 @@ class tvManager(Screen):
                 print('ncam in nim')
                 if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
                     print('existe NcamInfo')
-                    # self.BlueAction = 'NCAMINFO'
-                    # self["key_blue"].setText("NCAMINFO")
         print('[setBlueKey] self.curCam= 11 ', self.curCam)
         print('[setBlueKey] self.BlueAction= 11 ', self.BlueAction)
         print('[setBlueKey] runningcam= 11 ', runningcam)
@@ -315,34 +305,23 @@ class tvManager(Screen):
                 try:
                     from Screens.OScamInfo import OscamInfoMenu
                     print('[cccam 1] OScamInfo')
-                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     self.session.open(OscamInfoMenu)
                 except ImportError:
                     from .data.OScamInfo import OscamInfoMenu
                     print('[cccam 2] OScamInfo')
-                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     self.session.open(OscamInfoMenu)
             except Exception as e:
                 print('[cccam] OScamInfo e:', e)
                 pass
 
-        # elif 'cccam' in str(self.curCam).lower():
         elif 'ccam' in str(self.curCam).lower():
             try:
-                # if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
-                    # from .data.CCcamInfoPli import CCcamInfoMain
-                    # print('[cccam 1] CCcamInfo')
-                    # # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                    # self.session.open(CCcamInfoMain)
-                # else:
-                    from Screens.CCcamInfo import CCcamInfoMain
-                    print('[cccam 12] CCcamInfo')
-                    # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                    self.session.open(CCcamInfoMain)
+                from Screens.CCcamInfo import CCcamInfoMain
+                print('[cccam 12] CCcamInfo')
+                self.session.open(CCcamInfoMain)
             except ImportError:
                 from .data.CCcamInfo import CCcamInfoMain
                 print('[cccam 2] CCcamInfo')
-                # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
                 self.session.open(CCcamInfoMain)
 
         elif 'ncam' in str(self.curCam).lower():
@@ -350,12 +329,10 @@ class tvManager(Screen):
                 try:
                     from Screens.NcamInfo import NcamInfoMenu
                     print('[cccam 1] NcamInfo')
-                    # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
                     self.session.open(NcamInfoMenu)
                 except ImportError:
                     from .data.NcamInfo import NcamInfoMenu
                     print('[cccam 2] NcamInfo')
-                    # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
                     self.session.open(NcamInfoMenu)
             except Exception as e:
                 print('[cccam] NcamInfo e:', e)
@@ -366,14 +343,12 @@ class tvManager(Screen):
                 try:
                     from Screens.OScamInfo import OscamInfoMenu
                     print('[cccam 1] MOVICAMINFO')
-                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     self.session.open(OscamInfoMenu)
                 except ImportError:
                     from .data.OScamInfo import OscamInfoMenu
                     print('[cccam 2] MOVICAMINFO')
-                    # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
                     self.session.open(OscamInfoMenu)
-                        
+
             except Exception as e:
                 print('[cccam] MOVICAMINFO e:', e)
                 pass
@@ -386,33 +361,24 @@ class tvManager(Screen):
 
     def cccam(self):
         try:
-            # if os.path.exists('/usr/lib/enigma2/python/Plugins/PLi'):
-                # if os.path.exists(data_path + '/CCcamInfoPli.pyo') or os.path.exists(data_path + '/CCcamInfoPli.pyc'):
-                    # from .data.CCcamInfoPli import CCcamInfoMain
-                    # self.session.open(CCcamInfoMain)
-            # else:
-                from Screens.CCcamInfo import CCcamInfoMain
-                # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-                self.session.open(CCcamInfoMain)
+            from Screens.CCcamInfo import CCcamInfoMain
+            # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+            self.session.open(CCcamInfoMain)
         except ImportError:
             from .data.CCcamInfo import CCcamInfoMain
-            # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
             self.session.open(CCcamInfoMain)
 
     def oscam(self):
         try:
             from Screens.OScamInfo import OscamInfoMenu
-            # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
             self.session.open(OscamInfoMenu)
         except ImportError:
             from .data.OScamInfo import OscamInfoMenu
-            # self.session.openWithCallback(self.callbackx, OscamInfoMenu)
             self.session.open(OscamInfoMenu)
 
     def ncam(self):
         try:
             from Screens.NcamInfo import NcamInfoMenu
-            # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
             self.session.open(NcamInfoMenu)
         except ImportError:
             from .data.NcamInfo import NcamInfoMenu
@@ -561,7 +527,6 @@ class tvManager(Screen):
                 except OSError:
                     pass
 
-            # if self.last is not None:  # or self.last >= 1:
                 if self.last == self.var:
                     self.cmd1 = '/usr/camscript/' + self.softcamslist[self.var][0] + '.sh' + ' cam_res &'
                     _session.open(MessageBox, _('Please wait..\nRESTART CAM'), MessageBox.TYPE_INFO, timeout=5)
@@ -796,7 +761,8 @@ class GetipklistTv(Screen):
         self.names = []
         self.names_1 = []
         self.list = []
-        self['list'] = m2list([])
+        # self['list'] = m2list([])
+        self['list'] = MenuList([])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['description'] = Label(_('Getting the list, please wait ...'))
@@ -829,8 +795,10 @@ class GetipklistTv(Screen):
         self.timer.start(500, 1)
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions'], {'ok': self.okClicked, 'cancel': self.close, 'green': self.loadpage, 'red': self.close}, -1)
-        # self.onShown.append(self.get_list)
-        # self.onShown.append(self.updateList)
+        self.onShown.append(self.pasx)
+
+    def pasx(self):
+        pass
 
     def updateList(self):
         payp = paypal()
@@ -854,7 +822,10 @@ class GetipklistTv(Screen):
         else:
             FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
         url = str(FTP_XML)
-        getPage(str.encode(url)).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
+        if PY3:
+            url = url.encode()
+        # getPage(str.encode(url)).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
+        getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
     def errorLoad(self, error):
         print(str(error))
@@ -865,46 +836,50 @@ class GetipklistTv(Screen):
         global local
         if local is False:
             self.xml = Utils.checkGZIP(self.xml)
+
+        self.list = []
+        self.names = []
         try:
-            # regexC = '<plugins cont = "(.*?)"'
-            regexC = '<plugins cont="(.*?)"'
-            match = re.compile(regexC, re.DOTALL).findall(self.xml)
-            for name in match:
-                name = Utils.ensure_str(name)
-                self.list.append(name)
+            if self.xml:
+                self.xmlparse = minidom.parseString(self.xml)
+                for plugins in self.xmlparse.getElementsByTagName('plugins'):
+                    self.names.append(str(plugins.getAttribute('cont')))
+                self["list"].l.setList(self.names)
                 self['description'].setText(_('Please select ...'))
-            showlist(self.list, self['list'])
             self.downloading = True
         except:
-            self['description'].setText(_('Try again later ...'))
-            pass
+            self['description'].setText(_('Error processing server addons data'))
 
     def okClicked(self):
-        i = len(self.list)
-        if i < 0:
+        try:
+            if self.downloading is True:
+                selection = str(self['list'].getCurrent())
+                self.session.open(GetipkTv, self.xmlparse, selection)
+            else:
+                self.close()
+        except:
             return
-        if self.downloading is True:
-            try:
-                idx = self["list"].getSelectedIndex()
-                name = self.list[idx]
-                self.session.open(GetipkTv, self.xml, name)
-            except:
-                return
-        else:
-            self.close()
 
 
 class GetipkTv(Screen):
     def __init__(self, session, xmlparse, selection):
+        Screen.__init__(self, session)
         self.session = session
         skin = os.path.join(skin_path, 'GetipkTv.xml')
         with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
-        Screen.__init__(self, session)
         self.xmlparse = xmlparse
         self.selection = selection
-        self['list'] = m2list([])
+        # self['list'] = m2list([])
         self.list = []
+        adlist = []
+        for plugins in self.xmlparse.getElementsByTagName('plugins'):
+            if str(plugins.getAttribute('cont')) == self.selection:
+                for plugin in plugins.getElementsByTagName('plugin'):
+                    adlist.append(str(plugin.getAttribute('name')))
+                continue
+        adlist.sort()
+        self['list'] = MenuList(adlist)
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
         self['description'] = Label(_('Select and Install'))
@@ -913,122 +888,91 @@ class GetipkTv(Screen):
         self['key_green'] = Button('Remove')
         self['key_yellow'] = Button('Restart')
         self['key_blue'] = Button()
-        # self['key_green'].hide()
+        self['key_green'].hide()
         # self['key_yellow'].hide()
         self['key_blue'].hide()
         self['actions'] = ActionMap(['OkCancelActions', 'ColorActions'], {'ok': self.message,
                                                                           'cancel': self.close,
-                                                                          'green': self.remove,
+                                                                          # 'green': self.remove,
                                                                           'yellow': self.restart,
                                                                           }, -1)
         self.onLayoutFinish.append(self.start)
         # self.onShown.append(self.updateList)
 
+    def start(self):
+        pass
+
     def updateList(self):
         payp = paypal()
         self["paypal"].setText(payp)
 
-    def start(self):
-        xmlparse = self.xmlparse
-        n1 = xmlparse.find(self.selection, 0)
-        n2 = xmlparse.find("</plugins>", n1)
-        data1 = xmlparse[n1:n2]
-        self.names = []
-        self.urls = []
-        items = []
-        regex = '<plugin name="(.*?)".*?url>"(.*?)"</url'
-        match = re.compile(regex, re.DOTALL).findall(data1)
-        for name, url in match:
-            name = name.replace('_', ' ').replace('-', ' ')
-            name = Utils.ensure_str(name)
-            item = name + "###" + url
-            items.append(item)
-        items.sort()
-        for item in items:
-            name = item.split('###')[0]
-            url = item.split('###')[1]
-            self.names.append(name)
-            self.urls.append(url)
-        showlist(self.names, self['list'])
-
     def message(self):
-        idx = self["list"].getSelectionIndex()
-        self.url = self.urls[idx]
-        n1 = self.url.rfind("/")
-        self.plug = self.url[(n1 + 1):]
-        self.iname = ''
+        self.session.openWithCallback(self.selclicked, MessageBox, _('Do you install this plugin ?'), MessageBox.TYPE_YESNO)
+
+    def selclicked(self, result):
+        if result:
+            try:
+                selection_country = self['list'].getCurrent()
+                for plugins in self.xmlparse.getElementsByTagName('plugins'):
+                    if str(plugins.getAttribute('cont')) == self.selection:
+                        for plugin in plugins.getElementsByTagName('plugin'):
+                            if str(plugin.getAttribute('name')) == selection_country:
+                                self.com = str(plugin.getElementsByTagName('url')[0].childNodes[0].data)
+                                self.dom = str(plugin.getAttribute('name'))
+                                # test lululla
+                                self.com = self.com.replace('"', '')
+                                if ".deb" in self.com:
+                                    if not os.path.exists('/var/lib/dpkg/info'):
+                                        self.session.open(MessageBox,
+                                                          _('Unknow Image!'),
+                                                          MessageBox.TYPE_INFO,
+                                                          timeout=5)
+                                        return
+                                    n2 = self.com.find("_", 0)
+                                    self.dom = self.com[:n2]
+
+                                if ".ipk" in self.com:
+                                    if os.path.exists('/var/lib/dpkg/info'):
+                                        self.session.open(MessageBox,
+                                                          _('Unknow Image!'),
+                                                          MessageBox.TYPE_INFO,
+                                                          timeout=5)
+                                        return
+                                    n2 = self.com.find("_", 0)
+                                    self.dom = self.com[:n2]
+                                elif ".zip" in self.com:
+                                    self.dom = self.com
+                                elif ".tar" in self.com or ".gz" in self.com or "bz2" in self.com:
+                                    self.dom = self.com
+                                print('self.prombt self.com: ', self.com)
+                                self.prombt()
+                            else:
+                                print('Return from prompt ')
+                                self['description'].setText('Select')
+                            continue
+            except Exception as e:
+                print('error prompt ', e)
+                self['description'].setText('Error')
+                return
+
+    def prombt(self):
+        self.plug = self.com.split("/")[-1]
+        self.folddest = '/tmp/' + self.plug
         if ".deb" in self.plug:
-            if not os.path.exists('/var/lib/dpkg/info'):
-                self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
-                return
-            n2 = self.plug.find("_", 0)
-            self.iname = self.plug[:n2]
-
+            cmd2 = "dpkg -i '/tmp/" + self.plug + "'"
         if ".ipk" in self.plug:
-            if os.path.exists('/var/lib/dpkg/info'):
-                self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
-                return
-            n2 = self.plug.find("_", 0)
-            self.iname = self.plug[:n2]
+            cmd2 = "opkg install --force-overwrite '/tmp/" + self.plug + "'"
         elif ".zip" in self.plug:
-            self.iname = self.plug
-        elif ".tar" in self.plug or ".gz" in self.plug or "bz2" in self.plug:
-            self.iname = self.plug
-
-        self.session.openWithCallback(self.okClicked, MessageBox, _("Do you want to install %s?") % self.iname, MessageBox.TYPE_YESNO)
-
-    def okClicked(self, answer=False):
-        if answer:
-            dest = "/tmp"
-            # cmd1 = "wget -P '" + dest + "' '" + self.url + "'"
-            cmd1 = ("wget --no-check-certificate -U '%s' -P '" + dest + "' '" + self.url + "'") % AgentRequest
-            if ".deb" in self.plug:
-                cmd2 = "dpkg -i '/tmp/" + self.plug + "'"
-            if ".ipk" in self.plug:
-                cmd2 = "opkg install --force-reinstall --force-overwrite '/tmp/" + self.plug + "'"
-            elif ".zip" in self.plug:
-                cmd2 = "unzip -o -q '/tmp/" + self.plug + "' -d /"
-
-            elif ".tar" in self.plug and "gz" in self.plug:
-                cmd2 = "tar -xvf '/tmp/" + self.plug + "' -C /"
-
-            elif ".bz2" in self.plug and "gz" in self.plug:
-                cmd2 = "tar -xjvf '/tmp/" + self.plug + "' -C /"
-
-            cmd3 = "rm '/tmp/" + self.plug + "'"
-            cmd = cmd1 + " && " + cmd2 + " && " + cmd3
-            title = (_("Installing %s\nPlease Wait...") % self.iname)
-            self.session.open(Console, _(title), [cmd], closeOnSuccess=False)
-
-    def remove(self):
-        self.session.openWithCallback(self.removenow, MessageBox, _("Do you want to remove?"), MessageBox.TYPE_YESNO)
-
-    def removenow(self, answer=False):
-        if answer:
-            idx = self["list"].getSelectionIndex()
-            # name = self.names[idx]
-            url = self.urls[idx]
-            n1 = url.rfind("/")
-            self.plug = url[(n1 + 1):]
-            print('self.plug remove = ', self.plug)
-            if ".zip" in self.plug:
-                return
-            if ".deb" in self.plug and not os.path.exists('/var/lib/dpkg/info'):
-                self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
-                return
-            if ".ipk" in self.plug and os.path.exists('/var/lib/dpkg/info'):
-                self.session.open(MessageBox, _('Unknow Image!'), MessageBox.TYPE_INFO, timeout=5)
-                return
-
-            n2 = self.plug.find("_", 0)
-            iname = self.plug[:n2]
-            if ".deb" in self.plug:
-                cmd = "dpkg -r " + iname  # + "'"
-            if ".ipk" in self.plug:
-                cmd = "opkg remove " + iname
-            print('command:', cmd)
-            title = (_("Removing %s") % iname)
-            self.session.open(Console, _(title), [cmd])
+            cmd2 = "unzip -o -q '/tmp/" + self.plug + "' -d /"
+        elif ".tar" in self.plug and "gz" in self.plug:
+            cmd2 = "tar -xvf '/tmp/" + self.plug + "' -C /"
+        elif ".bz2" in self.plug and "gz" in self.plug:
+            cmd2 = "tar -xjvf '/tmp/" + self.plug + "' -C /"
+        cmd3 = "rm '/tmp/" + self.plug + "'"
+        cmd = cmd2 + " && " + cmd3
+        cmd00 = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), self.folddest, cmd)
+        title = (_("Installing %s\nPlease Wait...") % self.dom)
+        self.session.open(Console, _(title), [cmd00], closeOnSuccess=False)
 
     def restart(self):
         self.session.openWithCallback(self.restartnow, MessageBox, _("Do you want to restart Gui Interface?"), MessageBox.TYPE_YESNO)
@@ -1086,7 +1030,7 @@ class InfoCfg(Screen):
     def check_vers(self):
         remote_version = '0.0'
         remote_changelog = ''
-        req = Utils.Request(Utils.b64decoder(installer_url), headers={'User-Agent': 'Mozilla/5.0'})
+        req = Utils.Request(Utils.b64decoder(installer_url), headers={'User-Agent': AgentRequest})
         page = Utils.urlopen(req).read()
         if PY3:
             data = page.decode("utf-8")
@@ -1126,7 +1070,7 @@ class InfoCfg(Screen):
             self.session.open(MessageBox, _("Congrats! You already have the latest version..."),  MessageBox.TYPE_INFO, timeout=4)
 
     def update_dev(self):
-        req = Utils.Request(Utils.b64decoder(developer_url), headers={'User-Agent': 'Mozilla/5.0'})
+        req = Utils.Request(Utils.b64decoder(developer_url), headers={'User-Agent': AgentRequest})
         page = Utils.urlopen(req).read()
         data = json.loads(page)
         remote_date = data['pushed_at']
@@ -1159,6 +1103,7 @@ class InfoCfg(Screen):
         arkFull = ''
         libsssl = ''
         arcx = os.popen('uname -m').read().strip('\n\r')
+        python = os.popen('python -V').read().strip('\n\r')
         libs = os.popen('ls -l /usr/lib/libss*.*').read().strip('\n\r')
         if arcx:
             arc = arcx
@@ -1169,7 +1114,7 @@ class InfoCfg(Screen):
         if libs:
             libsssl = libs
         cont += ' ------------------------------------------ \n'
-        cont += 'Cpu: %s\nArchitecture information: %s\nLibssl(oscam):\n%s\n' % (arc, arkFull, libsssl)
+        cont += 'Cpu: %s\nArchitecture info: %s\nPython V.%s\nLibssl(oscam):\n%s\n' % (arc, arkFull, python, libsssl)
         cont += ' ------------------------------------------ \n'
         return cont
 
