@@ -136,7 +136,7 @@ if screenwidth.width() == 2560:
 elif screenwidth.width() == 1920:
     skin_path = res_plugin_path + '/skins/fhd/'
 else:
-    skin_path = os.path.join(res_plugin_path, "/skins/hd/")
+    skin_path = res_plugin_path + '/skins/hd/'
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + '/dreamOs/'
 
@@ -824,7 +824,6 @@ class GetipklistTv(Screen):
         url = str(FTP_XML)
         if PY3:
             url = url.encode()
-        # getPage(str.encode(url)).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
         getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
 
     def errorLoad(self, error):
@@ -961,7 +960,7 @@ class GetipkTv(Screen):
         if ".deb" in self.plug:
             cmd2 = "dpkg -i '/tmp/" + self.plug + "'"
         if ".ipk" in self.plug:
-            cmd2 = "opkg install --force-overwrite '/tmp/" + self.plug + "'"
+            cmd2 = "opkg install --force-reinstall --force-overwrite '/tmp/" + self.plug + "'"
         elif ".zip" in self.plug:
             cmd2 = "unzip -o -q '/tmp/" + self.plug + "' -d /"
         elif ".tar" in self.plug and "gz" in self.plug:
@@ -973,6 +972,54 @@ class GetipkTv(Screen):
         cmd00 = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), self.folddest, cmd)
         title = (_("Installing %s\nPlease Wait...") % self.dom)
         self.session.open(Console, _(title), [cmd00], closeOnSuccess=False)
+
+    def remove(self):
+        self.session.openWithCallback(self.removenow,
+                                      MessageBox,
+                                      _("Do you want to remove?"),
+                                      MessageBox.TYPE_YESNO)
+
+    def removenow(self, answer=False):
+        if answer:
+            selection_country = self['list'].getCurrent()
+            for plugins in self.xmlparse.getElementsByTagName('plugins'):
+                if str(plugins.getAttribute('cont')) == self.selection:
+                    for plugin in plugins.getElementsByTagName('plugin'):
+                        if str(plugin.getAttribute('name')) == selection_country:
+                            self.com = str(plugin.getElementsByTagName('url')[0].childNodes[0].data)
+                            self.dom = str(plugin.getAttribute('name'))
+                            # test lululla
+                            self.com = self.com.replace('"', '')
+                            cmd = ''
+
+                            if ".deb" in self.com:
+                                if not os.path.exists('/var/lib/dpkg/info'):
+                                    self.session.open(MessageBox,
+                                                      _('Unknow Image!'),
+                                                      MessageBox.TYPE_INFO,
+                                                      timeout=5)
+                                    return
+                                self.plug = self.com.split("/")[-1]
+                                n2 = self.plug.find("_", 0)
+                                self.dom = self.plug[:n2]
+                                cmd = "dpkg -r " + self.dom  #  + "'"
+                                print('cmd deb remove:', cmd)                                
+
+                            if ".ipk" in self.com:
+                                if os.path.exists('/var/lib/dpkg/info'):
+                                    self.session.open(MessageBox,
+                                                      _('Unknow Image!'),
+                                                      MessageBox.TYPE_INFO,
+                                                      timeout=5)
+                                    return
+                                self.plug = self.com.split("/")[-1]
+                                n2 = self.plug.find("_", 0)
+                                self.dom = self.plug[:n2]
+                                cmd = "opkg remove " + self.dom  #  + "'"
+                                print('cmd ipk remove:', cmd)
+
+                            title = (_("Removing %s") % self.dom)
+                            self.session.open(Console, _(title), [cmd])
 
     def restart(self):
         self.session.openWithCallback(self.restartnow, MessageBox, _("Do you want to restart Gui Interface?"), MessageBox.TYPE_YESNO)
