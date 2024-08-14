@@ -195,10 +195,10 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==', 'Server03'),
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZWNjY2Ft', 'Server04'),
     ('aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=', 'Server05'),
-    # ('aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=', 'Server06'),
+    ('aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=', 'Server06'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v', 'Server07'),
     ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZWNjY2Ft', 'Server08'),
-    # ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server9'),
+    ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server9'),
     ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server10'),
     ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server11'),
 ]
@@ -278,6 +278,14 @@ class tv_config(Screen, ConfigListScreen):
             self["key_green"] = StaticText("")
             self["key_yellow"] = StaticText("")
             self["key_blue"] = StaticText("")
+            # self["key_red"] = Button(_("Back"))
+            # self["key_green"] = Button("")
+            # self["key_yellow"] = Button("")
+            # self["key_blue"] = Button("")            
+            # self["key_red"] = Label(_("Back"))
+            # self["key_green"] = Label("")
+            # self["key_yellow"] = Label("")
+            # self["key_blue"] = Label("")
         else:
             self["key_red"] = Label(_("Back"))
             self["key_green"] = Label("")
@@ -320,15 +328,16 @@ class tv_config(Screen, ConfigListScreen):
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)
-        # self.selectionChanged()
+        self.selectionChanged()
         self.onLayoutFinish.append(self.layoutFinished)
-        self.onLayoutFinish.append(self.showhide)
-        # self.onShown.append(self.layoutFinished)
+        # self.onLayoutFinish.append(self.showhide)
+        # self.onShown.append(self.showhide)
 
     def layoutFinished(self):
         self.setTitle(self.setup_title)
         payp = paypal()
         self["paypal"].setText(payp)
+        # self.showhide()
 
         # self.runningcam = self.readCurrent()
         # print('runningcam 7 =', self.runningcam)
@@ -455,7 +464,7 @@ class tv_config(Screen, ConfigListScreen):
             self['key_green'].setText('Force Emm Send')
             self['key_yellow'].setText('Check Emm Send')
             self['key_blue'].setText('')
-        # return
+        return
 
     def green(self):
         if config.plugins.tvmanager.active.value is True:
