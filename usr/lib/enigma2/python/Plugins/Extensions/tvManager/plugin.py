@@ -132,11 +132,11 @@ checkdir()
 # =============== SCREEN PATH SETTING
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
-    skin_path = res_plugin_path + '/skins/uhd/'
+    skin_path = plugin_path + 'res/skins/uhd/'
 elif screenwidth.width() == 1920:
-    skin_path = res_plugin_path + '/skins/fhd/'
+    skin_path = plugin_path + 'res/skins/fhd/'
 else:
-    skin_path = res_plugin_path + '/skins/hd/'
+    skin_path = plugin_path + 'res/skins/hd/'
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + '/dreamOs/'
 
@@ -1002,8 +1002,8 @@ class GetipkTv(Screen):
                                 self.plug = self.com.split("/")[-1]
                                 n2 = self.plug.find("_", 0)
                                 self.dom = self.plug[:n2]
-                                cmd = "dpkg -r " + self.dom  #  + "'"
-                                print('cmd deb remove:', cmd)                                
+                                cmd = "dpkg -r " + self.dom  # + "'"
+                                print('cmd deb remove:', cmd)
 
                             if ".ipk" in self.com:
                                 if os.path.exists('/var/lib/dpkg/info'):
@@ -1015,7 +1015,7 @@ class GetipkTv(Screen):
                                 self.plug = self.com.split("/")[-1]
                                 n2 = self.plug.find("_", 0)
                                 self.dom = self.plug[:n2]
-                                cmd = "opkg remove " + self.dom  #  + "'"
+                                cmd = "opkg remove " + self.dom  # + "'"
                                 print('cmd ipk remove:', cmd)
 
                             title = (_("Removing %s") % self.dom)
