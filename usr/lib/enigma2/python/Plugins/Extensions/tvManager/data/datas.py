@@ -149,11 +149,11 @@ def getUrl(url):
 # =============== SCREEN PATH SETTING
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
-    skin_path = plugin_path + 'res/skins/uhd/'
+    skin_path = plugin_path + '/res/skins/uhd/'
 elif screenwidth.width() == 1920:
-    skin_path = plugin_path + 'res/skins/fhd/'
+    skin_path = plugin_path + '/res/skins/fhd/'
 else:
-    skin_path = plugin_path + 'res/skins/hd/'
+    skin_path = plugin_path + '/res/skins/hd/'
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + '/dreamOs/'
 
@@ -673,41 +673,45 @@ class tv_config(Screen, ConfigListScreen):
         global host, port, user, passw
         try:
             # data = checkStr(data)
-            url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+            url1 = re.findall(r'<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
             if 'bosscccam' in data.lower():
-                url1 = re.findall('ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
+                url1 = re.findall(r'ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
 
             elif 'cccam.net/freecccam' in data.lower():
                 # <b>C: free.cccam.net 21126 by5MtVIk cccam.net</b>
-                url1 = re.findall('b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
+                url1 = re.findall(r'b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
 
             elif 'testcline' in data.lower():
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)</d', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</d', data)
 
             elif 'free.cccam.net' in data.lower():
-                url1 = re.findall('<b>C: (.*?) (.*?) (.*?) (.*?)</b>', data)
+                url1 = re.findall(r'<b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
 
             elif 'cccam-premium.co' in data.lower():
-                url1 = re.findall('C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
 
             elif 'cccamsate' in data.lower():
-                url1 = re.findall('<span><b>C: (.+?) (.+?) (.+?) (.+?)</b>', data)
+                url1 = re.findall(r'<span><b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
 
             elif 'cccameagle' in data.lower():
-                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</h2>', data)
+                url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</h2>', data)
 
             elif 'cccamprime' in data.lower():
-                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?).*?Host', data)
+                # url1 = re.findall('Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+).*?Host', data)
+                url1 = re.findall(r'Cline : C:\s+(.*?)\s+(\d+)\s+(\w+)\s+(.*?)\s*Host', data)
                 url1 = url1.replace('<br><br>', '')
 
             elif 'cccamprima.com' in data.lower():
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccampri.me' in data.lower():
-                url1 = re.findall('Cline : C: (.+?) (.+?) (.+?) (.+?)<br>', data)
+                # url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br>', data)
+                url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br\s*/?>', data)
 
             elif 'cccamfree.co' in data.lower():
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'iptvcccam' in data.lower():
                 url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
@@ -716,49 +720,58 @@ class tv_config(Screen, ConfigListScreen):
                 # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccamia' in data:
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+                url1 = re.findall(r'>?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccameurop' in data.lower():
-                url1 = re.findall('C: (.+?) (.+?)</', data)
+                # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)</', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s*</', data)
 
             elif 'infosat' in data.lower():
-                url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
+                # url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
+                url1 = re.findall(r'host:\s*(.+?)<br\s*/?>\s*port:\s*(.+?)<br\s*/?>\s*user:\s*(.+?)<br\s*/?>\s*pass:\s*(.+?)\s*\n', data)
 
             elif 'cccamx' in data.lower():
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccamiptv' in data.lower():
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
+                # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
 
             elif 'FREEN12' in data.lower():
-                url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'history' in data.lower():
-                url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
+                # url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
+                url1 = re.findall(r'of the line">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</a>.*?title=', data)
 
             elif 'store' in data.lower():
-                url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
+                # url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
+                url1 = re.findall(r'<center><strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*<br>', data)
 
             elif 'cccamhub' in data.lower():
-                url1 = re.findall('id="cline">.*?C: (.+?) (.+?) (.+?) (.+?).*?</div>', data)
+                url1 = re.findall(r'id="cline">.*?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</div>', data)
 
             elif 'rogcam' in data.lower():
-                url1 = re.findall('bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
+                url1 = re.findall(r'bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
 
             elif 'cccambird' in data.lower():
-                url1 = re.findall('>C: (.+?) (.+?) (.+?) (.+?)</th>', data)
+                url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th>', data)
 
             elif 'bosscccam' in data.lower():
-                url1 = re.findall('<strong>c: (.+?) (.+?) (.+?) (.+?)</strong', data)
+                url1 = re.findall(r'<strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong', data)
 
             elif '15days' in data.lower():
-                url1 = re.findall('">C: (.*?) (.*?) (.*?) (.+?)</th></tr>', data)
+                url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
 
             elif 'cccamfrei' in data.lower():
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
-
+                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
             elif 'cccamazon' in data.lower():
-                url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
             print('===========data=========', url1)
 
             if url1 != '':
