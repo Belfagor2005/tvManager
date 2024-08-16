@@ -8,10 +8,9 @@
 #      No Coppy       #
 # --------------------#
 from __future__ import print_function
-from .. import _, sl, paypal
+from .. import _, paypal
 from ..plugin import currversion, runningcam
 from Components.ActionMap import ActionMap
-from Components.Button import Button
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
 from Components.config import (
@@ -78,7 +77,7 @@ def b64decoder(s):
     return outp
 
 
-currversion = '2.3'
+# currversion = '2.3'
 name_plug = 'TiVuStream Softcam Manager'
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
 data_path = os.path.join(plugin_path, 'data/')
@@ -147,7 +146,6 @@ def getUrl(url):
     return content
 
 
-res_plugin_path = os.path.join(plugin_path, "res")
 # =============== SCREEN PATH SETTING
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
@@ -213,8 +211,6 @@ cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/gcam.server', 'Gcam'),
           ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
 
-                                                                                                              
-                                                                                                     
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
@@ -283,7 +279,7 @@ class tv_config(Screen, ConfigListScreen):
             # self["key_red"] = Button(_("Back"))
             # self["key_green"] = Button("")
             # self["key_yellow"] = Button("")
-            # self["key_blue"] = Button("")            
+            # self["key_blue"] = Button("")
             # self["key_red"] = Label(_("Back"))
             # self["key_green"] = Label("")
             # self["key_yellow"] = Label("")
@@ -319,6 +315,7 @@ class tv_config(Screen, ConfigListScreen):
                                                                   'cancel': self.closex,
                                                                   'info': self.infomsg,
                                                                   'back': self.closex}, -1)
+        '''
         # if config.plugins.tvmanager.active.value is True:
             # self['key_green'].setText(buttn)
             # self['key_yellow'].setText(_('Get Link'))
@@ -327,6 +324,7 @@ class tv_config(Screen, ConfigListScreen):
             # self['key_green'].setText('Force Emm Send')
             # self['key_yellow'].setText('Check Emm Send')
             # self['key_blue'].setText('')
+        '''
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)
@@ -483,7 +481,7 @@ class tv_config(Screen, ConfigListScreen):
             else:
                 return
         else:
-            if 'oscam' in str(runningcam):  #  or 'movicam' in str(self.runningcam):
+            if 'oscam' in str(runningcam):  # or 'movicam' in str(self.runningcam):
                 msg = []
                 msg.append(_("\n....\n.....\n"))
                 self.cmd1 = data_path + 'emm_sender.sh'
@@ -679,7 +677,7 @@ class tv_config(Screen, ConfigListScreen):
             if 'bosscccam' in data.lower():
                 url1 = re.findall('ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
 
-            elif 'cccam.net/freecccam' in data.lower():  
+            elif 'cccam.net/freecccam' in data.lower():
                 # <b>C: free.cccam.net 21126 by5MtVIk cccam.net</b>
                 url1 = re.findall('b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
 

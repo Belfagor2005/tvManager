@@ -1,15 +1,15 @@
 <!-- Skin tvManager 15/08/2020 -->
 <screen name="tvManager" position="0,0" size="1280,720" title="..::TiVuStream Cam Manager" backgroundColor="#ff000000" flags="wfNoBorder">
-	<eLabel position="0,418" size="1280,303" backgroundColor="#20000000" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="1076,478" size="200,35" alphatest="blend" scale="1" zPosition="5" />
-	<widget name="title" position="1,420" size="1280,40" font="Regular; 24" halign="center" valign="center" foregroundColor="#49bbff" backgroundColor="#20000000" transparent="1" zPosition="5" />
-	<eLabel position="0,465" size="1280,3" backgroundColor="#303030" zPosition="3" />
-	<eLabel position="0,715" size="1280,3" backgroundColor="#303030" zPosition="3" />
-	<eLabel position="1045,462" size="3,245" backgroundColor="#202020" zPosition="3" />
-	<widget name="info" position="531,474" size="516,245" font="Regular; 18" halign="right" foregroundColor="yellow" backgroundColor="#20000000" transparent="1" zPosition="5" />
-	<widget name="description" position="2,420" size="500,40" font="Regular; 24" halign="center" valign="center" foregroundColor="#49bbff" backgroundColor="#ff000000" transparent="1" zPosition="5" />
-    	<widget source="list" render="Listbox" position="0,474" size="750,237" scrollbarMode="showOnDemand" foregroundColor="#00a0a0a0" backgroundColorSelected="#0b2049" enableWrapAround="1" transparent="1" zPosition="5">
-        	<convert type="TemplatedMultiContent">
+	<eLabel position="0,418" size="1280,303" backgroundColor="#20000000"/>
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/res/pics/tvs.png" position="1076,478" size="200,35" alphatest="blend" scale="1" zPosition="5"/>
+	<widget name="title" position="1,420" size="1280,40" font="Regular; 24" halign="center" valign="center" foregroundColor="#49bbff" backgroundColor="#20000000" transparent="1" zPosition="5"/>
+	<eLabel position="0,465" size="1280,3" backgroundColor="#303030" zPosition="3"/>
+	<eLabel position="0,715" size="1280,3" backgroundColor="#303030" zPosition="3"/>
+	<eLabel position="1045,462" size="3,245" backgroundColor="#202020" zPosition="3"/>
+	<widget name="info" position="531,474" size="516,245" font="Regular; 18" halign="right" foregroundColor="yellow" backgroundColor="#20000000" transparent="1" zPosition="5"/>
+	<widget name="description" position="2,420" size="500,40" font="Regular; 24" halign="center" valign="center" foregroundColor="#49bbff" backgroundColor="#ff000000" transparent="1" zPosition="5"/>
+	<widget source="list" render="Listbox" position="0,474" size="750,237" scrollbarMode="showOnDemand" foregroundColor="#00a0a0a0" backgroundColorSelected="#0b2049" enableWrapAround="1" transparent="1" zPosition="5">
+		<convert type="TemplatedMultiContent">
         	    {"template": [
         	            MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(70, 40), png=1), # index 1 is the pixmap   
         	            MultiContentEntryText(pos = (95, 0), size = (490, 45), flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER, text=0, color=0x72d000, color_sel=0xffffff, backcolor_sel=0x0066cc), # index 0 is the text name,
@@ -18,24 +18,24 @@
         	     "fonts": [gFont("Regular", 30)],
         	     "itemHeight": 50
         	    }
-        	</convert>
-    	</widget>
-    <!-- Clock -->
-    <widget backgroundColor="#101010" font="Regular; 32" foregroundColor="#60cefe" halign="right" position="1156,420" render="Label" size="120,40" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
-        <convert type="ClockToText">Format:%H:%M:%S</convert>
-    </widget>
-    <widget backgroundColor="#101010" font="Regular; 32" foregroundColor="#60cefe" halign="right" position="1006,420" render="Label" size="150,40" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
-        <convert type="ClockToText">Format:%A</convert>
-    </widget>
-    	<!-- Colors -->
-	<widget name="key_red" position="1077,519" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="key_green" position="1077,558" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5" />
-	<widget name="key_yellow" position="1077,600" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" zPosition="5" transparent="1" />
-	<widget name="key_blue" position="1077,642" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" zPosition="5" transparent="1" />
-	<eLabel backgroundColor="red" cornerRadius="3" position="1077,549" size="200,6" zPosition="11" />
-	<eLabel backgroundColor="green" cornerRadius="3" position="1077,590" size="200,6" zPosition="11" />
-	<eLabel backgroundColor="yellow" cornerRadius="3" position="1077,633" size="200,6" zPosition="11" />
-	<eLabel backgroundColor="blue" cornerRadius="3" position="1077,675" size="200,6" zPosition="11" />
-	<eLabel text="Menu" position="1077,685" size="100,26" font="Regular; 24" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5" />
-	<eLabel text="Info" position="1177,685" size="100,26" font="Regular;28" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5" />
+		</convert>
+	</widget>
+	<!-- Clock -->
+	<widget backgroundColor="#101010" font="Regular; 32" foregroundColor="#60cefe" halign="right" position="1156,420" render="Label" size="120,40" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
+		<convert type="ClockToText">Format:%H:%M:%S</convert>
+	</widget>
+	<widget backgroundColor="#101010" font="Regular; 32" foregroundColor="#60cefe" halign="right" position="1006,420" render="Label" size="150,40" source="global.CurrentTime" transparent="1" valign="center" zPosition="7">
+		<convert type="ClockToText">Format:%A</convert>
+	</widget>
+	<!-- Colors -->
+	<widget name="key_red" position="1077,519" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5"/>
+	<widget name="key_green" position="1077,558" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" transparent="1" zPosition="5"/>
+	<widget name="key_yellow" position="1077,600" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" zPosition="5" transparent="1"/>
+	<widget name="key_blue" position="1077,642" size="200,30" font="Regular;28" halign="center" valign="center" backgroundColor="black" zPosition="5" transparent="1"/>
+	<eLabel backgroundColor="red" cornerRadius="3" position="1077,549" size="200,6" zPosition="11"/>
+	<eLabel backgroundColor="green" cornerRadius="3" position="1077,590" size="200,6" zPosition="11"/>
+	<eLabel backgroundColor="yellow" cornerRadius="3" position="1077,633" size="200,6" zPosition="11"/>
+	<eLabel backgroundColor="blue" cornerRadius="3" position="1077,675" size="200,6" zPosition="11"/>
+	<eLabel text="Menu" position="1077,685" size="100,26" font="Regular; 24" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5"/>
+	<eLabel text="Info" position="1177,685" size="100,26" font="Regular;28" foregroundColor="#fffffe" backgroundColor="#707070" halign="center" valign="center" cornerRadius="26" zPosition="5"/>
 </screen>
