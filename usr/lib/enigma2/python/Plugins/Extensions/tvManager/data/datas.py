@@ -79,8 +79,8 @@ def b64decoder(s):
 
 # currversion = '2.3'
 name_plug = 'TiVuStream Softcam Manager'
-plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/")
-data_path = os.path.join(plugin_path, 'data/')
+plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager")
+data_path = plugin_path + 'data/'
 skin_path = plugin_path
 
 try:

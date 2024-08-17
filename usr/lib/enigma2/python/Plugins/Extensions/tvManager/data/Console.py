@@ -60,20 +60,20 @@ class Console(Screen):
             self.skinName = [skin, 'Console']
         self.errorOcurred = False
         self['text'] = ScrollLabel('')
-        self['key_red'] = StaticText('Cancel')
-        self['key_green'] = StaticText('Hide')
+        # self['key_red'] = StaticText('Cancel')
+        # self['key_green'] = StaticText('Hide')
         self["actions"] = ActionMap(["WizardActions", "DirectionActions", 'ColorActions'],
-            {
-            "ok": self.cancel,
-            "up": self["text"].pageUp,
-            "down": self["text"].pageDown,
-            "red": self.cancel,
-            "green": self.toggleHideShow,
-            "blue": self.restartenigma,
-            "exit": self.cancel,
-            }, -1)
+                                    {
+                                    "ok": self.cancel,
+                                    "up": self["text"].pageUp,
+                                    "down": self["text"].pageDown,
+                                    "red": self.cancel,
+                                    "green": self.toggleHideShow,
+                                    "blue": self.restartenigma,
+                                    "cancel": self.cancel,
+                                    }, -1)
         self.cmdlist = isinstance(cmdlist, list) and cmdlist or [cmdlist]
-        self.newtitle = title == 'Console' and 'Console' or title
+        self.newtitle = title == 'Console' and ('Console') or title
         self.cancel_msg = None
         self.onShown.append(self.updateTitle)
         self.container = eConsoleAppContainer()
@@ -92,7 +92,7 @@ class Console(Screen):
 
     def startRun(self):
         if self.showStartStopText:
-            self['text'].setText('Execution progress' + '\n\n')
+            self['text'].setText('Execution progress\n\n')
         print('[Console] executing in run', self.run, ' the command:', self.cmdlist[self.run])
         if self.container.execute(self.cmdlist[self.run]):
             self.runFinished(-1)
@@ -122,8 +122,8 @@ class Console(Screen):
                 self.closeConsole()
             else:
                 self['text'].appendText('\nPress OK or Exit to abort!')
-                self['key_red'].setText('Exit')
-                self['key_green'].setText('')
+                # self['key_red'].setText('Exit')
+                # self['key_green'].setText('')
 
     def toggleHideShow(self):
         if self.finished:
