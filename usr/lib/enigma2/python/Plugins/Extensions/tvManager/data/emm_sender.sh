@@ -16,12 +16,12 @@ clear
 
 # Constanti
 ATR_183E='3F FF 95 00 FF 91 81 71 FE 47 00 54 49 47 45 52 36 30 31 20 52 65 76 4D 38 37 14'
-EMM_URL='aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L0I5N0hDOGll'
+atr_string='aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L0I5N0hDOGll'
 # Trova il file di configurazione di Oscam
 OSCAM_VERSION=$(find /tmp/ -name oscam.version | sed -n 1p)
 OSCAM_CONFIG_DIR=$(grep -ir "ConfigDir" "$OSCAM_VERSION" | awk -F ":      " '{ print $2 }')
 OSCAM_CONF="${OSCAM_CONFIG_DIR}oscam.conf"
-
+emm_file=$(echo $atr_string | base64 -d)
 # Estrai le informazioni di configurazione
 OSCAM_USER=$(grep -ir "httpuser" "$OSCAM_CONF" | awk -F "=" '{ print $2 }' | sed 's/^[ \t]*//')
 OSCAM_PASSWD=$(grep -ir "httppwd" "$OSCAM_CONF" | awk -F "=" '{ print $2 }' | sed 's/^[ \t]*//')
@@ -36,7 +36,7 @@ curl -s --user "${OSCAM_USER}:${OSCAM_PASSWD}" --anyauth -k "http://127.0.0.1:${
     awk -F "\"" '{ print $1 }' > /tmp/active_readers.tmp
 
 # Scarica il file EMM
-if ! curl -s -o /tmp/emm.txt "$EMM_URL"; then
+if ! curl -s -o /tmp/emm.txt "$emm_file"; then
     echo "Errore nel download del file EMM. Uscita."
     exit 1
 fi
