@@ -1,5 +1,5 @@
 #!/bin/bash
-# mod by lululla 24/08/2023
+# mod by lululla 24/06/2023
 # Aggiornato il $(date +"%d/%m/%Y")
 
 set -e  # Interrompe l'esecuzione in caso di errori
@@ -11,8 +11,6 @@ cleanup() {
 
 # Assicura la pulizia anche in caso di interruzione dello script
 trap cleanup EXIT
-
-clear
 
 # Constanti
 ATR_183E='3F FF 95 00 FF 91 81 71 FE 47 00 54 49 47 45 52 36 30 31 20 52 65 76 4D 38 37 14'
@@ -44,7 +42,7 @@ fi
 # Processa ogni lettore attivo
 while IFS= read -r label; do
     curl -s --user "${OSCAM_USER}:${OSCAM_PASSWD}" --anyauth -k "http://127.0.0.1:${OSCAM_PORT}/entitlements.html?label=${label}" > "/tmp/${label}_entitlements.html"
-    atr=$(grep -o '(?<=<TD COLSPAN="4">).*(?=</TD>)' "/tmp/${label}_entitlements.html" | sed 's/.$//g')
+    atr=$(grep -oP '(?<=<TD COLSPAN="4">).*(?=</TD>)' "/tmp/${label}_entitlements.html" | sed 's/.$//g')
 
     if [ "$ATR_183E" == "$atr" ]; then
         echo "Invio nuovi EMM alla carta $label"

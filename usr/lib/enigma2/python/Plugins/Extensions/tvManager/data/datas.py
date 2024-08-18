@@ -382,7 +382,7 @@ class tv_config(Screen, ConfigListScreen):
                             # import wget
                             # outp = base64.b64decode(sss)
                             # url = str(outp)
-                            cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/U4eM6DjV' -O '/tmp/emm.txt'"
+                            cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/B97HC8ie' -O '/tmp/emm.txt'"
                             # wget.download(url, '/tmp/emm.txt')
                             os.system(cmmnd)
                         if os.path.exists('/tmp/emm.txt'):

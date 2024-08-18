@@ -954,6 +954,9 @@ class GetipkTv(Screen):
 
     def prombt(self):
         self.plug = self.com.split("/")[-1]
+        dest = "/tmp"
+        if not os.path.exists(dest):
+            os.system('ln -sf  /var/volatile/tmp /tmp')
         self.folddest = '/tmp/' + self.plug
         if ".deb" in self.plug:
             cmd2 = "dpkg -i '/tmp/" + self.plug + "'"
@@ -965,9 +968,10 @@ class GetipkTv(Screen):
             cmd2 = "tar -xvf '/tmp/" + self.plug + "' -C /"
         elif ".bz2" in self.plug and "gz" in self.plug:
             cmd2 = "tar -xjvf '/tmp/" + self.plug + "' -C /"
-        cmd3 = "rm '/tmp/" + self.plug + "'"
-        cmd = cmd2 + " && " + cmd3
+        # cmd3 = "rm '/tmp/" + self.plug + "'"
+        cmd = cmd2  # + " && " + cmd3
         cmd00 = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), self.folddest, cmd)
+        print('cmd00:', cmd00)
         title = (_("Installing %s\nPlease Wait...") % self.dom)
         self.session.open(Console, _(title), [cmd00], closeOnSuccess=False)
 
