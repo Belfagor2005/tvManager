@@ -1042,7 +1042,6 @@ class InfoCfg(Screen):
         self.setTitle(_(title_plug))
         self['list'] = Label()
         self['actions'] = ActionMap(['OkCancelActions',
-                                     'ColorActions',
                                      'DirectionActions',
                                      'HotkeyActions',
                                      'InfobarEPGActions',

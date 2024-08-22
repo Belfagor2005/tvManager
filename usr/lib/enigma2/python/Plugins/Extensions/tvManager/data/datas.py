@@ -673,9 +673,17 @@ class tv_config(Screen, ConfigListScreen):
         global host, port, user, passw
         try:
             # data = checkStr(data)
-            url1 = re.findall(r'<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+            url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+
             if 'bosscccam' in data.lower():
-                url1 = re.findall(r'ong>c: (.+?) (.+?) (.+?) (.+?)</', data)
+                url1 = re.findall(r'<strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong', data)
+
+            elif '15days' in data.lower():
+                url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
+
+            elif 'cccamia' in data:
+                # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+                url1 = re.findall(r'>?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccam.net/freecccam' in data.lower():
                 # <b>C: free.cccam.net 21126 by5MtVIk cccam.net</b>
@@ -719,9 +727,6 @@ class tv_config(Screen, ConfigListScreen):
             # elif 'premium' in data.lower():
                 # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
-            elif 'cccamia' in data:
-                # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
-                url1 = re.findall(r'>?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccameurop' in data.lower():
                 # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)</', data)
@@ -759,12 +764,6 @@ class tv_config(Screen, ConfigListScreen):
 
             elif 'cccambird' in data.lower():
                 url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th>', data)
-
-            elif 'bosscccam' in data.lower():
-                url1 = re.findall(r'<strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong', data)
-
-            elif '15days' in data.lower():
-                url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
 
             elif 'cccamfrei' in data.lower():
                 # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)

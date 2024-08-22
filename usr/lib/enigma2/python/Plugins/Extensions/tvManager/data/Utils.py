@@ -712,6 +712,8 @@ def __createdir(list):
                 print('Mkdir Failed', dir)
 
 
+is_tmdb = False
+is_imdb = False
 try:
     from Plugins.Extensions.tmdb import tmdb
     is_tmdb = True
@@ -1237,243 +1239,121 @@ def get_safe_filename(filename, fallback=''):
 
 
 def decodeHtml(text):
-    charlist = []
-    charlist.append(('&#034;', '"'))
-    charlist.append(('&#038;', '&'))
-    charlist.append(('&#039;', "'"))
-    charlist.append(('&#060;', ' '))
-    charlist.append(('&#062;', ' '))
-    charlist.append(('&#160;', ' '))
-    charlist.append(('&#174;', ''))
-    charlist.append(('&#192;', '\xc3\x80'))
-    charlist.append(('&#193;', '\xc3\x81'))
-    charlist.append(('&#194;', '\xc3\x82'))
-    charlist.append(('&#196;', '\xc3\x84'))
-    charlist.append(('&#204;', '\xc3\x8c'))
-    charlist.append(('&#205;', '\xc3\x8d'))
-    charlist.append(('&#206;', '\xc3\x8e'))
-    charlist.append(('&#207;', '\xc3\x8f'))
-    charlist.append(('&#210;', '\xc3\x92'))
-    charlist.append(('&#211;', '\xc3\x93'))
-    charlist.append(('&#212;', '\xc3\x94'))
-    charlist.append(('&#214;', '\xc3\x96'))
-    charlist.append(('&#217;', '\xc3\x99'))
-    charlist.append(('&#218;', '\xc3\x9a'))
-    charlist.append(('&#219;', '\xc3\x9b'))
-    charlist.append(('&#220;', '\xc3\x9c'))
-    charlist.append(('&#223;', '\xc3\x9f'))
-    charlist.append(('&#224;', '\xc3\xa0'))
-    charlist.append(('&#225;', '\xc3\xa1'))
-    charlist.append(('&#226;', '\xc3\xa2'))
-    charlist.append(('&#228;', '\xc3\xa4'))
-    charlist.append(('&#232;', '\xc3\xa8'))
-    charlist.append(('&#233;', '\xc3\xa9'))
-    charlist.append(('&#234;', '\xc3\xaa'))
-    charlist.append(('&#235;', '\xc3\xab'))
-    charlist.append(('&#236;', '\xc3\xac'))
-    charlist.append(('&#237;', '\xc3\xad'))
-    charlist.append(('&#238;', '\xc3\xae'))
-    charlist.append(('&#239;', '\xc3\xaf'))
-    charlist.append(('&#242;', '\xc3\xb2'))
-    charlist.append(('&#243;', '\xc3\xb3'))
-    charlist.append(('&#244;', '\xc3\xb4'))
-    charlist.append(('&#246;', '\xc3\xb6'))
-    charlist.append(('&#249;', '\xc3\xb9'))
-    charlist.append(('&#250;', '\xc3\xba'))
-    charlist.append(('&#251;', '\xc3\xbb'))
-    charlist.append(('&#252;', '\xc3\xbc'))
-    charlist.append(('&#8203;', ''))
-    charlist.append(('&#8211;', '-'))
-    charlist.append(('&#8211;', '-'))
-    charlist.append(('&#8212;', ''))
-    charlist.append(('&#8212;', '—'))
-    charlist.append(('&#8216;', "'"))
-    charlist.append(('&#8216;', "'"))
-    charlist.append(('&#8217;', "'"))
-    charlist.append(('&#8217;', "'"))
-    charlist.append(('&#8220;', "'"))
-    charlist.append(('&#8220;', ''))
-    charlist.append(('&#8221;', '"'))
-    charlist.append(('&#8222;', ''))
-    charlist.append(('&#8222;', ', '))
-    charlist.append(('&#8230;', '...'))
-    charlist.append(('&#8230;', '...'))
-    charlist.append(('&#8234;', ''))
-    charlist.append(('&#x21;', '!'))
-    charlist.append(('&#x26;', '&'))
-    charlist.append(('&#x27;', "'"))
-    charlist.append(('&#x3f;', '?'))
-    charlist.append(('&#xB7;', '·'))
-    charlist.append(('&#xC4;', 'Ä'))
-    charlist.append(('&#xD6;', 'Ö'))
-    charlist.append(('&#xDC;', 'Ü'))
-    charlist.append(('&#xDF;', 'ß'))
-    charlist.append(('&#xE4;', 'ä'))
-    charlist.append(('&#xE9;', 'é'))
-    charlist.append(('&#xF6;', 'ö'))
-    charlist.append(('&#xF8;', 'ø'))
-    charlist.append(('&#xFB;', 'û'))
-    charlist.append(('&#xFC;', 'ü'))
-    charlist.append(('&8221;', '\xe2\x80\x9d'))
-    charlist.append(('&8482;', '\xe2\x84\xa2'))
-    charlist.append(('&Aacute;', '\xc3\x81'))
-    charlist.append(('&Acirc;', '\xc3\x82'))
-    charlist.append(('&Agrave;', '\xc3\x80'))
-    charlist.append(('&Auml;', '\xc3\x84'))
-    charlist.append(('&Iacute;', '\xc3\x8d'))
-    charlist.append(('&Icirc;', '\xc3\x8e'))
-    charlist.append(('&Igrave;', '\xc3\x8c'))
-    charlist.append(('&Iuml;', '\xc3\x8f'))
-    charlist.append(('&Oacute;', '\xc3\x93'))
-    charlist.append(('&Ocirc;', '\xc3\x94'))
-    charlist.append(('&Ograve;', '\xc3\x92'))
-    charlist.append(('&Ouml;', '\xc3\x96'))
-    charlist.append(('&Uacute;', '\xc3\x9a'))
-    charlist.append(('&Ucirc;', '\xc3\x9b'))
-    charlist.append(('&Ugrave;', '\xc3\x99'))
-    charlist.append(('&Uuml;', '\xc3\x9c'))
-    charlist.append(('&aacute;', '\xc3\xa1'))
-    charlist.append(('&acirc;', '\xc3\xa2'))
-    charlist.append(('&acute;', '\''))
-    charlist.append(('&agrave;', '\xc3\xa0'))
-    charlist.append(('&amp;', '&'))
-    charlist.append(('&apos;', "'"))
-    charlist.append(('&auml;', '\xc3\xa4'))
-    charlist.append(('&bdquo;', '"'))
-    charlist.append(('&bdquo;', '"'))
-    charlist.append(('&eacute;', '\xc3\xa9'))
-    charlist.append(('&ecirc;', '\xc3\xaa'))
-    charlist.append(('&egrave;', '\xc3\xa8'))
-    charlist.append(('&euml;', '\xc3\xab'))
-    charlist.append(('&gt;', '>'))
-    charlist.append(('&hellip;', '...'))
-    charlist.append(('&iacute;', '\xc3\xad'))
-    charlist.append(('&icirc;', '\xc3\xae'))
-    charlist.append(('&igrave;', '\xc3\xac'))
-    charlist.append(('&iuml;', '\xc3\xaf'))
-    charlist.append(('&laquo;', '"'))
-    charlist.append(('&ldquo;', '"'))
-    charlist.append(('&lsquo;', '\''))
-    charlist.append(('&lt;', '<'))
-    charlist.append(('&mdash;', '—'))
-    charlist.append(('&nbsp;', ' '))
-    charlist.append(('&ndash;', '-'))
-    charlist.append(('&oacute;', '\xc3\xb3'))
-    charlist.append(('&ocirc;', '\xc3\xb4'))
-    charlist.append(('&ograve;', '\xc3\xb2'))
-    charlist.append(('&ouml;', '\xc3\xb6'))
-    charlist.append(('&quot;', '"'))
-    charlist.append(('&raquo;', '"'))
-    charlist.append(('&rsquo;', '\''))
-    charlist.append(('&szlig;', '\xc3\x9f'))
-    charlist.append(('&uacute;', '\xc3\xba'))
-    charlist.append(('&ucirc;', '\xc3\xbb'))
-    charlist.append(('&ugrave;', '\xc3\xb9'))
-    charlist.append(('&uuml;', '\xc3\xbc'))
-    charlist.append(('\u0026', '&'))
-    charlist.append(('\u003d', '='))
-    charlist.append(('\u00a0', ' '))
-    charlist.append(('\u00b4', '\''))
-    charlist.append(('\u00c1', 'Á'))
-    charlist.append(('\u00c4', 'Ä'))
-    charlist.append(('\u00c6', 'Æ'))
-    charlist.append(('\u00d6', 'Ö'))
-    charlist.append(('\u00dc', 'Ü'))
-    charlist.append(('\u00df', 'ß'))
-    charlist.append(('\u00e0', 'à'))
-    charlist.append(('\u00e1', 'á'))
-    charlist.append(('\u00e4', 'ä'))
-    charlist.append(('\u00e7', 'ç'))
-    charlist.append(('\u00e8', 'é'))
-    charlist.append(('\u00e9', 'é'))
-    charlist.append(('\u00f6', 'ö'))
-    charlist.append(('\u00fc', 'ü'))
-    charlist.append(('\u014d', 'ō'))
-    charlist.append(('\u016b', 'ū'))
-    charlist.append(('\u2013', '–'))
-    charlist.append(('\u2018', '\"'))
-    charlist.append(('\u2019s', '’'))
-    charlist.append(('\u201a', '\"'))
-    charlist.append(('\u201c', '\"'))
-    charlist.append(('\u201d', '\''))
-    charlist.append(('\u201e', '\"'))
-    charlist.append(('\u2026', '...'))
-    for repl in charlist:
-        text = text.replace(repl[0], repl[1])
-    from re import sub as re_sub
-    text = re_sub('<[^>]+>', '', text)
-    if PY3:
-        text = text.encode('utf-8').decode('unicode_escape')
-    return str(text)  # str needed for PLi
+    if pythonVer == 3:
+        import html
+        text = html.unescape(text)
+    else:
+        from six.moves import (html_parser)
+        h = html_parser.HTMLParser()
+        text = h.unescape(text.decode('utf8')).encode('utf8')
+    text = text.replace('&amp;', '&')
+    text = text.replace('&apos;', "'")
+    text = text.replace('&lt;', '<')
+    text = text.replace('&gt;', '>')
+    text = text.replace('&ndash;', '-')
+    text = text.replace('&quot;', '"')
+    text = text.replace('&ntilde;', '~')
+    text = text.replace('&rsquo;', '\'')
+    text = text.replace('&nbsp;', ' ')
+    text = text.replace('&equals;', '=')
+    text = text.replace('&quest;', '?')
+    text = text.replace('&comma;', ',')
+    text = text.replace('&period;', '.')
+    text = text.replace('&colon;', ':')
+    text = text.replace('&lpar;', '(')
+    text = text.replace('&rpar;', ')')
+    text = text.replace('&excl;', '!')
+    text = text.replace('&dollar;', '$')
+    text = text.replace('&num;', '#')
+    text = text.replace('&ast;', '*')
+    text = text.replace('&lowbar;', '_')
+    text = text.replace('&lsqb;', '[')
+    text = text.replace('&rsqb;', ']')
+    text = text.replace('&half;', '1/2')
+    text = text.replace('&DiacriticalTilde;', '~')
+    text = text.replace('&OpenCurlyDoubleQuote;', '"')
+    text = text.replace('&CloseCurlyDoubleQuote;', '"')
+    return text.strip()
 
+
+
+if sys.version_info[0] < 3:
+    # Python 2
+    def u(x):
+        return x.decode('utf-8')
+else:
+    # Python 3
+    def u(x):
+        return x
 
 conversion = {
-    str('\xd0\xb0'): 'a',
-    str('\xd0\x90'): 'A',
-    str('\xd0\xb1'): 'b',
-    str('\xd0\x91'): 'B',
-    str('\xd0\xb2'): 'v',
-    str('\xd0\x92'): 'V',
-    str('\xd0\xb3'): 'g',
-    str('\xd0\x93'): 'G',
-    str('\xd0\xb4'): 'd',
-    str('\xd0\x94'): 'D',
-    str('\xd0\xb5'): 'e',
-    str('\xd0\x95'): 'E',
-    str('\xd1\x91'): 'jo',
-    str('\xd0\x81'): 'jo',
-    str('\xd0\xb6'): 'zh',
-    str('\xd0\x96'): 'ZH',
-    str('\xd0\xb7'): 'z',
-    str('\xd0\x97'): 'Z',
-    str('\xd0\xb8'): 'i',
-    str('\xd0\x98'): 'I',
-    str('\xd0\xb9'): 'j',
-    str('\xd0\x99'): 'J',
-    str('\xd0\xba'): 'k',
-    str('\xd0\x9a'): 'K',
-    str('\xd0\xbb'): 'l',
-    str('\xd0\x9b'): 'L',
-    str('\xd0\xbc'): 'm',
-    str('\xd0\x9c'): 'M',
-    str('\xd0\xbd'): 'n',
-    str('\xd0\x9d'): 'N',
-    str('\xd0\xbe'): 'o',
-    str('\xd0\x9e'): 'O',
-    str('\xd0\xbf'): 'p',
-    str('\xd0\x9f'): 'P',
-    str('\xd1\x80'): 'r',
-    str('\xd0\xa0'): 'R',
-    str('\xd1\x81'): 's',
-    str('\xd0\xa1'): 'S',
-    str('\xd1\x82'): 't',
-    str('\xd0\xa2'): 'T',
-    str('\xd1\x83'): 'u',
-    str('\xd0\xa3'): 'U',
-    str('\xd1\x84'): 'f',
-    str('\xd0\xa4'): 'F',
-    str('\xd1\x85'): 'h',
-    str('\xd0\xa5'): 'H',
-    str('\xd1\x86'): 'c',
-    str('\xd0\xa6'): 'C',
-    str('\xd1\x87'): 'ch',
-    str('\xd0\xa7'): 'CH',
-    str('\xd1\x88'): 'sh',
-    str('\xd0\xa8'): 'SH',
-    str('\xd1\x89'): 'sh',
-    str('\xd0\xa9'): 'SH',
-    str('\xd1\x8a'): '',
-    str('\xd0\xaa'): '',
-    str('\xd1\x8b'): 'y',
-    str('\xd0\xab'): 'Y',
-    str('\xd1\x8c'): 'j',
-    str('\xd0\xac'): 'J',
-    str('\xd1\x8d'): 'je',
-    str('\xd0\xad'): 'JE',
-    str('\xd1\x8e'): 'ju',
-    str('\xd0\xae'): 'JU',
-    str('\xd1\x8f'): 'ja',
-    str('\xd0\xaf'): 'JA'}
+    u(b'\xd0\xb0'): 'a',
+    u(b'\xd0\x90'): 'A',
+    u(b'\xd0\xb1'): 'b',
+    u(b'\xd0\x91'): 'B',
+    u(b'\xd0\xb2'): 'v',
+    u(b'\xd0\x92'): 'V',
+    u(b'\xd0\xb3'): 'g',
+    u(b'\xd0\x93'): 'G',
+    u(b'\xd0\xb4'): 'd',
+    u(b'\xd0\x94'): 'D',
+    u(b'\xd0\xb5'): 'e',
+    u(b'\xd0\x95'): 'E',
+    u(b'\xd1\x91'): 'jo',
+    u(b'\xd0\x81'): 'jo',
+    u(b'\xd0\xb6'): 'zh',
+    u(b'\xd0\x96'): 'ZH',
+    u(b'\xd0\xb7'): 'z',
+    u(b'\xd0\x97'): 'Z',
+    u(b'\xd0\xb8'): 'i',
+    u(b'\xd0\x98'): 'I',
+    u(b'\xd0\xb9'): 'j',
+    u(b'\xd0\x99'): 'J',
+    u(b'\xd0\xba'): 'k',
+    u(b'\xd0\x9a'): 'K',
+    u(b'\xd0\xbb'): 'l',
+    u(b'\xd0\x9b'): 'L',
+    u(b'\xd0\xbc'): 'm',
+    u(b'\xd0\x9c'): 'M',
+    u(b'\xd0\xbd'): 'n',
+    u(b'\xd0\x9d'): 'N',
+    u(b'\xd0\xbe'): 'o',
+    u(b'\xd0\x9e'): 'O',
+    u(b'\xd0\xbf'): 'p',
+    u(b'\xd0\x9f'): 'P',
+    u(b'\xd1\x80'): 'r',
+    u(b'\xd0\xa0'): 'R',
+    u(b'\xd1\x81'): 's',
+    u(b'\xd0\xa1'): 'S',
+    u(b'\xd1\x82'): 't',
+    u(b'\xd0\xa2'): 'T',
+    u(b'\xd1\x83'): 'u',
+    u(b'\xd0\xa3'): 'U',
+    u(b'\xd1\x84'): 'f',
+    u(b'\xd0\xa4'): 'F',
+    u(b'\xd1\x85'): 'h',
+    u(b'\xd0\xa5'): 'H',
+    u(b'\xd1\x86'): 'c',
+    u(b'\xd0\xa6'): 'C',
+    u(b'\xd1\x87'): 'ch',
+    u(b'\xd0\xa7'): 'CH',
+    u(b'\xd1\x88'): 'sh',
+    u(b'\xd0\xa8'): 'SH',
+    u(b'\xd1\x89'): 'sh',
+    u(b'\xd0\xa9'): 'SH',
+    u(b'\xd1\x8a'): '',
+    u(b'\xd0\xaa'): '',
+    u(b'\xd1\x8b'): 'y',
+    u(b'\xd0\xab'): 'Y',
+    u(b'\xd1\x8c'): 'j',
+    u(b'\xd0\xac'): 'J',
+    u(b'\xd1\x8d'): 'je',
+    u(b'\xd0\xad'): 'JE',
+    u(b'\xd1\x8e'): 'ju',
+    u(b'\xd0\xae'): 'JU',
+    u(b'\xd1\x8f'): 'ja',
+    u(b'\xd0\xaf'): 'JA'
+}
 
 
 def cyr2lat(text):
