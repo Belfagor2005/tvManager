@@ -300,31 +300,21 @@ class tv_config(Screen, ConfigListScreen):
         # self.runningcam = self.readCurrent()
         self['actions'] = ActionMap(['OkCancelActions',
                                      'DirectionActions',
-                                     'ColorActions',
+                                     'HotkeyActions',
                                      'VirtualKeyboardActions',
                                      'MenuActions',
                                      'EPGSelectActions',
-                                     'InfobarChannelSelection'], {'left': self.keyLeft,
-                                                                  'right': self.keyRight,
-                                                                  'ok': self.closex,
-                                                                  'showVirtualKeyboard': self.KeyText,
-                                                                  'green': self.green,
-                                                                  'yellow': self.sendemm,
-                                                                  'blue': self.resetcfg,
-                                                                  'red': self.closex,
-                                                                  'cancel': self.closex,
-                                                                  'info': self.infomsg,
-                                                                  'back': self.closex}, -1)
-        '''
-        # if config.plugins.tvmanager.active.value is True:
-            # self['key_green'].setText(buttn)
-            # self['key_yellow'].setText(_('Get Link'))
-            # self['key_blue'].setText(_('Reset'))
-        # else:
-            # self['key_green'].setText('Force Emm Send')
-            # self['key_yellow'].setText('Check Emm Send')
-            # self['key_blue'].setText('')
-        '''
+                                     'InfobarEPGActions'], {'left': self.keyLeft,
+                                                            'right': self.keyRight,
+                                                            'ok': self.closex,
+                                                            'showVirtualKeyboard': self.KeyText,
+                                                            'green': self.green,
+                                                            'yellow': self.sendemm,
+                                                            'blue': self.resetcfg,
+                                                            'red': self.closex,
+                                                            'cancel': self.closex,
+                                                            'info': self.infomsg,
+                                                            'back': self.closex}, -1)
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)
