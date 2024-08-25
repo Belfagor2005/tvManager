@@ -4,7 +4,7 @@
 # --------------------#
 #  coded by Lululla   #
 #   skin by MMark     #
-#     10/07/2023      #
+#     10/07/2024      #
 #      No Coppy       #
 # --------------------#
 from __future__ import print_function
@@ -203,7 +203,6 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server11'),
 ]
 
-# cfgcam = [(cccamPath(), 'CCcam'),
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/oscam.server', 'Oscam'),
           ('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
@@ -215,7 +214,6 @@ cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
 config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
-# config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(default='/etc/CCcam.cfg', choices=[('/etc/CCcam.cfg', _('CCcam')), ('/etc/tuxbox/config/oscam.server', _('Oscam')), ('/etc/tuxbox/config/ncam.server', _('Ncam'))]))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='127.0.0.1'))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=15000))
@@ -329,10 +327,6 @@ class tv_config(Screen, ConfigListScreen):
         payp = paypal()
         self["paypal"].setText(payp)
         # self.showhide()
-
-        # self.runningcam = self.readCurrent()
-        # print('runningcam 7 =', self.runningcam)
-
         self['info'].setText(_('Select Your Choice'))
 
     def infomsg(self):
@@ -346,7 +340,6 @@ class tv_config(Screen, ConfigListScreen):
                 print('runningcam1=', runningcam)
                 if runningcam is None:
                     return
-                # if runningcam == 'oscam' or runningcam == 'ncam':
                 if runningcam == 'oscam':
                     cmd = 'ps -T'
                     res = os.popen(cmd).read()
@@ -359,8 +352,6 @@ class tv_config(Screen, ConfigListScreen):
                         from os import access, X_OK
                         if not access(self.cmd1, X_OK):
                             os.chmod(self.cmd1, 493)
-                        # os.system(self.cmd1)
-                        # subprocess.check_output(['bash', self.cmd1])
                         try:
                             subprocess.check_output(['bash', self.cmd1])
                             self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
@@ -370,11 +361,7 @@ class tv_config(Screen, ConfigListScreen):
 
                         os.system('sleep 5')
                         if not os.path.exists('/tmp/emm.txt'):
-                            # import wget
-                            # outp = base64.b64decode(sss)
-                            # url = str(outp)
                             cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c 'https://pastebin.com/raw/B97HC8ie' -O '/tmp/emm.txt'"
-                            # wget.download(url, '/tmp/emm.txt')
                             os.system(cmmnd)
                         if os.path.exists('/tmp/emm.txt'):
                             msg.append(_("READ EMM....\n"))
@@ -413,7 +400,6 @@ class tv_config(Screen, ConfigListScreen):
             if not os.path.exists('/tmp/emm.txt'):
                 outp = base64.b64decode(sss)
                 url = str(outp)
-                # cmd = 'wget -q --no-use-server-timestamps --no-clobber --timeout=5' + url + ' -O /tmp/emm.txt'
                 try:
                     # subprocess.check_output(['bash', cmd])
                     subprocess.call(["wget", "-q", "--no-use-server-timestamps", "--no-clobber", "--timeout=5", url, "-O", '/tmp/emm.txt'])
@@ -559,7 +545,6 @@ class tv_config(Screen, ConfigListScreen):
         return SetupSummary
 
     def selectionChanged(self):
-        # self["info"].setText(self["config"].getCurrent()[2])
         self.showhide()
 
     def changedEntry(self):
@@ -591,7 +576,6 @@ class tv_config(Screen, ConfigListScreen):
             return
         os.system('chmod -R 755 %s' % dest)
         cfgdok = open(dest, 'a')
-        # cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n\n' + host + ' ' + port + ' ' + user + ' ' + pasw)
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -609,7 +593,6 @@ class tv_config(Screen, ConfigListScreen):
             return
         os.system('chmod -R 755 %s' % dest)
         cfgdok = open(dest, 'a')
-        # cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n[reader]\nlabel = Server_' + host + '\nenable= 1\nprotocol = cccam\ndevice = ' + host + ',' + port + '\nuser = ' + user + '\npassword = ' + pasw + '\ninactivitytimeout = 30\ngroup = 3\ncccversion = 2.2.1\ncccmaxhops = 0\nccckeepalive = 1\naudisabled = 1\n\n')
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -634,7 +617,6 @@ class tv_config(Screen, ConfigListScreen):
             return
         os.system('chmod -R 755 %s' % dest)
         cfgdok = open(dest, 'a')
-        # cfgdok = open(dest, 'a', encoding='utf-8')
         cfgdok.write('\n[reader]\nlabel = Server_' + host + '\nenable= 1\nprotocol = cccam\ndevice = ' + host + ',' + port + '\nuser = ' + user + '\npassword = ' + pasw + '\ngroup = 3\ncccversion = 2.0.11\ndisablecrccws_only_for= 0500:032830\ncccmaxhops= 1\nccckeepalive= 1\naudisabled = 1\n\n')
         cfgdok.close()
         self.session.open(MessageBox, _('Server Copy in ') + dest, type=MessageBox.TYPE_INFO, timeout=8)
@@ -654,7 +636,6 @@ class tv_config(Screen, ConfigListScreen):
                 else:
                     self.timer.callback.append(self.load_getcl(data))
                 self.timer.start(600, 1)
-                # self.load_getcl(data)
             except Exception as e:
                 print('getcl error: ', str(e))
         except Exception as e:
@@ -663,7 +644,7 @@ class tv_config(Screen, ConfigListScreen):
     def load_getcl(self, data):
         global host, port, user, passw
         try:
-            # data = checkStr(data)
+            data = checkStr(data)
             url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             if 'bosscccam' in data.lower():
@@ -673,11 +654,9 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
 
             elif 'cccamia' in data:
-                # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
                 url1 = re.findall(r'>?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccam.net/freecccam' in data.lower():
-                # <b>C: free.cccam.net 21126 by5MtVIk cccam.net</b>
                 url1 = re.findall(r'b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
 
             elif 'testcline' in data.lower():
@@ -696,48 +675,25 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</h2>', data)
 
             elif 'cccamprime' in data.lower():
-                # url1 = re.findall('Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+).*?Host', data)
                 url1 = re.findall(r'Cline : C:\s+(.*?)\s+(\d+)\s+(\w+)\s+(.*?)\s*Host', data)
                 url1 = url1.replace('<br><br>', '')
 
-            # elif 'cccamprima.com' in data.lower():
-                # # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
-
             elif 'cccampri.me' in data.lower():
                 # url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br>', data)
-                url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br\s*/?>', data)
-
-            # elif 'cccamfree.co' in data.lower():
-                # # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+                url1 = re.findall(r'line : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br\s*/?>', data)
 
             elif 'iptvcccam' in data.lower():
-                url1 = re.findall('?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h1>', data)
+                url1 = re.findall(r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h1>', data)
 
             # elif 'premium' in data.lower():
                 # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
-
             elif 'cccameurop' in data.lower():
-                # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)</', data)
                 url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s*</', data)
 
             elif 'infosat' in data.lower():
                 # url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
                 url1 = re.findall(r'host:\s*(.+?)<br\s*/?>\s*port:\s*(.+?)<br\s*/?>\s*user:\s*(.+?)<br\s*/?>\s*pass:\s*(.+?)\s*\n', data)
-
-            # elif 'cccamx' in data.lower():
-                # # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
-                # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
-
-            # elif 'cccamiptv' in data.lower():
-                # # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
-                # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
-
-            # elif 'FREEN12' in data.lower():
-                # # url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             # elif 'history' in data.lower():
                 # # url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
@@ -756,12 +712,8 @@ class tv_config(Screen, ConfigListScreen):
             # elif 'cccambird' in data.lower():
                 # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th>', data)
 
-            # elif 'cccamfrei' in data.lower():
-                # # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
-            # elif 'cccamazon' in data.lower():
-                # # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            else:
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
             print('===========data=========', url1)
 
             if url1 != '':
