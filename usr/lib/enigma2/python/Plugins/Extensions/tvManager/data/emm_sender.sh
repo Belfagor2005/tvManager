@@ -1,5 +1,5 @@
 #!/bin/bash
-# mod by lululla 24/06/2023
+# mod by lululla 24/08/2024
 # Aggiornato il $(date +"%d/%m/%Y")
 
 set -e  # Interrompe l'esecuzione in caso di errori
@@ -40,7 +40,7 @@ fi
 # Processa ogni lettore attivo
 while IFS= read -r label; do
     curl -s --user "${OSCAM_USER}:${OSCAM_PASSWD}" --anyauth -k "http://127.0.0.1:${OSCAM_PORT}/entitlements.html?label=${label}" > "/tmp/${label}_entitlements.html"
-    atr=$(grep -oP '(?<=<TD COLSPAN="4">).*(?=</TD>)' "/tmp/${label}_entitlements.html" | sed 's/.$//g')
+    atr=$(grep -o '(?<=<TD COLSPAN="4">).*(?=</TD>)' "/tmp/${label}_entitlements.html" | sed 's/.$//g')
 
     if [ "$ATR_183E" == "$atr" ]; then
         echo "Invio nuovi EMM alla carta $label"

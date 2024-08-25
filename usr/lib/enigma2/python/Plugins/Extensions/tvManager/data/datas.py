@@ -155,7 +155,7 @@ elif screenwidth.width() == 1920:
 else:
     skin_path = plugin_path + '/res/skins/hd/'
 if os.path.exists('/var/lib/dpkg/info'):
-    skin_path = skin_path + '/dreamOs/'
+    skin_path = skin_path + 'dreamOs/'
 
 
 def cccamPath():
@@ -197,7 +197,7 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=', 'Server05'),
     ('aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=', 'Server06'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v', 'Server07'),
-    ('aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZWNjY2Ft', 'Server08'),
+    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server08'),
     ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server9'),
     ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server10'),
     ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server11'),
@@ -648,7 +648,7 @@ class tv_config(Screen, ConfigListScreen):
             url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             if 'bosscccam' in data.lower():
-                url1 = re.findall(r'<strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong', data)
+                url1 = re.findall(r'<strong>c:\s[\w.-]+\s\d{5}\s\w+\s[\w.-]+<\/strong>', data)
 
             elif '15days' in data.lower():
                 url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
