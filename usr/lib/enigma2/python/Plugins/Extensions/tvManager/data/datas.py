@@ -304,6 +304,7 @@ class tv_config(Screen, ConfigListScreen):
                                      'VirtualKeyboardActions',
                                      'MenuActions',
                                      'EPGSelectActions',
+                                     'ColorActions',
                                      'InfobarEPGActions'], {'left': self.keyLeft,
                                                             'right': self.keyRight,
                                                             'ok': self.closex,
