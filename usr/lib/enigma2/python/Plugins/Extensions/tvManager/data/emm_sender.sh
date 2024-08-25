@@ -5,9 +5,7 @@
 set -e  # Interrompe l'esecuzione in caso di errori
 
 # Funzione per la pulizia
-cleanup() {
-    rm -f /tmp/*.tmp /tmp/*.html /tmp/emm.txt
-}
+cleanup() { rm -f /tmp/*.tmp /tmp/*.html /tmp/emm.txt }
 
 # Assicura la pulizia anche in caso di interruzione dello script
 trap cleanup EXIT
@@ -27,10 +25,10 @@ OSCAM_HTTPPORT=$(grep -ir "httpport" "$OSCAM_CONF" | awk -F "=" '{ print $2 }' |
 OSCAM_PORT=$(echo "$OSCAM_HTTPPORT" | sed -e 's|+||g')
 
 # Ottieni la lista dei lettori attivi
-curl -s --user "${OSCAM_USER}:${OSCAM_PASSWD}" --anyauth -k "http://127.0.0.1:${OSCAM_PORT}/status.html" | 
-    grep "Restart Reader" | 
-    sed -e 's|<TD CLASS="statuscol1"><A HREF="status.html?action=restart&amp;label=||g' | 
-    sed 's/^[ \t]*//' | 
+curl -s --user "${OSCAM_USER}:${OSCAM_PASSWD}" --anyauth -k "http://127.0.0.1:${OSCAM_PORT}/status.html" |
+    grep "Restart Reader" |
+    sed -e 's|<TD CLASS="statuscol1"><A HREF="status.html?action=restart&amp;label=||g' |
+    sed 's/^[ \t]*//' |
     awk -F "\"" '{ print $1 }' > /tmp/active_readers.tmp
 
 # Scarica il file EMM

@@ -699,20 +699,20 @@ class tv_config(Screen, ConfigListScreen):
                 url1 = re.findall(r'Cline : C:\s+(.*?)\s+(\d+)\s+(\w+)\s+(.*?)\s*Host', data)
                 url1 = url1.replace('<br><br>', '')
 
-            elif 'cccamprima.com' in data.lower():
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
-                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            # elif 'cccamprima.com' in data.lower():
+                # # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccampri.me' in data.lower():
                 # url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br>', data)
                 url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br\s*/?>', data)
 
-            elif 'cccamfree.co' in data.lower():
-                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
-                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            # elif 'cccamfree.co' in data.lower():
+                # # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'iptvcccam' in data.lower():
-                url1 = re.findall('C: (.+?) (.+?) (.+?) (*?).*?</h1>', data)
+                url1 = re.findall('?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h1>', data)
 
             # elif 'premium' in data.lower():
                 # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
@@ -726,41 +726,41 @@ class tv_config(Screen, ConfigListScreen):
                 # url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
                 url1 = re.findall(r'host:\s*(.+?)<br\s*/?>\s*port:\s*(.+?)<br\s*/?>\s*user:\s*(.+?)<br\s*/?>\s*pass:\s*(.+?)\s*\n', data)
 
-            elif 'cccamx' in data.lower():
-                # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
-                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            # elif 'cccamx' in data.lower():
+                # # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
-            elif 'cccamiptv' in data.lower():
-                # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
-                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
+            # elif 'cccamiptv' in data.lower():
+                # # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n.*?</h3>', data)
+                # url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
 
-            elif 'FREEN12' in data.lower():
-                # url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
-                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            # elif 'FREEN12' in data.lower():
+                # # url1 = re.findall('<h1>\nC: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
-            elif 'history' in data.lower():
-                # url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
-                url1 = re.findall(r'of the line">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</a>.*?title=', data)
+            # elif 'history' in data.lower():
+                # # url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
+                # url1 = re.findall(r'of the line">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</a>.*?title=', data)
 
-            elif 'store' in data.lower():
-                # url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
-                url1 = re.findall(r'<center><strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*<br>', data)
+            # elif 'store' in data.lower():
+                # # url1 = re.findall('<center><strong>C: (.+?) (.+?) (.+?) (.+?) <br>', data)
+                # url1 = re.findall(r'<center><strong>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*<br>', data)
 
-            elif 'cccamhub' in data.lower():
-                url1 = re.findall(r'id="cline">.*?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</div>', data)
+            # elif 'cccamhub' in data.lower():
+                # url1 = re.findall(r'id="cline">.*?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</div>', data)
 
             elif 'rogcam' in data.lower():
-                url1 = re.findall(r'bg-primary"> C: (.+?) (.+?) (.+?) (.+?) </span>', data)
+                url1 = re.findall(r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</span>', data)
 
-            elif 'cccambird' in data.lower():
-                url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th>', data)
+            # elif 'cccambird' in data.lower():
+                # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th>', data)
 
-            elif 'cccamfrei' in data.lower():
-                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
-                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
-            elif 'cccamazon' in data.lower():
-                # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
-                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            # elif 'cccamfrei' in data.lower():
+                # # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+            # elif 'cccamazon' in data.lower():
+                # # url1 = re.findall('<h1>C: (.+?) (.+?) (.+?) (.+?)\n', data)
+                # url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
             print('===========data=========', url1)
 
             if url1 != '':
@@ -776,17 +776,6 @@ class tv_config(Screen, ConfigListScreen):
                         user = str(u)
                         password = str(pw)
                         print('Host: %s - Port: %s - User: %s - Password: %s' % (host, port, user, password))
-                elif 'cccam.net' in data.lower():
-                    for h, p, u, pw in url1:
-                        print(h, p, u, pw)
-                        host = str(h)
-                        port = str(p)
-                        user = str(u)
-                        password = str(pw)
-                        password = password.replace('</b>', '').replace('</span>', '')
-                        password = password.replace('</div>', '')
-                        password = password.replace('</h1>', '')
-                        password = password.replace('</div>', '')
                 else:
                     for h, p, u, pw in url1:
                         print(h, p, u, pw)
@@ -794,8 +783,8 @@ class tv_config(Screen, ConfigListScreen):
                         port = str(p)
                         user = str(u)
                         password = str(pw)
-                        password = password.replace('</h1>', '')
-                        password = password.replace('</div>', '')
+                        password = password.replace('</h1>', '').replace('</b>', '')
+                        password = password.replace('</div>', '').replace('</span>', '')
                 # if config.plugins.tvmanager.active.getValue():
                 config.plugins.tvmanager.hostaddress.setValue(host)
                 config.plugins.tvmanager.port.setValue(port)
