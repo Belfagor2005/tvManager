@@ -4,7 +4,7 @@
 # --------------------#
 #  coded by Lululla   #
 #   skin by MMark     #
-#     10/07/2024      #
+#     26/06/2024     #
 #      No Coppy       #
 # --------------------#
 from __future__ import print_function
@@ -197,10 +197,8 @@ Serverlive = [
     ('aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=', 'Server05'),
     ('aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=', 'Server06'),
     ('aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v', 'Server07'),
-    ('aHR0cHM6Ly93d3cuY2NjYW1iaXJkMi5jb20vZnJlZWNjY2FtLnBocA==', 'Server08'),
-    ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server9'),
-    ('aHR0cHM6Ly9jY2NhbWZyZWkuY29tL2ZyZWUvZ2V0LnBocA==', 'Server10'),
-    ('aHR0cHM6Ly9jY2NhbWlwdHYuY2x1Yi9mcmVlLWNjY2FtLw==', 'Server11'),
+    ('aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw', 'Server8'),
+    ('aHR0cHM6Ly9jY2NhbWlwdHYucHJvL2NjY2FtLWZyZWUvI3BhZ2UtY29udGVudA==', 'Server9'),
 ]
 
 cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
@@ -648,7 +646,11 @@ class tv_config(Screen, ConfigListScreen):
             url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             if 'bosscccam' in data.lower():
-                url1 = re.findall(r'<strong>c:\s[\w.-]+\s\d{5}\s\w+\s[\w.-]+<\/strong>', data)
+                url1 = re.findall(r'<strong>c:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong', data)
+
+            # <h3 class="elementor-heading-title elementor-size-default">C: free.cccamx.com 18804 Trial978532 89390137</h3>
+            elif 'cccamx' in data.lower():
+                url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
 
             elif '15days' in data.lower():
                 url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
@@ -661,6 +663,10 @@ class tv_config(Screen, ConfigListScreen):
 
             elif 'testcline' in data.lower():
                 url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</d', data)
+            
+            # <div id="cline">C: free.cccamiptv.club 13000 ggd32x cccamiptv.pro</div>
+            elif 'cccamiptv' in data.lower():
+                url1 = re.findall(r'cline">\s*C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'free.cccam.net' in data.lower():
                 url1 = re.findall(r'<b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
@@ -684,9 +690,6 @@ class tv_config(Screen, ConfigListScreen):
 
             elif 'iptvcccam' in data.lower():
                 url1 = re.findall(r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h1>', data)
-
-            # elif 'premium' in data.lower():
-                # url1 = re.findall('C: (.+?) (.+?) (.+?) (.+?)\n', data)
 
             elif 'cccameurop' in data.lower():
                 url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s*</', data)
