@@ -136,7 +136,7 @@ elif screenwidth.width() == 1920:
 else:
     skin_path = plugin_path + '/res/skins/hd/'
 if os.path.exists('/var/lib/dpkg/info'):
-    skin_path = skin_path + '/dreamOs/'
+    skin_path = skin_path + 'dreamOs/'
 
 
 if not os.path.exists('/etc/clist.list'):
@@ -252,10 +252,6 @@ class tvManager(Screen):
         global runningcam
         self.curCam = self.readCurrent()
         # self.BlueAction = 'SOFTCAM'
-        # runningcam = 'softcam'
-        # print('self.curCam= 10 ', self.curCam)
-        # print('self.BlueAction= 10 ', self.BlueAction)
-        # print('runningcam= 10 ', runningcam)
         self["key_blue"].setText("Softcam")
         if self.curCam is not None:
             nim = str(self.curCam).lower()
@@ -780,11 +776,11 @@ class GetipklistTv(Screen):
         local = False
         self.icount = 0
         self.downloading = False
-        if os.path.exists('/var/lib/dpkg/info'):
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
-        else:
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-        self.xml = str(FTP_XML)
+        # if os.path.exists('/var/lib/dpkg/info'):
+            # FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
+        # else:
+            # FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
+        # self.xml = str(FTP_XML)
         self.timer = eTimer()
         if os.path.exists('/var/lib/dpkg/status'):
             self.timer_conn = self.timer.timeout.connect(self._gotPageLoad)
@@ -814,26 +810,23 @@ class GetipklistTv(Screen):
                 local = True
             self._gotPageLoad()
 
-    def downloadxmlpage(self):
-        if os.path.exists('/var/lib/dpkg/info'):
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
-        else:
-            FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-        url = str(FTP_XML)
-        if PY3:
-            url = url.encode()
-        getPage(url).addCallback(self._gotPageLoad).addErrback(self.errorLoad)
-
-    def errorLoad(self, error):
-        print(str(error))
-        self['description'].setText(_('Try again later ...'))
-        self.downloading = False
-
     def _gotPageLoad(self):
         global local
+        self.xml = 'https://raw.githubusercontent.com/levi-45/Multicam/main/Caminstaller.xml'
+        if PY3:
+            self.xml = self.xml.encode()
         if local is False:
-            self.xml = Utils.checkGZIP(self.xml)
+            if os.path.exists('/var/lib/dpkg/info'):
+                print('have a dreamOs!!!')
+                self.data = Utils.checkGZIP(self.xml)
+                self.downloadxmlpage(self.data)
+            else:
+                print('have a Atv-PLi - etc..!!!')
+                getPage(self.xml).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
 
+    def downloadxmlpage(self, data):
+
+        self.xml = data
         self.list = []
         self.names = []
         try:
@@ -841,11 +834,18 @@ class GetipklistTv(Screen):
                 self.xmlparse = minidom.parseString(self.xml)
                 for plugins in self.xmlparse.getElementsByTagName('plugins'):
                     self.names.append(str(plugins.getAttribute('cont')))
+                # self["list"].l.setItemHeight(50)
                 self["list"].l.setList(self.names)
                 self['description'].setText(_('Please select ...'))
-            self.downloading = True
-        except:
+                self.downloading = True
+        except Exception as e:
+            print('error:', e)
             self['description'].setText(_('Error processing server addons data'))
+
+    def errorLoad(self, error):
+        print(str(error))
+        self['description'].setText(_('Try again later ...'))
+        self.downloading = False
 
     def okClicked(self):
         try:
@@ -958,6 +958,7 @@ class GetipkTv(Screen):
         if not os.path.exists(dest):
             os.system('ln -sf  /var/volatile/tmp /tmp')
         self.folddest = '/tmp/' + self.plug
+        cmd2 = ''
         if ".deb" in self.plug:
             cmd2 = "dpkg -i '/tmp/" + self.plug + "'"
         if ".ipk" in self.plug:
