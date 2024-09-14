@@ -79,7 +79,7 @@ def b64decoder(s):
 
 # currversion = '2.3'
 name_plug = 'TiVuStream Softcam Manager'
-plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/Manager")
+plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager")
 data_path = plugin_path + 'data/'
 skin_path = plugin_path
 
@@ -208,8 +208,6 @@ cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
           ('/etc/tuxbox/config/gcam.server', 'Gcam'),
           ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
 
-                                                                                                              
-                                                                                                     
 
 config.plugins.Manager = ConfigSubsection()
 config.plugins.Manager.active = ConfigYesNo(default=False)
@@ -296,24 +294,24 @@ class tv_config(Screen, ConfigListScreen):
         self["paypal"] = Label()
         # self.runningcam = None
         # self.runningcam = self.readCurrent()
-        self['actions'] = ActionMap(['OkCancelActions',
-                                     'DirectionActions',
+        self['actions'] = ActionMap(['InfobarEPGActions',
+                                     'OkCancelActions',
+                                     # 'DirectionActions',
                                      'HotkeyActions',
                                      'VirtualKeyboardActions',
-                                     'MenuActions',
-                                     'EPGSelectActions',
+                                     # 'EPGSelectActions',
                                      'ColorActions',
-                                     'InfobarEPGActions'], {'left': self.keyLeft,
-                                                            'right': self.keyRight,
-                                                            'ok': self.closex,
-                                                            'showVirtualKeyboard': self.KeyText,
-                                                            'green': self.green,
-                                                            'yellow': self.sendemm,
-                                                            'blue': self.resetcfg,
-                                                            'red': self.closex,
-                                                            'cancel': self.closex,
-                                                            'info': self.infomsg,
-                                                            'back': self.closex}, -1)
+                                     'MenuActions'], {'left': self.keyLeft,
+                                                      'right': self.keyRight,
+                                                      'ok': self.closex,
+                                                      'showVirtualKeyboard': self.KeyText,
+                                                      'green': self.green,
+                                                      'yellow': self.sendemm,
+                                                      'blue': self.resetcfg,
+                                                      'red': self.closex,
+                                                      'cancel': self.closex,
+                                                      'info': self.infomsg,
+                                                      'back': self.closex}, -1)
         self.createSetup()
         if self.selectionChanged not in self["config"].onSelectionChanged:
             self["config"].onSelectionChanged.append(self.selectionChanged)
@@ -348,7 +346,7 @@ class tv_config(Screen, ConfigListScreen):
                         print('oscam exist')
                         msg = []
                         msg.append(_("\n....\n.....\n"))
-                        self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/Manager/data/emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/Manager/data/emm_sender.sh'
+                        self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'  # '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
                         from os import access, X_OK
                         if not access(self.cmd1, X_OK):
                             os.chmod(self.cmd1, 493)
@@ -361,7 +359,7 @@ class tv_config(Screen, ConfigListScreen):
 
                         os.system('sleep 5')
                         if not os.path.exists('/tmp/emm.txt'):
-                            cmmnd = "wget --no-check-certificate -U 'Enigma2 - Manager Plugin' -c 'https://pastebin.com/raw/B97HC8ie' -O '/tmp/emm.txt'"
+                            cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvManager Plugin' -c 'https://pastebin.com/raw/B97HC8ie' -O '/tmp/emm.txt'"
                             os.system(cmmnd)
                         if os.path.exists('/tmp/emm.txt'):
                             msg.append(_("READ EMM....\n"))
@@ -386,7 +384,7 @@ class tv_config(Screen, ConfigListScreen):
         if answer:
             msg = []
             msg.append(_("\n....\n.....\n"))
-            self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/Manager/data/emm_sender.sh'
+            self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
             from os import access, X_OK
             if not access(self.cmd1, X_OK):
                 os.chmod(self.cmd1, 493)
@@ -665,7 +663,7 @@ class tv_config(Screen, ConfigListScreen):
 
             elif 'testcline' in data.lower():
                 url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</d', data)
-            
+
             # <div id="cline">C: free.cccamiptv.club 13000 ggd32x cccamiptv.pro</div>
             elif 'cccamiptv' in data.lower():
                 url1 = re.findall(r'cline">\s*C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)

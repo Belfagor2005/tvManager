@@ -61,7 +61,7 @@ if PY3:
     PY3 = True
 
 
-currversion = '2.3'
+currversion = '2.4'
 name_plug = 'Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
