@@ -776,11 +776,6 @@ class GetipklistTv(Screen):
         local = False
         self.icount = 0
         self.downloading = False
-        # if os.path.exists('/var/lib/dpkg/info'):
-            # FTP_XML = 'http://patbuweb.com/tvManager/tvManagerdeb.xml'
-        # else:
-            # FTP_XML = 'http://patbuweb.com/tvManager/tvManager.xml'
-        # self.xml = str(FTP_XML)
         self.timer = eTimer()
         if os.path.exists('/var/lib/dpkg/status'):
             self.timer_conn = self.timer.timeout.connect(self._gotPageLoad)
