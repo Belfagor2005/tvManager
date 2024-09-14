@@ -297,13 +297,13 @@ class tvManager(Screen):
         if 'oscam' in str(self.curCam).lower():
             try:
                 try:
-                    from Screens.OScamInfo import OscamInfoMenu
+                    from Screens.OScamInfo import OSCamInfo
                     print('[cccam 1] OScamInfo')
-                    self.session.open(OscamInfoMenu)
+                    self.session.open(OSCamInfo)
                 except ImportError:
-                    from .data.OScamInfo import OscamInfoMenu
+                    from .data.OScamInfo import OSCamInfo
                     print('[cccam 2] OScamInfo')
-                    self.session.open(OscamInfoMenu)
+                    self.session.open(OSCamInfo)
             except Exception as e:
                 print('[cccam] OScamInfo e:', e)
                 pass
@@ -335,13 +335,13 @@ class tvManager(Screen):
         elif 'movicam' in str(self.curCam).lower():
             try:
                 try:
-                    from Screens.OScamInfo import OscamInfoMenu
+                    from Screens.OScamInfo import OSCamInfo
                     print('[cccam 1] MOVICAMINFO')
-                    self.session.open(OscamInfoMenu)
+                    self.session.open(OSCamInfo)
                 except ImportError:
-                    from .data.OScamInfo import OscamInfoMenu
+                    from .data.OScamInfo import OSCamInfo
                     print('[cccam 2] MOVICAMINFO')
-                    self.session.open(OscamInfoMenu)
+                    self.session.open(OSCamInfo)
 
             except Exception as e:
                 print('[cccam] MOVICAMINFO e:', e)
@@ -364,11 +364,11 @@ class tvManager(Screen):
 
     def oscam(self):
         try:
-            from Screens.OScamInfo import OscamInfoMenu
-            self.session.open(OscamInfoMenu)
+            from Screens.OScamInfo import OSCamInfo
+            self.session.open(OSCamInfo)
         except ImportError:
-            from .data.OScamInfo import OscamInfoMenu
-            self.session.open(OscamInfoMenu)
+            from .data.OScamInfo import OSCamInfo
+            self.session.open(OSCamInfo)
 
     def ncam(self):
         try:
@@ -755,7 +755,6 @@ class GetipklistTv(Screen):
         self.names = []
         self.names_1 = []
         self.list = []
-        # self['list'] = m2list([])
         self['list'] = MenuList([])
         self.setTitle(_(title_plug))
         self['title'] = Label(_(title_plug))
@@ -828,6 +827,17 @@ class GetipklistTv(Screen):
             if self.xml:
                 self.xmlparse = minidom.parseString(self.xml)
                 for plugins in self.xmlparse.getElementsByTagName('plugins'):
+                for plugins in self.xmlparse.getElementsByTagName('plugins'):
+                    # if config.ParentalControl.configured.value:
+                        # if 'adult' in str(plugins.getAttribute('cont')).lower():
+                            # continue
+                    if not os.path.exists('/var/lib/dpkg/info'):
+                        if 'deb' in str(plugins.getAttribute('cont')).lower():
+                            continue
+
+                    if os.path.exists('/var/lib/dpkg/info'):
+                        if 'deb' not in str(plugins.getAttribute('cont')).lower():
+                            continue
                     self.names.append(str(plugins.getAttribute('cont')))
                 # self["list"].l.setItemHeight(50)
                 self["list"].l.setList(self.names)
@@ -862,7 +872,6 @@ class GetipkTv(Screen):
             self.skin = f.read()
         self.xmlparse = xmlparse
         self.selection = selection
-        # self['list'] = m2list([])
         self.list = []
         adlist = []
         for plugins in self.xmlparse.getElementsByTagName('plugins'):

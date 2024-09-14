@@ -6,7 +6,7 @@
 # TOGGLE_SHOW = InfoBar.toggleShow
 # modded by lululla 20240314
 from __future__ import print_function
-from .. import _
+# from .. import _
 from . import CCcamPrioMaker
 from . import CCcamOrganizer
 from Components.ActionMap import (
