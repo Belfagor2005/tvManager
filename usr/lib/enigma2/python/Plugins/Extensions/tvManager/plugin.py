@@ -42,7 +42,6 @@ from time import sleep
 from twisted.web.client import getPage
 import codecs
 import os
-# import re
 import sys
 import time
 import json
@@ -66,7 +65,7 @@ name_plug = 'Softcam Manager'
 title_plug = '..:: ' + name_plug + ' V. %s ::..' % currversion
 plugin_path = os.path.dirname(sys.modules[__name__].__file__)
 iconpic = os.path.join(plugin_path, 'logo.png')
-data_path = plugin_path + '/data'
+data_path = os.path.join(plugin_path, 'data')
 dir_work = '/usr/lib/enigma2/python/Screens'
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
 FTP_XML = ''
@@ -84,31 +83,6 @@ AgentRequest = RequestAgent()
 runningcam = None
 
 
-'''
-try:
-    from .data.NcamInfo import NcamInfoMenu
-except ImportError:
-    pass
-
-try:
-    from .data.OScamInfo import OscamInfoMenu
-except ImportError:
-    pass
-
-try:
-    from .data.CCcamInfo import CCcamInfoMain
-except ImportError:
-    pass
-'''
-
-'''
-try:
-    if os.path.isfile(resolveFilename(SCOPE_PLUGINS, 'Extensions/CCcamInfo/plugin.pyc')):
-        from Plugins.Extensions.CCcamInfo.plugin import CCcamInfoMain
-except ImportError:
-    pass
-'''
-
 try:
     wgetsts()
 except:
@@ -125,9 +99,6 @@ def checkdir():
 
 
 checkdir()
-
-
-# =============== SCREEN PATH SETTING
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
     skin_path = plugin_path + '/res/skins/uhd/'
@@ -137,7 +108,6 @@ else:
     skin_path = plugin_path + '/res/skins/hd/'
 if os.path.exists('/var/lib/dpkg/info'):
     skin_path = skin_path + 'dreamOs/'
-
 
 if not os.path.exists('/etc/clist.list'):
     with open('/etc/clist.list', 'w'):
@@ -200,10 +170,14 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-        self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
-                                                                    '1': self.cccam,
-                                                                    '2': self.oscam,
-                                                                    '3': self.ncam},)
+        # self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
+                                                                    # '1': self.cccam,
+                                                                    # '2': self.oscam,
+                                                                    # '3': self.ncam},)
+        self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.keyNumberGlobal,
+                                                                    '1': self.keyNumberGlobal,
+                                                                    '2': self.keyNumberGlobal,
+                                                                    '8': self.keyNumberGlobal},)
         self['actions'] = ActionMap(['OkCancelActions',
                                      'ColorActions',
                                      'EPGSelectActions',
@@ -224,7 +198,6 @@ class tvManager(Screen):
         self["key_blue"].setText("Softcam")
         self['description'] = Label(_('Scanning and retrieval list softcam ...'))
         self['info'] = Label()
-        # self['list'] = m2list([])
         self["list"] = List([])
         self.curCam = None
         self.curCam = self.readCurrent()
@@ -269,10 +242,8 @@ class tvManager(Screen):
                 runningcam = "cccam"
                 self.BlueAction = 'CCCAMINFO'
                 self["key_blue"].setText("CCCAMINFO")
-
                 if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
                     print('existe CCcamInfo')
-
             if 'movicam' in str(self.curCam).lower():
                 print('movicam in nim')
                 runningcam = "movicam"
@@ -280,7 +251,6 @@ class tvManager(Screen):
                 self["key_blue"].setText("MOVICAMINFO")
                 if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
                     print('existe movicamInfo')
-
             if 'ncam' in str(self.curCam).lower():
                 runningcam = "ncam"
                 self.BlueAction = 'NCAMINFO'
@@ -342,7 +312,6 @@ class tvManager(Screen):
                     from .data.OScamInfo import OSCamInfo
                     print('[cccam 2] MOVICAMINFO')
                     self.session.open(OSCamInfo)
-
             except Exception as e:
                 print('[cccam] MOVICAMINFO e:', e)
                 pass
@@ -361,6 +330,7 @@ class tvManager(Screen):
         except ImportError:
             from .data.CCcamInfo import CCcamInfoMain
             self.session.open(CCcamInfoMain)
+            # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
 
     def oscam(self):
         try:
@@ -369,6 +339,7 @@ class tvManager(Screen):
         except ImportError:
             from .data.OScamInfo import OSCamInfo
             self.session.open(OSCamInfo)
+            # self.session.openWithCallback(self.callbackx, OSCamInfo)
 
     def ncam(self):
         try:
@@ -378,6 +349,19 @@ class tvManager(Screen):
             from .data.NcamInfo import NcamInfoMenu
             # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
             self.session.open(NcamInfoMenu)
+
+    def keyNumberGlobal(self, number):
+        print('pressed', number)
+        if number == 0:
+            self.messagekd()
+        elif number == 1:
+            self.cccam()
+        elif number == 2:
+            self.oscam()
+        elif number == 3:
+            self.ncam()
+        else:
+            return
 
     def setEcmInfo(self):
         try:
@@ -412,15 +396,18 @@ class tvManager(Screen):
 
     def keysdownload(self, result):
         if result:
-            script = ('%s/auto' % plugin_path)
+            script = os.path.join(plugin_path, 'auto')
             from os import access, X_OK
             if not access(script, X_OK):
                 chmod(script, 493)
             if os.path.exists('/usr/keys/SoftCam.Key'):
                 os.system('rm -rf /usr/keys/SoftCam.Key')
-            import subprocess
-            subprocess.check_output(['bash', script])
+            # import subprocess
+            # subprocess.check_output(['bash', script])
             self.session.open(MessageBox, _('SoftcamKeys Updated!'), MessageBox.TYPE_INFO, timeout=5)
+            cmd = script
+            title = _("Installing Softcam Keys\nPlease Wait...")
+            self.session.open(Console, _(title), [cmd], closeOnSuccess=False)
 
     def CfgInfo(self):
         self.session.open(InfoCfg)
@@ -819,7 +806,6 @@ class GetipklistTv(Screen):
                 getPage(self.xml).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
 
     def downloadxmlpage(self, data):
-
         self.xml = data
         self.list = []
         self.names = []
@@ -972,8 +958,7 @@ class GetipkTv(Screen):
             cmd2 = "tar -xvf '/tmp/" + self.plug + "' -C /"
         elif ".bz2" in self.plug and "gz" in self.plug:
             cmd2 = "tar -xjvf '/tmp/" + self.plug + "' -C /"
-        # cmd3 = "rm '/tmp/" + self.plug + "'"
-        cmd = cmd2  # + " && " + cmd3
+        cmd = cmd2
         cmd00 = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), self.folddest, cmd)
         print('cmd00:', cmd00)
         title = (_("Installing %s\nPlease Wait...") % self.dom)
@@ -1010,7 +995,6 @@ class GetipkTv(Screen):
                                 self.dom = self.plug[:n2]
                                 cmd = "dpkg -r " + self.dom  # + "'"
                                 print('cmd deb remove:', cmd)
-
                             if ".ipk" in self.com:
                                 if os.path.exists('/var/lib/dpkg/info'):
                                     self.session.open(MessageBox,

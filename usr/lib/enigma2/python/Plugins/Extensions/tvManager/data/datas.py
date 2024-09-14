@@ -464,7 +464,6 @@ class tv_config(Screen, ConfigListScreen):
         else:
             if 'oscam' in str(runningcam):  # or 'movicam' in str(self.runningcam):
                 msg = []
-                msg.append(_("\n\n\n"))
                 self.cmd1 = data_path + 'emm_sender.sh'
                 from os import access, X_OK
                 if not access(self.cmd1, X_OK):
