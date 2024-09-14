@@ -827,7 +827,6 @@ class GetipklistTv(Screen):
             if self.xml:
                 self.xmlparse = minidom.parseString(self.xml)
                 for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                for plugins in self.xmlparse.getElementsByTagName('plugins'):
                     # if config.ParentalControl.configured.value:
                         # if 'adult' in str(plugins.getAttribute('cont')).lower():
                             # continue
