@@ -363,10 +363,10 @@ class tv_config(Screen, ConfigListScreen):
                             with open('/tmp/emm.txt') as f:
                                 file_content = f.read().strip()
                                 msg.append("CURRENT EMM IS:\n")
-                                msg.append(f"{file_content}")
+                                msg.append(file_content)
                                 msg.append("\nCurrent Emm saved to /tmp/emm.txt")
                             msg = (" %s " % _("\n")).join(msg)
-                            print(f"DEBUG: msg_output = {msg}")
+                            print("DEBUG: msg_output = ", msg)
                             self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
                         else:
                             self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=10)
@@ -404,10 +404,10 @@ class tv_config(Screen, ConfigListScreen):
                 with open('/tmp/emm.txt') as f:
                     file_content = f.read().strip()
                     msg.append("CURRENT EMM IS:\n")
-                    msg.append(f"{file_content}")
+                    msg.append(file_content)
                     msg.append("\nCurrent Emm saved to /tmp/emm.txt")
                 msg = (" %s " % _("\n")).join(msg)
-                print(f"DEBUG: msg_output = {msg}")
+                print("DEBUG: msg_output =", msg)
                 self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
             else:
                 self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
