@@ -68,8 +68,6 @@ iconpic = os.path.join(plugin_path, 'logo.png')
 data_path = os.path.join(plugin_path, 'data')
 dir_work = '/usr/lib/enigma2/python/Screens'
 FILE_XML = os.path.join(plugin_path, 'tvManager.xml')
-FTP_XML = ''
-FTP_CFG = 'http://patbuweb.com/tvManager/cfg.txt'
 local = True
 ECM_INFO = '/tmp/ecm.info'
 EMPTY_ECM_INFO = ('', '0', '0', '0')
@@ -170,10 +168,6 @@ class tvManager(Screen):
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
         except:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-        # self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.messagekd,
-                                                                    # '1': self.cccam,
-                                                                    # '2': self.oscam,
-                                                                    # '3': self.ncam},)
         self["NumberActions"] = NumberActionMap(["NumberActions"], {'0': self.keyNumberGlobal,
                                                                     '1': self.keyNumberGlobal,
                                                                     '2': self.keyNumberGlobal,
@@ -316,7 +310,8 @@ class tvManager(Screen):
                 print('[cccam] MOVICAMINFO e:', e)
                 pass
         else:
-            return
+            self.cccam()
+            # return
 
     def callbackx(self, call=None):
         print('call:', call)
