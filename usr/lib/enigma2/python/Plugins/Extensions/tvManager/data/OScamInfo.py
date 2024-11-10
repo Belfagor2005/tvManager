@@ -1346,7 +1346,6 @@ class OscamInfoConfigScreen(ConfigListScreen, Screen):
             <eLabel backgroundColor="#002d3d5b" cornerRadius="20" position="0,0" size="1920,1080" zPosition="-99"/>
             <eLabel backgroundColor="#001a2336" cornerRadius="30" position="20,1014" size="1880,60" zPosition="-80"/>
             <eLabel name="" position="31,30" size="901,977" zPosition="-90" cornerRadius="18" backgroundColor="#00171a1c" foregroundColor="#00171a1c"/>
-            <!--
             <eLabel backgroundColor="#00ff0000" position="34,1064" size="300,6" zPosition="12"/>
             <eLabel backgroundColor="#0000ff00" position="342,1064" size="300,6" zPosition="12"/>
             <eLabel backgroundColor="#00ffff00" position="652,1064" size="300,6" zPosition="12"/>
@@ -1355,7 +1354,6 @@ class OscamInfoConfigScreen(ConfigListScreen, Screen):
             <widget source="key_green" render="Label" position="342,1016" size="300,45" zPosition="11" font="Regular; 30" valign="center" halign="center" backgroundColor="#0528343b" transparent="1" foregroundColor="white"/>
             <widget source="key_yellow" render="Label" position="652,1016" size="300,45" zPosition="11" font="Regular; 30" valign="center" halign="center" backgroundColor="#0528343b" transparent="1" foregroundColor="white"/>
             <widget source="key_blue" render="Label" position="962,1016" size="300,45" zPosition="11" font="Regular; 30" valign="center" halign="center" backgroundColor="#0528343b" transparent="1" foregroundColor="white"/>
-            -->
             <widget name="config" position="40,100" size="890,900" itemHeight="50" enableWrapAround="1" transparent="1" font="Regular; 30" itemCornerRadius="8" valign="center"/>
             <widget source="session.VideoPicture" render="Pig" position="997,100" zPosition="19" size="880,499" backgroundColor="#ff000000" transparent="0" cornerRadius="14"/>
             <widget name="status" render="Label" position="997,607" size="885,180" font="Regular; 24" halign="left" valign="top" backgroundColor="#0528343b" transparent="1" zPosition="55"/>

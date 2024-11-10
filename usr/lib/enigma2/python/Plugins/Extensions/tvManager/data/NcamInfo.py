@@ -213,7 +213,6 @@ class NcamInfo:
                 # If we have a config file, we need to investigate it further
                 with open(conf, 'r') as data:
                     for i in data:
-                        # print("[NcamInfo][getUserData] i", i)
                         if "httpuser" in i.lower():
                             user = i.split("=")[1].strip()
                         elif "httppwd" in i.lower():

@@ -8,29 +8,28 @@ from Components.MenuList import MenuList
 from Components.ActionMap import ActionMap
 from Screens.MessageBox import MessageBox
 from Tools.Directories import fileExists
-# from .. import _
 
 
 class OrganizerMenu(Screen):
     skin = """
         <screen position="center,center" size="460,400" title="CCcam Organizer" >
-            <widget name="myMenu" position="10,10" size="420,380" itemHeight="45" scrollbarMode="showOnDemand" />
+            <widget name="myMenu" position="10,10" size="420,380" scrollbarMode="showOnDemand" />
         </screen>"""
 
     def __init__(self, session):
-        Screen.__init__(self, session)
-
         self.session = session
-        listx = []
-        # if fileExists("/etc/CCcam.cfg"):
-        listx.append((_("Delete Peer"), "two"))
-        listx.append((_("Recover Peer"), "tree"))
-        listx.append((_("Find Fakes"), "four"))
-        listx.append((_("Stop Finding Fakes"), "five"))
-        listx.append((_("Exit"), "exit"))
+        list = []
+        if fileExists("/etc/CCcam.cfg"):
+            list.append((_("Delete Peer"), "two"))
+            list.append((_("Recover Peer"), "tree"))
+            list.append((_("Find Fakes"), "four"))
+            list.append((_("Stop Finding Fakes"), "five"))
+        list.append((_("Exit"), "exit"))
+
+        Screen.__init__(self, session)
         self.setTitle(_("CCcam Organizer"))
-        self["myMenu"] = MenuList(listx)
-        self["actions"] = ActionMap(["SetupActions"], {"ok": self.go, "cancel": self.cancel}, -2)
+        self["myMenu"] = MenuList(list)
+        self["myActionMap"] = ActionMap(["SetupActions"], {"ok": self.go, "cancel": self.cancel}, -2)
 
     def go(self):
         if not fileExists("/etc/CCcam.cfg"):
@@ -51,19 +50,16 @@ class OrganizerMenu(Screen):
 
     def Revert(self):
         lines = []
-        # Apri il file in modalità di lettura
-        with open("/etc/CCcam.cfg", 'r') as f:
-            for line in f:
-                if line.startswith('#FC:'):
-                    line = line.replace('#FC:', 'C:')
-                lines.append(line)
-
-        # Apri il file in modalità di scrittura
-        with open("/etc/CCcam.cfg", 'w') as f:
-            for line in lines:
-                f.write(line)
-
-        # Mostra un messaggio
+        f = open("/etc/CCcam.cfg", 'r')
+        for line in f:
+            if line.startswith('#FC:'):
+                line = line.replace('#FC:', 'C:')
+            lines.append(line)
+        f.close()
+        f = open("/etc/CCcam.cfg", 'w')
+        for i in lines:
+            f.write(i)
+        f.close()
         self.session.open(MessageBox, _("\nSTOPPED FINDING FAKES \n\nREVERTED BACK TO INITIAL STATUS"), MessageBox.TYPE_INFO)
 
 
@@ -74,7 +70,6 @@ class OrganizerNewmenu(Screen):
         </screen>"""
 
     def __init__(self, session):
-        Screen.__init__(self, session)
         self.session = session
         self.CFG = "/etc/CCcam.cfg"
         if not fileExists("/etc/CCcam.cfg"):
@@ -85,20 +80,24 @@ class OrganizerNewmenu(Screen):
         self.selected = ""
 
         menu_list = []
-
-        with open(self.CFG, 'r') as f:
+        # if returnValue is "two" or returnValue is "four":
+        if returnValue == "two" or returnValue == "four":
+            f = open(self.CFG, 'r')
             for line in f:
-                if returnValue in ["two", "four"]:
-                    if line.startswith('C:') or line.startswith('C :'):
-                        a = line.split()
-                        if len(a) > 1:  # Verifica che ci siano abbastanza elementi dopo lo split
-                            menu_list.append((_(a[1]), line))
-                elif returnValue == "tree":
-                    if line.startswith('#!C:') or line.startswith('#!C :'):
-                        a = line.split()
-                        if len(a) > 1:  # Verifica che ci siano abbastanza elementi dopo lo split
-                            menu_list.append((_(a[1]), line))
+                if line.startswith('C:') or line.startswith('C :'):
+                    a = line.split()
+                    menu_list.append((_(a[1]), line))
+            f.close()
+        # elif returnValue is "tree":
+        elif returnValue == "tree":
+            f = open(self.CFG, 'r')
+            for line in f:
+                if line.startswith('#!C:') or line.startswith('#!C :'):
+                    a = line.split()
+                    menu_list.append((_(a[1]), line))
+            f.close()
 
+        Screen.__init__(self, session)
         self.setTitle(_("CCcam Organizer"))
         self["Newmenu"] = MenuList(menu_list)
         # if returnValue is "two":
@@ -130,46 +129,34 @@ class OrganizerNewmenu(Screen):
             self.message(self.selected, _("PRESS RETURN"))
 
     def FindFakes(self):
-        selected = self["Newmenu"].l.getCurrentSelection()
-        if selected:
-            self.selected = selected[1]
-        else:
+        self.selected = self["Newmenu"].l.getCurrentSelection() and self["Newmenu"].l.getCurrentSelection()[1]
+        if not self.selected:
             return
         lines = []
-        try:
-            with open(self.CFG, 'r') as f:
-                for line in f:
-                    if line.startswith("C:") and line.strip() != self.selected:
-                        line = line.replace("C:", "#FC:")
-                    lines.append(line)
-        except IOError as e:
-            self.session.open(MessageBox, _("Error reading file: %s") % str(e), MessageBox.TYPE_ERROR)
-            return
-        try:
-            with open(self.CFG, 'w') as f:
-                f.writelines(lines)
-        except IOError as e:
-            self.session.open(MessageBox, _("Error writing to file: %s") % str(e), MessageBox.TYPE_ERROR)
-            return
-
+        f = open(self.CFG, 'r')
+        for line in f:
+            if line.startswith("C:") and line != self.selected:
+                line = line.replace("C:", "#FC:")
+            lines.append(line)
+        f.close()
+        f = open(self.CFG, 'w')
+        for i in lines:
+            f.write(i)
+        f.close()
         self.message(self.selected, _("Set as UNIQUE PEER"))
 
     def findReplace(self, find, replace, selected):
         lines = []
-        try:
-            with open(self.CFG, 'r') as f:
-                for line in f:
-                    if line.startswith(find) and line.strip() == selected:
-                        line = line.replace(find, replace)
-                    lines.append(line)
-        except IOError as e:
-            self.session.open(MessageBox, _("Error reading file: %s") % str(e), MessageBox.TYPE_ERROR)
-            return
-        try:
-            with open(self.CFG, 'w') as f:
-                f.writelines(lines)
-        except IOError as e:
-            self.session.open(MessageBox, _("Error writing to file: %s") % str(e), MessageBox.TYPE_ERROR)
+        f = open(self.CFG, 'r')
+        for line in f:
+            if line.startswith(find) and line == selected:
+                line = line.replace(find, replace)
+            lines.append(line)
+        f.close()
+        f = open(self.CFG, 'w')
+        for i in lines:
+            f.write(i)
+        f.close()
 
     def message(self, selected, text):
         try:
