@@ -20,9 +20,9 @@ from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from enigma import (
+    eTimer,
     RT_HALIGN_LEFT,
     eListboxPythonMultiContent,
-    eTimer,
     gFont,
     getDesktop,
 )
@@ -466,22 +466,32 @@ class NcamInfo:
 
 
 class oscMenuList(MenuList):
-    def __init__(self, list):
+    def __init__(self, list, itemH=30):
         MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-        if f == 1.5:
-            self.l.setItemHeight(int(30 * f))
-            self.l.setFont(0, gFont("Regular", int(20 * f)))
-            self.l.setFont(1, gFont("Regular", int(18 * f)))
-            self.clientFont = gFont("Regular", int(16 * f))
-            self.l.setFont(2, self.clientFont)
-            self.l.setFont(3, gFont("Regular", int(12 * f)))
-        else:
-            self.l.setItemHeight(int(35 * f))
-            self.l.setFont(0, gFont("Regular", int(30 * f)))
-            self.l.setFont(1, gFont("Regular", int(25 * f)))
-            self.clientFont = gFont("Regular", int(25 * f))
-            self.l.setFont(2, self.clientFont)
-            self.l.setFont(3, gFont("Regular", int(25 * f)))
+        self.l.setItemHeight(int(itemH * f))
+        self.l.setFont(0, gFont("Regular", int(20 * f)))
+        self.l.setFont(1, gFont("Regular", int(18 * f)))
+        self.clientFont = gFont("Regular", int(16 * f))
+        self.l.setFont(2, self.clientFont)
+        self.l.setFont(3, gFont("Regular", int(12 * f)))
+
+# class oscMenuList(MenuList):
+    # def __init__(self, list):
+        # MenuList.__init__(self, list, False, eListboxPythonMultiContent)
+        # if f == 1.5:
+            # self.l.setItemHeight(int(30 * f))
+            # self.l.setFont(0, gFont("Regular", int(20 * f)))
+            # self.l.setFont(1, gFont("Regular", int(18 * f)))
+            # self.clientFont = gFont("Regular", int(16 * f))
+            # self.l.setFont(2, self.clientFont)
+            # self.l.setFont(3, gFont("Regular", int(12 * f)))
+        # else:
+            # self.l.setItemHeight(int(35 * f))
+            # self.l.setFont(0, gFont("Regular", int(30 * f)))
+            # self.l.setFont(1, gFont("Regular", int(25 * f)))
+            # self.clientFont = gFont("Regular", int(25 * f))
+            # self.l.setFont(2, self.clientFont)
+            # self.l.setFont(3, gFont("Regular", int(25 * f)))
 
 
 class NcamInfoMenu(Screen):
@@ -957,7 +967,7 @@ class ncInfo(Screen, NcamInfo):
         else:
             data = self.readXML(typ=self.what)
         self.out = []
-        self.itemheight = 25
+        self.itemheight = 35
         if data[0]:
             if self.what != "l":
                 heading = (self.HEAD[self.NAME], self.HEAD[self.PROT], self.HEAD[self.CAID_SRVID],
