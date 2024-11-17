@@ -261,9 +261,15 @@ class tvManager(Screen):
         if 'oscam' in str(self.curCam).lower():
             try:
                 try:
-                    from Screens.OScamInfo import OSCamInfo
-                    print('[cccam 1] OScamInfo')
-                    self.session.open(OSCamInfo)
+                    if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus/{}".format('plugin.py'))):
+                        from Plugins.Extensions.OscamStatus.plugin import OscamStatus
+                        print('[cccam 1] OscamStatus')
+                        self.session.open(OscamStatus)                    
+                    else:
+                        if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
+                            from Screens.OScamInfo import OSCamInfo
+                            print('[cccam 1] OScamInfo')
+                            self.session.open(OSCamInfo)
                 except ImportError:
                     from .data.OScamInfo import OSCamInfo
                     print('[cccam 2] OScamInfo')
