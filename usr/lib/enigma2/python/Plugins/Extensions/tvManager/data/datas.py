@@ -154,7 +154,7 @@ elif screenwidth.width() == 1920:
     skin_path = plugin_path + '/res/skins/fhd/'
 else:
     skin_path = plugin_path + '/res/skins/hd/'
-if os.path.exists('/var/lib/dpkg/info'):
+if os.path.exists("/usr/bin/apt-get"):
     skin_path = skin_path + 'dreamOs/'
 
 
@@ -636,7 +636,7 @@ class tv_config(Screen, ConfigListScreen):
                     import six
                     data = six.ensure_str(data)
                 self.timer = eTimer()
-                if os.path.exists('/var/lib/dpkg/info'):
+                if os.path.exists("/usr/bin/apt-get"):
                     self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
                 else:
                     self.timer.callback.append(self.load_getcl(data))

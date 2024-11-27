@@ -104,7 +104,7 @@ elif screenwidth.width() == 1920:
     skin_path = plugin_path + '/res/skins/fhd/'
 else:
     skin_path = plugin_path + '/res/skins/hd/'
-if os.path.exists('/var/lib/dpkg/info'):
+if os.path.exists("/usr/bin/apt-get"):
     skin_path = skin_path + 'dreamOs/'
 
 if not os.path.exists('/etc/clist.list'):
@@ -449,7 +449,7 @@ class tvManager(Screen):
     def arckget(self):
         zarcffll = 'by Lululla'
         try:
-            if os.path.exists('/var/lib/dpkg/info'):
+            if os.path.exists("/usr/bin/apt-get"):
                 zarcffll = os.popen('dpkg --print-architecture | grep -iE "arm|aarch64|mips|cortex|sh4|sh_4"').read().strip('\n\r')
             else:
                 zarcffll = os.popen('opkg print-architecture | grep -iE "arm|aarch64|mips|cortex|h4|sh_4"').read().strip('\n\r')
@@ -798,7 +798,7 @@ class GetipklistTv(Screen):
         if PY3:
             self.xml = self.xml.encode()
         if local is False:
-            if os.path.exists('/var/lib/dpkg/info'):
+            if os.path.exists("/usr/bin/apt-get"):
                 print('have a dreamOs!!!')
                 self.data = Utils.checkGZIP(self.xml)
                 self.downloadxmlpage(self.data)
@@ -821,7 +821,7 @@ class GetipklistTv(Screen):
                         if 'deb' in str(plugins.getAttribute('cont')).lower():
                             continue
 
-                    if os.path.exists('/var/lib/dpkg/info'):
+                    if os.path.exists("/usr/bin/apt-get"):
                         if 'deb' not in str(plugins.getAttribute('cont')).lower():
                             continue
                     self.names.append(str(plugins.getAttribute('cont')))
@@ -919,7 +919,7 @@ class GetipkTv(Screen):
                                     self.dom = self.com[:n2]
 
                                 if ".ipk" in self.com:
-                                    if os.path.exists('/var/lib/dpkg/info'):
+                                    if os.path.exists("/usr/bin/apt-get"):
                                         self.session.open(MessageBox,
                                                           _('Unknow Image!'),
                                                           MessageBox.TYPE_INFO,
@@ -997,7 +997,7 @@ class GetipkTv(Screen):
                                 cmd = "dpkg -r " + self.dom  # + "'"
                                 print('cmd deb remove:', cmd)
                             if ".ipk" in self.com:
-                                if os.path.exists('/var/lib/dpkg/info'):
+                                if os.path.exists("/usr/bin/apt-get"):
                                     self.session.open(MessageBox,
                                                       _('Unknow Image!'),
                                                       MessageBox.TYPE_INFO,
@@ -1164,7 +1164,7 @@ class InfoCfg(Screen):
     def arckget(self):
         zarcffll = 'by Lululla'
         try:
-            if os.path.exists('/var/lib/dpkg/info'):
+            if os.path.exists("/usr/bin/apt-get"):
                 zarcffll = os.popen('dpkg --print-architecture | grep -iE "arm|aarch64|mips|cortex|sh4|sh_4"').read().strip('\n\r')
             else:
                 zarcffll = os.popen('opkg print-architecture | grep -iE "arm|aarch64|mips|cortex|h4|sh_4"').read().strip('\n\r')
