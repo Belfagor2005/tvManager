@@ -11,7 +11,7 @@
 	<widget name="paypal" position="1909,782" size="526,197" font="Regular;38" halign="center" foregroundColor="#ffffff" backgroundColor="#101010" transparent="1" zPosition="2"/>
 	<eLabel position="1900,141" size="540,639" backgroundColor="#80000000" zPosition="1" transparent="1"/>
 	<!-- Menu List -->
-	<widget name="list" position="238,292" size="1372,900" font="Regular;40" itemHeight="66" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/tvaddon/res/pics/sliderb.png"/>
+	<widget name="list" position="238,292" size="1372,900" font="Regular;40" itemHeight="66" scrollbarMode="showOnDemand" transparent="1" zPosition="5" foregroundColor="#00a0a0a0" foregroundColorSelected="#ffffff" backgroundColor="#20000000" backgroundColorSelected="#0b2049" />
 	<!-- Colors 1220 -->
 	<eLabel backgroundColor="red" cornerRadius="3" position="311,1302" size="400,6" zPosition="11"/>
 	<eLabel backgroundColor="green" cornerRadius="3" position="311,1388" size="400,6" zPosition="11"/>
