@@ -218,138 +218,143 @@ class tvManager(Screen):
     def setBlueKey(self):
         global runningcam
         self.curCam = self.readCurrent()
-        # self.BlueAction = 'SOFTCAM'
         self["key_blue"].setText("Softcam")
+        self.BlueAction = None  # Default action
         if self.curCam is not None:
-            nim = str(self.curCam).lower()
-            print('nim lower=', nim)
+            cam_name = str(self.curCam).lower()
+            print('cam_name=', cam_name)
+            cam_info = {
+                "oscam": ("OSCAMINFO", "OScamInfo"),
+                "cccam": ("CCCAMINFO", "CCcamInfo"),
+                "movicam": ("MOVICAMINFO", "OScamInfo"),
+                "ncam": ("NCAMINFO", "NcamInfo")
+            }
+            for key, (action, file_name) in cam_info.items():
+                if key in cam_name:
+                    print('%s detected in cam_name' % key)
+                    runningcam = key
+                    self.BlueAction = action
+                    self["key_blue"].setText(action)
 
-            if 'oscam' in str(self.curCam).lower():
-                print('oscam in nim')
-                runningcam = "oscam"
-                self["key_blue"].setText("OSCAMINFO")
-                self.BlueAction = 'OSCAMINFO'
-                if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
-                    print('existe OScamInfo')
+                    if os.path.exists(os.path.join(plugin_path, 'data/%s.pyo' % file_name)) or os.path.exists(
+                            os.path.join(plugin_path, 'data/%s.pyo' % file_name)):
 
-            if 'cccam' in str(self.curCam).lower():
-                runningcam = "cccam"
-                self.BlueAction = 'CCCAMINFO'
-                self["key_blue"].setText("CCCAMINFO")
-                if os.path.exists(data_path + '/CCcamInfo.pyo') or os.path.exists(data_path + '/CCcamInfo.pyc'):
-                    print('existe CCcamInfo')
-            if 'movicam' in str(self.curCam).lower():
-                print('movicam in nim')
-                runningcam = "movicam"
-                self.BlueAction = 'MOVICAMINFO'
-                self["key_blue"].setText("MOVICAMINFO")
-                if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
-                    print('existe movicamInfo')
-            if 'ncam' in str(self.curCam).lower():
-                runningcam = "ncam"
-                self.BlueAction = 'NCAMINFO'
-                self["key_blue"].setText("NCAMINFO")
-                print('ncam in nim')
-                if os.path.exists(data_path + "/NcamInfo.pyo") or os.path.exists(data_path + '/NcamInfo.pyc'):
-                    print('existe NcamInfo')
-        print('[setBlueKey] self.curCam= 11 ', self.curCam)
-        print('[setBlueKey] self.BlueAction= 11 ', self.BlueAction)
-        print('[setBlueKey] runningcam= 11 ', runningcam)
+                        print('existe %s' % file_name)
+                    break
+            # Debug info
+            print('[setBlueKey] self.curCam=', self.curCam)
+            print('[setBlueKey] self.BlueAction=', self.BlueAction)
+            print('[setBlueKey] runningcam=', runningcam)
+            print('[setBlueKey] file_name=', file_name)
 
     def Blue(self):
-        print('[cccam] self.BlueAction are:', self.BlueAction)
-        if 'oscam' in str(self.curCam).lower():
-            try:
+        print('[Blue] self.BlueAction:', self.BlueAction)
+        cam_name = str(self.curCam).lower()
+        print('cam_name=', cam_name)
+        print('plugin_path + /data/=', plugin_path + '/data/')
+        try:
+            if 'oscam' in str(self.curCam).lower():
                 try:
-                    if os.path.exists(resolveFilename(SCOPE_PLUGINS, "Extensions/OscamStatus/{}".format('plugin.py'))):
-                        from Plugins.Extensions.OscamStatus.plugin import OscamStatus
-                        print('[cccam 1] OscamStatus')
-                        self.session.open(OscamStatus)                    
-                    else:
-                        if os.path.exists(data_path + "/OScamInfo.pyo") or os.path.exists(data_path + '/OScamInfo.pyc'):
-                            from Screens.OScamInfo import OSCamInfo
-                            print('[cccam 1] OScamInfo')
-                            self.session.open(OSCamInfo)
+                    try:
+                        from Screens.OScamInfo import OSCamInfo
+                        print('[cccam 1] OScamInfo')
+                        self.session.open(OSCamInfo)
+                    except ImportError:
+                        from .data.OScamInfo import OSCamInfo
+                        print('[cccam 2] OScamInfo')
+                        self.session.open(OSCamInfo)
+                except Exception as e:
+                    print('[cccam] OScamInfo e:', e)
+                    pass
+
+            elif 'ccam' in str(self.curCam).lower():
+                try:
+
+                    from Screens.CCcamInfo import CCcamInfoMain
+                    print('[cccam 12] CCcamInfo')
+                    self.session.open(CCcamInfoMain)
                 except ImportError:
-                    from .data.OScamInfo import OSCamInfo
-                    print('[cccam 2] OScamInfo')
-                    self.session.open(OSCamInfo)
-            except Exception as e:
-                print('[cccam] OScamInfo e:', e)
-                pass
+                    from .data.CCcamInfo import CCcamInfoMain
+                    print('[cccam 2] CCcamInfo')
+                    self.session.open(CCcamInfoMain)
 
-        elif 'ccam' in str(self.curCam).lower():
-            try:
-                from Screens.CCcamInfo import CCcamInfoMain
-                print('[cccam 12] CCcamInfo')
-                self.session.open(CCcamInfoMain)
-            except ImportError:
-                from .data.CCcamInfo import CCcamInfoMain
-                print('[cccam 2] CCcamInfo')
-                self.session.open(CCcamInfoMain)
-
-        elif 'ncam' in str(self.curCam).lower():
-            try:
+            elif 'ncam' in cam_name:
                 try:
-                    from Screens.NcamInfo import NcamInfoMenu
-                    print('[cccam 1] NcamInfo')
+                    try:
+                        from Screens.NcamInfo import NcamInfoMenu
+                    except ImportError:
+                        from .data.NcamInfo import NcamInfoMenu
+                    print('[Blue] Opening NcamInfo')
                     self.session.open(NcamInfoMenu)
-                except ImportError:
-                    from .data.NcamInfo import NcamInfoMenu
-                    print('[cccam 2] NcamInfo')
-                    self.session.open(NcamInfoMenu)
-            except Exception as e:
-                print('[cccam] NcamInfo e:', e)
-                pass
+                except Exception as e:
+                    print('[Blue] Error in NcamInfo handling:', e)
 
-        elif 'movicam' in str(self.curCam).lower():
-            try:
+            elif 'movicam' in cam_name:
                 try:
-                    from Screens.OScamInfo import OSCamInfo
-                    print('[cccam 1] MOVICAMINFO')
+                    try:
+                        from Screens.OScamInfo import OSCamInfo
+                    except ImportError:
+                        from .data.OScamInfo import OSCamInfo
+                    print('[Blue] Opening MovicamInfo (OScamInfo)')
                     self.session.open(OSCamInfo)
-                except ImportError:
-                    from .data.OScamInfo import OSCamInfo
-                    print('[cccam 2] MOVICAMINFO')
-                    self.session.open(OSCamInfo)
-            except Exception as e:
-                print('[cccam] MOVICAMINFO e:', e)
-                pass
-        else:
-            self.cccam()
-            # return
+                except Exception as e:
+                    print('[Blue] Error in MovicamInfo handling:', e)
+
+            else:
+                print('[Blue] Default action: CCcam')
+                self.cccam()
+        except Exception as e:
+            print('[Blue] General Error:', e)
 
     def callbackx(self, call=None):
         print('call:', call)
         pass
 
-    def cccam(self):
+    def open_plugin(self, screen_import, fallback_import, callback=None):
+        """
+        Funzione generica per aprire un plugin con gestione dell'importazione.
+        """
         try:
-            from Screens.CCcamInfo import CCcamInfoMain
-            # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
-            self.session.open(CCcamInfoMain)
+            plugin_screen = __import__(screen_import, fromlist=[''])
+            print('[open_plugin] Successfully imported:', screen_import)
         except ImportError:
-            from .data.CCcamInfo import CCcamInfoMain
-            self.session.open(CCcamInfoMain)
-            # self.session.openWithCallback(self.callbackx, CCcamInfoMain)
+            try:
+                plugin_screen = __import__(fallback_import, fromlist=[''])
+                print('[open_plugin] Fallback imported:', fallback_import)
+            except ImportError as e:
+                print('[open_plugin] ImportError:', e)
+                self.session.open(
+                    MessageBox,
+                    _('Failed to load plugin: %s' % fallback_import),
+                    MessageBox.TYPE_ERROR,
+                    timeout=5
+                )
+                return
+
+        if callback:
+            print('[open_plugin] Opening with callback:', callback)
+            self.session.openWithCallback(callback, plugin_screen)
+        else:
+            print('[open_plugin] Opening plugin:', plugin_screen)
+            self.session.open(plugin_screen)
+
+    def cccam(self):
+        self.open_plugin(
+            screen_import="Screens.CCcamInfo.CCcamInfoMain",
+            fallback_import=".data.CCcamInfo.CCcamInfoMain"
+        )
 
     def oscam(self):
-        try:
-            from Screens.OScamInfo import OSCamInfo
-            self.session.open(OSCamInfo)
-        except ImportError:
-            from .data.OScamInfo import OSCamInfo
-            self.session.open(OSCamInfo)
-            # self.session.openWithCallback(self.callbackx, OSCamInfo)
+        self.open_plugin(
+            screen_import="Screens.OScamInfo.OSCamInfo",
+            fallback_import=".data.OScamInfo.OSCamInfo"
+        )
 
     def ncam(self):
-        try:
-            from Screens.NcamInfo import NcamInfoMenu
-            self.session.open(NcamInfoMenu)
-        except ImportError:
-            from .data.NcamInfo import NcamInfoMenu
-            # self.session.openWithCallback(self.callbackx, NcamInfoMenu)
-            self.session.open(NcamInfoMenu)
+        self.open_plugin(
+            screen_import="Screens.NcamInfo.NcamInfoMenu",
+            fallback_import=".data.NcamInfo.NcamInfoMenu"
+        )
 
     def keyNumberGlobal(self, number):
         print('pressed', number)
@@ -814,9 +819,6 @@ class GetipklistTv(Screen):
             if self.xml:
                 self.xmlparse = minidom.parseString(self.xml)
                 for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                    # if config.ParentalControl.configured.value:
-                        # if 'adult' in str(plugins.getAttribute('cont')).lower():
-                            # continue
                     if not os.path.exists('/var/lib/dpkg/info'):
                         if 'deb' in str(plugins.getAttribute('cont')).lower():
                             continue
