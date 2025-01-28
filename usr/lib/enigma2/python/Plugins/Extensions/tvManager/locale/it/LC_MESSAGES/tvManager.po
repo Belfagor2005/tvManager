@@ -1,619 +1,672 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tvManager TivuStream\n"
-"POT-Creation-Date: 2023-09-08 19:24+0200\n"
-"PO-Revision-Date: 2023-09-08 19:26+0200\n"
+"POT-Creation-Date: 2025-01-28 19:48+0100\n"
+"PO-Revision-Date: 2025-01-28 19:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: lululla\n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
-"X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: tvManager/data/datas.py\n"
 
-#: tvManager/data/CCcamInfo.py:119
+#: tvManager/data/CCcamInfo.py:191
 msgid "Current time"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:120
+#: tvManager/data/CCcamInfo.py:192
 msgid "NodeID"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:121
+#: tvManager/data/CCcamInfo.py:193
 msgid "Uptime"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:122
+#: tvManager/data/CCcamInfo.py:194
 msgid "Connected clients"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:123 tvManager/data/CCcamInfo.py:186
-#: tvManager/data/CCcamInfo.py:1055
+#: tvManager/data/CCcamInfo.py:195 tvManager/data/CCcamInfo.py:250
+#: tvManager/data/CCcamInfo.py:667
 msgid "Active clients"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:124
+#: tvManager/data/CCcamInfo.py:196
 msgid "Total handled client ecm's"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:125
+#: tvManager/data/CCcamInfo.py:197
 msgid "Total handled client emm's"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:126
+#: tvManager/data/CCcamInfo.py:198
 msgid "Peak load (max queued requests per workerthread)"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:127
+#: tvManager/data/CCcamInfo.py:199
 msgid "card reader"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:128
+#: tvManager/data/CCcamInfo.py:200
 msgid "no or unknown card inserted"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:129
+#: tvManager/data/CCcamInfo.py:201
 msgid "system:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:130
+#: tvManager/data/CCcamInfo.py:202
 msgid "caid:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:131
+#: tvManager/data/CCcamInfo.py:203
 msgid "provider:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:132
+#: tvManager/data/CCcamInfo.py:204
 msgid "provid:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:133
+#: tvManager/data/CCcamInfo.py:205
 msgid "using:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:134
+#: tvManager/data/CCcamInfo.py:206
 msgid "address:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:135
+#: tvManager/data/CCcamInfo.py:207
 msgid "hops:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:136
+#: tvManager/data/CCcamInfo.py:208
 msgid "pid:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:137
+#: tvManager/data/CCcamInfo.py:209
 msgid "share:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:138
+#: tvManager/data/CCcamInfo.py:210
 msgid "handled"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:139
+#: tvManager/data/CCcamInfo.py:211
 msgid " and"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:140
+#: tvManager/data/CCcamInfo.py:212
 msgid "card"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:141
+#: tvManager/data/CCcamInfo.py:213
 msgid "Cardserial"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:142
+#: tvManager/data/CCcamInfo.py:214
 msgid "ecm time:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:184 tvManager/data/CCcamInfo.py:1051
+#: tvManager/data/CCcamInfo.py:247 tvManager/data/CCcamInfo.py:716
+msgid "CCcam.cfg Basic Line Editor"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:248 tvManager/data/CCcamInfo.py:661
+#: tvManager/data/CCcamInfo.py:862 tvManager/data/CCcamInfo.py:866
+#: tvManager/data/CCcamInfo.py:869
 msgid "General"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:185 tvManager/data/CCcamInfo.py:1053
+#: tvManager/data/CCcamInfo.py:249 tvManager/data/CCcamInfo.py:664
+#: tvManager/data/NcamInfo.py:818 tvManager/data/NcamInfo.py:822
+#: tvManager/data/NcamInfo.py:826 tvManager/data/NcamInfo.py:989
+#: tvManager/data/NcamInfo.py:994 tvManager/data/NcamInfo.py:1005
+#: tvManager/data/OScamInfo.py:818 tvManager/data/OScamInfo.py:822
+#: tvManager/data/OScamInfo.py:826 tvManager/data/OScamInfo.py:989
+#: tvManager/data/OScamInfo.py:994 tvManager/data/OScamInfo.py:1005
 msgid "Clients"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:187 tvManager/data/CCcamInfo.py:1057
+#: tvManager/data/CCcamInfo.py:251 tvManager/data/CCcamInfo.py:670
+#: tvManager/data/CCcamInfo.py:1322 tvManager/data/NcamInfo.py:815
+#: tvManager/data/NcamInfo.py:823 tvManager/data/NcamInfo.py:827
+#: tvManager/data/NcamInfo.py:985 tvManager/data/NcamInfo.py:995
+#: tvManager/data/NcamInfo.py:1006 tvManager/data/OScamInfo.py:815
+#: tvManager/data/OScamInfo.py:823 tvManager/data/OScamInfo.py:827
+#: tvManager/data/OScamInfo.py:985 tvManager/data/OScamInfo.py:995
+#: tvManager/data/OScamInfo.py:1006
 msgid "Servers"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:188 tvManager/data/CCcamInfo.py:1059
+#: tvManager/data/CCcamInfo.py:252 tvManager/data/CCcamInfo.py:673
 msgid "Shares"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:189 tvManager/data/CCcamInfo.py:1061
-#: tvManager/data/CCcamInfo.py:1618 tvManager/data/CCcamInfo.py:1619
+#: tvManager/data/CCcamInfo.py:253 tvManager/data/CCcamInfo.py:676
+#: tvManager/data/CCcamInfo.py:1221 tvManager/data/CCcamInfo.py:1222
 msgid "Share View"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:190 tvManager/data/CCcamInfo.py:1063
+#: tvManager/data/CCcamInfo.py:254 tvManager/data/CCcamInfo.py:679
 msgid "Extended Shares"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:191 tvManager/data/CCcamInfo.py:1065
+#: tvManager/data/CCcamInfo.py:255 tvManager/data/CCcamInfo.py:682
 msgid "Providers"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:192 tvManager/data/CCcamInfo.py:1067
+#: tvManager/data/CCcamInfo.py:256 tvManager/data/CCcamInfo.py:685
+#: tvManager/data/CCcamInfo.py:1015 tvManager/data/CCcamInfo.py:1017
+#: tvManager/data/CCcamInfo.py:1019
 msgid "Entitlements"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:193 tvManager/data/CCcamInfo.py:1069
+#: tvManager/data/CCcamInfo.py:257 tvManager/data/CCcamInfo.py:688
 msgid "ecm.info"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:194 tvManager/data/CCcamInfo.py:1071
-#: tvManager/data/CCcamInfo.py:2422
+#: tvManager/data/CCcamInfo.py:258 tvManager/data/CCcamInfo.py:691
+#: tvManager/data/CCcamInfo.py:1865
 msgid "Menu config"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:195 tvManager/data/CCcamInfo.py:1073
+#: tvManager/data/CCcamInfo.py:259 tvManager/data/CCcamInfo.py:694
+#: tvManager/data/CCcamInfo.py:696
 msgid "Local box"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:196 tvManager/data/CCcamInfo.py:1076
+#: tvManager/data/CCcamInfo.py:260 tvManager/data/CCcamInfo.py:698
 msgid "Remote box"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:197 tvManager/data/CCcamInfo.py:1078
+#: tvManager/data/CCcamInfo.py:261 tvManager/data/CCcamInfo.py:701
 msgid "CCcam Prio Maker"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:198 tvManager/data/CCcamInfo.py:1080
-#: tvManager/data/CCcamOrganizer.py:29 tvManager/data/CCcamOrganizer.py:100
+#: tvManager/data/CCcamInfo.py:262 tvManager/data/CCcamInfo.py:704
+#: tvManager/data/CCcamOrganizer.py:30 tvManager/data/CCcamOrganizer.py:101
 msgid "CCcam Organizer"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:199 tvManager/data/CCcamInfo.py:1082
+#: tvManager/data/CCcamInfo.py:263 tvManager/data/CCcamInfo.py:707
+#: tvManager/data/CCcamInfo.py:1040 tvManager/data/CCcamInfo.py:1042
+#: tvManager/data/CCcamInfo.py:1044
+msgid "Free memory"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:264 tvManager/data/CCcamInfo.py:713
 msgid "Switch config"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:200
+#: tvManager/data/CCcamInfo.py:265 tvManager/data/CCcamInfo.py:723
 msgid "About"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:481
-msgid "No parse cannot emu"
+#: tvManager/data/CCcamInfo.py:279
+msgid "CCcam"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:614
-msgid "Free to Air"
+#: tvManager/data/CCcamInfo.py:279
+msgid "NewCamd"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:620 tvManager/data/CCcamInfo.py:1618
-#: tvManager/data/CCcamInfo.py:1619 tvManager/data/CCcamInfo.py:1621
-msgid "Hops:"
+#: tvManager/data/CCcamInfo.py:373
+msgid "CCcam Line Editor"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:622
-msgid "Ecm time:"
+#: tvManager/data/CCcamInfo.py:375
+msgid "Remove"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:756
-msgid "Encoding screen config menu"
+#: tvManager/data/CCcamInfo.py:377
+msgid "Remove the Line from CCcam.cfg"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:759
-msgid "Activate screen:"
+#: tvManager/data/CCcamInfo.py:378
+msgid "CCcam Line Edit Actions"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:760
-msgid "Show ecm.info:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:761
-msgid "Hide ecm.info after (x) seconds:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:762
-msgid "Hide ecm.info with InfoBar:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:763
-msgid "Cut servername after (x) letters:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:764
-msgid "Z position screen:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:765
-msgid "Position:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:766
-msgid "Show CCcam Info in ext menu:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:883 tvManager/data/CCcamInfo.py:1230
-#: tvManager/data/CCcamInfo.py:1271
+#: tvManager/data/CCcamInfo.py:479 tvManager/data/CCcamInfo.py:488
+#: tvManager/data/CCcamInfo.py:929 tvManager/data/CCcamInfo.py:967
 msgid "Type: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:884 tvManager/data/CCcamInfo.py:1271
-#: tvManager/data/CCcamInfo.py:1272 tvManager/data/CCcamInfo.py:1295
-#: tvManager/data/CCcamInfo.py:1296
+#: tvManager/data/CCcamInfo.py:480 tvManager/data/CCcamInfo.py:489
+#: tvManager/data/CCcamInfo.py:968 tvManager/data/CCcamInfo.py:973
+#: tvManager/data/CCcamInfo.py:996 tvManager/data/CCcamInfo.py:1001
 msgid "CaID: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:885 tvManager/data/CCcamInfo.py:1271
-#: tvManager/data/CCcamInfo.py:1295
+#: tvManager/data/CCcamInfo.py:481 tvManager/data/CCcamInfo.py:490
+#: tvManager/data/CCcamInfo.py:969 tvManager/data/CCcamInfo.py:999
 msgid "System: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:886 tvManager/data/CCcamInfo.py:1271
-#: tvManager/data/CCcamInfo.py:2151 tvManager/data/CCcamInfo.py:2204
+#: tvManager/data/CCcamInfo.py:482 tvManager/data/CCcamInfo.py:491
+#: tvManager/data/CCcamInfo.py:970 tvManager/data/CCcamInfo.py:1639
+#: tvManager/data/CCcamInfo.py:1695
 msgid "Uphops: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:887 tvManager/data/CCcamInfo.py:1271
-#: tvManager/data/CCcamInfo.py:2151 tvManager/data/CCcamInfo.py:2204
+#: tvManager/data/CCcamInfo.py:483 tvManager/data/CCcamInfo.py:492
+#: tvManager/data/CCcamInfo.py:971 tvManager/data/CCcamInfo.py:1640
+#: tvManager/data/CCcamInfo.py:1695
 msgid "Maxdown: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:953
-msgid "CCcam Info Main"
+#: tvManager/data/CCcamInfo.py:562
+msgid "CCcam Info"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1043
+#: tvManager/data/CCcamInfo.py:652
 msgid "New profile: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1045
+#: tvManager/data/CCcamInfo.py:652 tvManager/data/CCcamInfo.py:654
+msgid "Profile"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:654
 msgid "Using old profile: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1075
+#: tvManager/data/CCcamInfo.py:696
 msgid "Profile: Local box"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1085
-#, python-format
-msgid ""
-"CCcam Info %s\n"
-"by AliAbdul %s\n"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1085
-msgid "This plugin shows you the status of your CCcam."
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1127 tvManager/data/CCcamInfo.py:1152
-#: tvManager/data/CCcamInfo.py:1311 tvManager/data/CCcamInfo.py:1453
-#: tvManager/data/CCcamInfo.py:2097
-msgid "Error reading webpage!"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1135 tvManager/data/CCcamInfo.py:2344
+#: tvManager/data/CCcamInfo.py:720 tvManager/data/CCcamInfo.py:799
 #, python-format
 msgid "Could not open the file %s!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1160 tvManager/data/CCcamInfo.py:1199
-#: tvManager/data/CCcamInfo.py:1230
+#: tvManager/data/CCcamInfo.py:720 tvManager/data/CCcamInfo.py:840
+#: tvManager/data/NcamInfo.py:1004 tvManager/data/OScamInfo.py:1004
+msgid "Error"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:723
+#, python-format
+msgid ""
+"CCcam Info %s\n"
+"by AliAbdul %s\n"
+"\n"
+"recoded from Lululla\n"
+"\n"
+"This screen shows you the status of CCcam."
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:735
+msgid "Add new CCcam line"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:736
+msgid "Add new NewCamd line"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:737
+msgid "Please select a line to edit or select add to create new line."
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:788 tvManager/data/CCcamInfo.py:840
+#: tvManager/data/CCcamInfo.py:1019 tvManager/data/CCcamInfo.py:1128
+#: tvManager/data/CCcamInfo.py:1600
+msgid "Error reading webpage!"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:813
+msgid "Invalid HTML content!"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:831
+msgid "Invalid URL!"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:851 tvManager/data/CCcamInfo.py:899
+#: tvManager/data/CCcamInfo.py:930
 msgid "Version: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1167 tvManager/data/CCcamInfo.py:2151
-#: tvManager/data/CCcamInfo.py:2204
+#: tvManager/data/CCcamInfo.py:862 tvManager/data/CCcamInfo.py:866
+#: tvManager/data/CCcamInfo.py:1638 tvManager/data/CCcamInfo.py:1695
 msgid "Available shares:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1199
+#: tvManager/data/CCcamInfo.py:896
 msgid "Hostname: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1199 tvManager/data/CCcamInfo.py:1230
-#: tvManager/data/CCcamInfo.py:1801
+#: tvManager/data/CCcamInfo.py:897 tvManager/data/CCcamInfo.py:932
+#: tvManager/data/CCcamInfo.py:1373
 msgid "Connected: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1199
+#: tvManager/data/CCcamInfo.py:898
 msgid "Idle Time: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1199
+#: tvManager/data/CCcamInfo.py:900
 msgid "Last used share: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1230
+#: tvManager/data/CCcamInfo.py:904
+msgid "CCcam Clients Info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:928
 msgid "Cards: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1230
+#: tvManager/data/CCcamInfo.py:931
 msgid "NodeID: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1295 tvManager/data/CCcamInfo.py:1296
+#: tvManager/data/CCcamInfo.py:975
+msgid "CCcam Shares Info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:997 tvManager/data/CCcamInfo.py:1001
 msgid "Provider: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1295
+#: tvManager/data/CCcamInfo.py:998
 msgid "Provider Name: "
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1307
+#: tvManager/data/CCcamInfo.py:1003
+msgid "CCcam Provider Info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1014
 msgid "No card inserted!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1340
-msgid "ecm.info selection"
+#: tvManager/data/CCcamInfo.py:1017
+msgid "Error processing HTML!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1371
-msgid "CCcam Info"
+#: tvManager/data/CCcamInfo.py:1040
+msgid "Free memory:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1413
-msgid "CCcam Share View Menu"
+#: tvManager/data/CCcamInfo.py:1040
+msgid "Total:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1427
-msgid "close share view"
+#: tvManager/data/CCcamInfo.py:1040
+msgid "Used:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1428
-msgid "show cards with uphop 0"
+#: tvManager/data/CCcamInfo.py:1040
+msgid "Free:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1429
-msgid "show cards with uphop 1"
+#: tvManager/data/CCcamInfo.py:1050
+msgid "CCcam ECM Info"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1430
-msgid "show cards with uphop 2"
+#: tvManager/data/CCcamInfo.py:1076 tvManager/data/CCcamInfo.py:1117
+#: tvManager/data/CCcamInfo.py:1334 tvManager/data/CCcamInfo.py:1381
+#: tvManager/data/CCcamInfo.py:1820 tvManager/data/CCcamPrioMaker.py:231
+msgid "Cancel"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:1431
-msgid "show cards with uphop 3"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1432
-msgid "show cards with uphop 4"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1433
-msgid "show cards with uphop 5"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1434
-msgid "show cards with uphop 6"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1435
-msgid "show cards with uphop 7"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1436
-msgid "show cards with uphop 8"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1437
-msgid "show cards with uphop 9"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1438
-msgid "show all cards"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1439
-msgid "increase uphop by 1"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1440
-msgid "decrease uphop by 1"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1441
-msgid "get the cards' server"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1542 tvManager/data/CCcamInfo.py:2142
-#: tvManager/data/CCcamInfo.py:2147 tvManager/data/CCcamInfo.py:2195
-#: tvManager/data/CCcamInfo.py:2200
-msgid "All"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1618 tvManager/data/CCcamInfo.py:1619
-#: tvManager/data/CCcamInfo.py:1622
-msgid "Total cards:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1623
-msgid "Providers:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1624
-msgid "Reshare:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1707
-msgid "Servers:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1744
-msgid "CCcam Info Sub Menu"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1795
-msgid "CCcam Info Server Menu"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1803
-msgid "Cards: 0"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1864
-msgid "CCcam Info Config Menu"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1872
-msgid "Name:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1873
-msgid "IP:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1874
-msgid "Username:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1875
-msgid "Password:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1876
-msgid "Port:"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1921
-msgid "CCcam Info Remote Box Menu"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1925 tvManager/data/CCcamInfo.py:2244
-msgid "Delete"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1926
-msgid "New"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1927 tvManager/data/CCcamInfo.py:2383
-msgid "Location"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:1928
-msgid "Edit"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:2068
+#: tvManager/data/CCcamInfo.py:1086 tvManager/data/CCcamInfo.py:1570
 msgid "CCcam Share Info"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2075
+#: tvManager/data/CCcamInfo.py:1100
+msgid "close share view"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1101
+msgid "show cards with uphop 0"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1102
+msgid "show cards with uphop 1"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1103
+msgid "show cards with uphop 2"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1104
+msgid "show cards with uphop 3"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1105
+msgid "show cards with uphop 4"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1106
+msgid "show cards with uphop 5"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1107
+msgid "show cards with uphop 6"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1108
+msgid "show cards with uphop 7"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1109
+msgid "show cards with uphop 8"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1110
+msgid "show cards with uphop 9"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1111
+msgid "show all cards"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1112
+msgid "increase uphop by 1"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1113
+msgid "decrease uphop by 1"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1114
+msgid "get the cards' server"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1194 tvManager/data/CCcamInfo.py:1633
+#: tvManager/data/CCcamInfo.py:1634 tvManager/data/CCcamInfo.py:1686
+#: tvManager/data/CCcamInfo.py:1691 tvManager/data/NcamInfo.py:617
+#: tvManager/data/OScamInfo.py:618
+msgid "All"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1221 tvManager/data/CCcamInfo.py:1222
+#: tvManager/data/CCcamInfo.py:1225
+msgid "Total cards:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1221 tvManager/data/CCcamInfo.py:1222
+#: tvManager/data/CCcamInfo.py:1224
+msgid "Hops:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1226
+msgid "Providers:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1227
+msgid "Reshare:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1310
+msgid "Servers:"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1333
+msgid "info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1367
+msgid "CCcam Server Info"
+msgstr "Informazioni CCcam Server"
+
+#: tvManager/data/CCcamInfo.py:1375
+msgid "Cards: 0"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1421
+msgid "CCcam Info Config Menu"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1444
+msgid "CCcam Remote Info"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1447 tvManager/data/CCcamInfo.py:1705
+msgid "Delete"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1448
+msgid "New"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1449 tvManager/data/CCcamInfo.py:1822
+msgid "Location"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1450
+msgid "Edit"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1502
+#, python-format
+msgid "Could not save the config file! Error: %s"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1578
 msgid "Uphops +"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2076
+#: tvManager/data/CCcamInfo.py:1579
 msgid "Uphops -"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2077
+#: tvManager/data/CCcamInfo.py:1580
 msgid "Maxdown +"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2078
+#: tvManager/data/CCcamInfo.py:1581
 msgid "Maxdown -"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2243
+#: tvManager/data/CCcamInfo.py:1704 tvManager/data/CCcamInfo.py:1812
 msgid "CCcam Config Switcher"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2245
+#: tvManager/data/CCcamInfo.py:1706
 msgid "Activate"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2246
+#: tvManager/data/CCcamInfo.py:1707
 msgid "Rename"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2247
+#: tvManager/data/CCcamInfo.py:1708
 msgid "Content"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2276
+#: tvManager/data/CCcamInfo.py:1739
 #, python-format
 msgid "Delete %s?"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2282
+#: tvManager/data/CCcamInfo.py:1745
 msgid "Delete failed!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2284
+#: tvManager/data/CCcamInfo.py:1747
 #, python-format
 msgid "Deleted %s!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2306
+#: tvManager/data/CCcamInfo.py:1769
 msgid "Rename to:"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2329
+#: tvManager/data/CCcamInfo.py:1779 tvManager/data/CCcamInfo.py:1797
+msgid "Rename failed!"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1794
 #, python-format
 msgid "Renamed %s!"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2332 tvManager/data/CCcamInfo.py:2334
-msgid "Rename failed!"
+#: tvManager/data/CCcamInfo.py:1808
+#, python-format
+msgid "Could not open the file %s! Error: %s"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2380
+#: tvManager/data/CCcamInfo.py:1811
+#, python-format
+msgid "An unexpected error occurred: %s"
+msgstr ""
+
+#: tvManager/data/CCcamInfo.py:1819
 msgid "CCcam Info Config"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2381 tvManager/data/CCcamPrioMaker.py:216
-msgid "Cancel"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:2382
+#: tvManager/data/CCcamInfo.py:1821
 msgid "Save"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2438
+#: tvManager/data/CCcamInfo.py:1879
 #, python-format
 msgid "Configfile %s saved."
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2440
+#: tvManager/data/CCcamInfo.py:1882
 #, python-format
-msgid "Could not save configfile %s!"
+msgid "Could not save configfile %s! Error: %s"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2468
-msgid "Ecm Info"
-msgstr ""
-
-#: tvManager/data/CCcamInfo.py:2474 tvManager/data/CCcamInfo.py:2478
+#: tvManager/data/CCcamInfo.py:1953
 #, python-format
 msgid "CCcam Info %s"
 msgstr ""
 
-#: tvManager/data/CCcamInfo.py:2474 tvManager/data/CCcamInfo.py:2478
+#: tvManager/data/CCcamInfo.py:1953
 msgid "This plugin shows you the status of your CCcam"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:22
+#: tvManager/data/CCcamOrganizer.py:23
 msgid "Delete Peer"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:23
+#: tvManager/data/CCcamOrganizer.py:24
 msgid "Recover Peer"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:24
+#: tvManager/data/CCcamOrganizer.py:25
 msgid "Find Fakes"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:25
+#: tvManager/data/CCcamOrganizer.py:26
 msgid "Stop Finding Fakes"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:26
+#: tvManager/data/CCcamOrganizer.py:27
 msgid "Exit"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:62
+#: tvManager/data/CCcamOrganizer.py:63
 msgid ""
 "\n"
 "STOPPED FINDING FAKES \n"
@@ -621,51 +674,52 @@ msgid ""
 "REVERTED BACK TO INITIAL STATUS"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:117
+#: tvManager/data/CCcamOrganizer.py:118
 msgid "Temporarely DELETED"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:125
+#: tvManager/data/CCcamOrganizer.py:126
 msgid "UNDELETED"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:127
+#: tvManager/data/CCcamOrganizer.py:128
 msgid "a NOTHING.TO.UNDELE"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:128
+#: tvManager/data/CCcamOrganizer.py:129
 msgid "PRESS RETURN"
 msgstr ""
 
-#: tvManager/data/CCcamOrganizer.py:145
+#: tvManager/data/CCcamOrganizer.py:146
 msgid "Set as UNIQUE PEER"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:163
+#: tvManager/data/CCcamPrioMaker.py:175
 msgid "Caid:"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:163
+#: tvManager/data/CCcamPrioMaker.py:175
 msgid "\tProvid:"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:171 tvManager/data/CCcamPrioMaker.py:193
-#: tvManager/data/CCcamPrioMaker.py:202
+#: tvManager/data/CCcamPrioMaker.py:183 tvManager/data/CCcamPrioMaker.py:205
+#: tvManager/data/CCcamPrioMaker.py:214 tvManager/data/NcamInfo.py:452
+#: tvManager/data/OScamInfo.py:451
 msgid "Provider"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:171 tvManager/data/CCcamPrioMaker.py:193
-#: tvManager/data/CCcamPrioMaker.py:202
+#: tvManager/data/CCcamPrioMaker.py:183 tvManager/data/CCcamPrioMaker.py:205
+#: tvManager/data/CCcamPrioMaker.py:214
 msgid "Service"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:176
+#: tvManager/data/CCcamPrioMaker.py:188
 msgid ""
 "\n"
 " All Caid:"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:193
+#: tvManager/data/CCcamPrioMaker.py:205
 #, python-format
 msgid ""
 "%s\n"
@@ -677,311 +731,645 @@ msgid ""
 "%s"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:193
+#: tvManager/data/CCcamPrioMaker.py:205
 msgid "Add"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:211
+#: tvManager/data/CCcamPrioMaker.py:223
 msgid "CCPrioMaker Settings"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:217
+#: tvManager/data/CCcamPrioMaker.py:232
 msgid "OK"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:220
+#: tvManager/data/CCcamPrioMaker.py:234
 msgid "CCPrioMaker autostart"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:221
+#: tvManager/data/CCcamPrioMaker.py:235
 msgid "Ask for the selection caid"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:222
+#: tvManager/data/CCcamPrioMaker.py:236
 msgid "Ask all caid"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:223
+#: tvManager/data/CCcamPrioMaker.py:237
 msgid "Editing one caid"
 msgstr ""
 
-#: tvManager/data/CCcamPrioMaker.py:224
+#: tvManager/data/CCcamPrioMaker.py:238
 msgid "Write-Debug"
 msgstr ""
 
-#: tvManager/data/GetEcmInfo.py:69
-msgid "FTA"
-msgstr "FTA"
+#: tvManager/data/NcamInfo.py:157 tvManager/data/NcamInfo.py:1323
+#: tvManager/data/OScamInfo.py:156 tvManager/data/OScamInfo.py:1323
+msgid "Reader/User"
+msgstr ""
 
-#: tvManager/data/datas.py:286 tvManager/data/datas.py:289
-#: tvManager/data/datas.py:292 tvManager/data/datas.py:295
-#: tvManager/data/datas.py:298 tvManager/data/datas.py:301
+#: tvManager/data/NcamInfo.py:157 tvManager/data/NcamInfo.py:458
+#: tvManager/data/OScamInfo.py:156 tvManager/data/OScamInfo.py:457
+msgid "Protocol"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:158 tvManager/data/OScamInfo.py:157
+msgid "Caid:Srvid"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:158 tvManager/data/OScamInfo.py:157
+msgid "Channel Name"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:159 tvManager/data/NcamInfo.py:462
+#: tvManager/data/OScamInfo.py:158 tvManager/data/OScamInfo.py:461
+msgid "Ecm Time"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:159 tvManager/data/OScamInfo.py:158
+msgid "IP Address"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:208 tvManager/data/OScamInfo.py:207
+#, python-format
+msgid "%s webif disabled"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:325 tvManager/data/NcamInfo.py:329
+#: tvManager/data/NcamInfo.py:331 tvManager/data/NcamInfo.py:389
+#: tvManager/data/NcamInfo.py:392 tvManager/data/OScamInfo.py:324
+#: tvManager/data/OScamInfo.py:328 tvManager/data/OScamInfo.py:330
+#: tvManager/data/OScamInfo.py:388 tvManager/data/OScamInfo.py:391
+msgid "-"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:420 tvManager/data/OScamInfo.py:419
+#, python-format
+msgid "%s ( %s Cards )"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:448 tvManager/data/NcamInfo.py:1323
+#: tvManager/data/OScamInfo.py:447 tvManager/data/OScamInfo.py:1323
+msgid "Caid"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:450 tvManager/data/OScamInfo.py:449
+msgid "Pid"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:454 tvManager/data/NcamInfo.py:1175
+#: tvManager/data/OScamInfo.py:453 tvManager/data/OScamInfo.py:1175
+msgid "Reader"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:456 tvManager/data/OScamInfo.py:455
+msgid "Address"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:460 tvManager/data/OScamInfo.py:459
+msgid "Hops"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:519 tvManager/data/OScamInfo.py:520
+#, python-format
+msgid "%s Info - Main Menu"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Show Ecm info"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Show Clients"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Show Readers/Proxies"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Show Log"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Card info (CCcam-Reader)"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Ecm Statistics"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:520 tvManager/data/OScamInfo.py:521
+msgid "Setup"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:592 tvManager/data/OScamInfo.py:593
+#, python-format
+msgid ""
+"File %s.conf not found.\n"
+"Enter username/password manually."
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:597 tvManager/data/OScamInfo.py:598
+msgid "No ECM info is currently available. This is only available while decrypting."
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:612 tvManager/data/OScamInfo.py:613
+msgid "Choose CCcam-Reader"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:623 tvManager/data/OScamInfo.py:624
+msgid "Choose reader"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:627
+msgid "Ncam not running - start Cam to obtain information."
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:725 tvManager/data/NcamInfo.py:727
+#: tvManager/data/OScamInfo.py:726 tvManager/data/OScamInfo.py:728
+msgid "Ecm Info"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:737 tvManager/data/NcamInfo.py:812
+#: tvManager/data/NcamInfo.py:1087 tvManager/data/NcamInfo.py:1227
+#: tvManager/data/OScamInfo.py:738 tvManager/data/OScamInfo.py:812
+#: tvManager/data/OScamInfo.py:1087 tvManager/data/OScamInfo.py:1227
+msgid "Close"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:816 tvManager/data/NcamInfo.py:820
+#: tvManager/data/NcamInfo.py:828 tvManager/data/NcamInfo.py:986
+#: tvManager/data/NcamInfo.py:991 tvManager/data/NcamInfo.py:1007
+#: tvManager/data/OScamInfo.py:816 tvManager/data/OScamInfo.py:820
+#: tvManager/data/OScamInfo.py:828 tvManager/data/OScamInfo.py:986
+#: tvManager/data/OScamInfo.py:991 tvManager/data/OScamInfo.py:1007
+msgid "Log"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:983 tvManager/data/OScamInfo.py:983
+#, python-format
+msgid "Client %s-%s"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:988 tvManager/data/OScamInfo.py:988
+#, python-format
+msgid "Server %s-%s"
+msgstr "Server %s-%s"
+
+#: tvManager/data/NcamInfo.py:993 tvManager/data/OScamInfo.py:993
+#, python-format
+msgid "Log %s-%s"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1097 tvManager/data/OScamInfo.py:1097
+msgid "System"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1097 tvManager/data/OScamInfo.py:1097
+msgid "Reshare"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1107 tvManager/data/NcamInfo.py:1247
+#: tvManager/data/OScamInfo.py:1107 tvManager/data/OScamInfo.py:1247
+msgid "Providers: "
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1175 tvManager/data/OScamInfo.py:1175
+msgid "Cards:"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1175 tvManager/data/OScamInfo.py:1175
+msgid "Server:"
+msgstr "Server:"
+
+#: tvManager/data/NcamInfo.py:1316 tvManager/data/OScamInfo.py:1316
+msgid "(All readers)"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1320 tvManager/data/OScamInfo.py:1320
+#, python-format
+msgid "(Show only reader) (%s)"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1323 tvManager/data/OScamInfo.py:1323
+msgid "Channel"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1323 tvManager/data/OScamInfo.py:1323
+msgid "Ecm avg"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1323 tvManager/data/OScamInfo.py:1323
+msgid "Ecm last"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1323 tvManager/data/OScamInfo.py:1323
+msgid "Status"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1323 tvManager/data/OScamInfo.py:1323
+msgid "Last Req."
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1323 tvManager/data/OScamInfo.py:1323
+msgid "Total"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1332 tvManager/data/OScamInfo.py:1332
+msgid "Reader Statistics"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1364 tvManager/data/OScamInfo.py:1364
+#, python-format
+msgid "%s Info - Configuration"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1365 tvManager/data/OScamInfo.py:1365
+#, python-format
+msgid ""
+"Error:\n"
+"%s"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1380 tvManager/data/OScamInfo.py:1380
+#, python-format
+msgid "Read Userdata from %s.conf"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1382 tvManager/data/OScamInfo.py:1382
+msgid "Username (httpuser)"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1383 tvManager/data/OScamInfo.py:1383
+msgid "Password (httpwd)"
+msgstr "Password (httpwd)"
+
+#: tvManager/data/NcamInfo.py:1384 tvManager/data/OScamInfo.py:1384
+msgid "IP address"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1385 tvManager/data/OScamInfo.py:1385
+#: tvManager/data/datas.py:503
+msgid "Port"
+msgstr "Port"
+
+#: tvManager/data/NcamInfo.py:1386 tvManager/data/OScamInfo.py:1386
+msgid "Automatically update Client/Server View?"
+msgstr ""
+
+#: tvManager/data/NcamInfo.py:1388 tvManager/data/OScamInfo.py:1388
+msgid "Update interval (in seconds)"
+msgstr ""
+
+#: tvManager/data/OScamInfo.py:628
+msgid "Oscam not running - start Cam to obtain information."
+msgstr ""
+
+#: tvManager/data/datas.py:235 tvManager/data/datas.py:238
+#: tvManager/data/datas.py:241 tvManager/data/datas.py:244
+#: tvManager/data/datas.py:247 tvManager/data/datas.py:250
 msgid "Write"
 msgstr "Scrivi"
 
-#: tvManager/data/datas.py:337 tvManager/plugin.py:677 tvManager/plugin.py:783
-#: tvManager/plugin.py:920
+#: tvManager/data/datas.py:271 tvManager/data/datas.py:284
+#: tvManager/plugin.py:764 tvManager/plugin.py:884 tvManager/plugin.py:1059
 msgid "Back"
 msgstr "Indietro"
 
-#: tvManager/data/datas.py:338
-msgid "Force Emm Send"
-msgstr ""
-
-#: tvManager/data/datas.py:339
-msgid "Check Emm Send"
-msgstr ""
-
-#: tvManager/data/datas.py:346
+#: tvManager/data/datas.py:290
 msgid "Wait please..."
 msgstr ""
 
-#: tvManager/data/datas.py:364 tvManager/data/datas.py:397
-#: tvManager/data/datas.py:473
+#: tvManager/data/datas.py:328
+msgid "Select Your Choice"
+msgstr "Seleziona"
+
+#: tvManager/data/datas.py:331
+#, python-format
 msgid ""
-"\n"
-"....\n"
-".....\n"
+"Manager by Lululla\n"
+"V.%s\n"
+"Install Cam Software\n"
+"Forum Support www.corvoboys.org\n"
 msgstr ""
 
-#: tvManager/data/datas.py:376 tvManager/data/datas.py:414
-#: tvManager/data/datas.py:481
-msgid "READ EMM....\n"
+#: tvManager/data/datas.py:354 tvManager/data/datas.py:387
+msgid "Card Updated!"
 msgstr ""
 
-#: tvManager/data/datas.py:380 tvManager/data/datas.py:418
-#: tvManager/data/datas.py:485
-msgid "CURRENT EMM IS:\n"
+#: tvManager/data/datas.py:357 tvManager/data/datas.py:390
+msgid "Card Not Updated!"
 msgstr ""
 
-#: tvManager/data/datas.py:382 tvManager/data/datas.py:420
-#: tvManager/data/datas.py:487
-msgid ""
-"\n"
-"Current Emm saved to /tmp/emm.txt"
-msgstr ""
-
-#: tvManager/data/datas.py:385 tvManager/data/datas.py:423
-#: tvManager/data/datas.py:490
+#: tvManager/data/datas.py:368 tvManager/data/datas.py:409
+#: tvManager/data/datas.py:488
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
-#: tvManager/data/datas.py:386 tvManager/data/datas.py:424
-#: tvManager/data/datas.py:491
+#: tvManager/data/datas.py:370 tvManager/data/datas.py:411
+#: tvManager/data/datas.py:489
 #, python-format
 msgid "Please wait, %s."
 msgstr ""
 
-#: tvManager/data/datas.py:388
+#: tvManager/data/datas.py:372
 msgid "File no exist /tmp/emm.txt"
 msgstr ""
 
-#: tvManager/data/datas.py:390
+#: tvManager/data/datas.py:374
 msgid "The Cam is not active, send the command anyway?"
 msgstr ""
 
-#: tvManager/data/datas.py:426 tvManager/data/datas.py:493
+#: tvManager/data/datas.py:413 tvManager/data/datas.py:491
 msgid ""
 "No Action!\n"
 "File no exist /tmp/emm.txt"
 msgstr ""
 
-#: tvManager/data/datas.py:428
+#: tvManager/data/datas.py:415
 msgid "Command Cancelled"
 msgstr ""
 
-#: tvManager/data/datas.py:438 tvManager/data/datas.py:446
+#: tvManager/data/datas.py:425 tvManager/data/datas.py:431
+#: tvManager/data/datas.py:509
 msgid "Reset"
 msgstr "Reset"
 
-#: tvManager/data/datas.py:444
+#: tvManager/data/datas.py:430 tvManager/data/datas.py:508
 msgid "Get Link"
 msgstr "Ottieni link"
 
-#: tvManager/data/datas.py:500
-msgid "Select Your Choice"
-msgstr "Seleziona"
+#: tvManager/data/datas.py:478
+msgid "READ EMM....\n"
+msgstr ""
 
-#: tvManager/data/datas.py:505
+#: tvManager/data/datas.py:483
+msgid "CURRENT EMM IS:\n"
+msgstr ""
+
+#: tvManager/data/datas.py:485
+msgid ""
+"\n"
+"Current Emm saved to /tmp/emm.txt"
+msgstr ""
+
+#: tvManager/data/datas.py:493
+msgid ""
+"No Action!\n"
+"Oscam not active"
+msgstr ""
+
+#: tvManager/data/datas.py:498
 msgid "Activate Insert line in Config File:"
-msgstr "Attivare inserimento in File Cfg 3C"
+msgstr "Attivare inserimento in File Cfg 3C:"
 
-#: tvManager/data/datas.py:505
+#: tvManager/data/datas.py:498
 msgid "If Active: Download/Reset Server Config"
 msgstr "Se Attivo: Scarica/Reset Config .serv"
 
-#: tvManager/data/datas.py:507
+#: tvManager/data/datas.py:500
 msgid "Server Config"
 msgstr "Server Config"
 
-#: tvManager/data/datas.py:508
+#: tvManager/data/datas.py:501
 msgid "Server Link"
 msgstr "Url del Server"
 
-#: tvManager/data/datas.py:508
+#: tvManager/data/datas.py:501
 msgid "Select Get Link"
 msgstr "Seleziona Link Server"
 
-#: tvManager/data/datas.py:509
+#: tvManager/data/datas.py:502
 msgid "Server URL"
 msgstr "Server URL"
 
-#: tvManager/data/datas.py:509
+#: tvManager/data/datas.py:502
 msgid "Server Url i.e. 012.345.678.900"
 msgstr "Url Server Es. 012.345.678.900"
 
-#: tvManager/data/datas.py:510
+#: tvManager/data/datas.py:503
 msgid "Server Port"
 msgstr "Porta del Server"
 
-#: tvManager/data/datas.py:510
-msgid "Port"
-msgstr "Port"
-
-#: tvManager/data/datas.py:511
+#: tvManager/data/datas.py:504
 msgid "Server Username"
 msgstr "Server Username"
 
-#: tvManager/data/datas.py:511
+#: tvManager/data/datas.py:504
 msgid "Username"
 msgstr "Username"
 
-#: tvManager/data/datas.py:512
+#: tvManager/data/datas.py:505
 msgid "Server Password"
 msgstr "Server Password"
 
-#: tvManager/data/datas.py:512
+#: tvManager/data/datas.py:505
 msgid "Password"
 msgstr "Password"
 
-#: tvManager/data/datas.py:560
+#: tvManager/data/datas.py:569
 msgid "Select CCcam"
 msgstr "Seleziona CCcam"
 
-#: tvManager/data/datas.py:571 tvManager/data/datas.py:589
-#: tvManager/data/datas.py:614
+#: tvManager/data/datas.py:580 tvManager/data/datas.py:597
+#: tvManager/data/datas.py:621
 msgid "Please Reset - No File CFG"
 msgstr "Prego Reset - nessun file di Config"
 
-#: tvManager/data/datas.py:578 tvManager/data/datas.py:596
-#: tvManager/data/datas.py:621
+#: tvManager/data/datas.py:586 tvManager/data/datas.py:603
+#: tvManager/data/datas.py:627
 msgid "Server Copy in "
 msgstr "Server copiato in "
 
-#: tvManager/data/datas.py:601
+#: tvManager/data/datas.py:608
 msgid "Select Ncam"
 msgstr "Seleziona Ncam"
 
-#: tvManager/plugin.py:200
+#: tvManager/data/datas.py:801
+msgid "Emm Info"
+msgstr ""
+
+#: tvManager/plugin.py:198
 msgid "Start"
 msgstr "Avvio"
 
-#: tvManager/plugin.py:201
-msgid "Download"
-msgstr "Download"
+#: tvManager/plugin.py:199
+msgid "Download Panel"
+msgstr "Download Panel"
 
-#: tvManager/plugin.py:202
+#: tvManager/plugin.py:200
 msgid "Stop"
 msgstr "Stop"
 
 #: tvManager/plugin.py:203
-msgid "Softcam"
-msgstr "Softcam"
-
-#: tvManager/plugin.py:205
 msgid "Scanning and retrieval list softcam ..."
-msgstr "Scansione e recupero lista softcam"
+msgstr "Scansione e recupero lista softcam.."
 
-#: tvManager/plugin.py:247
-msgid "SOFTCAM"
+#: tvManager/plugin.py:338
+#, python-format
+msgid "Failed to load plugin: %s"
 msgstr ""
 
-#: tvManager/plugin.py:315
+#: tvManager/plugin.py:411
 msgid "Update SoftcamKeys from google search?"
 msgstr "Aggiornamento SoftcamKeys da ricerca google?"
 
-#: tvManager/plugin.py:323
-#, python-format
-msgid "Update Softcam.key: %s"
-msgstr "Aggiornamento SoftCam.Key: %s"
+#: tvManager/plugin.py:423
+msgid "SoftcamKeys Updated!"
+msgstr ""
 
-#: tvManager/plugin.py:336
+#: tvManager/plugin.py:425
+msgid ""
+"Installing Softcam Keys\n"
+"Please Wait..."
+msgstr ""
+
+#: tvManager/plugin.py:437
 msgid "Select a cam to run ..."
 msgstr "Selezionare una cam da avviare ..."
 
-#: tvManager/plugin.py:338
+#: tvManager/plugin.py:439
 msgid "Install Cam first!!!"
 msgstr "Installa prima una Cam!!!"
 
-#: tvManager/plugin.py:418
+#: tvManager/plugin.py:529
 msgid ""
 "Please wait..\n"
 "RESTART CAM"
 msgstr ""
 
-#: tvManager/plugin.py:423
+#: tvManager/plugin.py:534
 msgid ""
 "Please wait..\n"
 "STOP & RESTART CAM"
 msgstr ""
 
-#: tvManager/plugin.py:431
+#: tvManager/plugin.py:542
 msgid ""
 "Please wait..\n"
 "START UP CAM"
 msgstr ""
 
-#: tvManager/plugin.py:506
+#: tvManager/plugin.py:598
 msgid ""
 "Please wait..\n"
 "STOP CAM"
 msgstr ""
 
-#: tvManager/plugin.py:624
-msgid "Autocam assigned to the current channel"
-msgstr "Autocam assegnato al canale corrente"
-
-#: tvManager/plugin.py:675
+#: tvManager/plugin.py:762
 msgid "Getting the list, please wait ..."
 msgstr "Getting the list, please wait ..."
 
-#: tvManager/plugin.py:678
+#: tvManager/plugin.py:765
 msgid "Load"
 msgstr ""
 
-#: tvManager/plugin.py:729 tvManager/plugin.py:750
-msgid "Try again later ..."
-msgstr "Riprova piu tardi ..."
-
-#: tvManager/plugin.py:746
+#: tvManager/plugin.py:840
 msgid "Please select ..."
 msgstr "Seleziona prego..."
 
-#: tvManager/plugin.py:781
+#: tvManager/plugin.py:844
+msgid "Error processing server addons data"
+msgstr ""
+
+#: tvManager/plugin.py:848
+msgid "Try again later ..."
+msgstr "Riprova piu tardi ..."
+
+#: tvManager/plugin.py:882
 msgid "Select and Install"
 msgstr "Seleziona e Installa"
 
-#: tvManager/plugin.py:833
-msgid "Do you want to install?"
-msgstr "Vuoi installare?"
+#: tvManager/plugin.py:907
+msgid "Do you install this plugin ?"
+msgstr ""
 
-#: tvManager/plugin.py:882
+#: tvManager/plugin.py:924 tvManager/plugin.py:934 tvManager/plugin.py:1000
+#: tvManager/plugin.py:1012
 msgid "Unknow Image!"
 msgstr "Unknow Image!"
 
-#: tvManager/plugin.py:885
-msgid "Download failur!"
+#: tvManager/plugin.py:975
+#, python-format
+msgid ""
+"Installing %s\n"
+"Please Wait..."
 msgstr ""
 
-#: tvManager/plugin.py:897
-msgid "All file Download are removed!"
-msgstr "Tutti i file scaricati sono stati rimossi!"
+#: tvManager/plugin.py:981
+msgid "Do you want to remove?"
+msgstr "Vuoi rimuovere?"
 
-#: tvManager/plugin.py:929
-msgid "Path Configuration Folder"
-msgstr "Configurazione cartelle"
+#: tvManager/plugin.py:1022
+#, python-format
+msgid "Removing %s"
+msgstr ""
 
-#: tvManager/plugin.py:1097
+#: tvManager/plugin.py:1026
+msgid "Do you want to restart Gui Interface?"
+msgstr "Vuoi riavviare enigma?"
+
+#: tvManager/plugin.py:1060
+msgid "Force Update"
+msgstr ""
+
+#: tvManager/plugin.py:1061
+msgid "Update"
+msgstr ""
+
+#: tvManager/plugin.py:1102
+#, python-format
+msgid ""
+"New version %s is available\n"
+"\n"
+"Changelog: %s\n"
+"\n"
+"Press info_long or yellow_long button to start force updating."
+msgstr ""
+
+#: tvManager/plugin.py:1107
+#, python-format
+msgid ""
+"New version %s is available.\n"
+"\n"
+"Changelog: %s \n"
+"\n"
+"Do you want to install it now?"
+msgstr ""
+
+#: tvManager/plugin.py:1109
+msgid "Congrats! You already have the latest version..."
+msgstr ""
+
+#: tvManager/plugin.py:1118
+#, python-format
+msgid "Do you want to install update ( %s ) now?"
+msgstr "Vuoi installare aggiornamento(%s) adesso?"
+
+#: tvManager/plugin.py:1124
+msgid "Update Aborted!"
+msgstr ""
+
+#: tvManager/plugin.py:1264
 msgid "Softcam Manager"
 msgstr ""
 
+#~ msgid "FTA"
+#~ msgstr "FTA"
+
+#~ msgid "Softcam"
+#~ msgstr "Softcam"
+
+#, python-format
+#~ msgid "Update Softcam.key: %s"
+#~ msgstr "Aggiornamento SoftCam.Key: %s"
+
+#~ msgid "Autocam assigned to the current channel"
+#~ msgstr "Autocam assegnato al canale corrente"
+
+#~ msgid "All file Download are removed!"
+#~ msgstr "Tutti i file scaricati sono stati rimossi!"
+
+#~ msgid "Path Configuration Folder"
+#~ msgstr "Configurazione cartelle"

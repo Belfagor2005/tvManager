@@ -10,11 +10,10 @@
 from __future__ import print_function
 # local import
 from . import _, paypal, wgetsts, installer_url, developer_url
-from .data import Utils
 from .data.Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
 from .data.Console import Console
-from .data.Utils import b64decoder
+from .data.Utils import b64decoder, checkGZIP
 
 # enigma lib import
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -51,6 +50,8 @@ from xml.dom import minidom
 
 global active, skin_path, local
 global _session, runningcam
+
+
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
@@ -689,7 +690,6 @@ class tvManager(Screen):
         if clist is not None:
             for line in clist:
                 current = line
-
             clist.close()
         print('current =', current)
         if os.path.isfile('/etc/autocam.txt') is False:
@@ -735,7 +735,6 @@ class tvManager(Screen):
                 continue
             myfile2.write(line)
             icount = icount + 1
-
         myfile.close()
         myfile2.close()
         os.system('rm /etc/autocam.txt')
@@ -814,7 +813,7 @@ class GetipklistTv(Screen):
         if local is False:
             if os.path.exists("/usr/bin/apt-get"):
                 print('have a dreamOs!!!')
-                self.data = Utils.checkGZIP(self.xml)
+                self.data = checkGZIP(self.xml)
                 self.downloadxmlpage(self.data)
             else:
                 print('have a Atv-PLi - etc..!!!')
@@ -828,7 +827,7 @@ class GetipklistTv(Screen):
             if self.xml:
                 self.xmlparse = minidom.parseString(self.xml)
                 for plugins in self.xmlparse.getElementsByTagName('plugins'):
-                    if not os.path.exists('/var/lib/dpkg/info'):
+                    if not os.path.exists('/usr/bin/apt-get'):
                         if 'deb' in str(plugins.getAttribute('cont')).lower():
                             continue
 
@@ -920,7 +919,7 @@ class GetipkTv(Screen):
                                 # test lululla
                                 self.com = self.com.replace('"', '')
                                 if ".deb" in self.com:
-                                    if not os.path.exists('/var/lib/dpkg/info'):
+                                    if not os.path.exists('/usr/bin/apt-get'):
                                         self.session.open(MessageBox,
                                                           _('Unknow Image!'),
                                                           MessageBox.TYPE_INFO,
@@ -996,7 +995,7 @@ class GetipkTv(Screen):
                             cmd = ''
 
                             if ".deb" in self.com:
-                                if not os.path.exists('/var/lib/dpkg/info'):
+                                if not os.path.exists('/usr/bin/apt-get'):
                                     self.session.open(MessageBox,
                                                       _('Unknow Image!'),
                                                       MessageBox.TYPE_INFO,
@@ -1110,8 +1109,8 @@ class InfoCfg(Screen):
             self.session.open(MessageBox, _("Congrats! You already have the latest version..."),  MessageBox.TYPE_INFO, timeout=4)
 
     def update_dev(self):
-        req = Utils.Request(Utils.b64decoder(developer_url), headers={'User-Agent': AgentRequest})
-        page = Utils.urlopen(req).read()
+        req = Request(b64decoder(developer_url), headers={'User-Agent': AgentRequest})
+        page = urlopen(req).read()
         data = json.loads(page)
         remote_date = data['pushed_at']
         strp_remote_date = datetime.strptime(remote_date, '%Y-%m-%dT%H:%M:%SZ')
@@ -1120,7 +1119,7 @@ class InfoCfg(Screen):
 
     def install_update(self, answer=False):
         if answer:
-            self.session.open(Console, 'Upgrading...', cmdlist=('wget -q "--no-check-certificate" ' + Utils.b64decoder(installer_url) + ' -O - | /bin/sh'), finishedCallback=self.myCallback, closeOnSuccess=False)
+            self.session.open(Console, 'Upgrading...', cmdlist=('wget -q "--no-check-certificate" ' + b64decoder(installer_url) + ' -O - | /bin/sh'), finishedCallback=self.myCallback, closeOnSuccess=False)
         else:
             self.session.open(MessageBox, _("Update Aborted!"),  MessageBox.TYPE_INFO, timeout=3)
 
@@ -1265,7 +1264,7 @@ def mainmenu(menu_id):
         return [(_("Softcam Manager"),
                  startConfig,
                  "Softcam Manager",
-                 41)]
+                 50)]
     else:
         return []
 
