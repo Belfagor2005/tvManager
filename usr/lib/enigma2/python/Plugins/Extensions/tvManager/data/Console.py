@@ -79,7 +79,7 @@ class Console(Screen):
         self.container = eConsoleAppContainer()
         self.run = 0
         self.finished = False
-        try:
+        try:  # DreamOS By RAED
             self.container.appClosed.append(self.runFinished)
             self.container.dataAvail.append(self.dataAvail)
         except:

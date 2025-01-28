@@ -13,7 +13,8 @@ from . import _, paypal, wgetsts, installer_url, developer_url
 from .data import Utils
 from .data.Utils import RequestAgent
 from .data.GetEcmInfo import GetEcmInfo
-from .Console import Console
+from .data.Console import Console
+from .data.Utils import b64decoder
 
 # enigma lib import
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -53,11 +54,15 @@ global _session, runningcam
 active = False
 _session = None
 PY3 = sys.version_info.major >= 3
+
 if PY3:
     unicode = str
     unichr = chr
     long = int
     PY3 = True
+    from urllib.request import urlopen, Request
+else:
+    from urllib2 import urlopen, Request
 
 
 currversion = '2.4'
@@ -79,6 +84,10 @@ CCCAMINFO = 1
 OSCAMINFO = 2
 AgentRequest = RequestAgent()
 runningcam = None
+
+
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
+           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'Accept-Encoding': 'deflate'}
 
 
 try:
@@ -1070,8 +1079,8 @@ class InfoCfg(Screen):
     def check_vers(self):
         remote_version = '0.0'
         remote_changelog = ''
-        req = Utils.Request(Utils.b64decoder(installer_url), headers={'User-Agent': AgentRequest})
-        page = Utils.urlopen(req).read()
+        req = Request(b64decoder(installer_url), headers=headers)
+        page = urlopen(req).read()
         if PY3:
             data = page.decode("utf-8")
         else:
@@ -1088,19 +1097,10 @@ class InfoCfg(Screen):
                     break
         self.new_version = remote_version
         self.new_changelog = remote_changelog
-        # if float(currversion) < float(remote_version):
         if currversion < remote_version:
             self.Update = True
-            # self.new_version = remote_version
-            # self.new_changelog = remote_changelog
-            # updatestr = title_plug
-            # cvrs = 'New version %s is available' % self.new_version
-            # cvrt = 'Changelog: %s\n\nPress yellow button to start updating' % self.new_changelog
-            # self['info'].setText(updatestr)
-            # self['pth'].setText(cvrs)
-            # self['pform'].setText(cvrt)
             self['key_yellow'].show()
-            self.mbox = self.session.open(MessageBox, _('New version %s is available\n\nChangelog: %s\n\nPress yellow button to start updating') % (self.new_version, self.new_changelog), MessageBox.TYPE_INFO, timeout=5)
+            self.session.open(MessageBox, _('New version %s is available\n\nChangelog: %s\n\nPress info_long or yellow_long button to start force updating.') % (self.new_version, self.new_changelog), MessageBox.TYPE_INFO, timeout=5)
         self['key_green'].show()
 
     def update_me(self):
@@ -1181,6 +1181,81 @@ class InfoCfg(Screen):
         self['list'].pageUp()
 
 
+class DreamCCAuto:
+    def __init__(self):
+        self.readCurrent()
+
+    def readCurrent(self):
+        current = None
+        self.FilCurr = '/etc/CurrentBhCamName' if os.path.exists('/etc/CurrentBhCamName') else '/etc/clist.list'
+        try:
+            with open(self.FilCurr, 'r', encoding='UTF-8') as clist:
+                for line in clist:
+                    current = line.strip()
+        except Exception as e:
+            print("Error reading current cam file:", e)
+            return
+
+        print("Current cam name:", current)
+
+        scriptliste = []
+        path = '/usr/camscript/'
+        if not os.path.exists(path):
+            print("Path does not exist:", path)
+            return
+
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                scriptliste.append(name)
+
+        for script in scriptliste:
+            dat = os.path.join(path, script)
+            try:
+                with open(dat, 'r') as file:
+                    for line in file:
+                        if line.startswith('OSD'):
+                            nam = line[5:].strip()
+                            if current == nam:
+                                if os.path.exists('/etc/init.d/dccamd'):
+                                    os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
+                                for link, target in [('/var/bin', '/usr/bin'),
+                                                     ('/var/keys', '/usr/keys'),
+                                                     ('/var/scce', '/usr/scce'),
+                                                     ('/var/script', '/usr/script')]:
+                                    if not os.path.islink(link):
+                                        os.system('ln -sf %s %s' % (target, link))
+                                if os.system("/etc/startcam.sh") != 0:
+                                    print("Error starting the cam with /etc/startcam.sh")
+                                else:
+                                    print("*** running autostart ***")
+                                return
+            except Exception as e:
+                print("Error reading script file:", e)
+
+        print('pass autostart')
+
+
+def autostartsoftcam(reason, session=None, **kwargs):
+    print("[Softcam] Started")
+    if reason == 0 and session is not None:
+        print('reason 0')
+        try:
+            if os.path.exists('/etc/init.d/dccamd'):
+                os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
+            DreamCCAuto()
+        except Exception as e:
+            print("Error during autostart:", e)
+
+
+def main(session, **kwargs):
+    try:
+        session.open(tvManager)
+    except:
+        import traceback
+        traceback.print_exc()
+        pass
+
+
 def startConfig(session, **kwargs):
     session.open(tvManager)
 
@@ -1195,8 +1270,16 @@ def mainmenu(menu_id):
         return []
 
 
+"""
+def StartSetup(menuid, **kwargs):
+    return [(name_plug, main, 'Softcam Manager', 44)] if menuid == "mainmenu" else []
+
+
+def menu(menuid, **kwargs):
+    return [(name_plug, main, 'Softcam Manager', 44)] if menuid == "cam" else []
+
+
 def autostart(reason, session=None, **kwargs):
-    """called with reason=1 to during shutdown, with reason=0 at startup?"""
     print("[Softcam] Started")
     if reason == 0:
         print('reason 0')
@@ -1220,93 +1303,7 @@ def autostart(reason, session=None, **kwargs):
         else:
             print('pass autostart')
     return
-
-
-class DreamCCAuto:
-    def __init__(self):
-        self.readCurrent()
-
-    def readCurrent(self):
-        current = None
-        self.FilCurr = ''
-        if fileExists('/etc/CurrentBhCamName'):
-            self.FilCurr = '/etc/CurrentBhCamName'
-        else:
-            self.FilCurr = '/etc/clist.list'
-        try:
-            if sys.version_info[0] == 3:
-                clist = open(self.FilCurr, 'r', encoding='UTF-8')
-            else:
-                clist = open(self.FilCurr, 'r')
-        except:
-            return
-
-        if clist is not None:
-            for line in clist:
-                current = line
-            clist.close()
-        scriptliste = []
-        path = '/usr/camscript/'
-        for root, dirs, files in os.walk(path):
-            for name in files:
-                scriptliste.append(name)
-
-        for lines in scriptliste:
-            dat = path + lines
-            datei = open(dat, 'r')
-            for line in datei:
-                if line[0:3] == 'OSD':
-                    nam = line[5:len(line) - 2]
-                    if current == nam:
-                        if fileExists('/etc/init.d/dccamd'):
-                            os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
-                        os.system('ln -sf /usr/bin /var/bin')
-                        os.system('ln -sf /usr/keys /var/keys')
-                        os.system('ln -sf /usr/scce /var/scce')
-                        os.system('ln -sf /usr/script /var/script')
-                        os.system("/etc/startcam.sh")
-                        os.system('sleep 2')
-                        print("*** running autostart ***")
-                        # os.system(dat + ' cam_startup &')
-                        # os.system('sleep 2')
-
-            datei.close()
-        else:
-            print('pass autostart')
-
-        return
-
-
-def autostartsoftcam(reason, session=None, **kwargs):
-    """called with reason=1 to during shutdown, with reason=0 at startup?"""
-    print("[Softcam] Started")
-    global DreamCC_auto
-    if reason == 0:
-        print('reason 0')
-        if session is not None:
-            try:
-                if fileExists('/etc/init.d/dccamd'):
-                    os.system('mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &')
-                DreamCC_auto = DreamCCAuto()
-            except:
-                pass
-
-
-def menu(menuid, **kwargs):
-    return [(name_plug, main, 'Softcam Manager', 44)] if menuid == "cam" else []
-
-
-def main(session, **kwargs):
-    try:
-        session.open(tvManager)
-    except:
-        import traceback
-        traceback.print_exc()
-        pass
-
-
-def StartSetup(menuid, **kwargs):
-    return [(name_plug, main, 'Softcam Manager', 44)] if menuid == "mainmenu" else []
+"""
 
 
 def Plugins(**kwargs):
