@@ -152,13 +152,21 @@ def show_list_1(h):
 
 
 def showlist(datal, list):
+    plist = []
+    for name in datal:  # Iterazione più pythonica
+        plist.append(show_list_1(name))
+    list.setList(plist)
+
+"""
+def showlist(datal, list):
     icount = 0
     plist = []
     for line in datal:
         name = datal[icount]
         plist.append(show_list_1(name))
         icount += 1
-        list.setList(plist)
+    list.setList(plist)
+"""
 
 
 class tvManager(Screen):
