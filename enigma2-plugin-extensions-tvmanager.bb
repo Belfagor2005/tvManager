@@ -6,7 +6,7 @@ LICENSE = "proprietary"
 
 require conf/license/license-gplv2.inc
 
-inherit gitpkgv
+inherit gitpkgv autotools pkgconfig
 
 SRCREV = "${AUTOREV}"
 PV = "1.0+git${SRCPV}"
@@ -21,7 +21,7 @@ S = "${WORKDIR}/git"
 FILES_${PN} = "/usr/* /etc*"
 
 do_install() {
-    cp -rp ${S}/usr* /etc* ${D}/ 
+    cp -af --no-preserve=ownership ${S}/usr* /etc* ${D}/ 
 }
 
 
