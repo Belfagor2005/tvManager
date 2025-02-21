@@ -31,7 +31,7 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import (fileExists, resolveFilename, SCOPE_PLUGINS)
 from Components.Sources.StaticText import StaticText
 from random import choice
-from enigma import (eTimer, getDesktop)
+from enigma import eTimer, getDesktop
 from os.path import exists, dirname, join
 from os import popen, chmod, system, stat, access, X_OK, listdir
 import base64
@@ -41,9 +41,12 @@ import sys
 import subprocess
 import codecs
 
+import os
+import threading
+
 global skin_path
 
-sss = 'aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1U0ZU02RGpW'
+sss = 'aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L0I5N0hDOGll'
 PY3 = sys.version_info.major >= 3
 if PY3:
 	unicode = str
@@ -284,35 +287,38 @@ Serverlive = [
 	('aHR0cHM6Ly9jY2NhbWlwdHYucHJvL2NjY2FtLWZyZWUvI3BhZ2UtY29udGVudA==', 'Server9'),
 ]
 
-cfgcam = [('/etc/CCcam.cfg', 'CCcam'),
-		  ('/etc/tuxbox/config/oscam.server', 'Oscam'),
-		  ('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
-		  ('/etc/tuxbox/config/ncam.server', 'Ncam'),
-		  ('/etc/tuxbox/config/gcam.server', 'Gcam'),
-		  ('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')]
+
+cfgcam = [
+	('/etc/CCcam.cfg', 'CCcam'),
+	('/etc/tuxbox/config/oscam.server', 'Oscam'),
+	('/etc/tuxbox/config/oscam-emu/oscam.server', 'oscam-emu'),
+	('/etc/tuxbox/config/ncam.server', 'Ncam'),
+	('/etc/tuxbox/config/gcam.server', 'Gcam'),
+	('/etc/tuxbox/config/Oscamicam/oscam.server', 'Oscamicam')
+]
 
 
-config.plugins.Manager = ConfigSubsection()
-config.plugins.Manager.active = ConfigYesNo(default=False)
-config.plugins.Manager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
-config.plugins.Manager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
-config.plugins.Manager.hostaddress = NoSave(ConfigText(default='127.0.0.1'))
-config.plugins.Manager.port = NoSave(ConfigNumber(default=16000))
-config.plugins.Manager.user = NoSave(ConfigText(default='Enter Username', visible_width=50, fixed_size=False))
-config.plugins.Manager.passw = NoSave(ConfigPassword(default='******', fixed_size=False, censor='*'))
+config.plugins.tvmanager = ConfigSubsection()
+config.plugins.tvmanager.active = ConfigYesNo(default=False)
+config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
+config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
+config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default='127.0.0.1'))
+config.plugins.tvmanager.port = NoSave(ConfigNumber(default=16000))
+config.plugins.tvmanager.user = NoSave(ConfigText(default='Enter Username', visible_width=50, fixed_size=False))
+config.plugins.tvmanager.passw = NoSave(ConfigPassword(default='******', fixed_size=False, censor='*'))
 
 # ===================================================
-host = str(config.plugins.Manager.hostaddress.value)
-port = str(config.plugins.Manager.port.value)
-user = str(config.plugins.Manager.user.value)
-password = str(config.plugins.Manager.passw.value)
+host = str(config.plugins.tvmanager.hostaddress.value)
+port = str(config.plugins.tvmanager.port.value)
+user = str(config.plugins.tvmanager.user.value)
+password = str(config.plugins.tvmanager.passw.value)
 
 
 def putlblcfg():
 	global rstcfg
 	global buttn
 	global putlbl
-	putlbl = config.plugins.Manager.cfgfile.getValue()
+	putlbl = config.plugins.tvmanager.cfgfile.getValue()
 	buttn = ''
 	if not putlbl:
 		print("Error: Invalid file path")
@@ -345,7 +351,11 @@ def putlblcfg():
 
 
 putlblcfg()
-print('putlblcfg===================', putlblcfg)
+print('putlblcfg start')
+print('putlbl ==========', putlbl)
+print('rstcfg ==========', rstcfg)
+print('rstcfg ==========', buttn)
+print('putlblcfg end')
 
 
 class tv_config(Screen, ConfigListScreen):
@@ -374,22 +384,30 @@ class tv_config(Screen, ConfigListScreen):
 		self.list = []
 		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 		self["paypal"] = Label()
-		self['actions'] = ActionMap(['InfobarEPGActions',
-									 'OkCancelActions',
-									 'HotkeyActions',
-									 'VirtualKeyboardActions',
-									 'ColorActions',
-									 'MenuActions'], {'left': self.keyLeft,
-													  'right': self.keyRight,
-													  'ok': self.closex,
-													  'showVirtualKeyboard': self.KeyText,
-													  'green': self.green,
-													  'yellow': self.sendemm,
-													  'blue': self.resetcfg,
-													  'red': self.closex,
-													  'cancel': self.closex,
-													  'info': self.infomsg,
-													  'back': self.closex}, -1)
+		self['actions'] = ActionMap(
+			[
+				'InfobarEPGActions',
+				'OkCancelActions',
+				'HotkeyActions',
+				'VirtualKeyboardActions',
+				'ColorActions',
+				'MenuActions'
+			],
+			{
+				'left': self.keyLeft,
+				'right': self.keyRight,
+				'ok': self.closex,
+				'showVirtualKeyboard': self.KeyText,
+				'green': self.green,
+				'yellow': self.sendemm,
+				'blue': self.resetcfg,
+				'red': self.closex,
+				'cancel': self.closex,
+				'info': self.infomsg,
+				'back': self.closex
+			},
+			-1
+		)
 		self.createSetup()
 		if self.selectionChanged not in self["config"].onSelectionChanged:
 			self["config"].onSelectionChanged.append(self.selectionChanged)
@@ -406,47 +424,44 @@ class tv_config(Screen, ConfigListScreen):
 		self.session.open(MessageBox, _("Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
 
 	def sendemm(self):
-		if config.plugins.Manager.active.value is True:
+		if config.plugins.tvmanager.active.value:
 			self.getcl()
 		else:
 			try:
-				print('runningcam1=', runningcam)
+				print('runningcam=', runningcam)
 				if runningcam is None:
 					return
-				if runningcam == 'oscam':
-					cmd = 'ps -T'
-					res = popen(cmd).read()
-					print('res: ', res)
-					if 'oscam' in res.lower() or 'icam' in res.lower() or 'ncam' in res.lower() or 'gcam' in res.lower():
-						print('oscam exist')
-						msg = []
-						self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
-						from os import access, X_OK
-						if not access(self.cmd1, X_OK):
-							chmod(self.cmd1, 493)
-						try:
-							subprocess.check_output(['bash', self.cmd1])
-							self.session.open(MessageBox, _('Card Updated!'), MessageBox.TYPE_INFO, timeout=5)
-						except subprocess.CalledProcessError as e:
-							print(e.output)
-							self.session.open(MessageBox, _('Card Not Updated!'), MessageBox.TYPE_INFO, timeout=5)
-						system('sleep 5')
-						if not exists('/tmp/emm.txt'):
-							cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvManager Plugin' -c 'https://pastebin.com/raw/B97HC8ie' -O '/tmp/emm.txt'"
-							system(cmmnd)
-						if exists('/tmp/emm.txt'):
-							with open('/tmp/emm.txt') as f:
-								file_content = f.read().strip()
-								msg.append("CURRENT EMM IS:\n")
-								msg.append(file_content)
-								msg.append("\nCurrent Emm saved to /tmp/emm.txt")
-							msg = (" %s " % _("\n")).join(msg)
-							print("DEBUG: msg_output = ", msg)
-							self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+
+				cmd = 'pgrep -af oscam'
+				res = subprocess.getoutput(cmd)
+				if 'oscam' in res.lower():  # Assicurati che la ricerca sia insensibile al maiuscolo/minuscolo
+					print("oscam process found")
+
+					if 'oscam' in runningcam.lower():
+						cmd = 'ps -T'
+						res = subprocess.getoutput(cmd)
+						print('res: ', res)
+
+						if any(cam in res.lower() for cam in ['oscam', 'icam', 'ncam', 'gcam']):
+							print('oscam exist')
+
+							msg = []
+							msg.append(_("\n....\n.....\n"))
+
+							self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
+							from os import access, X_OK
+							if not access(self.cmd1, X_OK):
+								os.chmod(self.cmd1, 493)
+
+							thread = threading.Thread(target=self.run_emm_command)
+							thread.start()
+
 						else:
-							self.session.open(MessageBox, _("File no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=10)
-				else:
-					self.session.openWithCallback(self.callMyMsg, MessageBox, _('The Cam is not active, send the command anyway?'), MessageBox.TYPE_YESNO)
+							self.session.openWithCallback(self.callMyMsg, MessageBox, _('The Cam is not active, send the command anyway?'), MessageBox.TYPE_YESNO)
+
+					else:
+						self.session.open(MessageBox, _("No runningcam"), MessageBox.TYPE_INFO, timeout=10)
+
 			except Exception as e:
 				print('error on emm', str(e))
 
@@ -491,14 +506,14 @@ class tv_config(Screen, ConfigListScreen):
 		self.close()
 
 	def resetcfg(self):
-		if config.plugins.Manager.active.value is True:
+		if config.plugins.tvmanager.active.value is True:
 			import shutil
 			shutil.copy2(data_path + rstcfg, putlbl)
 			system('chmod -R 755 %s' % putlbl)
 			self.session.open(MessageBox, _('Reset') + ' ' + putlbl, type=MessageBox.TYPE_INFO, timeout=8)
 
 	def showhide(self):
-		if config.plugins.Manager.active.value is True:
+		if config.plugins.tvmanager.active.value is True:
 			self['key_green'].setText(buttn)
 			self['key_yellow'].setText(_('Get Link'))
 			self['key_blue'].setText(_('Reset'))
@@ -521,56 +536,95 @@ class tv_config(Screen, ConfigListScreen):
 			self.showInfo(str(result))
 
 	def green(self):
-		if config.plugins.Manager.active.value is True:
-			if putlbl == '/etc/CCcam.cfg':
-				self.CCcam()
-			elif putlbl == '/etc/tuxbox/config/oscam.server':
-				self.Oscam()
-			elif putlbl == '/etc/tuxbox/config/oscam-emu/oscam.server':
-				self.Oscam()
-			elif putlbl == '/etc/tuxbox/config/Oscamicam/oscam.server':
-				self.Oscam()
-			elif putlbl == '/etc/tuxbox/config/ncam.server':
-				self.Ncam()
-			else:
-				return
-		else:
-			if 'oscam' in str(runningcam):  # or 'movicam' in str(self.runningcam):
-				msg = []
-				self.cmd1 = data_path + 'emm_sender.sh'
-				if not access(self.cmd1, X_OK):
-					chmod(self.cmd1, 493)
-				subprocess.check_output(['bash', self.cmd1], shell=True, encoding='utf-8')
-				system('sleep 3')
-				if exists('/tmp/emm.txt'):
-					msg.append(_("READ EMM....\n"))
-					with open('/tmp/emm.txt') as f:
-						f = f.read()
-						print('emm read:\n', f)
-						if f.startswith('82708'):
-							msg.append(_("CURRENT EMM IS:\n"))
-							msg.append(str(f))
-							msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
-						else:
-							msg.append('No Emm')
-					msg = (" %s " % _("\n")).join(msg)
-					self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+		try:
+			if hasattr(config.plugins, 'Manager') and config.plugins.tvmanager.active.value is True:
+				if putlbl == '/etc/CCcam.cfg':
+					self.CCcam()
+				elif putlbl in [
+					'/etc/tuxbox/config/oscam.server',
+					'/etc/tuxbox/config/oscam-emu/oscam.server',
+					'/etc/tuxbox/config/Oscamicam/oscam.server'
+				]:
+					self.Oscam()
+				elif putlbl == '/etc/tuxbox/config/ncam.server':
+					self.Ncam()
 				else:
-					self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
+					return
 			else:
-				self.session.open(MessageBox, _("No Action!\nOscam not active"), MessageBox.TYPE_INFO, timeout=5)
+
+				if 'oscam' in str(runningcam).lower():
+
+					def execute_command(choice):
+						if choice:
+							msg = []
+							self.cmd1 = data_path + 'emm_sender.sh'
+
+							if not access(self.cmd1, X_OK):
+								os.chmod(self.cmd1, 0o755)
+
+							try:
+								print("Starting the process...")
+								process = subprocess.Popen(['bash', self.cmd1], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+								try:
+									stdout, stderr = process.communicate(timeout=30)  # Timeout aumentato
+									print("Script Output:\n", stdout.decode('utf-8'))
+									if stderr:
+										print("Script Error:\n", stderr.decode('utf-8'))
+								except subprocess.TimeoutExpired:
+									process.kill()
+									print("Process timeout, script terminated.")
+									self.session.open(MessageBox, _("Process took too long and was terminated."), MessageBox.TYPE_ERROR, timeout=5)
+									return
+
+								system('sleep 5')
+
+								if not exists('/tmp/emm.txt'):
+									print("Downloading /tmp/emm.txt...")
+									cmmnd = "wget --no-check-certificate -U 'Enigma2 - tvmanager Plugin' -c '%s' -O '/tmp/emm.txt'" % sss
+									system(cmmnd)
+
+								if exists('/tmp/emm.txt'):
+									msg.append(_("READ EMM....\n"))
+									with open('/tmp/emm.txt') as f:
+										content = f.read()
+										print('emm read:\n', content)
+										if content.startswith('82708'):
+											msg.append(_("CURRENT EMM IS:\n"))
+											msg.append(str(content))
+											msg.append(_("\nCurrent Emm saved to /tmp/emm.txt"))
+										else:
+											msg.append('No Emm Read!')
+									msg = (" %s " % _("\n")).join(msg)
+									self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
+								else:
+									self.session.open(MessageBox, _("File does not exist: /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=10)
+
+							except Exception as e:
+								print("Error executing script:", str(e))
+								self.session.open(MessageBox, _("An error occurred while executing the script."), MessageBox.TYPE_ERROR, timeout=5)
+						else:
+							self.session.open(MessageBox, _("Operation cancelled."), MessageBox.TYPE_INFO, timeout=3)
+
+					self.session.openWithCallback(execute_command, MessageBox, _("Do you want to execute the command?"), MessageBox.TYPE_YESNO)
+
+				else:
+					self.session.open(MessageBox, _("No Action!\nOscam not active"), MessageBox.TYPE_INFO, timeout=5)
+
+		except Exception as e:
+			print("Error in green function:", str(e))
+			self.session.open(MessageBox, _("An error occurred in the green function."), MessageBox.TYPE_ERROR, timeout=5)
 
 	def createSetup(self):
 		self.editListEntry = None
 		self.list = []
-		self.list.append(getConfigListEntry(_('Activate Insert line in Config File:'), config.plugins.Manager.active, _('If Active: Download/Reset Server Config')))
-		if config.plugins.Manager.active.value:
-			self.list.append(getConfigListEntry(_('Server Config'), config.plugins.Manager.cfgfile, putlbl))
-			self.list.append(getConfigListEntry(_('Server Link'), config.plugins.Manager.Server, _('Select Get Link')))
-			self.list.append(getConfigListEntry(_('Server URL'), config.plugins.Manager.hostaddress, _('Server Url i.e. 012.345.678.900')))
-			self.list.append(getConfigListEntry(_('Server Port'), config.plugins.Manager.port, _('Port')))
-			self.list.append(getConfigListEntry(_('Server Username'), config.plugins.Manager.user, _('Username')))
-			self.list.append(getConfigListEntry(_('Server Password'), config.plugins.Manager.passw, _('Password')))
+		self.list.append(getConfigListEntry(_('Activate Insert line in Config File:'), config.plugins.tvmanager.active, _('If Active: Download/Reset Server Config')))
+		if config.plugins.tvmanager.active.value:
+			self.list.append(getConfigListEntry(_('Server Config'), config.plugins.tvmanager.cfgfile, putlbl))
+			self.list.append(getConfigListEntry(_('Server Link'), config.plugins.tvmanager.Server, _('Select Get Link')))
+			self.list.append(getConfigListEntry(_('Server URL'), config.plugins.tvmanager.hostaddress, _('Server Url i.e. 012.345.678.900')))
+			self.list.append(getConfigListEntry(_('Server Port'), config.plugins.tvmanager.port, _('Port')))
+			self.list.append(getConfigListEntry(_('Server Username'), config.plugins.tvmanager.user, _('Username')))
+			self.list.append(getConfigListEntry(_('Server Password'), config.plugins.tvmanager.passw, _('Password')))
 
 			self['key_green'].setText(buttn)
 			self['key_yellow'].setText(_('Get Link'))
@@ -639,15 +693,15 @@ class tv_config(Screen, ConfigListScreen):
 			self.session.open(MessageBox, _('Select CCcam'), type=MessageBox.TYPE_INFO, timeout=5)
 			return
 
-		if config.plugins.Manager.cfgfile.value != '/etc/CCcam.cfg':
+		if config.plugins.tvmanager.cfgfile.value != '/etc/CCcam.cfg':
 			self.session.open(MessageBox, _('Select CCcam'), type=MessageBox.TYPE_INFO, timeout=5)
 			return
-		dest = config.plugins.Manager.cfgfile.value
+		dest = config.plugins.tvmanager.cfgfile.value
 
-		host = 'C: ' + str(config.plugins.Manager.hostaddress.value)
-		port = str(config.plugins.Manager.port.value)
-		user = str(config.plugins.Manager.user.value)
-		passw = str(config.plugins.Manager.passw.value)
+		host = 'C: ' + str(config.plugins.tvmanager.hostaddress.value)
+		port = str(config.plugins.tvmanager.port.value)
+		user = str(config.plugins.tvmanager.user.value)
+		passw = str(config.plugins.tvmanager.passw.value)
 
 		if fileExists('/etc/CCcam.cfg'):
 			dest = '/etc/CCcam.cfg'
@@ -668,11 +722,11 @@ class tv_config(Screen, ConfigListScreen):
 			self.session.open(MessageBox, _('Select OScam'), type=MessageBox.TYPE_INFO, timeout=5)
 			return
 
-		dest = config.plugins.Manager.cfgfile.value
-		host = str(config.plugins.Manager.hostaddress.value)
-		port = str(config.plugins.Manager.port.value)
-		user = str(config.plugins.Manager.user.value)
-		passw = str(config.plugins.Manager.passw.value)
+		dest = config.plugins.tvmanager.cfgfile.value
+		host = str(config.plugins.tvmanager.hostaddress.value)
+		port = str(config.plugins.tvmanager.port.value)
+		user = str(config.plugins.tvmanager.user.value)
+		passw = str(config.plugins.tvmanager.passw.value)
 		if not fileExists(dest):
 			self.session.open(MessageBox, _('Please Reset - No File CFG'), type=MessageBox.TYPE_INFO, timeout=5)
 			return
@@ -692,11 +746,11 @@ class tv_config(Screen, ConfigListScreen):
 
 		if not exists('/etc/tuxbox/config'):
 			system('mkdir /etc/tuxbox/config')
-		dest = config.plugins.Manager.cfgfile.value
-		host = str(config.plugins.Manager.hostaddress.value)
-		port = str(config.plugins.Manager.port.value)
-		user = str(config.plugins.Manager.user.value)
-		passw = str(config.plugins.Manager.passw.value)
+		dest = config.plugins.tvmanager.cfgfile.value
+		host = str(config.plugins.tvmanager.hostaddress.value)
+		port = str(config.plugins.tvmanager.port.value)
+		user = str(config.plugins.tvmanager.user.value)
+		passw = str(config.plugins.tvmanager.passw.value)
 		if fileExists('/etc/tuxbox/config/ncam.server'):
 			dest = '/etc/tuxbox/config/ncam.server'
 		else:
@@ -710,7 +764,7 @@ class tv_config(Screen, ConfigListScreen):
 
 	def getcl(self):
 		try:
-			data1 = str(config.plugins.Manager.Server.value)
+			data1 = str(config.plugins.tvmanager.Server.value)
 			data = b64decoder(data1)
 			try:
 				data = getUrl(data)
@@ -830,11 +884,11 @@ class tv_config(Screen, ConfigListScreen):
 						password = str(pw)
 						password = password.replace('</h1>', '').replace('</b>', '')
 						password = password.replace('</div>', '').replace('</span>', '')
-				# if config.plugins.Manager.active.getValue():
-				config.plugins.Manager.hostaddress.setValue(host)
-				config.plugins.Manager.port.setValue(port)
-				config.plugins.Manager.user.setValue(user)
-				config.plugins.Manager.passw.setValue(password)
+				# if config.plugins.tvmanager.active.getValue():
+				config.plugins.tvmanager.hostaddress.setValue(host)
+				config.plugins.tvmanager.port.setValue(port)
+				config.plugins.tvmanager.user.setValue(user)
+				config.plugins.tvmanager.passw.setValue(password)
 				self.createSetup()
 			else:
 				return

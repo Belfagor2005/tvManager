@@ -1,10 +1,11 @@
 #!/bin/bash
 #DESCRIPTION=send emm
-# mod by lululla 24/08/2023
+# mod by lululla 21/02/2025
 # Aggiornato il $(date +"%d/%m/%Y")
+# bash -x /usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh
 
 set -e
-
+set -x
 ## Funzione di cleanup
 cleanup() {
     rm -f /tmp/*.tmp /tmp/*.html /tmp/emm.txt
