@@ -3,8 +3,8 @@
 ## setup command=wget -q --no-check-certificate https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh -O - | /bin/sh
 
 ## Only This 2 lines to edit with new version ######
-version='2.4'
-changelog='\nFix Server'
+version='2.5'
+changelog='\nFix Emm Send'
 ##
 TMPPATH=/tmp/tvManager-main
 FILEPATH=/tmp/main.tar.gz
