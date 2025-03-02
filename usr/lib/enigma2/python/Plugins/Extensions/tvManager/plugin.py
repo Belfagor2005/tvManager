@@ -11,10 +11,9 @@ from __future__ import print_function
 
 # local import
 from . import _, paypal, wgetsts, installer_url, developer_url
-from .data.Utils import RequestAgent
+from .data.Utils import RequestAgent, b64decoder, checkGZIP
 from .data.GetEcmInfo import GetEcmInfo
 from .data.Console import Console
-from .data.Utils import b64decoder, checkGZIP
 
 # enigma lib import
 from Components.ActionMap import ActionMap, NumberActionMap
@@ -27,7 +26,7 @@ from Plugins.Plugin import PluginDescriptor
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.Standby import TryQuitMainloop
-from Tools.Directories import (fileExists, resolveFilename, SCOPE_PLUGINS)
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
 from enigma import (
 	RT_HALIGN_LEFT,
@@ -42,7 +41,6 @@ from os.path import dirname, join, exists, islink
 from time import sleep
 from twisted.web.client import getPage
 import codecs
-
 import sys
 import time
 import json
@@ -701,7 +699,7 @@ class tvManager(Screen):
 	def readCurrent(self):
 		currCam = None
 		self.FilCurr = ""
-		if fileExists("/etc/CurrentBhCamName"):
+		if exists("/etc/CurrentBhCamName"):
 			self.FilCurr = "/etc/CurrentBhCamName"
 		else:
 			self.FilCurr = "/etc/clist.list"
@@ -895,6 +893,7 @@ class GetipklistTv(Screen):
 				self["list"].l.setList(self.names)
 				self["description"].setText(_("Please select ..."))
 				self.downloading = True
+
 		except Exception as e:
 			print("error:", e)
 			self["description"].setText(_("Error processing server addons data"))
@@ -1135,7 +1134,7 @@ class InfoCfg(Screen):
 	def check_vers(self):
 		remote_version = "0.0"
 		remote_changelog = ""
-		req = Request(b64decoder(installer_url), headers=headers)
+		req = Request(b64decoder(installer_url), headers={"User-Agent": AgentRequest})
 		page = urlopen(req).read()
 		if PY3:
 			data = page.decode("utf-8")
