@@ -37,16 +37,19 @@ from enigma import (
 	gFont,
 	getDesktop,
 )
-from os import (mkdir, chmod)
+from os import mkdir, access, X_OK, system, popen, chmod, remove, walk, stat
+from os.path import dirname, join, exists, islink
 from time import sleep
 from twisted.web.client import getPage
 import codecs
-import os
+
 import sys
 import time
 import json
 from datetime import datetime
 from xml.dom import minidom
+import subprocess
+# import threading
 
 global active, skin_path, local
 global _session, runningcam
@@ -69,11 +72,11 @@ else:
 currversion = "2.5"
 name_plug = "Softcam Manager"
 title_plug = "..:: " + name_plug + " V. %s ::.." % currversion
-plugin_path = os.path.dirname(sys.modules[__name__].__file__)
-iconpic = os.path.join(plugin_path, "logo.png")
-data_path = os.path.join(plugin_path, "data")
+plugin_path = dirname(sys.modules[__name__].__file__)
+iconpic = join(plugin_path, "logo.png")
+data_path = join(plugin_path, "data")
 dir_work = "/usr/lib/enigma2/python/Screens"
-FILE_XML = os.path.join(plugin_path, "tvManager.xml")
+FILE_XML = join(plugin_path, "tvManager.xml")
 local = True
 ECM_INFO = "/tmp/ecm.info"
 EMPTY_ECM_INFO = ("", "0", "0", "0")
@@ -87,8 +90,10 @@ AgentRequest = RequestAgent()
 runningcam = None
 
 
-headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
-		   "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Encoding": "deflate"}
+headers = {
+	"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
+	"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Encoding": "deflate"
+}
 
 
 try:
@@ -97,12 +102,38 @@ except:
 	pass
 
 
+def install_package():
+	try:
+		check_cmd = ["opkg", "list-installed"]
+		output = subprocess.check_output(check_cmd, stderr=subprocess.DEVNULL).decode("utf-8")
+
+		if "libusb-1.0-0" in output:
+			print("Package libusb-1.0-0 is already installed.")
+			return
+
+		print("Updating opkg...")
+		subprocess.run(["opkg", "update"], check=True)
+
+		print("Installing libusb-1.0-0...")
+		subprocess.run(["opkg", "install", "libusb-1.0-0"], check=True)
+
+		print("Installation completed.")
+
+	except subprocess.CalledProcessError as e:
+		print("Error executing opkg:", e)
+	except Exception as e:
+		print("Unexpected error:", e)
+
+
+install_package()
+
+
 def checkdir():
 	keys = "/usr/keys"
 	camscript = "/usr/camscript"
-	if not os.path.exists(keys):
+	if not exists(keys):
 		mkdir("/usr/keys")
-	if not os.path.exists(camscript):
+	if not exists(camscript):
 		mkdir("/usr/camscript")
 
 
@@ -114,13 +145,13 @@ elif screenwidth.width() == 1920:
 	skin_path = plugin_path + "/res/skins/fhd/"
 else:
 	skin_path = plugin_path + "/res/skins/hd/"
-if os.path.exists("/usr/bin/apt-get"):
+if exists("/usr/bin/apt-get"):
 	skin_path = skin_path + "dreamOs/"
 
-if not os.path.exists("/etc/clist.list"):
+if not exists("/etc/clist.list"):
 	with open("/etc/clist.list", "w"):
 		print("/etc/clist.list as been create")
-		os.system("chmod 755 /etc/clist.list &")
+		system("chmod 755 /etc/clist.list &")
 
 
 class m2list(MenuList):
@@ -177,7 +208,7 @@ class tvManager(Screen):
 		self.session = session
 		global _session, runningcam
 		_session = session
-		skin = os.path.join(skin_path, "tvManager.xml")
+		skin = join(skin_path, "tvManager.xml")
 		with codecs.open(skin, "r", encoding="utf-8") as f:
 			self.skin = f.read()
 		self.namelist = []
@@ -187,21 +218,34 @@ class tvManager(Screen):
 			self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 		except:
 			self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-		self["NumberActions"] = NumberActionMap(["NumberActions"], {"0": self.keyNumberGlobal,
-																	"1": self.keyNumberGlobal,
-																	"2": self.keyNumberGlobal,
-																	"8": self.keyNumberGlobal},)
-		self["actions"] = ActionMap(["OkCancelActions",
-									 "ColorActions",
-									 "EPGSelectActions",
-									 "MenuActions"], {"ok": self.action,
-													  "cancel": self.close,
-													  "menu": self.configtv,
-													  "blue": self.Blue,
-													  "yellow": self.download,
-													  "green": self.action,
-													  "info": self.CfgInfo,
-													  "red": self.stop}, -1)
+		self["NumberActions"] = NumberActionMap(
+			["NumberActions"],
+			{
+				"0": self.keyNumberGlobal,
+				"1": self.keyNumberGlobal,
+				"2": self.keyNumberGlobal,
+				"8": self.keyNumberGlobal
+			},
+		)
+		self["actions"] = ActionMap(
+			[
+				"OkCancelActions",
+				"ColorActions",
+				"EPGSelectActions",
+				"MenuActions"
+			],
+			{
+				"ok": self.action,
+				"cancel": self.close,
+				"menu": self.configtv,
+				"blue": self.Blue,
+				"yellow": self.download,
+				"green": self.action,
+				"info": self.CfgInfo,
+				"red": self.stop
+			},
+			-1
+		)
 		self.setTitle(_(title_plug))
 		self["title"] = Label(_(title_plug))
 		self["key_green"] = Label(_("Start"))
@@ -255,8 +299,7 @@ class tvManager(Screen):
 					self.BlueAction = action
 					self["key_blue"].setText(action)
 
-					if os.path.exists(os.path.join(plugin_path, "data/%s.pyo" % file_name)) or os.path.exists(
-							os.path.join(plugin_path, "data/%s.pyo" % file_name)):
+					if exists(join(plugin_path, "data/%s.pyo" % file_name)) or exists(join(plugin_path, "data/%s.pyo" % file_name)):
 
 						print("existe %s" % file_name)
 					break
@@ -402,7 +445,7 @@ class tvManager(Screen):
 	def ecm(self):
 		try:
 			ecmf = ""
-			if os.path.exists(ECM_INFO):
+			if exists(ECM_INFO):
 				try:
 					with open(ECM_INFO) as f:
 						self["info"].text = f.read()
@@ -421,12 +464,11 @@ class tvManager(Screen):
 
 	def keysdownload(self, result):
 		if result:
-			script = os.path.join(plugin_path, "auto")
-			from os import access, X_OK
+			script = join(plugin_path, "auto")
 			if not access(script, X_OK):
 				chmod(script, 493)
-			if os.path.exists("/usr/keys/SoftCam.Key"):
-				os.system("rm -rf /usr/keys/SoftCam.Key")
+			if exists("/usr/keys/SoftCam.Key"):
+				system("rm -rf /usr/keys/SoftCam.Key")
 			# self.session.open(MessageBox, _("SoftcamKeys Updated!"), MessageBox.TYPE_INFO, timeout=5)
 			cmd = script
 			title = _("Installing Softcam Keys\nPlease Wait...")
@@ -451,9 +493,9 @@ class tvManager(Screen):
 		arc = ""
 		arkFull = ""
 		libsssl = ""
-		python = os.popen("python -V").read().strip("\n\r")
-		arcx = os.popen("uname -m").read().strip("\n\r")
-		libs = os.popen("ls -l /usr/lib/libss*.*").read().strip("\n\r")
+		python = popen("python -V").read().strip("\n\r")
+		arcx = popen("uname -m").read().strip("\n\r")
+		libs = popen("ls -l /usr/lib/libss*.*").read().strip("\n\r")
 		if arcx:
 			arc = arcx
 			print("arc= ", arc)
@@ -471,10 +513,10 @@ class tvManager(Screen):
 	def arckget(self):
 		zarcffll = "by Lululla"
 		try:
-			if os.path.exists("/usr/bin/apt-get"):
-				zarcffll = os.popen("dpkg --print-architecture | grep -iE 'arm|aarch64|mips|cortex|sh4|sh_4'").read().strip("\n\r")
+			if exists("/usr/bin/apt-get"):
+				zarcffll = popen("dpkg --print-architecture | grep -iE 'arm|aarch64|mips|cortex|sh4|sh_4'").read().strip("\n\r")
 			else:
-				zarcffll = os.popen("opkg print-architecture | grep -iE 'arm|aarch64|mips|cortex|h4|sh_4'").read().strip("\n\r")
+				zarcffll = popen("opkg print-architecture | grep -iE 'arm|aarch64|mips|cortex|h4|sh_4'").read().strip("\n\r")
 			return str(zarcffll)
 		except Exception as e:
 			print("Error ", e)
@@ -520,34 +562,34 @@ class tvManager(Screen):
 			print("self var=== ", self.var)
 			"""
 			cmdx = "chmod 755 /usr/camscript/*.*"  # + self.softcamslist[self.var][0] + ".sh"
-			os.system(cmdx)
+			system(cmdx)
 			curCam = self.readCurrent()
 			if self.last is not None:
 				try:
 					foldcurr = "/usr/bin/" + str(curCam)
 					foldscrpt = "/usr/camscript/" + str(curCam) + ".sh"
-					os.chmod(foldcurr, 0o755)
-					os.chmod(foldscrpt, 0o755)
+					chmod(foldcurr, 0o755)
+					chmod(foldscrpt, 0o755)
 				except OSError:
 					pass
 
 				if self.last == self.var:
 					self.cmd1 = "/usr/camscript/" + self.softcamslist[self.var][0] + ".sh" + " cam_res &"
 					_session.open(MessageBox, _("Please wait..\nRESTART CAM"), MessageBox.TYPE_INFO, timeout=5)
-					os.system(self.cmd1)
+					system(self.cmd1)
 					sleep(1)
 				else:
 					self.cmd1 = "/usr/camscript/" + self.softcamslist[self.last][0] + ".sh" + " cam_down &"
 					_session.open(MessageBox, _("Please wait..\nSTOP & RESTART CAM"), MessageBox.TYPE_INFO, timeout=5)
-					os.system(self.cmd1)
+					system(self.cmd1)
 					sleep(1)
 					self.cmd1 = "/usr/camscript/" + self.softcamslist[self.var][0] + ".sh" + " cam_up &"
-					os.system(self.cmd1)
+					system(self.cmd1)
 			else:
 				try:
 					self.cmd1 = "/usr/camscript/" + self.softcamslist[self.var][0] + ".sh" + " cam_up &"
 					_session.open(MessageBox, _("Please wait..\nSTART UP CAM"), MessageBox.TYPE_INFO, timeout=5)
-					os.system(self.cmd1)
+					system(self.cmd1)
 					sleep(1)
 				except:
 					self.close()
@@ -568,7 +610,7 @@ class tvManager(Screen):
 				clist = open("/etc/clist.list", "w", encoding="UTF-8")
 			else:
 				clist = open("/etc/clist.list", "w")
-			os.system("chmod 755 /etc/clist.list &")
+			system("chmod 755 /etc/clist.list &")
 			clist.write(str(self.curCam))
 			clist.close()
 
@@ -578,7 +620,7 @@ class tvManager(Screen):
 			stcam = open("/etc/startcam.sh", "w")
 		stcam.write("#!/bin/sh\n" + self.cmd1)
 		stcam.close()
-		os.system("chmod 755 /etc/startcam.sh &")
+		system("chmod 755 /etc/startcam.sh &")
 		return
 
 	def stop(self):
@@ -596,12 +638,12 @@ class tvManager(Screen):
 			self.last = self.getLastIndex()
 			if self.last is not None:  # or self.curCam != "no":
 				self.cmd1 = "/usr/camscript/" + self.softcamslist[self.last][0] + ".sh" + " cam_down &"
-				os.system(self.cmd1)
+				system(self.cmd1)
 				self.curCam = None
 				self.writeFile()
 				sleep(1)
-				if os.path.exists(ECM_INFO):
-					os.remove(ECM_INFO)
+				if exists(ECM_INFO):
+					remove(ECM_INFO)
 				_session.open(MessageBox, _("Please wait..\nSTOP CAM"), MessageBox.TYPE_INFO, timeout=5)
 				self["info"].setText("CAM STOPPED")
 				self.BlueAction = "SOFTCAM"
@@ -616,18 +658,14 @@ class tvManager(Screen):
 			self.index = 0
 			s = 0
 			pathscript = "/usr/camscript/"
-			for root, dirs, files in os.walk(pathscript):
+			for root, dirs, files in walk(pathscript):
 				for name in files:
 					scriptlist.append(name)
 					s += 1
 			i = len(self.softcamslist)
 			del self.softcamslist[0:i]
-			png1 = LoadPixmap(cached=True,
-							  path=resolveFilename(SCOPE_PLUGINS,
-												   "Extensions/tvManager/res/img/{}".format("actcam.png")))
-			png2 = LoadPixmap(cached=True,
-							  path=resolveFilename(SCOPE_PLUGINS,
-												   "Extensions/tvManager/res/img/{}".format("defcam.png")))
+			png1 = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format("actcam.png")))
+			png2 = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format("defcam.png")))
 			if s >= 1:
 				for lines in scriptlist:
 					dat = pathscript + lines
@@ -667,7 +705,7 @@ class tvManager(Screen):
 			self.FilCurr = "/etc/CurrentBhCamName"
 		else:
 			self.FilCurr = "/etc/clist.list"
-		if os.stat(self.FilCurr).st_size > 0:
+		if stat(self.FilCurr).st_size > 0:
 			try:
 				if sys.version_info[0] == 3:
 					clist = open(self.FilCurr, "r", encoding="UTF-8")
@@ -744,8 +782,8 @@ class tvManager(Screen):
 			icount = icount + 1
 		myfile.close()
 		myfile2.close()
-		os.system("rm /etc/autocam.txt")
-		os.system("cp /etc/autocam2.txt /etc/autocam.txt")
+		system("rm /etc/autocam.txt")
+		system("cp /etc/autocam2.txt /etc/autocam.txt")
 		"""
 
 	def cancel(self):
@@ -756,7 +794,7 @@ class GetipklistTv(Screen):
 
 	def __init__(self, session):
 		self.session = session
-		skin = os.path.join(skin_path, "GetipkTv.xml")
+		skin = join(skin_path, "GetipkTv.xml")
 		with codecs.open(skin, "r", encoding="utf-8") as f:
 			self.skin = f.read()
 		Screen.__init__(self, session)
@@ -773,7 +811,7 @@ class GetipklistTv(Screen):
 		self["key_yellow"] = Button()
 		self["key_blue"] = Button()
 		self["key_green"].hide()
-		if os.path.exists(FILE_XML):
+		if exists(FILE_XML):
 			self["key_green"].show()
 		self["key_yellow"].hide()
 		self["key_blue"].hide()
@@ -784,13 +822,24 @@ class GetipklistTv(Screen):
 		self.icount = 0
 		self.downloading = False
 		self.timer = eTimer()
-		if os.path.exists("/var/lib/dpkg/status"):
+		if exists("/var/lib/dpkg/status"):
 			self.timer_conn = self.timer.timeout.connect(self._gotPageLoad)
 		else:
 			self.timer.callback.append(self._gotPageLoad)
 		self.timer.start(500, 1)
-		self["actions"] = ActionMap(["OkCancelActions",
-									 "ColorActions"], {"ok": self.okClicked, "cancel": self.close, "green": self.loadpage, "red": self.close}, -1)
+		self["actions"] = ActionMap(
+			[
+				"OkCancelActions",
+				"ColorActions"
+			],
+			{
+				"ok": self.okClicked,
+				"cancel": self.close,
+				"green": self.loadpage,
+				"red": self.close
+			},
+			-1
+		)
 		self.onShown.append(self.pasx)
 
 	def pasx(self):
@@ -802,7 +851,7 @@ class GetipklistTv(Screen):
 
 	def loadpage(self):
 		global local
-		if os.path.exists(FILE_XML):
+		if exists(FILE_XML):
 			self.lists = []
 			del self.names[:]
 			del self.list[:]
@@ -818,7 +867,7 @@ class GetipklistTv(Screen):
 		if PY3:
 			self.xml = self.xml.encode()
 		if local is False:
-			if os.path.exists("/usr/bin/apt-get"):
+			if exists("/usr/bin/apt-get"):
 				print("have a dreamOs!!!")
 				self.data = checkGZIP(self.xml)
 				self.downloadxmlpage(self.data)
@@ -834,11 +883,11 @@ class GetipklistTv(Screen):
 			if self.xml:
 				self.xmlparse = minidom.parseString(self.xml)
 				for plugins in self.xmlparse.getElementsByTagName("plugins"):
-					if not os.path.exists("/usr/bin/apt-get"):
+					if not exists("/usr/bin/apt-get"):
 						if "deb" in str(plugins.getAttribute("cont")).lower():
 							continue
 
-					if os.path.exists("/usr/bin/apt-get"):
+					if exists("/usr/bin/apt-get"):
 						if "deb" not in str(plugins.getAttribute("cont")).lower():
 							continue
 					self.names.append(str(plugins.getAttribute("cont")))
@@ -870,7 +919,7 @@ class GetipkTv(Screen):
 	def __init__(self, session, xmlparse, selection):
 		Screen.__init__(self, session)
 		self.session = session
-		skin = os.path.join(skin_path, "GetipkTv.xml")
+		skin = join(skin_path, "GetipkTv.xml")
 		with codecs.open(skin, "r", encoding="utf-8") as f:
 			self.skin = f.read()
 		self.xmlparse = xmlparse
@@ -895,11 +944,19 @@ class GetipkTv(Screen):
 		self["key_green"].hide()
 		# self["key_yellow"].hide()
 		self["key_blue"].hide()
-		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], {"ok": self.message,
-																		  "cancel": self.close,
-																		  # "green": self.remove,
-																		  "yellow": self.restart,
-																		  }, -1)
+		self["actions"] = ActionMap(
+			[
+				"OkCancelActions",
+				"ColorActions"
+			],
+			{
+				"ok": self.message,
+				"cancel": self.close,
+				# "green": self.remove,
+				"yellow": self.restart,
+			},
+			-1
+		)
 		self.onLayoutFinish.append(self.start)
 		# self.onShown.append(self.updateList)
 
@@ -926,21 +983,15 @@ class GetipkTv(Screen):
 								# test lululla
 								self.com = self.com.replace('"', "")
 								if ".deb" in self.com:
-									if not os.path.exists("/usr/bin/apt-get"):
-										self.session.open(MessageBox,
-														  _("Unknow Image!"),
-														  MessageBox.TYPE_INFO,
-														  timeout=5)
+									if not exists("/usr/bin/apt-get"):
+										self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
 										return
 									n2 = self.com.find("_", 0)
 									self.dom = self.com[:n2]
 
 								if ".ipk" in self.com:
-									if os.path.exists("/usr/bin/apt-get"):
-										self.session.open(MessageBox,
-														  _("Unknow Image!"),
-														  MessageBox.TYPE_INFO,
-														  timeout=5)
+									if exists("/usr/bin/apt-get"):
+										self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
 										return
 									n2 = self.com.find("_", 0)
 									self.dom = self.com[:n2]
@@ -962,8 +1013,8 @@ class GetipkTv(Screen):
 	def prombt(self):
 		self.plug = self.com.split("/")[-1]
 		dest = "/tmp"
-		if not os.path.exists(dest):
-			os.system("ln -sf  /var/volatile/tmp /tmp")
+		if not exists(dest):
+			system("ln -sf  /var/volatile/tmp /tmp")
 		self.folddest = "/tmp/" + self.plug
 		cmd2 = ""
 		if ".deb" in self.plug:
@@ -983,10 +1034,7 @@ class GetipkTv(Screen):
 		self.session.open(Console, _(title), [cmd00], closeOnSuccess=False)
 
 	def remove(self):
-		self.session.openWithCallback(self.removenow,
-									  MessageBox,
-									  _("Do you want to remove?"),
-									  MessageBox.TYPE_YESNO)
+		self.session.openWithCallback(self.removenow, MessageBox, _("Do you want to remove?"), MessageBox.TYPE_YESNO)
 
 	def removenow(self, answer=False):
 		if answer:
@@ -1002,11 +1050,8 @@ class GetipkTv(Screen):
 							cmd = ""
 
 							if ".deb" in self.com:
-								if not os.path.exists("/usr/bin/apt-get"):
-									self.session.open(MessageBox,
-													  _("Unknow Image!"),
-													  MessageBox.TYPE_INFO,
-													  timeout=5)
+								if not exists("/usr/bin/apt-get"):
+									self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
 									return
 								self.plug = self.com.split("/")[-1]
 								n2 = self.plug.find("_", 0)
@@ -1014,11 +1059,8 @@ class GetipkTv(Screen):
 								cmd = "dpkg -r " + self.dom  # + """
 								print("cmd deb remove:", cmd)
 							if ".ipk" in self.com:
-								if os.path.exists("/usr/bin/apt-get"):
-									self.session.open(MessageBox,
-													  _("Unknow Image!"),
-													  MessageBox.TYPE_INFO,
-													  timeout=5)
+								if exists("/usr/bin/apt-get"):
+									self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
 									return
 								self.plug = self.com.split("/")[-1]
 								n2 = self.plug.find("_", 0)
@@ -1040,28 +1082,36 @@ class GetipkTv(Screen):
 class InfoCfg(Screen):
 	def __init__(self, session):
 		self.session = session
-		skin = os.path.join(skin_path, "InfoCfg.xml")
+		skin = join(skin_path, "InfoCfg.xml")
 		with codecs.open(skin, "r", encoding="utf-8") as f:
 			self.skin = f.read()
 		Screen.__init__(self, session)
 		self.list = []
 		self.setTitle(_(title_plug))
 		self["list"] = Label()
-		self["actions"] = ActionMap(["OkCancelActions",
-									 "DirectionActions",
-									 "HotkeyActions",
-									 "InfobarEPGActions",
-									 "ColorActions",
-									 "ChannelSelectBaseActions"], {"ok": self.close,
-																   "back": self.close,
-																   "cancel": self.close,
-																   "yellow": self.update_me,
-																   "green": self.update_dev,
-																   "yellow_long": self.update_dev,
-																   "info_long": self.update_dev,
-																   "infolong": self.update_dev,
-																   "showEventInfoPlugin": self.update_dev,
-																   "red": self.close}, -1)
+		self["actions"] = ActionMap(
+			[
+				"OkCancelActions",
+				"DirectionActions",
+				"HotkeyActions",
+				"InfobarEPGActions",
+				"ColorActions",
+				"ChannelSelectBaseActions"
+			],
+			{
+				"ok": self.close,
+				"back": self.close,
+				"cancel": self.close,
+				"yellow": self.update_me,
+				"green": self.update_dev,
+				"yellow_long": self.update_dev,
+				"info_long": self.update_dev,
+				"infolong": self.update_dev,
+				"showEventInfoPlugin": self.update_dev,
+				"red": self.close
+			},
+			-1
+		)
 		self["paypal"] = Label()
 		self["key_red"] = Button(_("Back"))
 		self["key_green"] = Button(_("Force Update"))
@@ -1073,7 +1123,7 @@ class InfoCfg(Screen):
 
 		self.Update = False
 		self.timer = eTimer()
-		if os.path.exists("/var/lib/dpkg/status"):
+		if exists("/var/lib/dpkg/status"):
 			self.timer_conn = self.timer.timeout.connect(self.check_vers)
 		else:
 			self.timer.callback.append(self.check_vers)
@@ -1148,9 +1198,9 @@ class InfoCfg(Screen):
 		arc = ""
 		arkFull = ""
 		libsssl = ""
-		arcx = os.popen("uname -m").read().strip("\n\r")
-		python = os.popen("python -V").read().strip("\n\r")
-		libs = os.popen("ls -l /usr/lib/libss*.*").read().strip("\n\r")
+		arcx = popen("uname -m").read().strip("\n\r")
+		python = popen("python -V").read().strip("\n\r")
+		libs = popen("ls -l /usr/lib/libss*.*").read().strip("\n\r")
 		if arcx:
 			arc = arcx
 			print("arc= ", arc)
@@ -1172,10 +1222,10 @@ class InfoCfg(Screen):
 	def arckget(self):
 		zarcffll = "by Lululla"
 		try:
-			if os.path.exists("/usr/bin/apt-get"):
-				zarcffll = os.popen("dpkg --print-architecture | grep -iE 'arm|aarch64|mips|cortex|sh4|sh_4'").read().strip("\n\r")
+			if exists("/usr/bin/apt-get"):
+				zarcffll = popen("dpkg --print-architecture | grep -iE 'arm|aarch64|mips|cortex|sh4|sh_4'").read().strip("\n\r")
 			else:
-				zarcffll = os.popen("opkg print-architecture | grep -iE 'arm|aarch64|mips|cortex|h4|sh_4'").read().strip("\n\r")
+				zarcffll = popen("opkg print-architecture | grep -iE 'arm|aarch64|mips|cortex|h4|sh_4'").read().strip("\n\r")
 			return str(zarcffll)
 		except Exception as e:
 			print("Error ", e)
@@ -1193,7 +1243,7 @@ class DreamCCAuto:
 
 	def readCurrent(self):
 		current = None
-		self.FilCurr = "/etc/CurrentBhCamName" if os.path.exists("/etc/CurrentBhCamName") else "/etc/clist.list"
+		self.FilCurr = "/etc/CurrentBhCamName" if exists("/etc/CurrentBhCamName") else "/etc/clist.list"
 		try:
 			with open(self.FilCurr, "r", encoding="UTF-8") as clist:
 				for line in clist:
@@ -1206,31 +1256,28 @@ class DreamCCAuto:
 
 		scriptliste = []
 		path = "/usr/camscript/"
-		if not os.path.exists(path):
+		if not exists(path):
 			print("Path does not exist:", path)
 			return
 
-		for root, dirs, files in os.walk(path):
+		for root, dirs, files in walk(path):
 			for name in files:
 				scriptliste.append(name)
 
 		for script in scriptliste:
-			dat = os.path.join(path, script)
+			dat = join(path, script)
 			try:
 				with open(dat, "r") as file:
 					for line in file:
 						if line.startswith("OSD"):
 							nam = line[5:].strip()
 							if current == nam:
-								if os.path.exists("/etc/init.d/dccamd"):
-									os.system("mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
-								for link, target in [("/var/bin", "/usr/bin"),
-													 ("/var/keys", "/usr/keys"),
-													 ("/var/scce", "/usr/scce"),
-													 ("/var/script", "/usr/script")]:
-									if not os.path.islink(link):
-										os.system("ln -sf %s %s" % (target, link))
-								if os.system("/etc/startcam.sh") != 0:
+								if exists("/etc/init.d/dccamd"):
+									system("mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
+								for link, target in [("/var/bin", "/usr/bin"), ("/var/keys", "/usr/keys"), ("/var/scce", "/usr/scce"), ("/var/script", "/usr/script")]:
+									if not islink(link):
+										system("ln -sf %s %s" % (target, link))
+								if system("/etc/startcam.sh") != 0:
 									print("Error starting the cam with /etc/startcam.sh")
 								else:
 									print("*** running autostart ***")
@@ -1246,8 +1293,8 @@ def autostartsoftcam(reason, session=None, **kwargs):
 	if reason == 0 and session is not None:
 		print("reason 0")
 		try:
-			if os.path.exists("/etc/init.d/dccamd"):
-				os.system("mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
+			if exists("/etc/init.d/dccamd"):
+				system("mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
 			DreamCCAuto()
 		except Exception as e:
 			print("Error during autostart:", e)

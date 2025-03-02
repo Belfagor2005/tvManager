@@ -32,7 +32,7 @@ from Tools.Directories import (fileExists, resolveFilename, SCOPE_PLUGINS)
 from random import choice
 from enigma import eTimer, getDesktop
 from os.path import exists, dirname, join
-from os import popen, chmod, system, stat, access, X_OK, listdir
+from os import popen, system, stat, access, X_OK, listdir, chmod
 import base64
 import re
 import ssl
@@ -40,7 +40,6 @@ import sys
 import subprocess
 import codecs
 
-import os
 import threading
 
 global skin_path
@@ -56,7 +55,6 @@ if PY3:
 
 def b64decoder(s):
     """Add missing padding to string and return the decoded base64 string."""
-    import base64
     s = str(s).strip()
     try:
         outp = base64.b64decode(s)
@@ -424,20 +422,67 @@ class tv_config(Screen, ConfigListScreen):
                 if runningcam is None:
                     return
 
+                # def execute_command(choice):
+                    # if choice:
+                        # if "oscam" in runningcam.lower():
+                            # res = ""
+
+                            # # Esegui 'ps' e filtra il risultato in Python
+                            # try:
+                                # output = subprocess.Popen(["ps"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                                # stdout, stderr = output.communicate()
+
+                                # if output.returncode == 0:
+                                    # res = "\n".join(line for line in stdout.decode("utf-8").split("\n") if "oscam" in line.lower())
+                                    # print("execute_command res ps:", res)
+                                # else:
+                                    # print("Error executing ps:", stderr.decode("utf-8"))
+                            # except Exception as e:
+                                # print("Exception executing ps:", str(e))
+                                # return
+
+                            # # Controlla se uno dei processi richiesti è in esecuzione
+                            # if any(cam in res.lower() for cam in ["oscam", "icam", "ncam", "gcam"]):
+                                # print("oscam exist")
+                                # msg = [_("\n....\n.....\n")]
+
+                                # # Verifica e imposta i permessi di esecuzione
+                                # cmd1 = "/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh"
+                                # if not access(cmd1, X_OK):
+                                    # chmod(cmd1, 0o755)  # 0o755 = eseguibile per tutti
+
+                                # # Funzione per eseguire lo script
+                                # def run_command():
+                                    # subprocess.run([cmd1])
+
+                                # # Esegui lo script in un thread separato
+                                # thread = threading.Thread(target=run_command)
+                                # thread.start()
+
                 def execute_command(choice):
                     if choice:
                         if 'oscam' in runningcam.lower():
-                            cmd = "ps aux | grep -i '[o]scam'"
-                            res = subprocess.getoutput(cmd)
-                            print('res: ', res)
+                            # cmd = "ps aux | grep -i '[o]scam'"
+                            # res = subprocess.getoutput(cmd)
+                            res = ''
+
+                            cmd = ["ps"]
+                            output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                            stdout, stderr = output.communicate()
+
+                            if output.returncode == 0:
+                                res = "\n".join(line for line in stdout.decode("utf-8").split("\n") if "oscam" in line.lower())
+                                print('execute_command res ps:', res)
+                            else:
+                                print("Error:", stderr.decode("utf-8"))
+
                             if any(cam in res.lower() for cam in ['oscam', 'icam', 'ncam', 'gcam']):
                                 print('oscam exist')
                                 msg = []
                                 msg.append(_("\n....\n.....\n"))
                                 self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
-                                from os import access, X_OK
                                 if not access(self.cmd1, X_OK):
-                                    os.chmod(self.cmd1, 493)
+                                    chmod(self.cmd1, 493)
 
                                 def run_command():
                                     subprocess.run(self.cmd1, shell=True)
@@ -448,7 +493,7 @@ class tv_config(Screen, ConfigListScreen):
                                 # self.session.openWithCallback(self.callMyMsg, MessageBox, _('The Cam is not active, send the command anyway?'), MessageBox.TYPE_YESNO)
                                 self.session.open(MessageBox, _("Command Cancelled"), MessageBox.TYPE_INFO, timeout=5)
                                 return
-                                
+
                             if exists('/tmp/emm.txt'):
                                 print("EMM file exists!")
                                 with open('/tmp/emm.txt') as f:
@@ -459,7 +504,6 @@ class tv_config(Screen, ConfigListScreen):
                                     msg = (" %s " % _("\n")).join(msg)
                                     print("DEBUG: msg_output =", msg)
                                 self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
-                               
 
                 self.session.openWithCallback(execute_command, MessageBox, _("Do you want to execute the command?"), MessageBox.TYPE_YESNO)
             except Exception as e:
@@ -467,11 +511,10 @@ class tv_config(Screen, ConfigListScreen):
 
     def callMyMsg(self, answer=False):
         if answer:
-            
+
             self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
-            from os import access, X_OK
             if not access(self.cmd1, X_OK):
-                os.chmod(self.cmd1, 493)
+                chmod(self.cmd1, 493)
 
             def run_command():
                 subprocess.run(self.cmd1, shell=True)
@@ -512,7 +555,7 @@ class tv_config(Screen, ConfigListScreen):
             # else:
                 # self.session.open(MessageBox, _("No Action!\nFile no exist /tmp/emm.txt"), MessageBox.TYPE_INFO, timeout=5)
         else:
-            self.session.open(MessageBox, _("Command Cancelled"), MessageBox.TYPE_INFO, timeout=5)
+            self.session.open(MessageBox, _("Command Cancelled!!!"), MessageBox.TYPE_INFO, timeout=5)
 
     def closex(self):
         self.close()
@@ -584,7 +627,7 @@ class tv_config(Screen, ConfigListScreen):
                                 # msg.append(_("\n....\n.....\n"))
                                 # self.cmd1 = '/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh'
                                 # if not access(self.cmd1, X_OK):
-                                    # os.chmod(self.cmd1, 493)
+                                    # chmod(self.cmd1, 493)
 
                                 # def run_command():
                                     # print('Running command:', self.cmd1)
