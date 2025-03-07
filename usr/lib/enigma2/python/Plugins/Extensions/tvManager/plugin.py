@@ -186,18 +186,6 @@ def showlist(datal, list):
 	list.setList(plist)
 
 
-"""
-def showlist(datal, list):
-	icount = 0
-	plist = []
-	for line in datal:
-		name = datal[icount]
-		plist.append(show_list_1(name))
-		icount += 1
-	list.setList(plist)
-"""
-
-
 class tvManager(Screen):
 
 	def __init__(self, session):
@@ -296,7 +284,6 @@ class tvManager(Screen):
 					runningcam = key
 					self.BlueAction = action
 					self["key_blue"].setText(action)
-
 					if exists(join(plugin_path, "data/%s.pyo" % file_name)) or exists(join(plugin_path, "data/%s.pyc" % file_name)):
 						print("existe %s" % file_name)
 					break
@@ -310,9 +297,8 @@ class tvManager(Screen):
 		print("[Blue] self.BlueAction:", self.BlueAction)
 		cam_name = str(self.curCam).lower()
 		print("cam_name=", cam_name)
-		print("plugin_path + /data/=", plugin_path + "/data/")
 		try:
-			if "oscam" in str(self.curCam).lower():
+			if "oscam" in cam_name:
 				try:
 					try:
 						from Screens.OScamInfo import OSCamInfo
@@ -326,7 +312,7 @@ class tvManager(Screen):
 					print("[cccam] OScamInfo e:", e)
 					pass
 
-			elif "ccam" in str(self.curCam).lower():
+			elif "ccam" in cam_name:
 				try:
 
 					from Screens.CCcamInfo import CCcamInfoMain
@@ -466,7 +452,6 @@ class tvManager(Screen):
 				chmod(script, 493)
 			if exists("/usr/keys/SoftCam.Key"):
 				system("rm -rf /usr/keys/SoftCam.Key")
-			# self.session.open(MessageBox, _("SoftcamKeys Updated!"), MessageBox.TYPE_INFO, timeout=5)
 			cmd = script
 			title = _("Installing Softcam Keys\nPlease Wait...")
 			self.session.open(Console, _(title), [cmd], closeOnSuccess=False)
@@ -559,6 +544,7 @@ class tvManager(Screen):
 			print("self var=== ", self.var)
 			"""
 			system("chmod 755 /etc/clist.list")
+			system("chmod 755 /usr/camscript/*.*")
 			curCam = self.readCurrent()
 			if self.last is not None:
 				try:
@@ -862,6 +848,7 @@ class GetipklistTv(Screen):
 		self.xml = "https://raw.githubusercontent.com/levi-45/Multicam/main/Caminstaller.xml"
 		if PY3:
 			self.xml = self.xml.encode()
+
 		if local is False:
 			if exists("/usr/bin/apt-get"):
 				print("have a dreamOs!!!")
