@@ -3,7 +3,7 @@
 
 # --------------------#
 #  coded by Lululla   #
-#     03/03/2025     #
+#     03/03/2025      #
 #      No Coppy       #
 # --------------------#
 from __future__ import print_function
@@ -422,9 +422,7 @@ class tv_config(Screen, ConfigListScreen):
 			self.getcl()
 		else:
 			try:
-				print("runningcam=", runningcam)
-				if runningcam is None:
-					return
+				print("datas runningcam=", runningcam)
 
 				def execute_command(choice):
 					if choice:

@@ -36,21 +36,20 @@ from enigma import (
 	gFont,
 	getDesktop,
 )
+from datetime import datetime
 from os import mkdir, access, X_OK, system, popen, chmod, remove, walk, stat
 from os.path import dirname, join, exists, islink
 from time import sleep
 from twisted.web.client import getPage
+from xml.dom import minidom
 import codecs
+import json
+import subprocess
 import sys
 import time
-import json
-from datetime import datetime
-from xml.dom import minidom
-import subprocess
-# import threading
 
 global active, skin_path, local
-global _session, runningcam
+global _session
 
 
 active = False
@@ -85,7 +84,7 @@ SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
 AgentRequest = RequestAgent()
-runningcam = None
+
 
 
 headers = {
@@ -149,7 +148,7 @@ if exists("/usr/bin/apt-get"):
 if not exists("/etc/clist.list"):
 	with open("/etc/clist.list", "w"):
 		print("/etc/clist.list as been create")
-		system("chmod 755 /etc/clist.list &")
+		system("chmod 755 /etc/clist.list")
 
 
 class m2list(MenuList):
@@ -205,6 +204,7 @@ class tvManager(Screen):
 		Screen.__init__(self, session)
 		self.session = session
 		global _session, runningcam
+		runningcam = None
 		_session = session
 		skin = join(skin_path, "tvManager.xml")
 		with codecs.open(skin, "r", encoding="utf-8") as f:
@@ -297,8 +297,7 @@ class tvManager(Screen):
 					self.BlueAction = action
 					self["key_blue"].setText(action)
 
-					if exists(join(plugin_path, "data/%s.pyo" % file_name)) or exists(join(plugin_path, "data/%s.pyo" % file_name)):
-
+					if exists(join(plugin_path, "data/%s.pyo" % file_name)) or exists(join(plugin_path, "data/%s.pyc" % file_name)):
 						print("existe %s" % file_name)
 					break
 			# Debug info
@@ -559,8 +558,7 @@ class tvManager(Screen):
 			# # self.var = self["list"].getSelectionIndex()
 			print("self var=== ", self.var)
 			"""
-			cmdx = "chmod 755 /usr/camscript/*.*"  # + self.softcamslist[self.var][0] + ".sh"
-			system(cmdx)
+			system("chmod 755 /etc/clist.list")
 			curCam = self.readCurrent()
 			if self.last is not None:
 				try:
@@ -608,7 +606,7 @@ class tvManager(Screen):
 				clist = open("/etc/clist.list", "w", encoding="UTF-8")
 			else:
 				clist = open("/etc/clist.list", "w")
-			system("chmod 755 /etc/clist.list &")
+			chmod("/etc/clist.list", 755)
 			clist.write(str(self.curCam))
 			clist.close()
 
@@ -618,7 +616,7 @@ class tvManager(Screen):
 			stcam = open("/etc/startcam.sh", "w")
 		stcam.write("#!/bin/sh\n" + self.cmd1)
 		stcam.close()
-		system("chmod 755 /etc/startcam.sh &")
+		chmod("/etc/startcam.sh", 755)
 		return
 
 	def stop(self):
@@ -820,7 +818,7 @@ class GetipklistTv(Screen):
 		self.icount = 0
 		self.downloading = False
 		self.timer = eTimer()
-		if exists("/var/lib/dpkg/status"):
+		if exists("/usr/bin/apt-get"):
 			self.timer_conn = self.timer.timeout.connect(self._gotPageLoad)
 		else:
 			self.timer.callback.append(self._gotPageLoad)
@@ -957,7 +955,6 @@ class GetipkTv(Screen):
 			-1
 		)
 		self.onLayoutFinish.append(self.start)
-		# self.onShown.append(self.updateList)
 
 	def start(self):
 		pass
@@ -1122,7 +1119,7 @@ class InfoCfg(Screen):
 
 		self.Update = False
 		self.timer = eTimer()
-		if exists("/var/lib/dpkg/status"):
+		if exists("/usr/bin/apt-get"):
 			self.timer_conn = self.timer.timeout.connect(self.check_vers)
 		else:
 			self.timer.callback.append(self.check_vers)
@@ -1285,6 +1282,7 @@ class DreamCCAuto:
 				print("Error reading script file:", e)
 
 		print("pass autostart")
+		return
 
 
 def autostartsoftcam(reason, session=None, **kwargs):
@@ -1335,8 +1333,8 @@ def Plugins(**kwargs):
 			description=_(title_plug),
 			where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART],
 			needsRestart=True,
-			fnc=autostartsoftcam
+			fnc=autostartsoftcam,
 		),
 		PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_PLUGINMENU, icon=iconpic, fnc=main),
-		PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main)
+		PluginDescriptor(name=_(name_plug), description=_(title_plug), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main),
 	]
