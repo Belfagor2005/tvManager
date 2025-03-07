@@ -66,7 +66,7 @@ else:
 	from urllib2 import urlopen, Request
 
 
-currversion = "2.5"
+currversion = "2.6"
 name_plug = "Softcam Manager"
 title_plug = "..:: " + name_plug + " V. %s ::.." % currversion
 plugin_path = dirname(sys.modules[__name__].__file__)
