@@ -413,6 +413,7 @@ class tv_config(Screen, ConfigListScreen):
 		payp = paypal()
 		self["paypal"].setText(payp)
 		self["info"].setText(_("Select Your Choice"))
+		self["description"].setText(_("MENU EMM / SERVER CLINE"))
 
 	def infomsg(self):
 		self.session.open(MessageBox, _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
