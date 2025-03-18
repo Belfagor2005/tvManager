@@ -431,7 +431,7 @@ class tv_config(Screen, ConfigListScreen):
 							# cmd = "ps aux | grep -i '[o]scam'"
 							# res = subprocess.getoutput(cmd)
 							res = ""
-
+							msg = []
 							cmd = ["ps"]
 							output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 							stdout, stderr = output.communicate()
@@ -444,7 +444,6 @@ class tv_config(Screen, ConfigListScreen):
 
 							if any(cam in res.lower() for cam in ["oscam", "icam", "ncam", "gcam"]):
 								print("oscam exist")
-								msg = []
 								msg.append(_("\n....\n.....\n"))
 								self.cmd1 = "/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh"
 								if not access(self.cmd1, X_OK):
