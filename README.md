@@ -3,6 +3,9 @@ tvManger as Softcam Mager
 Enigma2 project
 
 
+[![Python package](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml/badge.svg)](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml)
+
+
 <img src="https://github.com/Belfagor2005/tvManager/blob/main/usr/lib/enigma2/python/Plugins/Extensions/tvManager/logo.png">
 
 
