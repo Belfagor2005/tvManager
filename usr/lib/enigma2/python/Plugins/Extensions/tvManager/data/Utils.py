@@ -777,15 +777,17 @@ def MemClean():
 
 
 def findSoftCamKey():
-	paths = ['/usr/keys',
-			 '/etc/tuxbox/config/oscam-emu',
-			 '/etc/tuxbox/config/oscam-trunk',
-			 '/etc/tuxbox/config/oscam',
-			 '/etc/tuxbox/config/ncam',
-			 '/etc/tuxbox/config/gcam',
-			 '/etc/tuxbox/config',
-			 '/etc',
-			 '/var/keys']
+	paths = [
+		'/usr/keys',
+		'/etc/tuxbox/config/oscam-emu',
+		'/etc/tuxbox/config/oscam-trunk',
+		'/etc/tuxbox/config/oscam',
+		'/etc/tuxbox/config/ncam',
+		'/etc/tuxbox/config/gcam',
+		'/etc/tuxbox/config',
+		'/etc',
+		'/var/keys'
+	]
 	from os import path as os_path
 	if os_path.exists('/tmp/.oscam/oscam.version'):
 		data = open('/tmp/.oscam/oscam.version', 'r').readlines()

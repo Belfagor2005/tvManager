@@ -799,7 +799,6 @@ class GetipklistTv(Screen):
 		self["key_blue"].hide()
 		self.addon = "emu"
 		self.url = ""
-		global local
 		local = False
 		self.icount = 0
 		self.downloading = False

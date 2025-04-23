@@ -607,7 +607,7 @@ class tv_config(Screen, ConfigListScreen):
 		return str(self["config"].getCurrent()[1].getText())
 
 	def CCcam(self):
-		global host, port, user, passw
+		global host, port, user
 		putlblcfg()
 		print("putlblcfg CCcam ===================", putlbl)
 		if "CCcam.cfg" not in putlbl:
@@ -635,7 +635,7 @@ class tv_config(Screen, ConfigListScreen):
 		self.session.open(MessageBox, _("Server Copy in ") + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
 	def Oscam(self):
-		global host, port, user, passw
+		global host, port, user
 		putlblcfg()
 		print("putlbl Oscam ===================", putlbl)
 		if "oscam.server" not in putlbl:
@@ -657,7 +657,7 @@ class tv_config(Screen, ConfigListScreen):
 		self.session.open(MessageBox, _("Server Copy in ") + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
 	def Ncam(self):
-		global host, port, user, passw
+		global host, port, user
 		putlblcfg()
 		print("putlbl Oscam ===================", putlbl)
 		if "ncam.server" not in putlbl:
@@ -703,7 +703,7 @@ class tv_config(Screen, ConfigListScreen):
 			print("error on host", str(e))
 
 	def load_getcl(self, data):
-		global host, port, user, passw
+		global host, port, user
 		try:
 			data = checkStr(data)
 			url1 = re.findall(r"<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*", data)

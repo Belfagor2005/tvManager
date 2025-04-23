@@ -149,9 +149,18 @@ class OscamInfo:
 	SRVNAME = 4
 	ECMTIME = 5
 	IP_PORT = 6
-	HEAD = {NAME: _("Reader/User"), PROT: _("Protocol"),
-			CAID_SRVID: _("Caid:Srvid"), SRVNAME: _("Channel Name"),
-			ECMTIME: _("Ecm Time"), IP_PORT: _("IP Address")}
+	HEAD = {
+		NAME: _("Reader/User"),
+		PROT: _("Protocol"),
+		CAID_SRVID: _("Caid:Srvid"),
+		SRVNAME: _("Channel Name"),
+		ECMTIME: _("Ecm Time"),
+		IP_PORT: _("IP Address")
+	}
+
+	# Utilizzo del dizionario per visualizzare etichette
+	print(HEAD[NAME])  # Stampa "Reader/User"
+	print(HEAD[PROT])  # Stampa "Protocol"
 	version = ""
 
 	def confPath(self):
@@ -507,25 +516,30 @@ class OSCamInfo(Screen):
 		self.menu = [_("Show Ecm info"), _("Show Clients"), _("Show Readers/Proxies"), _("Show Log"), _("Card info (CCcam-Reader)"), _("Ecm Statistics"), _("Setup")]
 		self.osc = OscamInfo()
 		self["mainmenu"] = oscMenuList([])
-		self["actions"] = NumberActionMap(["OkCancelActions", "InputActions", "ColorActions"],
-										  {"ok": self.ok,
-										   "cancel": self.exit,
-										   "red": self.red,
-										   "green": self.green,
-										   "yellow": self.yellow,
-										   "blue": self.blue,
-										   "1": self.keyNumberGlobal,
-										   "2": self.keyNumberGlobal,
-										   "3": self.keyNumberGlobal,
-										   "4": self.keyNumberGlobal,
-										   "5": self.keyNumberGlobal,
-										   "6": self.keyNumberGlobal,
-										   "7": self.keyNumberGlobal,
-										   "8": self.keyNumberGlobal,
-										   "9": self.keyNumberGlobal,
-										   "0": self.keyNumberGlobal,
-										   "up": self.up,
-										   "down": self.down}, -1)
+		self["actions"] = NumberActionMap(
+			["OkCancelActions", "InputActions", "ColorActions"],  # Azioni associate (tasti per OK, Input, Colori)
+			{
+				"ok": self.ok,  # Tasto 'ok' esegue la funzione 'self.ok'
+				"cancel": self.exit,  # Tasto 'cancel' esegue la funzione 'self.exit'
+				"red": self.red,  # Tasto 'red' esegue la funzione 'self.red'
+				"green": self.green,  # Tasto 'green' esegue la funzione 'self.green'
+				"yellow": self.yellow,  # Tasto 'yellow' esegue la funzione 'self.yellow'
+				"blue": self.blue,  # Tasto 'blue' esegue la funzione 'self.blue'
+				"1": self.keyNumberGlobal,  # Tasto '1' esegue la funzione 'self.keyNumberGlobal'
+				"2": self.keyNumberGlobal,  # Tasto '2' esegue la funzione 'self.keyNumberGlobal'
+				"3": self.keyNumberGlobal,  # Tasto '3' esegue la funzione 'self.keyNumberGlobal'
+				"4": self.keyNumberGlobal,  # Tasto '4' esegue la funzione 'self.keyNumberGlobal'
+				"5": self.keyNumberGlobal,  # Tasto '5' esegue la funzione 'self.keyNumberGlobal'
+				"6": self.keyNumberGlobal,  # Tasto '6' esegue la funzione 'self.keyNumberGlobal'
+				"7": self.keyNumberGlobal,  # Tasto '7' esegue la funzione 'self.keyNumberGlobal'
+				"8": self.keyNumberGlobal,  # Tasto '8' esegue la funzione 'self.keyNumberGlobal'
+				"9": self.keyNumberGlobal,  # Tasto '9' esegue la funzione 'self.keyNumberGlobal'
+				"0": self.keyNumberGlobal,  # Tasto '0' esegue la funzione 'self.keyNumberGlobal'
+				"up": self.up,  # Tasto 'up' esegue la funzione 'self.up'
+				"down": self.down  # Tasto 'down' esegue la funzione 'self.down'
+			},
+			-1
+		)
 		self.onLayoutFinish.append(self.showMenu)
 
 	def ok(self):
@@ -708,7 +722,6 @@ class oscECMInfo(Screen, OscamInfo):
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		global HDSKIN, sizeH
 		self.setTitle(_("Ecm Info"))
 		self.ecminfo = "/tmp/ecm.info"
 		self.title = _("Ecm Info")
@@ -718,9 +731,15 @@ class oscECMInfo(Screen, OscamInfo):
 			self.loop.callback.append(self.showData)
 			timeout = config.oscaminfo.intervall.value * 1000
 			self.loop.start(timeout, False)
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.exit,
-									 "cancel": self.exit}, -1)
+		# Imposta le azioni per i tasti 'ok' e 'cancel' nell'ambito di 'SetupActions'.
+		self["actions"] = ActionMap(
+			["SetupActions"],  # Mappa delle azioni per la configurazione
+			{
+				"ok": self.exit,  # Quando viene premuto 'ok', esegue 'self.exit' per uscire
+				"cancel": self.exit  # Quando viene premuto 'cancel', esegue 'self.exit' per uscire
+			},
+			-1  # Priorità di azione (di solito -1 per azioni generiche)
+		)
 		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
@@ -730,9 +749,11 @@ class oscECMInfo(Screen, OscamInfo):
 		self.close()
 
 	def buildListEntry(self, listentry):
-		return ["",
-				(eListboxPythonMultiContent.TYPE_TEXT, 10 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[0]),
-				(eListboxPythonMultiContent.TYPE_TEXT, 300 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[1])]
+		return [
+			"",  # Una riga vuota per separare eventuali contenuti precedenti
+			(eListboxPythonMultiContent.TYPE_TEXT, 10 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[0]),  # Primo campo (Testo)
+			(eListboxPythonMultiContent.TYPE_TEXT, 300 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[1])   # Secondo campo (Testo)
+		]
 
 	def showData(self):
 		dataECM = self.getECMInfo(self.ecminfo)
@@ -770,7 +791,6 @@ class oscInfo(Screen, OscamInfo):
 			</screen>'''
 
 	def __init__(self, session, what):
-		global HDSKIN, sizeH
 		self.session = session
 		self.what = what
 		self.firstrun = True
@@ -817,19 +837,24 @@ class oscInfo(Screen, OscamInfo):
 			self.loop.callback.append(self.showData)
 			timeout = config.oscaminfo.intervall.value * 1000
 			self.loop.start(timeout, False)
-		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "DirectionActions"],
-									{"ok": self.key_ok,
-									 "cancel": self.exit,
-									 "red": self.exit,
-									 "green": self.key_green,
-									 "yellow": self.key_yellow,
-									 "blue": self.key_blue,
-									 "up": self.key_up,
-									 "down": self.key_down,
-									 "right": self.key_right,
-									 "left": self.key_left,
-									 "moveUp": self.key_moveUp,
-									 "moveDown": self.key_moveDown}, -1)
+		self["actions"] = ActionMap(
+			["OkCancelActions", "ColorActions", "DirectionActions"],  # Mappa delle azioni
+			{
+				"ok": self.key_ok,           # Azione per il tasto OK
+				"cancel": self.exit,         # Azione per il tasto di annullamento
+				"red": self.exit,            # Azione per il tasto rosso
+				"green": self.key_green,     # Azione per il tasto verde
+				"yellow": self.key_yellow,   # Azione per il tasto giallo
+				"blue": self.key_blue,       # Azione per il tasto blu
+				"up": self.key_up,           # Azione per la direzione "su"
+				"down": self.key_down,       # Azione per la direzione "giù"
+				"right": self.key_right,     # Azione per la direzione "destra"
+				"left": self.key_left,       # Azione per la direzione "sinistra"
+				"moveUp": self.key_moveUp,   # Azione per il movimento verso l'alto
+				"moveDown": self.key_moveDown  # Azione per il movimento verso il basso
+			},
+			-1  # Priorità dell'azione
+		)
 		self.onLayoutFinish.append(self.showData)
 
 	def key_ok(self):
@@ -956,8 +981,18 @@ class oscInfo(Screen, OscamInfo):
 		self.itemheight = 25
 		if data[0]:
 			if self.what != "l":
-				heading = (self.HEAD[self.NAME], self.HEAD[self.PROT], self.HEAD[self.CAID_SRVID],
-						   self.HEAD[self.SRVNAME], self.HEAD[self.ECMTIME], self.HEAD[self.IP_PORT], "")
+				# Create the heading tuple with values from the self.HEAD dictionary
+				heading = (
+					self.HEAD[self.NAME],
+					self.HEAD[self.PROT],
+					self.HEAD[self.CAID_SRVID],
+					self.HEAD[self.SRVNAME],
+					self.HEAD[self.ECMTIME],
+					self.HEAD[self.IP_PORT],
+					""
+				)
+
+				# Build the list entry with the heading and add it to self.out
 				self.out = [self.buildListEntry(heading, heading=True)]
 				for i in data[1]:
 					self.out.append(self.buildListEntry(i))
@@ -1023,7 +1058,6 @@ class oscInfo(Screen, OscamInfo):
 
 
 class oscEntitlements(Screen, OscamInfo):
-	global HDSKIN, sizeH
 	sizeLH = sizeH - 20
 	skin = """<screen position="center,center" size="%s, 390*f" title="Client Info" >
 				<widget source="output" render="Listbox" position="10,10" size="%s,390*f" scrollbarMode="showOnDemand" >
@@ -1062,14 +1096,18 @@ class oscEntitlements(Screen, OscamInfo):
 			</screen>""" % (sizeH, sizeLH)
 
 	def __init__(self, session, reader):
-		global HDSKIN, sizeH
 		Screen.__init__(self, session)
 		self.mlist = oscMenuList([])
 		self.cccamreader = reader
 		self["output"] = List([])
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.showData,
-									 "cancel": self.exit}, -1)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"ok": self.showData,
+				"cancel": self.exit
+			},
+			-1
+		)
 		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
@@ -1097,11 +1135,13 @@ class oscEntitlements(Screen, OscamInfo):
 				linefeed = "\n"
 			for j in prov:
 				providertxt += "%s - %s%s" % (j[0], j[1], linefeed)
-			res.append((ca_id,
-						csystem,
-						str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]), str(csum), str(creshare),
-						providertxt[:-1]
-						))
+			res.append((
+				ca_id,
+				csystem,
+				str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]),
+				str(csum), str(creshare),
+				providertxt[:-1]
+			))
 			outlist.append(res)
 		return res
 
@@ -1163,7 +1203,6 @@ class oscEntitlements(Screen, OscamInfo):
 
 
 class oscReaderStats(Screen, OscamInfo):
-	global HDSKIN, sizeH
 	sizeLH = sizeH - 20
 	skin = """<screen position="center,center" size="%s, 390*f" title="Client Info" >
 			<widget source="output" render="Listbox" position="10,10" size="%s,390*f" scrollbarMode="showOnDemand" >
@@ -1198,7 +1237,6 @@ class oscReaderStats(Screen, OscamInfo):
 		</screen>""" % (sizeH, sizeLH)
 
 	def __init__(self, session, reader):
-		global HDSKIN, sizeH
 		Screen.__init__(self, session)
 		if reader == "all":
 			self.allreaders = True
@@ -1207,9 +1245,14 @@ class oscReaderStats(Screen, OscamInfo):
 		self.reader = reader
 		self.mlist = oscMenuList([])
 		self["output"] = List([])
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.showData,
-									 "cancel": self.exit}, -1)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"ok": self.showData,
+				"cancel": self.exit
+			},
+			-1
+		)
 		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
@@ -1237,11 +1280,15 @@ class oscReaderStats(Screen, OscamInfo):
 				linefeed = "\n"
 			for j in prov:
 				providertxt += "%s - %s%s" % (j[0], j[1], linefeed)
-			res.append((ca_id,
-						csystem,
-						str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]), str(csum), str(creshare),
-						providertxt[:-1]
-						))
+			res.append(
+				(
+					ca_id,
+					csystem,
+					str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]),
+					str(csum), str(creshare),
+					providertxt[:-1]
+				)
+			)
 			outlist.append(res)
 		return res
 
@@ -1351,9 +1398,15 @@ class OscamInfoConfigScreen(ConfigListScreen, Screen):
 		self["status"] = StaticText(_("Error:\n%s") % msg if msg is not None else "")  # what is this?
 		ConfigListScreen.__init__(self, [], session=session, on_change=self.changedEntry)
 		# ConfigListScreen.__init__(self, [], session=session, on_change=self.changedEntry, fullUI=True)
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.savx,
-									 "cancel": self.exit}, -1)
+		# Define the action mappings for SetupActions
+		self["actions"] = ActionMap(
+			["SetupActions"],  # The action map group
+			{
+				"ok": self.savx,  # Action for 'OK' key (calls savx method)
+				"cancel": self.exit,  # Action for 'Cancel' key (calls exit method)
+			},
+			-1  # The action map priority (optional depending on the use case)
+		)
 		# self["key_red"] = StaticText(_("Close"))
 		self.createSetup()
 

@@ -154,9 +154,14 @@ class NcamInfo:
 	SRVNAME = 4
 	ECMTIME = 5
 	IP_PORT = 6
-	HEAD = {NAME: _("Reader/User"), PROT: _("Protocol"),
-			CAID_SRVID: _("Caid:Srvid"), SRVNAME: _("Channel Name"),
-			ECMTIME: _("Ecm Time"), IP_PORT: _("IP Address")}
+	HEAD = {
+		NAME: _("Reader/User"),
+		PROT: _("Protocol"),
+		CAID_SRVID: _("Caid:Srvid"),
+		SRVNAME: _("Channel Name"),
+		ECMTIME: _("Ecm Time"),
+		IP_PORT: _("IP Address")
+	}
 	version = ""
 
 	def confPath(self):
@@ -492,25 +497,30 @@ class NcamInfoMenu(Screen):
 		self.menu = [_("Show Ecm info"), _("Show Clients"), _("Show Readers/Proxies"), _("Show Log"), _("Card info (CCcam-Reader)"), _("Ecm Statistics"), _("Setup")]
 		self.osc = NcamInfo()
 		self["mainmenu"] = oscMenuList([])
-		self["actions"] = NumberActionMap(["OkCancelActions", "InputActions", "ColorActions"],
-										  {"ok": self.ok,
-										   "cancel": self.exit,
-										   "red": self.red,
-										   "green": self.green,
-										   "yellow": self.yellow,
-										   "blue": self.blue,
-										   "1": self.keyNumberGlobal,
-										   "2": self.keyNumberGlobal,
-										   "3": self.keyNumberGlobal,
-										   "4": self.keyNumberGlobal,
-										   "5": self.keyNumberGlobal,
-										   "6": self.keyNumberGlobal,
-										   "7": self.keyNumberGlobal,
-										   "8": self.keyNumberGlobal,
-										   "9": self.keyNumberGlobal,
-										   "0": self.keyNumberGlobal,
-										   "up": self.up,
-										   "down": self.down}, -1)
+		self["actions"] = NumberActionMap(
+			["OkCancelActions", "InputActions", "ColorActions"],
+			{
+				"ok": self.ok,
+				"cancel": self.exit,
+				"red": self.red,
+				"green": self.green,
+				"yellow": self.yellow,
+				"blue": self.blue,
+				"1": self.keyNumberGlobal,
+				"2": self.keyNumberGlobal,
+				"3": self.keyNumberGlobal,
+				"4": self.keyNumberGlobal,
+				"5": self.keyNumberGlobal,
+				"6": self.keyNumberGlobal,
+				"7": self.keyNumberGlobal,
+				"8": self.keyNumberGlobal,
+				"9": self.keyNumberGlobal,
+				"0": self.keyNumberGlobal,
+				"up": self.up,
+				"down": self.down
+			},
+			-1
+		)
 		self.onLayoutFinish.append(self.showMenu)
 
 	def ok(self):
@@ -653,7 +663,6 @@ class NcamInfoMenu(Screen):
 
 class oscECMInfo(Screen, NcamInfo):
 
-	global HDSKIN, sizeH
 	sizeLH = sizeH - 20
 	skin = """<screen position="center,center" size="%s, 390*f" title="ECMInfo" >
 			<widget source="output" render="Listbox" position="10,10" size="%s,390*f" scrollbarMode="showOnDemand" >
@@ -693,7 +702,6 @@ class oscECMInfo(Screen, NcamInfo):
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		global HDSKIN, sizeH
 		self.setTitle(_("Ecm Info"))
 		self.ecminfo = "/tmp/ecm.info"
 		self.title = _("Ecm Info")
@@ -703,9 +711,14 @@ class oscECMInfo(Screen, NcamInfo):
 			self.loop.callback.append(self.showData)
 			timeout = config.NcamInfo.intervall.value * 1000
 			self.loop.start(timeout, False)
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.exit,
-									 "cancel": self.exit}, -1)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"ok": self.exit,
+				"cancel": self.exit
+			},
+			-1
+		)
 		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
@@ -715,9 +728,11 @@ class oscECMInfo(Screen, NcamInfo):
 		self.close()
 
 	def buildListEntry(self, listentry):
-		return ["",
-				(eListboxPythonMultiContent.TYPE_TEXT, 10 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[0]),
-				(eListboxPythonMultiContent.TYPE_TEXT, 300 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[1])]
+		return [
+			"",
+			(eListboxPythonMultiContent.TYPE_TEXT, 10 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[0]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 300 * f, 2 * f, 300 * f, 30 * f, 0, RT_HALIGN_LEFT, listentry[1])
+		]
 
 	def showData(self):
 		dataECM = self.getECMInfo(self.ecminfo)
@@ -756,7 +771,6 @@ class ncInfo(Screen, NcamInfo):
 			</screen>'''
 
 	def __init__(self, session, what):
-		global HDSKIN, sizeH
 		self.session = session
 		self.what = what
 		self.firstrun = True
@@ -803,19 +817,24 @@ class ncInfo(Screen, NcamInfo):
 			self.loop.callback.append(self.showData)
 			timeout = config.NcamInfo.intervall.value * 1000
 			self.loop.start(timeout, False)
-		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "DirectionActions"],
-									{"ok": self.key_ok,
-									 "cancel": self.exit,
-									 "red": self.exit,
-									 "green": self.key_green,
-									 "yellow": self.key_yellow,
-									 "blue": self.key_blue,
-									 "up": self.key_up,
-									 "down": self.key_down,
-									 "right": self.key_right,
-									 "left": self.key_left,
-									 "moveUp": self.key_moveUp,
-									 "moveDown": self.key_moveDown}, -1)
+		self["actions"] = ActionMap(
+			["OkCancelActions", "ColorActions", "DirectionActions"],
+			{
+				"ok": self.key_ok,
+				"cancel": self.exit,
+				"red": self.exit,
+				"green": self.key_green,
+				"yellow": self.key_yellow,
+				"blue": self.key_blue,
+				"up": self.key_up,
+				"down": self.key_down,
+				"right": self.key_right,
+				"left": self.key_left,
+				"moveUp": self.key_moveUp,
+				"moveDown": self.key_moveDown
+			},
+			-1
+		)
 		self.onLayoutFinish.append(self.showData)
 
 	def key_ok(self):
@@ -942,8 +961,15 @@ class ncInfo(Screen, NcamInfo):
 		self.itemheight = 35
 		if data[0]:
 			if self.what != "l":
-				heading = (self.HEAD[self.NAME], self.HEAD[self.PROT], self.HEAD[self.CAID_SRVID],
-						   self.HEAD[self.SRVNAME], self.HEAD[self.ECMTIME], self.HEAD[self.IP_PORT], "")
+				heading = (
+					self.HEAD[self.NAME],
+					self.HEAD[self.PROT],
+					self.HEAD[self.CAID_SRVID],
+					self.HEAD[self.SRVNAME],
+					self.HEAD[self.ECMTIME],
+					self.HEAD[self.IP_PORT],
+					""
+				)
 				self.out = [self.buildListEntry(heading, heading=True)]
 				for i in data[1]:
 					self.out.append(self.buildListEntry(i))
@@ -1009,7 +1035,6 @@ class ncInfo(Screen, NcamInfo):
 
 
 class oscEntitlements(Screen, NcamInfo):
-	global HDSKIN, sizeH
 	sizeLH = sizeH - 20
 	skin = """<screen position="center,center" size="%s, 390*f" title="Client Info" >
 				<widget source="output" render="Listbox" position="10,10" size="%s,390*f" scrollbarMode="showOnDemand" >
@@ -1048,14 +1073,18 @@ class oscEntitlements(Screen, NcamInfo):
 			</screen>""" % (sizeH, sizeLH)
 
 	def __init__(self, session, reader):
-		global HDSKIN, sizeH
 		Screen.__init__(self, session)
 		self.mlist = oscMenuList([])
 		self.cccamreader = reader
 		self["output"] = List([])
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.showData,
-									 "cancel": self.exit}, -1)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"ok": self.showData,
+				"cancel": self.exit
+			},
+			-1
+		)
 		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
@@ -1083,11 +1112,15 @@ class oscEntitlements(Screen, NcamInfo):
 				linefeed = "\n"
 			for j in prov:
 				providertxt += "%s - %s%s" % (j[0], j[1], linefeed)
-			res.append((ca_id,
-						csystem,
-						str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]), str(csum), str(creshare),
-						providertxt[:-1]
-						))
+			res.append(
+				(
+					ca_id,
+					csystem,
+					str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]),
+					str(csum), str(creshare),
+					providertxt[:-1]
+				)
+			)
 			outlist.append(res)
 		return res
 
@@ -1149,7 +1182,6 @@ class oscEntitlements(Screen, NcamInfo):
 
 
 class oscReaderStats(Screen, NcamInfo):
-	global HDSKIN, sizeH
 	sizeLH = sizeH - 20
 	skin = """<screen position="center,center" size="%s, 390*f" title="Client Info" >
 			<widget source="output" render="Listbox" position="10,10" size="%s,390*f" scrollbarMode="showOnDemand" >
@@ -1184,7 +1216,7 @@ class oscReaderStats(Screen, NcamInfo):
 		</screen>""" % (sizeH, sizeLH)
 
 	def __init__(self, session, reader):
-		global HDSKIN, sizeH
+
 		Screen.__init__(self, session)
 		if reader == "all":
 			self.allreaders = True
@@ -1193,9 +1225,14 @@ class oscReaderStats(Screen, NcamInfo):
 		self.reader = reader
 		self.mlist = oscMenuList([])
 		self["output"] = List([])
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.showData,
-									 "cancel": self.exit}, -1)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"ok": self.showData,
+				"cancel": self.exit
+			},
+			-1
+		)
 		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
@@ -1223,11 +1260,15 @@ class oscReaderStats(Screen, NcamInfo):
 				linefeed = "\n"
 			for j in prov:
 				providertxt += "%s - %s%s" % (j[0], j[1], linefeed)
-			res.append((ca_id,
-						csystem,
-						str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]), str(csum), str(creshare),
-						providertxt[:-1]
-						))
+			res.append(
+				(
+					ca_id,
+					csystem,
+					str(hops[1]), str(hops[2]), str(hops[3]), str(hops[4]), str(hops[5]),
+					str(csum), str(creshare),
+					providertxt[:-1]
+				)
+			)
 			outlist.append(res)
 		return res
 
@@ -1337,9 +1378,14 @@ class NcamInfoConfigScreen(ConfigListScreen, Screen):
 		self["status"] = StaticText(_("Error:\n%s") % msg if msg is not None else "")  # what is this?
 		ConfigListScreen.__init__(self, [], session=session, on_change=self.changedEntry)
 		# ConfigListScreen.__init__(self, [], session=session, on_change=self.changedEntry, fullUI=True)
-		self["actions"] = ActionMap(["SetupActions"],
-									{"ok": self.savx,
-									 "cancel": self.exit}, -1)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"ok": self.savx,
+				"cancel": self.exit
+			},
+			-1
+		)
 		# self["key_red"] = StaticText(_("Close"))
 		self.createSetup()
 

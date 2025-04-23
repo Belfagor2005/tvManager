@@ -121,9 +121,13 @@ class CCPrioMaker(Screen):
 		except:
 			self.hideTimer.callback.append(self.parseEcmInfo)
 		self.hideTimer.start(200, 1)
-		self.__event_tracker = ServiceEventTracker(screen=self,
-												   eventmap={iPlayableService.evUpdatedEventInfo: self.__evUpdatedEventInfo,
-															 iPlayableService.evStopped: self.__evStopped})
+		self.__event_tracker = ServiceEventTracker(
+			screen=self,
+			eventmap={
+				iPlayableService.evUpdatedEventInfo: self.__evUpdatedEventInfo,
+				iPlayableService.evStopped: self.__evStopped
+			}
+		)
 		readprio()
 
 	def __evStopped(self):
@@ -223,10 +227,15 @@ class Ccprio_Setup(Screen, ConfigListScreen):
 		self.setup_title = _("CCPrioMaker Settings")
 		self.onChangedEntry = []
 
-		self["actions"] = ActionMap(["SetupActions"],
-									{"cancel": self.keyCancel,
-									 "save": self.keySave,
-									 "ok": self.keySave}, -2)
+		self["actions"] = ActionMap(
+			["SetupActions"],
+			{
+				"cancel": self.keyCancel,
+				"save": self.keySave,
+				"ok": self.keySave
+			},
+			-2
+		)
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("OK"))
