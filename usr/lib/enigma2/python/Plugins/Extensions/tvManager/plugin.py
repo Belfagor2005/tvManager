@@ -48,7 +48,7 @@ import subprocess
 import sys
 import time
 
-global active, skin_path, local
+global active, skin_path
 global _session
 
 
@@ -843,7 +843,6 @@ class GetipklistTv(Screen):
 			self._gotPageLoad()
 
 	def _gotPageLoad(self):
-		global local
 		self.xml = "https://raw.githubusercontent.com/levi-45/Multicam/main/Caminstaller.xml"
 		if PY3:
 			self.xml = self.xml.encode()

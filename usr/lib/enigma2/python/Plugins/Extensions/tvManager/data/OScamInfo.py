@@ -682,7 +682,6 @@ class OSCamInfo(Screen):
 
 class oscECMInfo(Screen, OscamInfo):
 
-	global HDSKIN, sizeH
 	sizeLH = sizeH - 20
 	skin = """<screen position="center,center" size="%s, 390*f" title="oscECMInfo" >
 			<widget source="output" render="Listbox" position="10,10" size="%s,390*f" scrollbarMode="showOnDemand" >
