@@ -46,16 +46,20 @@ def localeInit():
 
 
 if isDreamOS:  # check if DreamOS image
-	_ = lambda txt: gettext.dgettext(PluginLanguageDomain, txt) if txt else ""
+	def _(txt):
+		return gettext.dgettext(PluginLanguageDomain, txt) if txt else ""
 else:
 	def _(txt):
-		if gettext.dgettext(PluginLanguageDomain, txt):
-			return gettext.dgettext(PluginLanguageDomain, txt)
+		translation = gettext.dgettext(PluginLanguageDomain, txt)
+		if translation:
+			return translation
 		else:
 			print(("[%s] fallback to default translation for %s" % (PluginLanguageDomain, txt)))
 			return gettext.gettext(txt)
+
+
 localeInit()
 language.addCallback(localeInit)
-
+ftpxml = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2xldmktNDUvTXVsdGljYW0vbWFpbi9DYW1pbnN0YWxsZXIueG1s'
 installer_url = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0JlbGZhZ29yMjAwNS90dk1hbmFnZXIvbWFpbi9pbnN0YWxsZXIuc2g='
 developer_url = 'aHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9CZWxmYWdvcjIwMDUvdHZNYW5hZ2Vy'

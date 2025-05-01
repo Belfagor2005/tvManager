@@ -10,12 +10,13 @@
 from __future__ import print_function
 
 # local import
-from . import _, paypal, wgetsts, installer_url, developer_url
+from . import _, paypal, wgetsts, installer_url, developer_url, ftpxml
 from .data.Utils import RequestAgent, b64decoder, checkGZIP
 from .data.GetEcmInfo import GetEcmInfo
 from .data.Console import Console
 
 # enigma lib import
+from base64 import b64decode
 from Components.ActionMap import ActionMap, NumberActionMap
 from Components.Button import Button
 from Components.Label import Label
@@ -54,6 +55,7 @@ global _session
 
 active = False
 _session = None
+local = False
 PY3 = sys.version_info.major >= 3
 
 if PY3:
@@ -66,7 +68,7 @@ else:
 	from urllib2 import urlopen, Request
 
 
-currversion = "2.6"
+currversion = "2.7"
 name_plug = "Softcam Manager"
 title_plug = "..:: " + name_plug + " V. %s ::.." % currversion
 plugin_path = dirname(sys.modules[__name__].__file__)
@@ -74,7 +76,6 @@ iconpic = join(plugin_path, "logo.png")
 data_path = join(plugin_path, "data")
 dir_work = "/usr/lib/enigma2/python/Screens"
 FILE_XML = join(plugin_path, "tvManager.xml")
-local = True
 ECM_INFO = "/tmp/ecm.info"
 EMPTY_ECM_INFO = ("", "0", "0", "0")
 old_ecm_time = time.time()
@@ -84,7 +85,6 @@ SOFTCAM = 0
 CCCAMINFO = 1
 OSCAMINFO = 2
 AgentRequest = RequestAgent()
-
 
 
 headers = {
@@ -799,7 +799,7 @@ class GetipklistTv(Screen):
 		self["key_blue"].hide()
 		self.addon = "emu"
 		self.url = ""
-		local = False
+		self.xml = b64decode(ftpxml).decode('utf-8')
 		self.icount = 0
 		self.downloading = False
 		self.timer = eTimer()
@@ -840,28 +840,30 @@ class GetipklistTv(Screen):
 			with open(FILE_XML, "r") as f:
 				self.xml = f.read()
 				local = True
-			self._gotPageLoad()
+				self._gotPageLoad()
 
 	def _gotPageLoad(self):
-		self.xml = "https://raw.githubusercontent.com/levi-45/Multicam/main/Caminstaller.xml"
-		if PY3:
-			self.xml = self.xml.encode()
-
-		if local is False:
+		if local:
 			if exists("/usr/bin/apt-get"):
 				print("have a dreamOs!!!")
 				self.data = checkGZIP(self.xml)
+				print("XML Data fetched via checkGZIP")
 				self.downloadxmlpage(self.data)
 			else:
-				print("have a Atv-PLi - etc..!!!")
-				getPage(self.xml).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
+				print("have an Atv-PLi - etc..!!!")
+				getPage(self.xml.encode("utf-8")).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
+		else:
+			getPage(self.xml.encode("utf-8")).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
+			print("Local XML loaded")
 
 	def downloadxmlpage(self, data):
+		print("Downloading XML page...")
 		self.xml = data
 		self.list = []
 		self.names = []
 		try:
 			if self.xml:
+				print("Parsing XML...")
 				self.xmlparse = minidom.parseString(self.xml)
 				for plugins in self.xmlparse.getElementsByTagName("plugins"):
 					if not exists("/usr/bin/apt-get"):
@@ -872,13 +874,12 @@ class GetipklistTv(Screen):
 						if "deb" not in str(plugins.getAttribute("cont")).lower():
 							continue
 					self.names.append(str(plugins.getAttribute("cont")))
-				# self["list"].l.setItemHeight(50)
+				print("have an Atv-PLi - etc..!!!", self.names)
 				self["list"].l.setList(self.names)
 				self["description"].setText(_("Please select ..."))
 				self.downloading = True
-
 		except Exception as e:
-			print("error:", e)
+			print("Error during XML parsing:", e)
 			self["description"].setText(_("Error processing server addons data"))
 
 	def errorLoad(self, error):
