@@ -68,7 +68,7 @@ else:
 	from urllib2 import urlopen, Request
 
 
-currversion = "2.7"
+currversion = "2.8"
 name_plug = "Softcam Manager"
 title_plug = "..:: " + name_plug + " V. %s ::.." % currversion
 plugin_path = dirname(sys.modules[__name__].__file__)
@@ -670,7 +670,7 @@ class tvManager(Screen):
 								self.softcamslist.append(nam, png2, "")
 								pliste.append(nam, "")
 							self.index += 1
-				sfile.close()
+					sfile.close()
 				self.softcamslist.sort(key=lambda i: i[2], reverse=True)
 				pliste.sort(key=lambda i: i[1], reverse=True)
 				self.namelist = pliste
@@ -1271,14 +1271,37 @@ class DreamCCAuto:
 		return
 
 
-def autostartsoftcam(reason, session=None, **kwargs):
+def autostartsoftcam(reason, session=None, max_retries=5, retry_delay=10, **kwargs):
 	print("[Softcam] Started")
 	if reason == 0 and session is not None:
 		print("reason 0")
 		try:
 			if exists("/etc/init.d/dccamd"):
 				system("mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
-			DreamCCAuto()
+
+			retries = 0
+			success = False
+
+			# Tentativo di eseguire startcam.sh con retry
+			while retries < max_retries and not success:
+				print("Attempt", retries + 1)
+				try:
+					print("Trying to start softcam...")
+					system("/bin/bash /etc/startcam.sh &")
+					success = True
+				except Exception as e:
+					from time import sleep
+					print("Error during attempt", retries + 1, ":", e)
+					retries += 1
+					if retries < max_retries:
+						print(f"Retrying in {retry_delay} seconds...")
+						sleep(retry_delay)
+
+			if not success:
+				print("[Softcam] Failed to start after", max_retries, "attempts.")
+			else:
+				print("[Softcam] Started successfully.")
+
 		except Exception as e:
 			print("Error during autostart:", e)
 
