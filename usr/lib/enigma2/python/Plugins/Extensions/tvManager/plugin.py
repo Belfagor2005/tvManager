@@ -1294,7 +1294,7 @@ def autostartsoftcam(reason, session=None, max_retries=5, retry_delay=10, **kwar
 					print("Error during attempt", retries + 1, ":", e)
 					retries += 1
 					if retries < max_retries:
-						print(f"Retrying in {retry_delay} seconds...")
+						print("Retrying in %s seconds..." % str(retry_delay))
 						sleep(retry_delay)
 
 			if not success:
