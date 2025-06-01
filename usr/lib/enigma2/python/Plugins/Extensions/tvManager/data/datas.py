@@ -362,7 +362,7 @@ class tv_config(Screen, ConfigListScreen):
 			self.skin = f.read()
 		self.setup_title = (name_plug)
 		self["title"] = Label(_(name_plug))
-		self["key_red"] = Label(_(""))
+		self["key_red"] = Label("")
 		self["key_green"] = Label("")
 		self["key_yellow"] = Label("")
 		self["key_blue"] = Label("")
@@ -543,9 +543,9 @@ class tv_config(Screen, ConfigListScreen):
 			self["key_yellow"].setText(_("Get Link"))
 			self["key_blue"].setText(_("Reset"))
 		else:
-			self["key_red"].setText(_(""))
+			self["key_red"].setText("")
 			self["key_green"].setText("")
-			self["key_yellow"].setText("Check Emm Send")
+			self["key_yellow"].setText(_("Check Emm Send"))
 			self["key_blue"].setText("")
 		return
 
