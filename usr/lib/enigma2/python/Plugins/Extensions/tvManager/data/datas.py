@@ -12,15 +12,15 @@ from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
 from Components.config import (
-	ConfigNumber,
-	ConfigSelection,
-	ConfigYesNo,
-	ConfigSubsection,
-	ConfigPassword,
-	config,
-	ConfigText,
-	getConfigListEntry,
-	NoSave,
+    ConfigNumber,
+    ConfigSelection,
+    ConfigYesNo,
+    ConfigSubsection,
+    ConfigPassword,
+    config,
+    ConfigText,
+    getConfigListEntry,
+    NoSave,
 )
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -47,36 +47,36 @@ sss = "aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L0I5N0hDOGll"
 PY3 = sys.version_info.major >= 3
 
 if PY3:
-	unicode = str
-	unichr = chr
-	long = int
-	PY3 = True
+    unicode = str
+    unichr = chr
+    long = int
+    PY3 = True
 
 
 def b64decoder(s):
-	"""Add missing padding to string and return the decoded base64 string."""
-	s = str(s).strip()
-	try:
-		outp = base64.b64decode(s)
-		print("outp1 ", outp)
-		if PY3:
-			outp = outp.decode("utf-8")
-			print("outp2 ", outp)
-	except TypeError:
-		padding = len(s) % 4
-		if padding == 1:
-			print("Invalid base64 string: {}".format(s))
-			return ""
-		elif padding == 2:
-			s += b"=="
-		elif padding == 3:
-			s += b"="
-		outp = base64.b64decode(s)
-		print("outp1 ", outp)
-		if PY3:
-			outp = outp.decode("utf-8")
-			print("outp3 ", outp)
-	return outp
+    """Add missing padding to string and return the decoded base64 string."""
+    s = str(s).strip()
+    try:
+        outp = base64.b64decode(s)
+        print("outp1 ", outp)
+        if PY3:
+            outp = outp.decode("utf-8")
+            print("outp2 ", outp)
+    except TypeError:
+        padding = len(s) % 4
+        if padding == 1:
+            print("Invalid base64 string: {}".format(s))
+            return ""
+        elif padding == 2:
+            s += b"=="
+        elif padding == 3:
+            s += b"="
+        outp = base64.b64decode(s)
+        print("outp1 ", outp)
+        if PY3:
+            outp = outp.decode("utf-8")
+            print("outp3 ", outp)
+    return outp
 
 
 # currversion = "2.3"
@@ -86,227 +86,239 @@ data_path = plugin_path + "/data/"
 skin_path = plugin_path
 
 try:
-	_create_unverified_https_context = ssl._create_unverified_context
+    _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:
-	pass
+    pass
 else:
-	ssl._create_default_https_context = _create_unverified_https_context
+    ssl._create_default_https_context = _create_unverified_https_context
 
 
 def checkStr(txt):
-	if PY3:
-		if isinstance(type(txt), type(bytes())):
-			txt = txt.decode("utf-8")
-	else:
-		if isinstance(type(txt), type(unicode())):
-			txt = txt.encode("utf-8")
-	return txt
+    if PY3:
+        if isinstance(type(txt), type(bytes())):
+            txt = txt.decode("utf-8")
+    else:
+        if isinstance(type(txt), type(unicode())):
+            txt = txt.encode("utf-8")
+    return txt
 
 
 ListAgent = [
-	"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15",
-	"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14",
-	"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-	"Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-	"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1284.0 Safari/537.13",
-	"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.8 (KHTML, like Gecko) Chrome/17.0.940.0 Safari/535.8",
-	"Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
-	"Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
-	"Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
-	"Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2",
-	"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.16) Gecko/20120427 Firefox/15.0a1",
-	"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1",
-	"Mozilla/5.0 (Windows NT 6.2; WOW64; rv:15.0) Gecko/20120910144328 Firefox/15.0.2",
-	"Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:9.0a2) Gecko/20111101 Firefox/9.0a2",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
+    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
+    "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1284.0 Safari/537.13",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.8 (KHTML, like Gecko) Chrome/17.0.940.0 Safari/535.8",
+    "Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
+    "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
+    "Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2",
+    "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.16) Gecko/20120427 Firefox/15.0a1",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:15.0) Gecko/20120910144328 Firefox/15.0.2",
+    "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:9.0a2) Gecko/20111101 Firefox/9.0a2",
 ]
 
 
 def RequestAgent():
-	RandomAgent = choice(ListAgent)
-	return RandomAgent
+    RandomAgent = choice(ListAgent)
+    return RandomAgent
 
 
 def getUrl(url):
-	if sys.version_info.major == 3:
-		import urllib.request as urllib2
-	elif sys.version_info.major == 2:
-		import urllib2
-	req = urllib2.Request(url)
-	req.add_header("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14")
-	r = urllib2.urlopen(req, None, 15)
-	link = r.read()
-	r.close()
-	content = link
-	if str(type(content)).find("bytes") != -1:
-		try:
-			content = content.decode("utf-8")
-		except Exception as e:
-			print("Error: %s." % str(e))
-	return content
+    if sys.version_info.major == 3:
+        import urllib.request as urllib2
+    elif sys.version_info.major == 2:
+        import urllib2
+    req = urllib2.Request(url)
+    req.add_header(
+        "User-Agent",
+        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14")
+    r = urllib2.urlopen(req, None, 15)
+    link = r.read()
+    r.close()
+    content = link
+    if str(type(content)).find("bytes") != -1:
+        try:
+            content = content.decode("utf-8")
+        except Exception as e:
+            print("Error: %s." % str(e))
+    return content
 
 
 # =============== SCREEN PATH SETTING
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
-	skin_path = plugin_path + "/res/skins/uhd/"
+    skin_path = plugin_path + "/res/skins/uhd/"
 elif screenwidth.width() == 1920:
-	skin_path = plugin_path + "/res/skins/fhd/"
+    skin_path = plugin_path + "/res/skins/fhd/"
 else:
-	skin_path = plugin_path + "/res/skins/hd/"
+    skin_path = plugin_path + "/res/skins/hd/"
 if exists("/usr/bin/apt-get"):
-	skin_path = skin_path + "dreamOs/"
+    skin_path = skin_path + "dreamOs/"
 
 
 if not exists("/etc/tuxbox/config"):
-	system("mkdir /etc/tuxbox/config")
+    system("mkdir /etc/tuxbox/config")
 
 
 def cccamPath():
-	cmd = "find /usr -name CCcam.cfg"
-	res = popen(cmd).read()
-	if res == "":
-		cmd = "find /var -name CCcam.cfg"
-		res = popen(cmd).read()
-		if res == "":
-			cmd = "find /etc -name CCcam.cfg"
-			res = popen(cmd).read()
-			if res == "":
-				try:
-					folders = listdir("/etc/tuxbox/")
-					for folder in folders:
-						if folder.startswith("oscam"):
-							cmd = "find /etc/tuxbox/config/" + folder + " -name CCcam.cfg"
-							res = popen(cmd).read()
-							return "/etc/tuxbox/config/" + folder + "CCcam.cfg"
-						if res == "":
-							return "/etc/CCcam.cfg"
-				except:
-					return "/etc/CCcam.cfg"
-			else:
-				return "/etc/CCcam.cfg"
-		else:
-			return "/var/CCcam.cfg"
+    cmd = "find /usr -name CCcam.cfg"
+    res = popen(cmd).read()
+    if res == "":
+        cmd = "find /var -name CCcam.cfg"
+        res = popen(cmd).read()
+        if res == "":
+            cmd = "find /etc -name CCcam.cfg"
+            res = popen(cmd).read()
+            if res == "":
+                try:
+                    folders = listdir("/etc/tuxbox/")
+                    for folder in folders:
+                        if folder.startswith("oscam"):
+                            cmd = "find /etc/tuxbox/config/" + folder + " -name CCcam.cfg"
+                            res = popen(cmd).read()
+                            return "/etc/tuxbox/config/" + folder + "CCcam.cfg"
+                        if res == "":
+                            return "/etc/CCcam.cfg"
+                except BaseException:
+                    return "/etc/CCcam.cfg"
+            else:
+                return "/etc/CCcam.cfg"
+        else:
+            return "/var/CCcam.cfg"
 
 
 def findOscam():
-	"""Trova tutti i percorsi di oscam.server sul sistema."""
-	paths = [
-		"/etc/tuxbox/config/oscam/oscam.server",
-		"/etc/tuxbox/config/oscam-emu/oscam.server",
-		"/etc/tuxbox/config/oscam_atv_free/oscam.server",
-		"/etc/tuxbox/config/oscam.server",
-		"/etc/tuxbox/config/oscam-stable/oscam.server",
-		"/var/tuxbox/config/oscam.server",
-		"/etc/tuxbox/config/gcam.server",
-		"/etc/tuxbox/config/ncam.server",
-		"/etc/tuxbox/config/ncam/ncam.server",
-		"/etc/tuxbox/config/supcam-emu/oscam.server",
-		"/etc/tuxbox/config/oscamicam/oscam.server",
-		"/etc/tuxbox/config/oscamicamnew/oscam.server"
-	]
-	return paths
+    """Trova tutti i percorsi di oscam.server sul sistema."""
+    paths = [
+        "/etc/tuxbox/config/oscam/oscam.server",
+        "/etc/tuxbox/config/oscam-emu/oscam.server",
+        "/etc/tuxbox/config/oscam_atv_free/oscam.server",
+        "/etc/tuxbox/config/oscam.server",
+        "/etc/tuxbox/config/oscam-stable/oscam.server",
+        "/var/tuxbox/config/oscam.server",
+        "/etc/tuxbox/config/gcam.server",
+        "/etc/tuxbox/config/ncam.server",
+        "/etc/tuxbox/config/ncam/ncam.server",
+        "/etc/tuxbox/config/supcam-emu/oscam.server",
+        "/etc/tuxbox/config/oscamicam/oscam.server",
+        "/etc/tuxbox/config/oscamicamnew/oscam.server"
+    ]
+    return paths
 
 
 def saveFileContent(file_pathx):
-	"""Returns the contents of the file if it exists."""
-	if exists(file_pathx):
-		with open(file_pathx, "r") as f:
-			return f.read()
-	return ""
+    """Returns the contents of the file if it exists."""
+    if exists(file_pathx):
+        with open(file_pathx, "r") as f:
+            return f.read()
+    return ""
 
 
 def prependToFile(file_pathx):
-	"""
-	Reads (and creates if necessary) the original backup of the file,
-	adding markers to avoid duplication.
-	Returns the original content (with markers).
-	"""
-	directory = dirname(file_pathx)
-	if not exists(directory):
-		print("DEBUG: Directory non esistente per", file_pathx)
-		return ""
+    """
+    Reads (and creates if necessary) the original backup of the file,
+    adding markers to avoid duplication.
+    Returns the original content (with markers).
+    """
+    directory = dirname(file_pathx)
+    if not exists(directory):
+        print("DEBUG: Directory non esistente per", file_pathx)
+        return ""
 
-	backup_path = file_pathx + "Orig"
-	original_content = ""
+    backup_path = file_pathx + "Orig"
+    original_content = ""
 
-	if not exists(backup_path) and exists(file_pathx):
-		with open(file_pathx, "r") as f:
-			original_content = f.read()
-		with open(backup_path, "w") as f:
-			f.write(original_content)
-		print("DEBUG: Creato backup per", file_pathx)
-	elif exists(backup_path):
-		with open(backup_path, "r") as f:
-			original_content = f.read()
-		print("DEBUG: Lettura backup esistente per", file_pathx)
+    if not exists(backup_path) and exists(file_pathx):
+        with open(file_pathx, "r") as f:
+            original_content = f.read()
+        with open(backup_path, "w") as f:
+            f.write(original_content)
+        print("DEBUG: Creato backup per", file_pathx)
+    elif exists(backup_path):
+        with open(backup_path, "r") as f:
+            original_content = f.read()
+        print("DEBUG: Lettura backup esistente per", file_pathx)
 
-	marker_start = "### ORIGINAL START ###"
-	marker_end = "### ORIGINAL END ###"
-	if marker_start not in original_content:
-		original_content = marker_start + "\n" + original_content.strip() + "\n" + marker_end + "\n"
-		print("DEBUG: Aggiunti marker al backup per", file_pathx)
-	else:
-		print("DEBUG: Marker già presenti nel backup per", file_pathx)
+    marker_start = "### ORIGINAL START ###"
+    marker_end = "### ORIGINAL END ###"
+    if marker_start not in original_content:
+        original_content = marker_start + "\n" + original_content.strip() + "\n" + \
+            marker_end + "\n"
+        print("DEBUG: Aggiunti marker al backup per", file_pathx)
+    else:
+        print("DEBUG: Marker già presenti nel backup per", file_pathx)
 
-	return original_content
+    return original_content
 
 
 def remove_backup_block(content):
-	"""
-	If the content starts with the backup block (marker),
-	removes it and returns only the new content.
-	"""
-	marker_start = "### ORIGINAL START ###"
-	marker_end = "### ORIGINAL END ###"
-	if content.startswith(marker_start):
-		end_index = content.find(marker_end)
-		if end_index != -1:
-			# Salta il blocco del backup
-			return content[end_index + len(marker_end):].strip()
-	return content
+    """
+    If the content starts with the backup block (marker),
+    removes it and returns only the new content.
+    """
+    marker_start = "### ORIGINAL START ###"
+    marker_end = "### ORIGINAL END ###"
+    if content.startswith(marker_start):
+        end_index = content.find(marker_end)
+        if end_index != -1:
+            # Salta il blocco del backup
+            return content[end_index + len(marker_end):].strip()
+    return content
 
 
 def ensure_directory_exists(file_path):
-	"""Ensures that the file directory exists; otherwise, creates it."""
-	directory = dirname(file_path)
-	if not exists(directory):
-		return
+    """Ensures that the file directory exists; otherwise, creates it."""
+    directory = dirname(file_path)
+    if not exists(directory):
+        return
 
 
 Serverlive = [
-	("aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=", "Server01"),
-	("aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=", "Server02"),
-	("aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==", "Server03"),
-	("aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZWNjY2Ft", "Server04"),
-	("aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=", "Server05"),
-	("aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=", "Server06"),
-	("aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v", "Server07"),
-	("aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw", "Server8"),
-	("aHR0cHM6Ly9jY2NhbWlwdHYucHJvL2NjY2FtLWZyZWUvI3BhZ2UtY29udGVudA==", "Server9"),
+    ("aHR0cHM6Ly9ib3NzY2NjYW0uY28vVGVzdC5waHA=", "Server01"),
+    ("aHR0cHM6Ly9pcHR2LTE1ZGF5cy5ibG9nc3BvdC5jb20=", "Server02"),
+    ("aHR0cHM6Ly9jY2NhbWlhLmNvbS9mcmVlLWNjY2FtLw==", "Server03"),
+    ("aHR0cHM6Ly9jY2NhbS5uZXQvZnJlZWNjY2Ft", "Server04"),
+    ("aHR0cHM6Ly9jY2NhbXNhdGUuY29tL2ZyZWU=", "Server05"),
+    ("aHR0cHM6Ly9jY2NhbXguY29tL2ZyZWUtY2NjYW0=", "Server06"),
+    ("aHR0cHM6Ly9jY2NhbS1wcmVtaXVtLmNvL2ZyZWUtY2NjYW0v", "Server07"),
+    ("aHR0cHM6Ly9jY2NhbWZyZWUuY28vZnJlZS9nZXQucGhw", "Server8"),
+    ("aHR0cHM6Ly9jY2NhbWlwdHYucHJvL2NjY2FtLWZyZWUvI3BhZ2UtY29udGVudA==", "Server9"),
 ]
 
 
 cfgcam = [
-	("/etc/CCcam.cfg", "CCcam"),
-	("/etc/tuxbox/config/oscam.server", "Oscam"),
-	("/etc/tuxbox/config/oscam-emu/oscam.server", "oscam-emu"),
-	("/etc/tuxbox/config/ncam.server", "Ncam"),
-	("/etc/tuxbox/config/gcam.server", "Gcam"),
-	("/etc/tuxbox/config/Oscamicam/oscam.server", "Oscamicam")
+    ("/etc/CCcam.cfg", "CCcam"),
+    ("/etc/tuxbox/config/oscam.server", "Oscam"),
+    ("/etc/tuxbox/config/oscam-emu/oscam.server", "oscam-emu"),
+    ("/etc/tuxbox/config/ncam.server", "Ncam"),
+    ("/etc/tuxbox/config/gcam.server", "Gcam"),
+    ("/etc/tuxbox/config/Oscamicam/oscam.server", "Oscamicam")
 ]
 
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
-config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
+config.plugins.tvmanager.Server = NoSave(
+    ConfigSelection(choices=Serverlive))  # , default=Server1))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default="127.0.0.1"))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=16000))
-config.plugins.tvmanager.user = NoSave(ConfigText(default="Enter Username", visible_width=50, fixed_size=False))
-config.plugins.tvmanager.passw = NoSave(ConfigPassword(default="******", fixed_size=False, censor="*"))
+config.plugins.tvmanager.user = NoSave(
+    ConfigText(
+        default="Enter Username",
+        visible_width=50,
+        fixed_size=False))
+config.plugins.tvmanager.passw = NoSave(
+    ConfigPassword(
+        default="******",
+        fixed_size=False,
+        censor="*"))
 
 # ===================================================
 host = str(config.plugins.tvmanager.hostaddress.value)
@@ -316,35 +328,35 @@ password = str(config.plugins.tvmanager.passw.value)
 
 
 def putlblcfg():
-	global rstcfg
-	global buttn
-	global putlbl
+    global rstcfg
+    global buttn
+    global putlbl
 
-	putlbl = config.plugins.tvmanager.cfgfile.getValue()
-	buttn = ""
+    putlbl = config.plugins.tvmanager.cfgfile.getValue()
+    buttn = ""
 
-	if not putlbl:
-		print("Error: Invalid file path")
-		return None
+    if not putlbl:
+        print("Error: Invalid file path")
+        return None
 
-	path_map = {
-		"/etc/CCcam.cfg": ("CCcam", "CCcam.cfg"),
-		"/etc/tuxbox/config/oscam.server": ("Oscam", "oscam.server"),
-		# "/etc/tuxbox/config/gcam.server": ("Gcam", "gcam.server"),  # eventualmente da riabilitare
-		"/etc/tuxbox/config/oscam-emu/oscam.server": ("OscamEmu", "oscam.server"),
-		"/etc/tuxbox/config/Oscamicam/oscam.server": ("Oscamicam", "oscam.server"),
-		"/etc/tuxbox/config/ncam.server": ("Ncam", "ncam.server"),
-	}
+    path_map = {
+        "/etc/CCcam.cfg": ("CCcam", "CCcam.cfg"),
+        "/etc/tuxbox/config/oscam.server": ("Oscam", "oscam.server"),
+        # "/etc/tuxbox/config/gcam.server": ("Gcam", "gcam.server"),  # eventualmente da riabilitare
+        "/etc/tuxbox/config/oscam-emu/oscam.server": ("OscamEmu", "oscam.server"),
+        "/etc/tuxbox/config/Oscamicam/oscam.server": ("Oscamicam", "oscam.server"),
+        "/etc/tuxbox/config/ncam.server": ("Ncam", "ncam.server"),
+    }
 
-	if putlbl in path_map:
-		buttn = _("Write") + " " + path_map[putlbl][0]
-		rstcfg = path_map[putlbl][1]
-	else:
-		buttn = _("Write") + " NONE"
-		rstcfg = "unknow.server"
-		return None
+    if putlbl in path_map:
+        buttn = _("Write") + " " + path_map[putlbl][0]
+        rstcfg = path_map[putlbl][1]
+    else:
+        buttn = _("Write") + " NONE"
+        rstcfg = "unknow.server"
+        return None
 
-	return putlbl
+    return putlbl
 
 
 putlblcfg()
@@ -882,34 +894,34 @@ class tv_config(Screen, ConfigListScreen):
 
 
 if screenwidth.width() > 1200:
-	InfoScreenx = """
-	<screen position="center,center" size="800,620" title="CCcam Info">
-		<widget name="text" position="0,0" size="800,620" font="Regular; 30" />
-	</screen>"""
+    InfoScreenx = """
+    <screen position="center,center" size="800,620" title="CCcam Info">
+        <widget name="text" position="0,0" size="800,620" font="Regular; 30" />
+    </screen>"""
 else:
-	InfoScreenx = """
-	<screen position="center,center" size="500,420" title="CCcam Info" >
-		<widget name="text" position="0,0" size="500,420" font="Regular;20" />
-	</screen>"""
+    InfoScreenx = """
+    <screen position="center,center" size="500,420" title="CCcam Info" >
+        <widget name="text" position="0,0" size="500,420" font="Regular;20" />
+    </screen>"""
 
 
 class InfoScreen(Screen):
 
-	def __init__(self, session, info):
-		Screen.__init__(self, session)
-		self.skin = InfoScreenx
-		self.setTitle(_("Emm Info"))
-		from Components.ScrollLabel import ScrollLabel
-		self["text"] = ScrollLabel(info)
-		self["actions"] = ActionMap(
-			["OkCancelActions"],
-			{
-				"ok": self.close,
-				"cancel": self.close,
-				"up": self["text"].pageUp,
-				"down": self["text"].pageDown,
-				"left": self["text"].pageUp,
-				"right": self["text"].pageDown,
-			},
-			-1
-		)
+    def __init__(self, session, info):
+        Screen.__init__(self, session)
+        self.skin = InfoScreenx
+        self.setTitle(_("Emm Info"))
+        from Components.ScrollLabel import ScrollLabel
+        self["text"] = ScrollLabel(info)
+        self["actions"] = ActionMap(
+            ["OkCancelActions"],
+            {
+                "ok": self.close,
+                "cancel": self.close,
+                "up": self["text"].pageUp,
+                "down": self["text"].pageDown,
+                "left": self["text"].pageUp,
+                "right": self["text"].pageDown,
+            },
+            -1
+        )
