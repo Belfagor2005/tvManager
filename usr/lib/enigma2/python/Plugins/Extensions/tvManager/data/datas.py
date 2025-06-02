@@ -413,7 +413,7 @@ class tv_config(Screen, ConfigListScreen):
 		self.session.open(MessageBox, _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
 
 	def oscamAu(self, answer=False):
-		global putlbl
+		# global putlbl
 
 		if answer:
 			def status_callback(msg):
