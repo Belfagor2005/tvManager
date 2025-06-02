@@ -12,50 +12,58 @@ PluginLanguagePath = 'Extensions/tvManager/locale'
 global isDreamOS
 isDreamOS = False
 if os.path.exists("/var/lib/dpkg/status"):
-	isDreamOS = True
+    isDreamOS = True
 
 
 def wgetsts():
-	wgetsts = False
-	cmd22 = 'find /usr/bin -name "wget"'
-	res = os.popen(cmd22).read()
-	if 'wget' not in res.lower():
-		if os.path.exists("/var/lib/dpkg/status"):
-			cmd23 = 'apt-get update && apt-get install wget'
-			os.popen(cmd23)
-			wgetsts = True
-		else:
-			cmd23 = 'opkg update && opkg install wget'
-			os.popen(cmd23)
-			wgetsts = True
-		return wgetsts
+    wgetsts = False
+    cmd22 = 'find /usr/bin -name "wget"'
+    res = os.popen(cmd22).read()
+    if 'wget' not in res.lower():
+        if os.path.exists("/var/lib/dpkg/status"):
+            cmd23 = 'apt-get update && apt-get install wget'
+            os.popen(cmd23)
+            wgetsts = True
+        else:
+            cmd23 = 'opkg update && opkg install wget'
+            os.popen(cmd23)
+            wgetsts = True
+        return wgetsts
 
 
 def paypal():
-	conthelp = "If you like what I do you\n"
-	conthelp += "can contribute with a coffee\n"
-	conthelp += "scan the qr code and donate € 1.00"
-	return conthelp
+    conthelp = "If you like what I do you\n"
+    conthelp += "can contribute with a coffee\n"
+    conthelp += "scan the qr code and donate € 1.00"
+    return conthelp
 
 
 def localeInit():
-	if isDreamOS:  # check if opendreambox image
-		lang = language.getLanguage()[:2]  # getLanguage returns e.g. "fi_FI" for "language_country"
-		os.environ["LANGUAGE"] = lang  # Enigma doesn't set this (or LC_ALL, LC_MESSAGES, LANG). gettext needs it!
-	gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))
+    if isDreamOS:  # check if opendreambox image
+        # getLanguage returns e.g. "fi_FI" for "language_country"
+        lang = language.getLanguage()[:2]
+        # Enigma doesn't set this (or LC_ALL, LC_MESSAGES, LANG). gettext needs
+        # it!
+        os.environ["LANGUAGE"] = lang
+    gettext.bindtextdomain(
+        PluginLanguageDomain,
+        resolveFilename(
+            SCOPE_PLUGINS,
+            PluginLanguagePath))
 
 
 if isDreamOS:  # check if DreamOS image
-	def _(txt):
-		return gettext.dgettext(PluginLanguageDomain, txt) if txt else ""
+    def _(txt):
+        return gettext.dgettext(PluginLanguageDomain, txt) if txt else ""
 else:
-	def _(txt):
-		translation = gettext.dgettext(PluginLanguageDomain, txt)
-		if translation:
-			return translation
-		else:
-			print(("[%s] fallback to default translation for %s" % (PluginLanguageDomain, txt)))
-			return gettext.gettext(txt)
+    def _(txt):
+        translation = gettext.dgettext(PluginLanguageDomain, txt)
+        if translation:
+            return translation
+        else:
+            print(("[%s] fallback to default translation for %s" %
+                  (PluginLanguageDomain, txt)))
+            return gettext.gettext(txt)
 
 
 localeInit()
