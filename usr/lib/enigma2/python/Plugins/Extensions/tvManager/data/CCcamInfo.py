@@ -2104,8 +2104,7 @@ class CCcamInfoShareInfo(Screen):
 
         for x in self.list:
             (hostname, type, caid, system, uphops, maxdown) = x
-            if (uphops == str(self.uphops) or self.uphops == - \
-                1) and (maxdown == str(self.maxdown) or self.maxdown == -1):
+            if (uphops == str(self.uphops) or self.uphops == -1) and (maxdown == str(self.maxdown) or self.maxdown == -1):
                 shareList.append(
                     CCcamShareListEntry(
                         hostname,
