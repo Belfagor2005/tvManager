@@ -422,7 +422,7 @@ class tv_config(Screen, ConfigListScreen):
 				"green": self.green,
 				"yellow": self.sendemm,
 				"blue": self.resetcfg,
-				"red": self.oscamAu,  # closex,
+				"red": self.oscamAu,
 				"cancel": self.closex,
 				"info": self.infomsg,
 				"back": self.closex
@@ -485,8 +485,12 @@ class tv_config(Screen, ConfigListScreen):
 			Thread(target=run_collector_thread).start()
 
 		else:
+			def ask_callback(result):
+				if result:
+					self.oscamAu(True)
+
 			self.session.openWithCallback(
-				self.oscamAu,
+				ask_callback,
 				MessageBox,
 				"Do you want to automatically download CCcam readers?\nThey will be saved to:\n{}".format(putlbl),
 				MessageBox.TYPE_YESNO
