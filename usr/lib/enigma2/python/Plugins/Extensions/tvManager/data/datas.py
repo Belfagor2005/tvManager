@@ -434,7 +434,6 @@ class tv_config(Screen, ConfigListScreen):
 		self.session.open(MessageBox, _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
 
 	def oscamAu(self, answer=False):
-		global putlbl
 
 		if answer:
 			def status_callback(msg):
@@ -768,7 +767,7 @@ class tv_config(Screen, ConfigListScreen):
 			print("error on host", str(e))
 
 	def load_getcl(self, data):
-		global host, port, user, passw
+		global host, port, user
 		try:
 			data = checkStr(data)
 			url1 = re.findall(r"<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*", data)
