@@ -156,7 +156,9 @@ def getUrl(url):
 	elif sys.version_info.major == 2:
 		import urllib2
 	req = urllib2.Request(url)
-	req.add_header("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14")
+	req.add_header(
+		"User-Agent",
+		"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14")
 	r = urllib2.urlopen(req, None, 15)
 	link = r.read()
 	r.close()
@@ -204,7 +206,7 @@ def cccamPath():
 							return "/etc/tuxbox/config/" + folder + "CCcam.cfg"
 						if res == "":
 							return "/etc/CCcam.cfg"
-				except:
+				except BaseException:
 					return "/etc/CCcam.cfg"
 			else:
 				return "/etc/CCcam.cfg"
@@ -267,7 +269,8 @@ def prependToFile(file_pathx):
 	marker_start = "### ORIGINAL START ###"
 	marker_end = "### ORIGINAL END ###"
 	if marker_start not in original_content:
-		original_content = marker_start + "\n" + original_content.strip() + "\n" + marker_end + "\n"
+		original_content = marker_start + "\n" + original_content.strip() + "\n" + \
+			marker_end + "\n"
 		print("DEBUG: Aggiunti marker al backup per", file_pathx)
 	else:
 		print("DEBUG: Marker già presenti nel backup per", file_pathx)
@@ -322,12 +325,21 @@ cfgcam = [
 
 config.plugins.tvmanager = ConfigSubsection()
 config.plugins.tvmanager.active = ConfigYesNo(default=False)
-config.plugins.tvmanager.Server = NoSave(ConfigSelection(choices=Serverlive))  # , default=Server1))
+config.plugins.tvmanager.Server = NoSave(
+	ConfigSelection(choices=Serverlive))  # , default=Server1))
 config.plugins.tvmanager.cfgfile = NoSave(ConfigSelection(choices=cfgcam))
 config.plugins.tvmanager.hostaddress = NoSave(ConfigText(default="127.0.0.1"))
 config.plugins.tvmanager.port = NoSave(ConfigNumber(default=16000))
-config.plugins.tvmanager.user = NoSave(ConfigText(default="Enter Username", visible_width=50, fixed_size=False))
-config.plugins.tvmanager.passw = NoSave(ConfigPassword(default="******", fixed_size=False, censor="*"))
+config.plugins.tvmanager.user = NoSave(
+	ConfigText(
+		default="Enter Username",
+		visible_width=50,
+		fixed_size=False))
+config.plugins.tvmanager.passw = NoSave(
+	ConfigPassword(
+		default="******",
+		fixed_size=False,
+		censor="*"))
 
 # ===================================================
 host = str(config.plugins.tvmanager.hostaddress.value)
@@ -431,7 +443,7 @@ class tv_config(Screen, ConfigListScreen):
 		self["description"].setText(_("MENU EMM / SERVER CLINE"))
 
 	def infomsg(self):
-		self.session.open(MessageBox, _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
+		self.session.open(MessageBox, _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,	 MessageBox.TYPE_INFO, timeout=4)
 
 	def oscamAu(self, answer=False):
 
