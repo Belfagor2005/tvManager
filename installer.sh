@@ -3,8 +3,8 @@
 ## setup command=wget -q --no-check-certificate https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh -O - | /bin/sh
 
 ## Only This 2 lines to edit with new version ######
-version='2.9'
-changelog='\nAdd Red_Keys on Menu'
+version='3.0'
+changelog='\nMajor Fix'
 ##
 TMPPATH=/tmp/tvManager-main
 FILEPATH=/tmp/main.tar.gz

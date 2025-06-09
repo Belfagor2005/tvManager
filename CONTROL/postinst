@@ -1,13 +1,21 @@
 #!/bin/sh
 echo "****************************************"
-echo "*Please .. Restart Enigma2 *"
+echo "*             tvManager installed      *"
+echo "*                                      *"
+echo "*       Enjoy our plugin               *"
 echo "****************************************"
-echo "* Enjoy our plugin *"
+echo "*   Please .. Restarting Enigma2       *"
+echo "*     all right reserved               *"
+echo "*          no copy                     *"
 echo "****************************************"
-echo "* All Rights Reserved *"
-echo "* © 2024 - Lululla *"
-echo "****************************************"
-#init 4
-#killall -9 enigma2 > /dev/null 2>&1
-#init 3
+
+cmd22='/usr/bin/wget'
+cmd23=$(apt-get update && apt-get install wget)
+if [ -f $cmd22 ]; then
+    echo "wget exist"
+else apt-get update && apt-get install wget
+fi
+
+wget -q --no-check-certificate https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh -O - | /bin/sh
+
 exit 0
