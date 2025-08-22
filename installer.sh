@@ -1,46 +1,23 @@
 #!/bin/bash
-
 ## setup command=wget -q --no-check-certificate https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh -O - | /bin/sh
-
-## Only These 2 lines to edit with new version ######
 version='3.0'
 changelog='\nMajor Fix'
-##############################################################
-
 TMPPATH=/tmp/tvManager-main
-FILEPATH=/tmp/main.tar.gz
+FILEPATH=/tmp/tvManager.tar.gz
 
-# Determine plugin path based on architecture
 if [ ! -d /usr/lib64 ]; then
     PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/tvManager
 else
     PLUGINPATH=/usr/lib64/enigma2/python/Plugins/Extensions/tvManager
 fi
 
-# Cleanup function
-cleanup() {
-    [ -d "$TMPPATH" ] && rm -rf "$TMPPATH"
-    [ -f "$FILEPATH" ] && rm -f "$FILEPATH"
-    [ -d "$PLUGINPATH" ] && rm -rf "$PLUGINPATH"
-}
-
-# Check package manager type
 if [ -f /var/lib/dpkg/status ]; then
-    STATUS=/var/lib/dpkg/status
     OSTYPE=DreamOs
-    PKG_MANAGER="apt-get"
 else
-    STATUS=/var/lib/opkg/status
-    OSTYPE=Dream
-    PKG_MANAGER="opkg"
+    OSTYPE=OE20
 fi
 
-echo ""
-cleanup
-
-# Install wget if missing
 if ! command -v wget >/dev/null 2>&1; then
-    echo "Installing wget..."
     if [ "$OSTYPE" = "DreamOs" ]; then
         apt-get update && apt-get install -y wget || { echo "Failed to install wget"; exit 1; }
     else
@@ -48,92 +25,58 @@ if ! command -v wget >/dev/null 2>&1; then
     fi
 fi
 
-# Detect Python version
 if python --version 2>&1 | grep -q '^Python 3\.'; then
-    echo "Python3 image detected"
-    PYTHON=PY3
-    Packagesix=python3-six
     Packagerequests=python3-requests
 else
-    echo "Python2 image detected"
-    PYTHON=PY2
     Packagerequests=python-requests
 fi
 
-# Install required packages
-install_pkg() {
-    local pkg=$1
-    if ! grep -qs "Package: $pkg" "$STATUS"; then
-        echo "Installing $pkg..."
-        if [ "$OSTYPE" = "DreamOs" ]; then
-            apt-get update && apt-get install -y "$pkg" || { echo "Failed to install $pkg"; exit 1; }
-        else
-            opkg update && opkg install "$pkg" || { echo "Failed to install $pkg"; exit 1; }
-        fi
+if ! grep -qs "Package: $Packagerequests" /var/lib/*/status; then
+    echo "Installing $Packagerequests..."
+    if [ "$OSTYPE" = "DreamOs" ]; then
+        apt-get update && apt-get install -y "$Packagerequests" || { echo "Failed to install $Packagerequests"; exit 1; }
+    else
+        opkg update && opkg install "$Packagerequests" || { echo "Failed to install $Packagerequests"; exit 1; }
     fi
+fi
+
+[ -d "$TMPPATH" ] && rm -rf "$TMPPATH"
+[ -f "$FILEPATH" ] && rm -f "$FILEPATH"
+[ -d "$PLUGINPATH" ] && rm -rf "$PLUGINPATH"
+
+mkdir -p "$TMPPATH" || { echo "Failed to create temp directory"; exit 1; }
+cd "$TMPPATH" || exit 1
+
+wget --no-check-certificate 'https://github.com/Belfagor2005/tvManager/archive/refs/heads/main.tar.gz' -O "$FILEPATH" || {
+    echo "Download failed"; exit 1;
 }
 
-[ "$PYTHON" = "PY3" ] && install_pkg "$Packagesix"
-install_pkg "$Packagerequests"
+tar -xzf "$FILEPATH" -C /tmp/ || {
+    echo "Extraction failed"; exit 1;
+}
 
-# Download and install plugin
-mkdir -p "$TMPPATH"
-cd "$TMPPATH" || { echo "Failed to enter directory $TMPPATH"; exit 1; }
-set -e
+cp -r /tmp/tvManager-main/usr/ / || {
+    echo "Copy failed"; exit 1;
+}
 
-echo -e "\n# Your image is ${OSTYPE}\n"
-
-echo "Downloading tvManager..."
-wget --no-check-certificate 'https://github.com/Belfagor2005/tvManager/archive/refs/heads/main.tar.gz' -O "$FILEPATH"
-if [ $? -ne 0 ]; then
-    echo "Failed to download tvManager package!"
-    exit 1
-fi
-
-tar -xzf "$FILEPATH"
-if [ $? -ne 0 ]; then
-    echo "Failed to extract tvManager package!"
-    exit 1
-fi
-
-cp -r 'tvManager-main/usr' '/'
-
-set +e
-
-# Verify installation
 if [ ! -d "$PLUGINPATH" ]; then
-    echo "Error: Plugin installation failed!"
-    cleanup
+    echo "Installation failed: $PLUGINPATH missing"
     exit 1
 fi
 
-# Cleanup
-cleanup
+rm -rf "$TMPPATH" "$FILEPATH" /tmp/tvManager-main
 sync
 
-# System info
-FILE="/etc/image-version"
 box_type=$(head -n 1 /etc/hostname 2>/dev/null || echo "Unknown")
-distro_value=$(grep '^distro=' "$FILE" 2>/dev/null | awk -F '=' '{print $2}')
-distro_version=$(grep '^version=' "$FILE" 2>/dev/null | awk -F '=' '{print $2}')
+distro_value=$(grep '^distro=' "/etc/image-version" 2>/dev/null | awk -F '=' '{print $2}')
+distro_version=$(grep '^version=' "/etc/image-version" 2>/dev/null | awk -F '=' '{print $2}')
 python_vers=$(python --version 2>&1)
 
-cat <<EOF
+echo "#########################################################
+#       tvManager $version INSTALLED SUCCESSFULLY     #
 #########################################################
-#               INSTALLED SUCCESSFULLY                  #
-#                developed by LULULLA                   #
-#               https://corvoboys.org                   #
-#########################################################
-#           your Device will RESTART Now                #
-#########################################################
-^^^^^^^^^^Debug information:
 BOX MODEL: $box_type
-OO SYSTEM: $OSTYPE
 PYTHON: $python_vers
-IMAGE NAME: ${distro_value:-Unknown}
-IMAGE VERSION: ${distro_version:-Unknown}
-EOF
-
-sleep 5
-killall -9 enigma2
+IMAGE: ${distro_value:-Unknown} ${distro_version:-Unknown}"
+[ -f /usr/bin/enigma2 ] && killall -9 enigma2 || (init 4 && sleep 2 && init 3)
 exit 0
