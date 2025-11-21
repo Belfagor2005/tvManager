@@ -6,6 +6,7 @@
 
 **Enterprise Grade Enigma2 Softcam Management Plugin**
 
+[![Python package](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml/badge.svg)](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml)
 [![Python 2.7/3.x](https://img.shields.io/badge/Python-2.7%2F3.x-blue.svg)](https://www.python.org/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Enigma2](https://img.shields.io/badge/Enigma2-Plugin-orange.svg)](https://github.com/OpenPLi/enigma2)
@@ -208,4 +209,5 @@ To remove content from the web, contact the actual web host hosting the content 
 *Professional Softcam Management for Enigma2 Systems*
 
 </div>
+
 ```
