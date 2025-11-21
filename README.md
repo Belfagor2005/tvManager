@@ -1,4 +1,4 @@
-tvManager (Softcam Manager) v3.1.0 🚀
+#tvManager (Softcam Manager) v3.1.0 🚀
 
 <div align="center">
 
@@ -211,6 +211,7 @@ To remove content from the web, contact the actual web host hosting the content 
 </div>
 
 ```
+
 
 
 
