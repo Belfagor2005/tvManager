@@ -138,8 +138,8 @@ AgentRequest = RequestAgent()
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Encoding": "deflate"
-}
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "deflate"}
 
 
 # =========================
@@ -162,7 +162,8 @@ def execute_cam_command(cmd):
 def safe_system_call(cmd, max_retries=3, timeout=30, background=False):
     """Execute system commands with intelligent management"""
     # Identify command type
-    is_cam_command = "camscript" in cmd and ("cam_up" in cmd or "cam_down" in cmd or "cam_res" in cmd)
+    is_cam_command = "camscript" in cmd and (
+        "cam_up" in cmd or "cam_down" in cmd or "cam_res" in cmd)
     is_background_command = background or cmd.strip().endswith('&')
 
     # For cam and background commands: use system() without waiting
@@ -178,13 +179,15 @@ def safe_system_call(cmd, max_retries=3, timeout=30, background=False):
     for attempt in range(max_retries):
         try:
             if PY3:
-                result = subprocess.run(cmd, shell=True, capture_output=True, timeout=timeout)
+                result = subprocess.run(
+                    cmd, shell=True, capture_output=True, timeout=timeout)
                 if result.returncode == 0:
                     return True, result.stdout
                 print("Attempt %d failed: %s" % (attempt + 1, result.stderr))
             else:
                 import subprocess as sub
-                result = sub.Popen(cmd, shell=True, stdout=sub.PIPE, stderr=sub.PIPE)
+                result = sub.Popen(
+                    cmd, shell=True, stdout=sub.PIPE, stderr=sub.PIPE)
                 stdout, stderr = result.communicate()
                 if result.returncode == 0:
                     return True, stdout
@@ -218,13 +221,15 @@ def execute_blocking_command(cmd, max_retries=3, timeout=30):
     for attempt in range(max_retries):
         try:
             if PY3:
-                result = subprocess.run(cmd, shell=True, capture_output=True, timeout=timeout)
+                result = subprocess.run(
+                    cmd, shell=True, capture_output=True, timeout=timeout)
                 if result.returncode == 0:
                     return True, result.stdout
                 print("Attempt %d failed: %s" % (attempt + 1, result.stderr))
             else:
                 import subprocess as sub
-                result = sub.Popen(cmd, shell=True, stdout=sub.PIPE, stderr=sub.PIPE)
+                result = sub.Popen(
+                    cmd, shell=True, stdout=sub.PIPE, stderr=sub.PIPE)
                 stdout, stderr = result.communicate()
                 if result.returncode == 0:
                     return True, stdout
@@ -284,11 +289,15 @@ def backup_configs(backup_name=None):
         for config_file in config_files:
             if exists(config_file):
                 dest_file = join(backup_dir, basename(config_file))
-                success, _ = safe_system_call("cp '%s' '%s'" % (config_file, dest_file))
+                success, _ = safe_system_call(
+                    "cp '%s' '%s'" %
+                    (config_file, dest_file))
                 if success:
                     backed_up.append(config_file)
 
-        print("Backup completed: %d files saved in %s" % (len(backed_up), backup_dir))
+        print(
+            "Backup completed: %d files saved in %s" %
+            (len(backed_up), backup_dir))
         return backup_dir, backed_up
 
     except Exception as e:
@@ -314,7 +323,8 @@ def check_dependencies():
     """Check and install missing dependencies"""
     missing_deps = []
 
-    if not exists("/usr/lib/libusb-1.0.so.0") and not exists("/usr/lib/libusb-1.0.so"):
+    if not exists(
+            "/usr/lib/libusb-1.0.so.0") and not exists("/usr/lib/libusb-1.0.so"):
         missing_deps.append("libusb-1.0-0")
 
     ssl_check = safe_system_call("ldconfig -p | grep libssl > /dev/null")
@@ -341,10 +351,12 @@ def install_package():
             safe_system_call("opkg update")
 
         # Install libusb if necessary
-        libusb_check = safe_system_call(" ".join(check_cmd + ["|", "grep", "-q", "libusb-1.0-0"]))
+        libusb_check = safe_system_call(
+            " ".join(check_cmd + ["|", "grep", "-q", "libusb-1.0-0"]))
         if not libusb_check[0]:
             print("Installing libusb-1.0-0...")
-            success, _ = safe_system_call(" ".join(install_cmd + ["libusb-1.0-0"]))
+            success, _ = safe_system_call(
+                " ".join(install_cmd + ["libusb-1.0-0"]))
             if success:
                 print("libusb-1.0-0 installed successfully")
             else:
@@ -416,11 +428,41 @@ class m2list(MenuList):
 def show_list_1(h):
     res = [h]
     if screenwidth.width() == 2560:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(1000, 50), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(
+            MultiContentEntryText(
+                pos=(
+                    2,
+                    0),
+                size=(
+                    1000,
+                    50),
+                font=0,
+                text=h,
+                flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     elif screenwidth.width() == 1920:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(780, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(
+            MultiContentEntryText(
+                pos=(
+                    2,
+                    0),
+                size=(
+                    780,
+                    40),
+                font=0,
+                text=h,
+                flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     else:
-        res.append(MultiContentEntryText(pos=(2, 0), size=(780, 40), font=0, text=h, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
+        res.append(
+            MultiContentEntryText(
+                pos=(
+                    2,
+                    0),
+                size=(
+                    780,
+                    40),
+                font=0,
+                text=h,
+                flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
     return res
 
 
@@ -449,7 +491,8 @@ class ResourceMonitor:
             # 3. Active cam processes - USE THE SAFE VERSION
             active_cams = ResourceMonitor._get_active_cams_safe()
 
-            return "Mem: %s | CPU: %s | Cams: %s" % (memory_usage, cpu_usage, active_cams)
+            return "Mem: %s | CPU: %s | Cams: %s" % (
+                memory_usage, cpu_usage, active_cams)
 
         except Exception as e:
             print("[DEBUG] get_cam_resources error: %s" % str(e))
@@ -459,7 +502,13 @@ class ResourceMonitor:
     def _get_active_cams_safe():
         """Count active cam processes - count only unique processes"""
         try:
-            cam_keywords = ["oscam", "cccam", "ncam", "mgcamd", "gcam", "wicardd"]
+            cam_keywords = [
+                "oscam",
+                "cccam",
+                "ncam",
+                "mgcamd",
+                "gcam",
+                "wicardd"]
             found_cams = set()
 
             if exists("/proc"):
@@ -475,7 +524,8 @@ class ResourceMonitor:
                                 # Check if it's a cam
                                 for cam in cam_keywords:
                                     if cam in comm:
-                                        # Use base cam name (without numbers/versions)
+                                        # Use base cam name (without
+                                        # numbers/versions)
                                         base_cam = cam
                                         found_cams.add(base_cam)
                                         break
@@ -512,7 +562,7 @@ class ResourceMonitor:
                     return "%.1f%%" % used_percent
 
             return "N/A"
-        except:
+        except BaseException:
             return "N/A"
 
     @staticmethod
@@ -524,7 +574,7 @@ class ResourceMonitor:
                     load_avg = f.read().split()[0]
                 return load_avg
             return "N/A"
-        except:
+        except BaseException:
             return "N/A"
 
 
@@ -548,7 +598,7 @@ class ConfigBackupManager:
                 if item.startswith("backup_"):
                     backups.append(item)
             return sorted(backups, reverse=True)
-        except:
+        except BaseException:
             return []
 
     def restore_backup(self, backup_name):
@@ -581,20 +631,30 @@ class ConfigBackupManager:
                         if not exists(destination_dir):
                             mkdir(destination_dir)
 
-                        success, _ = safe_system_call("cp '%s' '%s'" % (source_file, destination), background=True)
+                        success, _ = safe_system_call(
+                            "cp '%s' '%s'" %
+                            (source_file, destination), background=True)
 
                         if success:
-                            safe_system_call("chmod 644 '%s'" % destination, background=True)
+                            safe_system_call(
+                                "chmod 644 '%s'" %
+                                destination, background=True)
                             restored_files.append(backup_file)
-                            print("Restored: %s -> %s" % (backup_file, destination))
+                            print(
+                                "Restored: %s -> %s" %
+                                (backup_file, destination))
                         else:
                             print("Failed to restore: %s" % backup_file)
 
                     except Exception as file_error:
-                        print("Error restoring %s: %s" % (backup_file, str(file_error)))
+                        print(
+                            "Error restoring %s: %s" %
+                            (backup_file, str(file_error)))
 
             if restored_files:
-                print("Backup restoration completed: %d files restored" % len(restored_files))
+                print(
+                    "Backup restoration completed: %d files restored" %
+                    len(restored_files))
                 return True, restored_files
             else:
                 print("No files were restored")
@@ -623,7 +683,7 @@ class tvManager(Screen):
         self.oldService = ""
         try:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-        except:
+        except BaseException:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
         self["NumberActions"] = NumberActionMap(
             ["NumberActions"],
@@ -659,7 +719,8 @@ class tvManager(Screen):
         self["key_yellow"] = Label(_("Cam Download"))
         self["key_red"] = Label(_("Stop"))
         self["key_blue"] = Label("Softcam")
-        self["description"] = Label(_("Scanning and retrieval list softcam ..."))
+        self["description"] = Label(
+            _("Scanning and retrieval list softcam ..."))
         self["resource_label"] = Label()
         self["info"] = Label()
         self["list"] = List([])
@@ -672,14 +733,15 @@ class tvManager(Screen):
         self.timer = eTimer()
         try:
             self.timer_conn = self.timer.timeout.connect(self.cgdesc)
-        except:
+        except BaseException:
             self.timer.callback.append(self.cgdesc)
         self.timer.start(300, 1)
 
         self.EcmInfoPollTimer = eTimer()
         try:
-            self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(self.setEcmInfo)
-        except:
+            self.EcmInfoPollTimer_conn = self.EcmInfoPollTimer.timeout.connect(
+                self.setEcmInfo)
+        except BaseException:
             self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
         self.EcmInfoPollTimer.start(200)
 
@@ -687,8 +749,9 @@ class tvManager(Screen):
         self["resource_label"].setText("Loading resources...")
         self.resource_timer = eTimer()
         try:
-            self.resource_timer_conn = self.resource_timer.timeout.connect(self.update_resource_info)
-        except:
+            self.resource_timer_conn = self.resource_timer.timeout.connect(
+                self.update_resource_info)
+        except BaseException:
             self.resource_timer.callback.append(self.update_resource_info)
         self.resource_timer.start(10000)
         self.onShown.append(self.ecm)
@@ -711,17 +774,30 @@ class tvManager(Screen):
         """Create configuration backup"""
         backup_dir, backed_up = backup_configs()
         if backup_dir:
-            message = "Backup created successfully!\nSaved %d files to:\n%s" % (len(backed_up), backup_dir)
-            self.session.open(MessageBox, _(message), MessageBox.TYPE_INFO, timeout=10)
+            message = "Backup created successfully!\nSaved %d files to:\n%s" % (
+                len(backed_up), backup_dir)
+            self.session.open(
+                MessageBox,
+                _(message),
+                MessageBox.TYPE_INFO,
+                timeout=10)
         else:
-            self.session.open(MessageBox, _("Backup failed!"), MessageBox.TYPE_ERROR, timeout=5)
+            self.session.open(
+                MessageBox,
+                _("Backup failed!"),
+                MessageBox.TYPE_ERROR,
+                timeout=5)
 
     def show_restore_menu(self):
         """Show menu to select backup to restore"""
         backups = self.backup_manager.list_backups()
 
         if not backups:
-            self.session.open(MessageBox, _("No backups available!"), MessageBox.TYPE_INFO, timeout=5)
+            self.session.open(
+                MessageBox,
+                _("No backups available!"),
+                MessageBox.TYPE_INFO,
+                timeout=5)
             return
 
         backup_list = []
@@ -729,24 +805,39 @@ class tvManager(Screen):
             backup_path = join(self.backup_manager.backup_dir, backup)
             if exists(backup_path):
                 try:
-                    backup_time = backup.replace("backup_", "").replace("_", " ").replace("-", ":")
-                    file_count = len([f for f in listdir(backup_path) if exists(join(backup_path, f))])
-                    backup_list.append((backup, "Backup: %s (%d files)" % (backup_time, file_count)))
-                except:
+                    backup_time = backup.replace(
+                        "backup_",
+                        "").replace(
+                        "_",
+                        " ").replace(
+                        "-",
+                        ":")
+                    file_count = len([f for f in listdir(
+                        backup_path) if exists(join(backup_path, f))])
+                    backup_list.append(
+                        (backup, "Backup: %s (%d files)" %
+                         (backup_time, file_count)))
+                except BaseException:
                     backup_list.append((backup, backup))
 
         if not backup_list:
-            self.session.open(MessageBox, _("No valid backups found!"), MessageBox.TYPE_INFO, timeout=5)
+            self.session.open(
+                MessageBox,
+                _("No valid backups found!"),
+                MessageBox.TYPE_INFO,
+                timeout=5)
             return
 
         def backup_selected(selected_backup):
             if selected_backup:
                 self.session.openWithCallback(
-                    lambda result: self._execute_restore(selected_backup[0], result),
+                    lambda result: self._execute_restore(
+                        selected_backup[0],
+                        result),
                     MessageBox,
-                    _("Restore backup '%s'?\nThis will overwrite current configurations.") % selected_backup[0],
-                    MessageBox.TYPE_YESNO
-                )
+                    _("Restore backup '%s'?\nThis will overwrite current configurations.") %
+                    selected_backup[0],
+                    MessageBox.TYPE_YESNO)
 
         self.session.openWithCallback(
             backup_selected,
@@ -758,10 +849,16 @@ class tvManager(Screen):
     def _execute_restore(self, backup_name, confirm):
         """Execute restore after confirmation"""
         if confirm:
-            success, restored_files = self.backup_manager.restore_backup(backup_name)
+            success, restored_files = self.backup_manager.restore_backup(
+                backup_name)
             if success:
-                message = _("Backup restored successfully!\nRestored files:\n- %s") % "\n- ".join(restored_files)
-                self.session.open(MessageBox, message, MessageBox.TYPE_INFO, timeout=10)
+                message = _(
+                    "Backup restored successfully!\nRestored files:\n- %s") % "\n- ".join(restored_files)
+                self.session.open(
+                    MessageBox,
+                    message,
+                    MessageBox.TYPE_INFO,
+                    timeout=10)
                 self.session.openWithCallback(
                     lambda result: self._restart_cam_after_restore(result),
                     MessageBox,
@@ -769,7 +866,11 @@ class tvManager(Screen):
                     MessageBox.TYPE_YESNO
                 )
             else:
-                self.session.open(MessageBox, _("Backup restoration failed!"), MessageBox.TYPE_ERROR, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("Backup restoration failed!"),
+                    MessageBox.TYPE_ERROR,
+                    timeout=5)
 
     def _restart_cam_after_restore(self, restart):
         """Restart cam after restore"""
@@ -777,9 +878,17 @@ class tvManager(Screen):
             if self.curCam and self.curCam != "None":
                 self.cmd1 = "/usr/camscript/" + self.curCam + ".sh cam_res &"
                 system(self.cmd1)
-                self.session.open(MessageBox, _("Softcam restarted with new configuration!"), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("Softcam restarted with new configuration!"),
+                    MessageBox.TYPE_INFO,
+                    timeout=5)
             else:
-                self.session.open(MessageBox, _("No active cam to restart!"), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("No active cam to restart!"),
+                    MessageBox.TYPE_INFO,
+                    timeout=5)
 
     def setBlueKey(self):
         global runningcam
@@ -831,7 +940,10 @@ class tvManager(Screen):
                 self.open_cccam_info()
         except Exception as e:
             print("[Blue] General Error:", e)
-            self.session.open(MessageBox, _("Error opening cam info: %s" % str(e)), MessageBox.TYPE_ERROR, timeout=5)
+            self.session.open(
+                MessageBox, _(
+                    "Error opening cam info: %s" %
+                    str(e)), MessageBox.TYPE_ERROR, timeout=5)
 
     def open_oscam_info(self):
         """Open OSCamInfo with error handling"""
@@ -844,7 +956,11 @@ class tvManager(Screen):
                 self.session.open(OSCamInfo)
             except ImportError as e:
                 print("OSCamInfo import error:", e)
-                self.session.open(MessageBox, _("OSCamInfo not available"), MessageBox.TYPE_ERROR, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("OSCamInfo not available"),
+                    MessageBox.TYPE_ERROR,
+                    timeout=5)
 
     def open_cccam_info(self):
         """Open CCcamInfo with error handling"""
@@ -857,7 +973,11 @@ class tvManager(Screen):
                 self.session.open(CCcamInfoMain)
             except ImportError as e:
                 print("CCcamInfo import error:", e)
-                self.session.open(MessageBox, _("CCcamInfo not available"), MessageBox.TYPE_ERROR, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("CCcamInfo not available"),
+                    MessageBox.TYPE_ERROR,
+                    timeout=5)
 
     def open_ncam_info(self):
         """Open NCamInfo with error handling"""
@@ -870,7 +990,11 @@ class tvManager(Screen):
                 self.session.open(NcamInfoMenu)
             except ImportError as e:
                 print("NCamInfo import error:", e)
-                self.session.open(MessageBox, _("NCamInfo not available"), MessageBox.TYPE_ERROR, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("NCamInfo not available"),
+                    MessageBox.TYPE_ERROR,
+                    timeout=5)
 
     def keyNumberGlobal(self, number):
         """Number key handling with shortcuts for quick access"""
@@ -916,7 +1040,11 @@ class tvManager(Screen):
             6 - Cleanup System  # <-- ADDED
             8 - This Help
             Press OK to close""")
-        self.session.open(MessageBox, help_text, MessageBox.TYPE_INFO, timeout=15)
+        self.session.open(
+            MessageBox,
+            help_text,
+            MessageBox.TYPE_INFO,
+            timeout=15)
 
     def show_resource_info(self):
         """Show system resource information"""
@@ -937,12 +1065,19 @@ class tvManager(Screen):
                 Cam Resources: %s
                 Press OK to close""") % (memory_usage, cpu_usage, disk, cam_resources)
 
-            self.session.open(MessageBox, resource_text, MessageBox.TYPE_INFO, timeout=10)
+            self.session.open(
+                MessageBox,
+                resource_text,
+                MessageBox.TYPE_INFO,
+                timeout=10)
 
         except Exception as e:
             print("Error getting resource info: %s" % str(e))
-            self.session.open(MessageBox, _("Error getting resource information"),
-                              MessageBox.TYPE_ERROR, timeout=3)
+            self.session.open(
+                MessageBox,
+                _("Error getting resource information"),
+                MessageBox.TYPE_ERROR,
+                timeout=3)
 
     def quick_restart(self):
         """Quick restart of current softcam"""
@@ -967,9 +1102,9 @@ class tvManager(Screen):
                     start_cmd = "/usr/camscript/%s.sh cam_up &" % self.curCam
                     safe_system_call(start_cmd)
 
-                    self.session.open(MessageBox,
-                                      _("%s restarted successfully!") % self.curCam,
-                                      MessageBox.TYPE_INFO, timeout=3)
+                    self.session.open(
+                        MessageBox, _("%s restarted successfully!") %
+                        self.curCam, MessageBox.TYPE_INFO, timeout=3)
                 else:
                     self.session.open(MessageBox,
                                       _("Error stopping %s!") % self.curCam,
@@ -1047,7 +1182,9 @@ class tvManager(Screen):
 
         try:
             ecm_text = "".join(ecm_info).strip()
-            ecm_text = ''.join(char for char in ecm_text if char.isprintable() or char in ['\n', '\t'])
+            ecm_text = ''.join(
+                char for char in ecm_text if char.isprintable() or char in [
+                    '\n', '\t'])
             if len(ecm_text) > 200:
                 ecm_text = ecm_text[:197] + "..."
 
@@ -1088,12 +1225,18 @@ class tvManager(Screen):
         """Clean ECM content from problematic characters"""
         try:
             if PY3:
-                cleaned = ''.join(char for char in content if char.isprintable() or char in ['\n', '\t'])
+                cleaned = ''.join(
+                    char for char in content if char.isprintable() or char in [
+                        '\n', '\t'])
             else:
                 if isinstance(content, unicode):
-                    cleaned = ''.join(char for char in content if char.isprintable() or char in [u'\n', u'\t'])
+                    cleaned = ''.join(
+                        char for char in content if char.isprintable() or char in [
+                            u'\n', u'\t'])
                 else:
-                    cleaned = ''.join(char for char in content if char.isprintable() or char in ['\n', '\t'])
+                    cleaned = ''.join(
+                        char for char in content if char.isprintable() or char in [
+                            '\n', '\t'])
 
             cleaned = sub(r'\n+', '\n', cleaned)
             cleaned = sub(r' +', ' ', cleaned)
@@ -1108,7 +1251,8 @@ class tvManager(Screen):
         self.EcmInfoPollTimer.stop()
 
     def messagekd(self):
-        self.session.openWithCallback(self.keysdownload, MessageBox, _("Update SoftcamKeys from google search?"), MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(self.keysdownload, MessageBox, _(
+            "Update SoftcamKeys from google search?"), MessageBox.TYPE_YESNO)
 
     def keysdownload(self, result):
         if result:
@@ -1152,7 +1296,8 @@ class tvManager(Screen):
         if libs:
             libsssl = libs
         cont += " ------------------------------------------ \n"
-        cont += "Cpu: %s\nArchitecture info: %s\nPython V.%s\nLibssl(oscam):\n%s" % (arc, arkFull, python, libsssl)
+        cont += "Cpu: %s\nArchitecture info: %s\nPython V.%s\nLibssl(oscam):\n%s" % (
+            arc, arkFull, python, libsssl)
         cont += " ------------------------------------------ \n"
         cont += "Button Info for Other Info\n"
         return cont
@@ -1161,9 +1306,11 @@ class tvManager(Screen):
         zarcffll = "by Lululla"
         try:
             if exists("/usr/bin/apt-get"):
-                zarcffll = popen("dpkg --print-architecture | grep -iE 'arm|aarch64|mips|cortex|sh4|sh_4'").read().strip("\n\r")
+                zarcffll = popen(
+                    "dpkg --print-architecture | grep -iE 'arm|aarch64|mips|cortex|sh4|sh_4'").read().strip("\n\r")
             else:
-                zarcffll = popen("opkg print-architecture | grep -iE 'arm|aarch64|mips|cortex|h4|sh_4'").read().strip("\n\r")
+                zarcffll = popen(
+                    "opkg print-architecture | grep -iE 'arm|aarch64|mips|cortex|h4|sh_4'").read().strip("\n\r")
             return str(zarcffll)
         except Exception as e:
             print("Error ", e)
@@ -1189,12 +1336,16 @@ class tvManager(Screen):
     def action(self):
         i = len(self.softcamslist)
         if i < 1:
-            self.session.open(MessageBox, _("No softcams available!"), MessageBox.TYPE_ERROR, timeout=5)
+            self.session.open(
+                MessageBox,
+                _("No softcams available!"),
+                MessageBox.TYPE_ERROR,
+                timeout=5)
             return
 
         try:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-        except:
+        except BaseException:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
 
         self.session.nav.stopService()
@@ -1215,31 +1366,47 @@ class tvManager(Screen):
                     pass
 
                 if self.last == self.var:
-                    self.cmd1 = "/usr/camscript/" + self.softcamslist[self.var][0] + ".sh" + " cam_res &"
-                    _session.open(MessageBox, _("Please wait..\nRESTART CAM"), MessageBox.TYPE_INFO, timeout=5)
+                    self.cmd1 = "/usr/camscript/" + \
+                        self.softcamslist[self.var][0] + ".sh" + " cam_res &"
+                    _session.open(
+                        MessageBox,
+                        _("Please wait..\nRESTART CAM"),
+                        MessageBox.TYPE_INFO,
+                        timeout=5)
                     system(self.cmd1)
                     sleep(1)
                 else:
-                    self.cmd1 = "/usr/camscript/" + self.softcamslist[self.last][0] + ".sh" + " cam_down &"
-                    _session.open(MessageBox, _("Please wait..\nSTOP & RESTART CAM"), MessageBox.TYPE_INFO, timeout=5)
+                    self.cmd1 = "/usr/camscript/" + \
+                        self.softcamslist[self.last][0] + ".sh" + " cam_down &"
+                    _session.open(
+                        MessageBox,
+                        _("Please wait..\nSTOP & RESTART CAM"),
+                        MessageBox.TYPE_INFO,
+                        timeout=5)
                     system(self.cmd1)
                     sleep(1)
-                    self.cmd1 = "/usr/camscript/" + self.softcamslist[self.var][0] + ".sh" + " cam_up &"
+                    self.cmd1 = "/usr/camscript/" + \
+                        self.softcamslist[self.var][0] + ".sh" + " cam_up &"
                     system(self.cmd1)
             else:
                 try:
-                    self.cmd1 = "/usr/camscript/" + self.softcamslist[self.var][0] + ".sh" + " cam_up &"
-                    _session.open(MessageBox, _("Please wait..\nSTART UP CAM"), MessageBox.TYPE_INFO, timeout=5)
+                    self.cmd1 = "/usr/camscript/" + \
+                        self.softcamslist[self.var][0] + ".sh" + " cam_up &"
+                    _session.open(
+                        MessageBox,
+                        _("Please wait..\nSTART UP CAM"),
+                        MessageBox.TYPE_INFO,
+                        timeout=5)
                     system(self.cmd1)
                     sleep(1)
-                except:
+                except BaseException:
                     self.close()
 
             if self.last != self.var:
                 try:
                     self.curCam = self.softcamslist[self.var][0]
                     self.writeFile()
-                except:
+                except BaseException:
                     self.close()
 
         self.session.nav.playService(self.oldService)
@@ -1274,7 +1441,7 @@ class tvManager(Screen):
         global runningcam
         try:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-        except:
+        except BaseException:
             self.oldService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
 
         self.session.nav.stopService()
@@ -1283,7 +1450,8 @@ class tvManager(Screen):
             self.last = self.getLastIndex()
 
             if self.last is not None:
-                self.cmd1 = "/usr/camscript/" + self.softcamslist[self.last][0] + ".sh" + " cam_down &"
+                self.cmd1 = "/usr/camscript/" + \
+                    self.softcamslist[self.last][0] + ".sh" + " cam_down &"
                 system(self.cmd1)
                 self.curCam = None
                 self.writeFile()
@@ -1292,7 +1460,11 @@ class tvManager(Screen):
                 if exists(ECM_INFO):
                     remove(ECM_INFO)
 
-                self.session.open(MessageBox, _("Please wait..\nSTOP CAM"), MessageBox.TYPE_INFO, timeout=5)
+                self.session.open(
+                    MessageBox,
+                    _("Please wait..\nSTOP CAM"),
+                    MessageBox.TYPE_INFO,
+                    timeout=5)
                 self["info"].setText("CAM STOPPED")
                 self.BlueAction = "SOFTCAM"
                 runningcam = "softcam"
@@ -1312,8 +1484,16 @@ class tvManager(Screen):
                     s += 1
             i = len(self.softcamslist)
             del self.softcamslist[0:i]
-            png1 = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format("actcam.png")))
-            png2 = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager/res/img/{}".format("defcam.png")))
+            png1 = LoadPixmap(
+                cached=True,
+                path=resolveFilename(
+                    SCOPE_PLUGINS,
+                    "Extensions/tvManager/res/img/{}".format("actcam.png")))
+            png2 = LoadPixmap(
+                cached=True,
+                path=resolveFilename(
+                    SCOPE_PLUGINS,
+                    "Extensions/tvManager/res/img/{}".format("defcam.png")))
             if s >= 1:
                 for lines in scriptlist:
                     dat = pathscript + lines
@@ -1324,10 +1504,12 @@ class tvManager(Screen):
                     for line in sfile:
                         if line[0:3] == "OSD":
                             nam = line[5:len(line) - 2]
-                            print("We are in tvManager and cam is type  = ", nam)
+                            print(
+                                "We are in tvManager and cam is type  = ", nam)
                             if self.curCam != "None" or self.curCam is not None:
                                 if nam == self.curCam:
-                                    self.softcamslist.append((nam,  png1, "(Active)"))
+                                    self.softcamslist.append(
+                                        (nam, png1, "(Active)"))
                                     pliste.append((nam, "(Active)"))
                                 else:
                                     self.softcamslist.append((nam, png2, ""))
@@ -1359,7 +1541,7 @@ class tvManager(Screen):
                     clist = open(self.FilCurr, "r", encoding="UTF-8")
                 else:
                     clist = open(self.FilCurr, "r")
-            except:
+            except BaseException:
                 return
             if clist is not None:
                 for line in clist:
@@ -1517,9 +1699,11 @@ class GetipklistTv(Screen):
                 self.downloadxmlpage(self.data)
             else:
                 print("have an Atv-PLi - etc..!!!")
-                getPage(self.xml.encode("utf-8")).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
+                getPage(self.xml.encode(
+                    "utf-8")).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
         else:
-            getPage(self.xml.encode("utf-8")).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
+            getPage(self.xml.encode("utf-8")
+                    ).addCallback(self.downloadxmlpage).addErrback(self.errorLoad)
             print("Local XML loaded")
 
     def downloadxmlpage(self, data):
@@ -1537,7 +1721,8 @@ class GetipklistTv(Screen):
                             continue
 
                     if exists("/usr/bin/apt-get"):
-                        if "deb" not in str(plugins.getAttribute("cont")).lower():
+                        if "deb" not in str(
+                                plugins.getAttribute("cont")).lower():
                             continue
                     self.names.append(str(plugins.getAttribute("cont")))
                 print("have an Atv-PLi - etc..!!!", self.names)
@@ -1546,7 +1731,8 @@ class GetipklistTv(Screen):
                 self.downloading = True
         except Exception as e:
             print("Error during XML parsing:", e)
-            self["description"].setText(_("Error processing server addons data"))
+            self["description"].setText(
+                _("Error processing server addons data"))
 
     def errorLoad(self, error):
         print(str(error))
@@ -1560,7 +1746,7 @@ class GetipklistTv(Screen):
                 self.session.open(GetipkTv, self.xmlparse, selection)
             else:
                 self.close()
-        except:
+        except BaseException:
             return
 
 
@@ -1616,7 +1802,11 @@ class GetipkTv(Screen):
         self["paypal"].setText(payp)
 
     def message(self):
-        self.session.openWithCallback(self.selclicked, MessageBox, _("Do you install this plugin ?"), MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(
+            self.selclicked,
+            MessageBox,
+            _("Do you install this plugin ?"),
+            MessageBox.TYPE_YESNO)
 
     def selclicked(self, result):
         if result:
@@ -1625,21 +1815,25 @@ class GetipkTv(Screen):
                 for plugins in self.xmlparse.getElementsByTagName("plugins"):
                     if str(plugins.getAttribute("cont")) == self.selection:
                         for plugin in plugins.getElementsByTagName("plugin"):
-                            if str(plugin.getAttribute("name")) == selection_country:
-                                self.com = str(plugin.getElementsByTagName("url")[0].childNodes[0].data)
+                            if str(
+                                    plugin.getAttribute("name")) == selection_country:
+                                self.com = str(
+                                    plugin.getElementsByTagName("url")[0].childNodes[0].data)
                                 self.dom = str(plugin.getAttribute("name"))
                                 # test lululla
                                 self.com = self.com.replace('"', "")
                                 if ".deb" in self.com:
                                     if not exists("/usr/bin/apt-get"):
-                                        self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
+                                        self.session.open(
+                                            MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
                                         return
                                     n2 = self.com.find("_", 0)
                                     self.dom = self.com[:n2]
 
                                 if ".ipk" in self.com:
                                     if exists("/usr/bin/apt-get"):
-                                        self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
+                                        self.session.open(
+                                            MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
                                         return
                                     n2 = self.com.find("_", 0)
                                     self.dom = self.com[:n2]
@@ -1676,13 +1870,18 @@ class GetipkTv(Screen):
         elif ".bz2" in self.plug and "gz" in self.plug:
             cmd2 = "tar -xjvf '/tmp/" + self.plug + "' -C /"
         cmd = cmd2
-        cmd00 = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (AgentRequest, str(self.com), self.folddest, cmd)
+        cmd00 = "wget --no-check-certificate -U '%s' -c '%s' -O '%s';%s > /dev/null" % (
+            AgentRequest, str(self.com), self.folddest, cmd)
         print("cmd00:", cmd00)
         title = (_("Installing %s\nPlease Wait...") % self.dom)
         self.session.open(Console, _(title), [cmd00], closeOnSuccess=False)
 
     def remove(self):
-        self.session.openWithCallback(self.removenow, MessageBox, _("Do you want to remove?"), MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(
+            self.removenow,
+            MessageBox,
+            _("Do you want to remove?"),
+            MessageBox.TYPE_YESNO)
 
     def removenow(self, answer=False):
         if answer:
@@ -1690,8 +1889,10 @@ class GetipkTv(Screen):
             for plugins in self.xmlparse.getElementsByTagName("plugins"):
                 if str(plugins.getAttribute("cont")) == self.selection:
                     for plugin in plugins.getElementsByTagName("plugin"):
-                        if str(plugin.getAttribute("name")) == selection_country:
-                            self.com = str(plugin.getElementsByTagName("url")[0].childNodes[0].data)
+                        if str(
+                                plugin.getAttribute("name")) == selection_country:
+                            self.com = str(
+                                plugin.getElementsByTagName("url")[0].childNodes[0].data)
                             self.dom = str(plugin.getAttribute("name"))
                             # test lululla
                             self.com = self.com.replace('"', "")
@@ -1699,7 +1900,8 @@ class GetipkTv(Screen):
 
                             if ".deb" in self.com:
                                 if not exists("/usr/bin/apt-get"):
-                                    self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
+                                    self.session.open(
+                                        MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
                                     return
                                 self.plug = self.com.split("/")[-1]
                                 n2 = self.plug.find("_", 0)
@@ -1708,7 +1910,8 @@ class GetipkTv(Screen):
                                 print("cmd deb remove:", cmd)
                             if ".ipk" in self.com:
                                 if exists("/usr/bin/apt-get"):
-                                    self.session.open(MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
+                                    self.session.open(
+                                        MessageBox, _("Unknow Image!"), MessageBox.TYPE_INFO, timeout=5)
                                     return
                                 self.plug = self.com.split("/")[-1]
                                 n2 = self.plug.find("_", 0)
@@ -1720,7 +1923,11 @@ class GetipkTv(Screen):
                             self.session.open(Console, _(title), [cmd])
 
     def restart(self):
-        self.session.openWithCallback(self.restartnow, MessageBox, _("Do you want to restart Gui Interface?"), MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(
+            self.restartnow,
+            MessageBox,
+            _("Do you want to restart Gui Interface?"),
+            MessageBox.TYPE_YESNO)
 
     def restartnow(self, answer=False):
         if answer:
@@ -1786,7 +1993,9 @@ class InfoCfg(Screen):
     def check_vers(self):
         remote_version = "0.0"
         remote_changelog = ""
-        req = Request(b64decoder(installer_url), headers={"User-Agent": AgentRequest})
+        req = Request(
+            b64decoder(installer_url), headers={
+                "User-Agent": AgentRequest})
         page = urlopen(req).read()
         if PY3:
             data = page.decode("utf-8")
@@ -1807,29 +2016,62 @@ class InfoCfg(Screen):
         if currversion < remote_version:
             self.Update = True
             self["key_yellow"].show()
-            self.session.open(MessageBox, _("New version %s is available\n\nChangelog: %s\n\nPress yellow button to update.") % (self.new_version, self.new_changelog), MessageBox.TYPE_INFO, timeout=5)
+            self.session.open(
+                MessageBox,
+                _("New version %s is available\n\nChangelog: %s\n\nPress yellow button to update.") %
+                (self.new_version,
+                 self.new_changelog),
+                MessageBox.TYPE_INFO,
+                timeout=5)
         self["key_green"].show()
 
     def update_me(self):
         if self.Update is True:
-            self.session.openWithCallback(self.install_update, MessageBox, _("New version %s is available.\n\nChangelog: %s \n\nInstall now?") % (self.new_version, self.new_changelog), MessageBox.TYPE_YESNO)
+            self.session.openWithCallback(
+                self.install_update,
+                MessageBox,
+                _("New version %s is available.\n\nChangelog: %s \n\nInstall now?") %
+                (self.new_version,
+                 self.new_changelog),
+                MessageBox.TYPE_YESNO)
         else:
-            self.session.open(MessageBox, _("You have the latest version!"), MessageBox.TYPE_INFO, timeout=3)
+            self.session.open(
+                MessageBox,
+                _("You have the latest version!"),
+                MessageBox.TYPE_INFO,
+                timeout=3)
 
     def update_dev(self):
-        req = Request(b64decoder(developer_url), headers={"User-Agent": AgentRequest})
+        req = Request(
+            b64decoder(developer_url), headers={
+                "User-Agent": AgentRequest})
         page = urlopen(req).read()
         data = json.loads(page)
         remote_date = data["pushed_at"]
         strp_remote_date = datetime.strptime(remote_date, "%Y-%m-%dT%H:%M:%SZ")
         remote_date = strp_remote_date.strftime("%Y-%m-%d")
-        self.session.openWithCallback(self.install_update, MessageBox, _("Install developer update (%s)?" % remote_date), MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(
+            self.install_update, MessageBox, _(
+                "Install developer update (%s)?" %
+                remote_date), MessageBox.TYPE_YESNO)
 
     def install_update(self, answer=False):
         if answer:
-            self.session.open(Console, "Upgrading...", cmdlist=("wget -q --no-check-certificate " + b64decoder(installer_url) + " -O - | /bin/sh"), finishedCallback=self.myCallback, closeOnSuccess=False)
+            self.session.open(
+                Console,
+                "Upgrading...",
+                cmdlist=(
+                    "wget -q --no-check-certificate " +
+                    b64decoder(installer_url) +
+                    " -O - | /bin/sh"),
+                finishedCallback=self.myCallback,
+                closeOnSuccess=False)
         else:
-            self.session.open(MessageBox, _("Update Aborted!"), MessageBox.TYPE_INFO, timeout=3)
+            self.session.open(
+                MessageBox,
+                _("Update Aborted!"),
+                MessageBox.TYPE_INFO,
+                timeout=3)
 
     def myCallback(self, result=None):
         print("result:", result)
@@ -1873,9 +2115,11 @@ class InfoCfg(Screen):
                         pass
             # Disk info
             disk = "N/A"
-            success, disk_info = safe_system_call("df -h / | tail -1 | awk '{print $4\"/\"$2\" (\"$5\" used)\"}'", timeout=3)
+            success, disk_info = safe_system_call(
+                "df -h / | tail -1 | awk '{print $4\"/\"$2\" (\"$5\" used)\"}'", timeout=3)
             if success:
-                disk = disk_info.decode().strip() if isinstance(disk_info, bytes) else disk_info.strip()
+                disk = disk_info.decode().strip() if isinstance(
+                    disk_info, bytes) else disk_info.strip()
             resource_text = _("""SYSTEM RESOURCES
                 Architecture: %s
                 Python: %s
@@ -1894,7 +2138,8 @@ class InfoCfg(Screen):
             python = popen("python -V").read().strip() or "N/A"
             arch_info = self.arckget() or "N/A"
             libssl = "N/A"
-            success, libs = safe_system_call("ls -1 /usr/lib/libssl.so* 2>/dev/null | head -1", timeout=3)
+            success, libs = safe_system_call(
+                "ls -1 /usr/lib/libssl.so* 2>/dev/null | head -1", timeout=3)
             if success and libs:
                 libssl = libs.decode().strip() if isinstance(libs, bytes) else libs.strip()
             system_text = _("""SYSTEM INFORMATION
@@ -1910,10 +2155,14 @@ class InfoCfg(Screen):
     def get_active_cam(self):
         """Get active cam name"""
         try:
-            if hasattr(self, 'session') and hasattr(self.session, 'softcam_manager'):
+            if hasattr(
+                    self,
+                    'session') and hasattr(
+                    self.session,
+                    'softcam_manager'):
                 return self.session.softcam_manager.curCam or "None"
             return "None"
-        except:
+        except BaseException:
             return "None"
 
     def get_image_info(self):
@@ -1926,17 +2175,19 @@ class InfoCfg(Screen):
                 with open("/etc/image-version", "r") as f:
                     return f.read().strip()
             return "Unknown"
-        except:
+        except BaseException:
             return "Unknown"
 
     def arckget(self):
         """Get architecture information"""
         try:
             if exists("/usr/bin/apt-get"):
-                return popen("dpkg --print-architecture").read().strip() or "N/A"
+                return popen(
+                    "dpkg --print-architecture").read().strip() or "N/A"
             else:
-                return popen("opkg print-architecture | head -1").read().strip() or "N/A"
-        except:
+                return popen(
+                    "opkg print-architecture | head -1").read().strip() or "N/A"
+        except BaseException:
             return "N/A"
 
     def toggleContent(self):
@@ -1984,7 +2235,8 @@ class DreamCCAuto:
 
     def readCurrent(self):
         current = None
-        self.FilCurr = "/etc/CurrentBhCamName" if exists("/etc/CurrentBhCamName") else "/etc/clist.list"
+        self.FilCurr = "/etc/CurrentBhCamName" if exists(
+            "/etc/CurrentBhCamName") else "/etc/clist.list"
         try:
             with open(self.FilCurr, "r", encoding="UTF-8") as clist:
                 for line in clist:
@@ -2014,12 +2266,15 @@ class DreamCCAuto:
                             nam = line[5:].strip()
                             if current == nam:
                                 if exists("/etc/init.d/dccamd"):
-                                    system("mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
-                                for link, target in [("/var/bin", "/usr/bin"), ("/var/keys", "/usr/keys"), ("/var/scce", "/usr/scce"), ("/var/script", "/usr/script")]:
+                                    system(
+                                        "mv /etc/init.d/dccamd /etc/init.d/dccamdOrig &")
+                                for link, target in [
+                                        ("/var/bin", "/usr/bin"), ("/var/keys", "/usr/keys"), ("/var/scce", "/usr/scce"), ("/var/script", "/usr/script")]:
                                     if not islink(link):
                                         system("ln -sf %s %s" % (target, link))
                                 if system("/etc/startcam.sh") != 0:
-                                    print("Error starting the cam with /etc/startcam.sh")
+                                    print(
+                                        "Error starting the cam with /etc/startcam.sh")
                                 else:
                                     print("*** running autostart ***")
                                 return
@@ -2097,14 +2352,28 @@ def mainmenu(menu_id):
 def Plugins(**kwargs):
     ICONPIC = "logo.png"
     return [
-        PluginDescriptor(name=_(NAME_PLUG), where=PluginDescriptor.WHERE_MENU, fnc=mainmenu),
+        PluginDescriptor(
+            name=_(NAME_PLUG),
+            where=PluginDescriptor.WHERE_MENU,
+            fnc=mainmenu),
         PluginDescriptor(
             name=_(NAME_PLUG),
             description=_(TITLE_PLUG),
-            where=[PluginDescriptor.WHERE_AUTOSTART, PluginDescriptor.WHERE_SESSIONSTART],
+            where=[
+                PluginDescriptor.WHERE_AUTOSTART,
+                PluginDescriptor.WHERE_SESSIONSTART],
             needsRestart=True,
             fnc=autostartsoftcam,
         ),
-        PluginDescriptor(name=_(NAME_PLUG), description=_(TITLE_PLUG), where=PluginDescriptor.WHERE_PLUGINMENU, icon=ICONPIC, fnc=main),
-        PluginDescriptor(name=_(NAME_PLUG), description=_(TITLE_PLUG), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main),
+        PluginDescriptor(
+            name=_(NAME_PLUG),
+            description=_(TITLE_PLUG),
+            where=PluginDescriptor.WHERE_PLUGINMENU,
+            icon=ICONPIC,
+            fnc=main),
+        PluginDescriptor(
+            name=_(NAME_PLUG),
+            description=_(TITLE_PLUG),
+            where=PluginDescriptor.WHERE_EXTENSIONSMENU,
+            fnc=main),
     ]
