@@ -8,6 +8,7 @@
 	<eLabel position="1655,815" size="3,245" backgroundColor="#202020" zPosition="3"/>
 	<widget name="info" position="880,810" size="766,250" font="Regular; 20" halign="right" foregroundColor="yellow" backgroundColor="#20000000" transparent="1" zPosition="5"/>
 	<widget name="description" position="24,746" size="814,50" font="Regular; 34" halign="center" valign="center" foregroundColor="#49bbff" backgroundColor="#ff000000" transparent="1" zPosition="5"/>
+	<widget name="resource_label" position="880,1009" size="814,50" font="Regular; 34" halign="left" valign="center" foregroundColor="#49bbff" backgroundColor="#ff000000" transparent="1" zPosition="5" />
 	<widget source="list" render="Listbox" position="28,810" size="750,250" scrollbarMode="showOnDemand" foregroundColor="#00a0a0a0" backgroundColorSelected="#0b2049" enableWrapAround="1" transparent="1" zPosition="5">
 		<convert type="TemplatedMultiContent">
         	    {"template": [

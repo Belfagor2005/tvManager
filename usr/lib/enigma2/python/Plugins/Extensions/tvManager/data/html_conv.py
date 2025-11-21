@@ -5,16 +5,40 @@ import types
 from six import unichr, iteritems
 from six.moves import html_entities
 
+# Python 2/3 compatibility definitions
+if sys.version_info[0] < 3:
+    # Python 2 - these names exist natively
+    string_types = (basestring,)
+    integer_types = (int, long)
+    text_type = unicode
+    binary_type = str
+else:
+    # Python 3 - define aliases for compatibility
+    string_types = (str,)
+    integer_types = (int,)
+    text_type = str
+    binary_type = bytes
+
+# Alternative approach - define the names safely
+try:
+    basestring
+except NameError:
+    basestring = str
+
+try:
+    long
+except NameError:
+    long = int
+
+try:
+    unicode
+except NameError:
+    unicode = str
 
 class_types = (type,) if six.PY3 else (type, types.ClassType)
-text_type = six.text_type  # unicode in Py2, str in Py3
-binary_type = six.binary_type  # str in Py2, bytes in Py3
 MAXSIZE = sys.maxsize  # Compatibile con entrambe le versioni
 
-_UNICODE_MAP = {
-    k: unichr(v) for k,
-    v in iteritems(
-        html_entities.name2codepoint)}
+_UNICODE_MAP = {k: unichr(v) for k, v in iteritems(html_entities.name2codepoint)}
 _ESCAPE_RE = re.compile("[&<>\"']")
 _UNESCAPE_RE = re.compile(r"&\s*(#?)(\w+?)\s*;")
 _ESCAPE_DICT = {
@@ -36,27 +60,32 @@ def ensure_str(s, encoding="utf-8", errors="strict"):
       - `str` -> `str`
       - `bytes` -> decoded to `str`
     """
-    if isinstance(s, str):
-        return s
-    if isinstance(s, binary_type):
-        return s.decode(encoding, errors)
-    raise TypeError("not expecting type '%s'" % type(s))
+    if not isinstance(s, string_types + (binary_type,)):
+        raise TypeError("not expecting type '%s'" % type(s))
+    
+    if isinstance(s, text_type):
+        return s.encode(encoding, errors)
+    elif isinstance(s, binary_type):
+        # For Python 3 bytes, or Python 2 str
+        if sys.version_info[0] >= 3:
+            return s.decode(encoding, errors)
+        else:
+            return s
+    return s
 
 
 def html_escape(value):
-    return _ESCAPE_RE.sub(
-        lambda match: _ESCAPE_DICT[match.group(0)], ensure_str(value).strip())
+    return _ESCAPE_RE.sub(lambda match: _ESCAPE_DICT[match.group(0)], ensure_str(value).strip())
 
 
 def html_unescape(value):
-    return _UNESCAPE_RE.sub(_convert_entity, ensure_str(value).strip())
+    return _UNESCAPE_RE.sub(_convert_entity, text_type(value).strip())
 
 
 def _convert_entity(m):
     if m.group(1) == "#":
         try:
-            return unichr(int(m.group(2)[1:], 16)) if m.group(
-                2)[:1].lower() == "x" else unichr(int(m.group(2)))
+            return unichr(int(m.group(2)[1:], 16)) if m.group(2)[:1].lower() == "x" else unichr(int(m.group(2)))
         except ValueError:
             return "&#%s;" % m.group(2)
     return _UNICODE_MAP.get(m.group(2), "&%s;" % m.group(2))

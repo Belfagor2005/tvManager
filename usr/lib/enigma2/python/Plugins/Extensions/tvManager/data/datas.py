@@ -26,6 +26,9 @@ from __future__ import print_function
 ===============================================================================
 """
 
+# =========================
+# Standard library imports
+# =========================
 import base64
 import codecs
 import re
@@ -37,6 +40,9 @@ from os.path import dirname, exists, join
 from random import choice
 from threading import Thread
 
+# =========================
+# Enigma2 / framework imports
+# =========================
 from enigma import eTimer, getDesktop
 
 from Components.ActionMap import ActionMap
@@ -60,12 +66,16 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 
 from Tools.Directories import SCOPE_PLUGINS, fileExists, resolveFilename
 
+# =========================
+# Local project imports
+# =========================
 from .. import _, paypal
 from ..plugin import currversion, runningcam
 
+
 global skin_path
 
-sss = "aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L0I5N0hDOGll"
+sss = "aHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1U0ZU02RGpW"
 PY3 = sys.version_info.major >= 3
 
 if PY3:
@@ -101,10 +111,11 @@ def b64decoder(s):
 
 
 # currversion = "2.3"
-name_plug = "TiVuStream Softcam Manager"
+NAME_PLUG = "TiVuStream Softcam Manager"
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager")
 data_path = plugin_path + "/data/"
 skin_path = plugin_path
+
 
 try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -125,50 +136,75 @@ def checkStr(txt):
 
 
 ListAgent = [
-    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15",
-    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14",
-    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
-    "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1284.0 Safari/537.13",
-    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.8 (KHTML, like Gecko) Chrome/17.0.940.0 Safari/535.8",
-    "Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
-    "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
-    "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1",
-    "Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2",
-    "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.16) Gecko/20120427 Firefox/15.0a1",
-    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1",
-    "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:15.0) Gecko/20120910144328 Firefox/15.0.2",
-    "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:9.0a2) Gecko/20111101 Firefox/9.0a2",
+    # --- Chrome Desktop ---
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6450.55 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36",
+
+    # --- Firefox Desktop ---
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
+    "Mozilla/5.0 (Windows NT 11.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0",
+    "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13.6; rv:125.0) Gecko/20100101 Firefox/125.0",
+
+    # --- Microsoft Edge ---
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36 Edg/125.0.2535.67",
+    "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6450.55 Safari/537.36 Edg/126.0.2651.40",
+
+    # --- Safari Desktop ---
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+
+    # --- Mobile Android ---
+    "Mozilla/5.0 (Linux; Android 14; SM-G996B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Mobile Safari/537.36",
+    "Mozilla/5.0 (Linux; Android 13; Pixel 7 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6450.55 Mobile Safari/537.36",
+
+    # --- iPhone / iOS ---
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+
+    # --- iPad ---
+    "Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1"
 ]
 
 
 def RequestAgent():
-    RandomAgent = choice(ListAgent)
-    return RandomAgent
+    return choice(ListAgent)
 
 
-def getUrl(url):
+def getUrl(url, timeout=15):
+    # Python 2/3 compatibility
     if sys.version_info.major == 3:
         import urllib.request as urllib2
-    elif sys.version_info.major == 2:
+    else:
         import urllib2
-    req = urllib2.Request(url)
-    req.add_header(
-        "User-Agent",
-        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14")
-    r = urllib2.urlopen(req, None, 15)
-    link = r.read()
-    r.close()
-    content = link
-    if str(type(content)).find("bytes") != -1:
-        try:
-            content = content.decode("utf-8")
-        except Exception as e:
-            print("Error: %s." % str(e))
-    return content
+
+    headers = {
+        "User-Agent": RequestAgent(),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Connection": "close"
+    }
+
+    try:
+        req = urllib2.Request(url, headers=headers)
+        response = urllib2.urlopen(req, timeout=timeout)
+        data = response.read()
+        response.close()
+
+        # Decode bytes → str
+        if isinstance(data, bytes):
+            try:
+                return data.decode("utf-8", errors="replace")
+            except:
+                return data.decode("latin-1", errors="replace")
+
+        return data
+
+    except Exception as e:
+        print("[getUrl] Error: %s" % e)
+        return ""
 
 
 # =============== SCREEN PATH SETTING
@@ -393,8 +429,8 @@ class tv_config(Screen, ConfigListScreen):
         skin = join(skin_path, "tv_config.xml")
         with codecs.open(skin, "r", encoding="utf-8") as f:
             self.skin = f.read()
-        self.setup_title = (name_plug)
-        self["title"] = Label(_(name_plug))
+        self.setup_title = (NAME_PLUG)
+        self["title"] = Label(_(NAME_PLUG))
         self["key_red"] = Label("")
         self["key_green"] = Label("")
         self["key_yellow"] = Label("")
@@ -403,11 +439,7 @@ class tv_config(Screen, ConfigListScreen):
         self["info"] = Label(_("Wait please..."))
         self.onChangedEntry = []
         self.list = []
-        ConfigListScreen.__init__(
-            self,
-            self.list,
-            session=self.session,
-            on_change=self.changedEntry)
+        ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
         self["paypal"] = Label()
         self["actions"] = ActionMap(
             [
@@ -447,12 +479,7 @@ class tv_config(Screen, ConfigListScreen):
         self["description"].setText(_("MENU EMM / SERVER CLINE"))
 
     def infomsg(self):
-        self.session.open(
-            MessageBox,
-            _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") %
-            currversion,
-            MessageBox.TYPE_INFO,
-            timeout=4)
+        self.session.open(MessageBox, _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") % currversion,  MessageBox.TYPE_INFO, timeout=4)
 
     def oscamAu(self, answer=False):
 
@@ -469,15 +496,11 @@ class tv_config(Screen, ConfigListScreen):
                     print("error:{}".format(e))
 
                     def show_error(err=e):
-                        self.session.open(
-                            MessageBox,
-                            "Error downloading CCcam data:\n{}".format(err),
-                            MessageBox.TYPE_ERROR)
+                        self.session.open(MessageBox, "Error downloading CCcam data:\n{}".format(err), MessageBox.TYPE_ERROR)
 
                     self.timer = eTimer()
                     if exists("/usr/bin/apt-get"):
-                        self.timer_conn = self.timer.timeout.connect(
-                            show_error)
+                        self.timer_conn = self.timer.timeout.connect(show_error)
                     else:
                         self.timer.callback.append(show_error)
                     self.timer.start(0, True)
@@ -486,8 +509,7 @@ class tv_config(Screen, ConfigListScreen):
                 def show_success():
                     name = "Oscam" if "oscam" in putlbl.lower() else "CCcam"
                     message = "{} config saved to:\n{}".format(name, putlbl)
-                    self.session.open(
-                        MessageBox, message, MessageBox.TYPE_INFO)
+                    self.session.open(MessageBox, message, MessageBox.TYPE_INFO)
 
                 self.timer = eTimer()
                 if exists("/usr/bin/apt-get"):
@@ -507,7 +529,8 @@ class tv_config(Screen, ConfigListScreen):
                 ask_callback,
                 MessageBox,
                 "Do you want to automatically download CCcam readers?\nThey will be saved to:\n{}".format(putlbl),
-                MessageBox.TYPE_YESNO)
+                MessageBox.TYPE_YESNO
+            )
 
     def sendemm(self):
         if config.plugins.tvmanager.active.value:
@@ -524,19 +547,16 @@ class tv_config(Screen, ConfigListScreen):
                             res = ""
                             msg = []
                             cmd = ["ps"]
-                            output = subprocess.Popen(
-                                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                            output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                             stdout, stderr = output.communicate()
 
                             if output.returncode == 0:
-                                res = "\n".join(line for line in stdout.decode(
-                                    "utf-8").split("\n") if "oscam" in line.lower())
+                                res = "\n".join(line for line in stdout.decode("utf-8").split("\n") if "oscam" in line.lower())
                                 print("execute_command res ps:", res)
                             else:
                                 print("Error:", stderr.decode("utf-8"))
 
-                            if any(cam in res.lower()
-                                   for cam in ["oscam", "icam", "ncam", "gcam"]):
+                            if any(cam in res.lower() for cam in ["oscam", "icam", "ncam", "gcam"]):
                                 print("oscam exist")
                                 msg.append(_("\n....\n.....\n"))
                                 self.cmd1 = "/usr/lib/enigma2/python/Plugins/Extensions/tvManager/data/emm_sender.sh"
@@ -555,16 +575,12 @@ class tv_config(Screen, ConfigListScreen):
                                     file_content = f.read().strip()
                                     msg.append("CURRENT EMM IS:\n")
                                     msg.append(file_content)
-                                    msg.append(
-                                        "\nCurrent Emm saved to /tmp/emm.txt")
+                                    msg.append("\nCurrent Emm saved to /tmp/emm.txt")
                                     msg = (" %s " % _("\n")).join(msg)
                                     print("DEBUG: msg_output =", msg)
-                                self.session.open(
-                                    MessageBox, _("Please wait, %s.") %
-                                    msg, MessageBox.TYPE_INFO, timeout=10)
+                                self.session.open(MessageBox, _("Please wait, %s.") % msg, MessageBox.TYPE_INFO, timeout=10)
 
-                self.session.openWithCallback(execute_command, MessageBox, _(
-                    "Do you want to execute the command?"), MessageBox.TYPE_YESNO)
+                self.session.openWithCallback(execute_command, MessageBox, _("Do you want to execute the command?"), MessageBox.TYPE_YESNO)
             except Exception as e:
                 print("error on emm", str(e))
 
@@ -580,11 +596,7 @@ class tv_config(Screen, ConfigListScreen):
             thread = Thread(target=run_command)
             thread.start()
         else:
-            self.session.open(
-                MessageBox,
-                _("Command Cancelled"),
-                MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Command Cancelled"), MessageBox.TYPE_INFO, timeout=5)
 
     def closex(self):
         self.close()
@@ -594,11 +606,7 @@ class tv_config(Screen, ConfigListScreen):
             import shutil
             shutil.copy2(data_path + rstcfg, putlbl)
             system("chmod -R 755 %s" % putlbl)
-            self.session.open(
-                MessageBox,
-                _("Reset") + " " + putlbl,
-                type=MessageBox.TYPE_INFO,
-                timeout=8)
+            self.session.open(MessageBox, _("Reset") + " " + putlbl, type=MessageBox.TYPE_INFO, timeout=8)
 
     def showhide(self):
         if config.plugins.tvmanager.active.value is True:
@@ -642,51 +650,19 @@ class tv_config(Screen, ConfigListScreen):
                     return
         except Exception as e:
             print("Error in green function:", str(e))
-            self.session.open(
-                MessageBox,
-                _("An error occurred in the green function."),
-                MessageBox.TYPE_ERROR,
-                timeout=5)
+            self.session.open(MessageBox, _("An error occurred in the green function."), MessageBox.TYPE_ERROR, timeout=5)
 
     def createSetup(self):
         self.editListEntry = None
         self.list = []
-        self.list.append(
-            getConfigListEntry(
-                _("Activate Insert line in Config File:"),
-                config.plugins.tvmanager.active,
-                _("If Active: Download/Reset Server Config")))
+        self.list.append(getConfigListEntry(_("Activate Insert line in Config File:"), config.plugins.tvmanager.active, _("If Active: Download/Reset Server Config")))
         if config.plugins.tvmanager.active.value:
-            self.list.append(
-                getConfigListEntry(
-                    _("Server Config"),
-                    config.plugins.tvmanager.cfgfile,
-                    putlbl))
-            self.list.append(
-                getConfigListEntry(
-                    _("Server Link"),
-                    config.plugins.tvmanager.Server,
-                    _("Select Get Link")))
-            self.list.append(
-                getConfigListEntry(
-                    _("Server URL"),
-                    config.plugins.tvmanager.hostaddress,
-                    _("Server Url i.e. 012.345.678.900")))
-            self.list.append(
-                getConfigListEntry(
-                    _("Server Port"),
-                    config.plugins.tvmanager.port,
-                    _("Port")))
-            self.list.append(
-                getConfigListEntry(
-                    _("Server Username"),
-                    config.plugins.tvmanager.user,
-                    _("Username")))
-            self.list.append(
-                getConfigListEntry(
-                    _("Server Password"),
-                    config.plugins.tvmanager.passw,
-                    _("Password")))
+            self.list.append(getConfigListEntry(_("Server Config"), config.plugins.tvmanager.cfgfile, putlbl))
+            self.list.append(getConfigListEntry(_("Server Link"), config.plugins.tvmanager.Server, _("Select Get Link")))
+            self.list.append(getConfigListEntry(_("Server URL"), config.plugins.tvmanager.hostaddress, _("Server Url i.e. 012.345.678.900")))
+            self.list.append(getConfigListEntry(_("Server Port"), config.plugins.tvmanager.port, _("Port")))
+            self.list.append(getConfigListEntry(_("Server Username"), config.plugins.tvmanager.user, _("Username")))
+            self.list.append(getConfigListEntry(_("Server Password"), config.plugins.tvmanager.passw, _("Password")))
             self["key_green"].setText(buttn)
             self["key_yellow"].setText(_("Get Link"))
             self["key_blue"].setText(_("Reset"))
@@ -698,11 +674,7 @@ class tv_config(Screen, ConfigListScreen):
     def KeyText(self):
         sel = self["config"].getCurrent()
         if sel:
-            self.session.openWithCallback(
-                self.VirtualKeyBoardCallback,
-                VirtualKeyBoard,
-                title=self["config"].getCurrent()[0],
-                text=self["config"].getCurrent()[1].value)
+            self.session.openWithCallback(self.VirtualKeyBoardCallback, VirtualKeyBoard, title=self["config"].getCurrent()[0], text=self["config"].getCurrent()[1].value)
 
     def keyLeft(self):
         ConfigListScreen.keyLeft(self)
@@ -755,19 +727,11 @@ class tv_config(Screen, ConfigListScreen):
         putlblcfg()
         print("putlblcfg CCcam ===================", putlbl)
         if "CCcam.cfg" not in putlbl:
-            self.session.open(
-                MessageBox,
-                _("Select CCcam"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Select CCcam"), type=MessageBox.TYPE_INFO, timeout=5)
             return
 
         if config.plugins.tvmanager.cfgfile.value != "/etc/CCcam.cfg":
-            self.session.open(
-                MessageBox,
-                _("Select CCcam"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Select CCcam"), type=MessageBox.TYPE_INFO, timeout=5)
             return
         dest = config.plugins.tvmanager.cfgfile.value
         host = "C: " + str(config.plugins.tvmanager.hostaddress.value)
@@ -778,32 +742,20 @@ class tv_config(Screen, ConfigListScreen):
         if fileExists("/etc/CCcam.cfg"):
             dest = "/etc/CCcam.cfg"
         else:
-            self.session.open(
-                MessageBox,
-                _("Please Reset - No File CFG"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Please Reset - No File CFG"), type=MessageBox.TYPE_INFO, timeout=5)
             return
         system("chmod -R 755 %s" % dest)
         cfgdok = open(dest, "a")
         cfgdok.write("\n\n" + host + " " + port + " " + user + " " + passw)
         cfgdok.close()
-        self.session.open(
-            MessageBox,
-            _("Server Copy in ") + dest,
-            type=MessageBox.TYPE_INFO,
-            timeout=8)
+        self.session.open(MessageBox, _("Server Copy in ") + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def Oscam(self):
         global host, port, user
         putlblcfg()
         print("putlbl Oscam ===================", putlbl)
         if "oscam.server" not in putlbl:
-            self.session.open(
-                MessageBox,
-                _("Select OScam"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Select OScam"), type=MessageBox.TYPE_INFO, timeout=5)
             return
 
         dest = config.plugins.tvmanager.cfgfile.value
@@ -812,43 +764,20 @@ class tv_config(Screen, ConfigListScreen):
         user = str(config.plugins.tvmanager.user.value)
         passw = str(config.plugins.tvmanager.passw.value)
         if not fileExists(dest):
-            self.session.open(
-                MessageBox,
-                _("Please Reset - No File CFG"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Please Reset - No File CFG"), type=MessageBox.TYPE_INFO, timeout=5)
             return
         system("chmod -R 755 %s" % dest)
         cfgdok = open(dest, "a")
-        cfgdok.write(
-            "\n[reader]\nlabel = Server_" +
-            host +
-            "\nenable= 1\nprotocol = cccam\ndevice = " +
-            host +
-            "," +
-            port +
-            "\nuser = " +
-            user +
-            "\npassword = " +
-            passw +
-            "\ninactivitytimeout = 30\ngroup = 3\ncccversion = 2.2.1\ncccmaxhops = 0\nccckeepalive = 1\naudisabled = 1\n\n")
+        cfgdok.write("\n[reader]\nlabel = Server_" + host + "\nenable= 1\nprotocol = cccam\ndevice = " + host + "," + port + "\nuser = " + user + "\npassword = " + passw + "\ninactivitytimeout = 30\ngroup = 3\ncccversion = 2.2.1\ncccmaxhops = 0\nccckeepalive = 1\naudisabled = 1\n\n")
         cfgdok.close()
-        self.session.open(
-            MessageBox,
-            _("Server Copy in ") + dest,
-            type=MessageBox.TYPE_INFO,
-            timeout=8)
+        self.session.open(MessageBox, _("Server Copy in ") + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def Ncam(self):
         global host, port, user, passw
         putlblcfg()
         print("putlbl Oscam ===================", putlbl)
         if "ncam.server" not in putlbl:
-            self.session.open(
-                MessageBox,
-                _("Select Ncam"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Select Ncam"), type=MessageBox.TYPE_INFO, timeout=5)
             return
 
         if not exists("/etc/tuxbox/config"):
@@ -861,32 +790,13 @@ class tv_config(Screen, ConfigListScreen):
         if fileExists("/etc/tuxbox/config/ncam.server"):
             dest = "/etc/tuxbox/config/ncam.server"
         else:
-            self.session.open(
-                MessageBox,
-                _("Please Reset - No File CFG"),
-                type=MessageBox.TYPE_INFO,
-                timeout=5)
+            self.session.open(MessageBox, _("Please Reset - No File CFG"), type=MessageBox.TYPE_INFO, timeout=5)
             return
         system("chmod -R 755 %s" % dest)
         cfgdok = open(dest, "a")
-        cfgdok.write(
-            "\n[reader]\nlabel = Server_" +
-            host +
-            "\nenable= 1\nprotocol = cccam\ndevice = " +
-            host +
-            "," +
-            port +
-            "\nuser = " +
-            user +
-            "\npassword = " +
-            passw +
-            "\ngroup = 3\ncccversion = 2.0.11\ndisablecrccws_only_for= 0500:032830\ncccmaxhops= 1\nccckeepalive= 1\naudisabled = 1\n\n")
+        cfgdok.write("\n[reader]\nlabel = Server_" + host + "\nenable= 1\nprotocol = cccam\ndevice = " + host + "," + port + "\nuser = " + user + "\npassword = " + passw + "\ngroup = 3\ncccversion = 2.0.11\ndisablecrccws_only_for= 0500:032830\ncccmaxhops= 1\nccckeepalive= 1\naudisabled = 1\n\n")
         cfgdok.close()
-        self.session.open(
-            MessageBox,
-            _("Server Copy in ") + dest,
-            type=MessageBox.TYPE_INFO,
-            timeout=8)
+        self.session.open(MessageBox, _("Server Copy in ") + dest, type=MessageBox.TYPE_INFO, timeout=8)
 
     def getcl(self):
         try:
@@ -899,8 +809,7 @@ class tv_config(Screen, ConfigListScreen):
                     data = six.ensure_str(data)
                 self.timer = eTimer()
                 if exists("/usr/bin/apt-get"):
-                    self.timer_conn = self.timer.timeout.connect(
-                        self.load_getcl(data))
+                    self.timer_conn = self.timer.timeout.connect(self.load_getcl(data))
                 else:
                     self.timer.callback.append(self.load_getcl(data))
                 self.timer.start(600, 1)
@@ -913,77 +822,60 @@ class tv_config(Screen, ConfigListScreen):
         global host, port, user
         try:
             data = checkStr(data)
-            url1 = re.findall(
-                r"<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*", data)
+            url1 = re.findall(r"<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*", data)
 
             if "bosscccam" in data.lower():
-                url1 = re.findall(
-                    r"<strong>c:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong", data)
+                url1 = re.findall(r"<strong>c:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</strong", data)
 
             # <h3 class="elementor-heading-title elementor-size-default">C: free.cccamx.com 18804 Trial978532 89390137</h3>
             elif "cccamx" in data.lower():
-                url1 = re.findall(
-                    r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
+                url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h3>', data)
 
             elif '15days' in data.lower():
-                url1 = re.findall(
-                    r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
+                url1 = re.findall(r'">C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th></tr>', data)
 
             elif 'cccamia' in data:
-                url1 = re.findall(
-                    r'>?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+                url1 = re.findall(r'>?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'cccam.net/freecccam' in data.lower():
-                url1 = re.findall(
-                    r'b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
+                url1 = re.findall(r'b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
 
             elif 'testcline' in data.lower():
-                url1 = re.findall(
-                    r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</d', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</d', data)
 
             # <div id="cline">C: free.cccamiptv.club 13000 ggd32x cccamiptv.pro</div>
             elif 'cccamiptv' in data.lower():
-                url1 = re.findall(
-                    r'cline">\s*C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+                url1 = re.findall(r'cline">\s*C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
 
             elif 'free.cccam.net' in data.lower():
-                url1 = re.findall(
-                    r'<b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
+                url1 = re.findall(r'<b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
 
             elif 'cccam-premium.co' in data.lower():
-                url1 = re.findall(
-                    r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
+                url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)', data)
 
             elif 'cccamsate' in data.lower():
-                url1 = re.findall(
-                    r'<span><b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
+                url1 = re.findall(r'<span><b>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</b>', data)
 
             elif 'cccameagle' in data.lower():
-                url1 = re.findall(
-                    r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</h2>', data)
+                url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)</h2>', data)
 
             elif 'cccamprime' in data.lower():
-                url1 = re.findall(
-                    r'Cline : C:\s+(.*?)\s+(\d+)\s+(\w+)\s+(.*?)\s*Host', data)
+                url1 = re.findall(r'Cline : C:\s+(.*?)\s+(\d+)\s+(\w+)\s+(.*?)\s*Host', data)
                 url1 = url1.replace('<br><br>', '')
 
             elif 'cccampri.me' in data.lower():
                 # url1 = re.findall(r'Cline : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br>', data)
-                url1 = re.findall(
-                    r'line : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br\s*/?>', data)
+                url1 = re.findall(r'line : C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)<br\s*/?>', data)
 
             elif 'iptvcccam' in data.lower():
-                url1 = re.findall(
-                    r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h1>', data)
+                url1 = re.findall(r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</h1>', data)
 
             elif 'cccameurop' in data.lower():
                 url1 = re.findall(r'C:\s+([\w.-]+)\s+(\d+)\s*</', data)
 
             elif 'infosat' in data.lower():
                 # url1 = re.findall('host: (.+?)<br> port: (.+?) <br>.*?user:(.+?)<br>.*?pass: (.+?)\n', data)
-                url1 = re.findall(
-                    r'host:\s*(.+?)<br\s*/?>\s*port:\s*(.+?)<br\s*/?>\s*user:\s*(.+?)<br\s*/?>\s*pass:\s*(.+?)\s*\n',
-                    data)
+                url1 = re.findall(r'host:\s*(.+?)<br\s*/?>\s*port:\s*(.+?)<br\s*/?>\s*user:\s*(.+?)<br\s*/?>\s*pass:\s*(.+?)\s*\n', data)
 
             # elif 'history' in data.lower():
                 # # url1 = re.findall('of the line">C: (.+?) (.+?) (.+?) (.+?)</a>.*?title=', data)
@@ -997,15 +889,13 @@ class tv_config(Screen, ConfigListScreen):
                 # url1 = re.findall(r'id="cline">.*?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</div>', data)
 
             elif 'rogcam' in data.lower():
-                url1 = re.findall(
-                    r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</span>', data)
+                url1 = re.findall(r'?C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</span>', data)
 
             # elif 'cccambird' in data.lower():
                 # url1 = re.findall(r'>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*</th>', data)
 
             else:
-                url1 = re.findall(
-                    r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
+                url1 = re.findall(r'<h1>C:\s+([\w.-]+)\s+(\d+)\s+(\w+)\s+([\w.-]+)\s*', data)
             print("===========data=========", url1)
 
             if url1 != "":
@@ -1020,9 +910,7 @@ class tv_config(Screen, ConfigListScreen):
                         port = "19000"
                         user = str(u)
                         password = str(pw)
-                        print(
-                            "Host: %s - Port: %s - User: %s - Password: %s" %
-                            (host, port, user, password))
+                        print("Host: %s - Port: %s - User: %s - Password: %s" % (host, port, user, password))
                 else:
                     for h, p, u, pw in url1:
                         print(h, p, u, pw)
@@ -1030,10 +918,8 @@ class tv_config(Screen, ConfigListScreen):
                         port = str(p)
                         user = str(u)
                         password = str(pw)
-                        password = password.replace(
-                            "</h1>", "").replace("</b>", "")
-                        password = password.replace(
-                            "</div>", "").replace("</span>", "")
+                        password = password.replace("</h1>", "").replace("</b>", "")
+                        password = password.replace("</div>", "").replace("</span>", "")
                 # if config.plugins.tvmanager.active.getValue():
                 config.plugins.tvmanager.hostaddress.setValue(host)
                 config.plugins.tvmanager.port.setValue(port)
@@ -1058,7 +944,7 @@ class tv_config(Screen, ConfigListScreen):
                     clist = open(self.FilCurr, "r", encoding="UTF-8")
                 else:
                     clist = open(self.FilCurr, "r")
-            except BaseException:
+            except:
                 return
             if clist is not None:
                 for line in clist:
