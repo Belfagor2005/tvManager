@@ -1,4 +1,3 @@
-```markdown
 # tvManager (Softcam Manager) v3.1.0 🚀
 
 <div align="center">
