@@ -1,7 +1,5 @@
-# tvManager (Softcam Manager) v3.1.0 🚀
-
 <div align="center">
-  
+# tvManager (Softcam Manager) v3.1.0 🚀
 ![tvManager Logo](https://github.com/Belfagor2005/tvManager/blob/main/usr/lib/enigma2/python/Plugins/Extensions/tvManager/logo.png)
 
 **Enterprise Grade Enigma2 Softcam Management Plugin**
@@ -211,3 +209,4 @@ To remove content from the web, contact the actual web host hosting the content 
 </div>
 
 ```
+
