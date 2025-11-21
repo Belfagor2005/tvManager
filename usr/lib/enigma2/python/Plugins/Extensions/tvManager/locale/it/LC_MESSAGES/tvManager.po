@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tvManager TivuStream\n"
-"POT-Creation-Date: 2025-06-09 22:24+0200\n"
-"PO-Revision-Date: 2025-06-09 22:24+0200\n"
+"POT-Creation-Date: 2025-11-21 15:15+0100\n"
+"PO-Revision-Date: 2025-11-21 15:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: lululla\n"
 "Language: it_IT\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "X-Poedit-SearchPath-0: data/datas.py\n"
@@ -917,7 +917,7 @@ msgstr "Server %s-%s"
 msgid "Log %s-%s"
 msgstr ""
 
-#: data/NcamInfo.py:1103 data/OScamInfo.py:1116
+#: data/NcamInfo.py:1103 data/OScamInfo.py:1116 plugin.py:1959
 msgid "System"
 msgstr ""
 
@@ -1004,7 +1004,7 @@ msgstr "Password (httpwd)"
 msgid "IP address"
 msgstr ""
 
-#: data/NcamInfo.py:1402 data/OScamInfo.py:1422 data/datas.py:612
+#: data/NcamInfo.py:1402 data/OScamInfo.py:1422 data/datas.py:663
 msgid "Port"
 msgstr "Port"
 
@@ -1020,23 +1020,23 @@ msgstr ""
 msgid "Oscam not running - start Cam to obtain information."
 msgstr ""
 
-#: data/datas.py:359 data/datas.py:362
+#: data/datas.py:407 data/datas.py:410
 msgid "Write"
 msgstr "Scrivi"
 
-#: data/datas.py:391
+#: data/datas.py:439
 msgid "Wait please..."
 msgstr ""
 
-#: data/datas.py:430
+#: data/datas.py:478
 msgid "Select Your Choice"
 msgstr "Seleziona"
 
-#: data/datas.py:431
+#: data/datas.py:479
 msgid "MENU EMM / SERVER CLINE"
 msgstr ""
 
-#: data/datas.py:434
+#: data/datas.py:482
 #, python-format
 msgid ""
 "Softcam Manager by Lululla\n"
@@ -1045,291 +1045,514 @@ msgid ""
 "Forum Support www.corvoboys.org\n"
 msgstr ""
 
-#: data/datas.py:510
+#: data/datas.py:561
 msgid ""
 "\n"
 "....\n"
 ".....\n"
 msgstr ""
 
-#: data/datas.py:528
+#: data/datas.py:579
 msgid "\n"
 msgstr "\n"
 
-#: data/datas.py:530
+#: data/datas.py:581
 #, python-format
 msgid "Please wait, %s."
 msgstr ""
 
-#: data/datas.py:532
-#, fuzzy
-#| msgid "Do you want to remove?"
+#: data/datas.py:583
 msgid "Do you want to execute the command?"
-msgstr "Vuoi rimuovere?"
+msgstr ""
 
-#: data/datas.py:548
+#: data/datas.py:599
 msgid "Command Cancelled"
 msgstr ""
 
-#: data/datas.py:558 data/datas.py:565 data/datas.py:617
+#: data/datas.py:609 data/datas.py:616 data/datas.py:668
 msgid "Reset"
 msgstr "Reset"
 
-#: data/datas.py:562
+#: data/datas.py:613
 msgid "xLine"
 msgstr ""
 
-#: data/datas.py:564 data/datas.py:616
+#: data/datas.py:615 data/datas.py:667
 msgid "Get Link"
 msgstr "Ottieni link"
 
-#: data/datas.py:569
+#: data/datas.py:620
 msgid "Check Emm Send"
 msgstr ""
 
-#: data/datas.py:602
+#: data/datas.py:653
 msgid "An error occurred in the green function."
 msgstr ""
 
-#: data/datas.py:607
+#: data/datas.py:658
 msgid "Activate Insert line in Config File:"
 msgstr "Attivare inserimento in File Cfg 3C:"
 
-#: data/datas.py:607
+#: data/datas.py:658
 msgid "If Active: Download/Reset Server Config"
 msgstr "Se Attivo: Scarica/Reset Config .serv"
 
-#: data/datas.py:609
+#: data/datas.py:660
 msgid "Server Config"
 msgstr "Server Config"
 
-#: data/datas.py:610
+#: data/datas.py:661
 msgid "Server Link"
 msgstr "Url del Server"
 
-#: data/datas.py:610
+#: data/datas.py:661
 msgid "Select Get Link"
 msgstr "Seleziona Link Server"
 
-#: data/datas.py:611
+#: data/datas.py:662
 msgid "Server URL"
 msgstr "Server URL"
 
-#: data/datas.py:611
+#: data/datas.py:662
 msgid "Server Url i.e. 012.345.678.900"
 msgstr "Url Server Es. 012.345.678.900"
 
-#: data/datas.py:612
+#: data/datas.py:663
 msgid "Server Port"
 msgstr "Porta del Server"
 
-#: data/datas.py:613
+#: data/datas.py:664
 msgid "Server Username"
 msgstr "Server Username"
 
-#: data/datas.py:613
+#: data/datas.py:664
 msgid "Username"
 msgstr "Username"
 
-#: data/datas.py:614
+#: data/datas.py:665
 msgid "Server Password"
 msgstr "Server Password"
 
-#: data/datas.py:614
+#: data/datas.py:665
 msgid "Password"
 msgstr "Password"
 
-#: data/datas.py:679 data/datas.py:683
+#: data/datas.py:730 data/datas.py:734
 msgid "Select CCcam"
 msgstr "Seleziona CCcam"
 
-#: data/datas.py:694 data/datas.py:716 data/datas.py:742
+#: data/datas.py:745 data/datas.py:767 data/datas.py:793
 msgid "Please Reset - No File CFG"
 msgstr "Prego Reset - nessun file di Config"
 
-#: data/datas.py:700 data/datas.py:722 data/datas.py:748
+#: data/datas.py:751 data/datas.py:773 data/datas.py:799
 msgid "Server Copy in "
 msgstr "Server copiato in "
 
-#: data/datas.py:707
-#, fuzzy
-#| msgid "Select Ncam"
+#: data/datas.py:758
 msgid "Select OScam"
-msgstr "Seleziona Ncam"
+msgstr "Seleziona OScam"
 
-#: data/datas.py:729
+#: data/datas.py:780
 msgid "Select Ncam"
 msgstr "Seleziona Ncam"
 
-#: data/datas.py:922
+#: data/datas.py:973
 msgid "Emm Info"
 msgstr ""
 
-#: plugin.py:237
+#: plugin.py:658
 msgid "Start"
 msgstr "Avvio"
 
-#: plugin.py:238
-#, fuzzy
-#| msgid "Download Panel"
+#: plugin.py:659
 msgid "Cam Download"
-msgstr "Download Panel"
+msgstr "Download Cams"
 
-#: plugin.py:239
+#: plugin.py:660
 msgid "Stop"
 msgstr "Stop"
 
-#: plugin.py:241
+#: plugin.py:662
 msgid "Scanning and retrieval list softcam ..."
 msgstr "Scansione e recupero lista softcam.."
 
-#: plugin.py:372
-#, python-format
-msgid "Failed to load plugin: %s"
+#: plugin.py:717
+msgid "Backup failed!"
 msgstr ""
 
-#: plugin.py:445
+#: plugin.py:724
+msgid "No backups available!"
+msgstr ""
+
+#: plugin.py:739
+msgid "No valid backups found!"
+msgstr ""
+
+#: plugin.py:747
+#, python-format
+msgid ""
+"Restore backup '%s'?\n"
+"This will overwrite current configurations."
+msgstr ""
+
+#: plugin.py:754
+msgid "Select backup to restore:"
+msgstr ""
+
+#: plugin.py:763
+#, python-format
+msgid ""
+"Backup restored successfully!\n"
+"Restored files:\n"
+"- %s"
+msgstr ""
+
+#: plugin.py:768
+msgid "Restart softcam to apply restored configuration?"
+msgstr ""
+
+#: plugin.py:772
+msgid "Backup restoration failed!"
+msgstr ""
+
+#: plugin.py:780
+msgid "Softcam restarted with new configuration!"
+msgstr ""
+
+#: plugin.py:782 plugin.py:950
+msgid "No active cam to restart!"
+msgstr ""
+
+#: plugin.py:834
+#, python-format
+msgid "Error opening cam info: %s"
+msgstr ""
+
+#: plugin.py:847
+msgid "OSCamInfo not available"
+msgstr ""
+
+#: plugin.py:860
+msgid "CCcamInfo not available"
+msgstr ""
+
+#: plugin.py:873
+msgid "NCamInfo not available"
+msgstr ""
+
+#: plugin.py:903
+#, python-format
+msgid "Error executing shortcut: %s"
+msgstr ""
+
+#: plugin.py:909
+msgid ""
+"Number Key Shortcuts:\n"
+"            0 - Update Softcam Keys\n"
+"            1 - CCcam Info\n"
+"            2 - OSCam Info\n"
+"            3 - NCam Info\n"
+"            4 - Create Backup\n"
+"            5 - Restore Backup\n"
+"            6 - Cleanup System  # <-- ADDED\n"
+"            8 - This Help\n"
+"            Press OK to close"
+msgstr ""
+
+#: plugin.py:933
+#, python-format
+msgid ""
+"System Resources:\n"
+"                Memory Used: %s\n"
+"                CPU Load: %s\n"
+"                Disk: %s\n"
+"                Cam Resources: %s\n"
+"                Press OK to close"
+msgstr ""
+
+#: plugin.py:944
+msgid "Error getting resource information"
+msgstr ""
+
+#: plugin.py:955
+#, python-format
+msgid "Quick restart %s?"
+msgstr ""
+
+#: plugin.py:971
+#, python-format
+msgid "%s restarted successfully!"
+msgstr ""
+
+#: plugin.py:975
+#, python-format
+msgid "Error stopping %s!"
+msgstr ""
+
+#: plugin.py:981
+#, python-format
+msgid "Restart error: %s"
+msgstr ""
+
+#: plugin.py:987
+msgid "Cleanup temporary files and cache?"
+msgstr ""
+
+#: plugin.py:1001
+msgid "System cleanup completed!"
+msgstr ""
+
+#: plugin.py:1006
+#, python-format
+msgid "Cleanup error: %s"
+msgstr ""
+
+#: plugin.py:1012
+msgid "Restart GUI?"
+msgstr ""
+
+#: plugin.py:1033
+msgid "No ECM data - Timeout"
+msgstr ""
+
+#: plugin.py:1046
+msgid "No ECM data"
+msgstr ""
+
+#: plugin.py:1058
+msgid "ECM data format error"
+msgstr ""
+
+#: plugin.py:1064
+msgid "No ECM file"
+msgstr ""
+
+#: plugin.py:1074
+msgid "ECM file empty"
+msgstr ""
+
+#: plugin.py:1078
+msgid "ECM file not found"
+msgstr ""
+
+#: plugin.py:1080
+msgid "ECM read error"
+msgstr ""
+
+#: plugin.py:1085
+msgid "ECM error"
+msgstr ""
+
+#: plugin.py:1111
 msgid "Update SoftcamKeys from google search?"
 msgstr "Aggiornamento SoftcamKeys da ricerca google?"
 
-#: plugin.py:455
+#: plugin.py:1121
 msgid ""
 "Installing Softcam Keys\n"
 "Please Wait..."
 msgstr ""
 
-#: plugin.py:467
+#: plugin.py:1133
 msgid "Select a cam to run ..."
 msgstr "Selezionare una cam da avviare ..."
 
-#: plugin.py:469
+#: plugin.py:1135
 msgid "Install Cam first!!!"
 msgstr "Installa prima una Cam!!!"
 
-#: plugin.py:559
+#: plugin.py:1192
+msgid "No softcams available!"
+msgstr ""
+
+#: plugin.py:1219
 msgid ""
 "Please wait..\n"
 "RESTART CAM"
 msgstr ""
 
-#: plugin.py:564
+#: plugin.py:1224
 msgid ""
 "Please wait..\n"
 "STOP & RESTART CAM"
 msgstr ""
 
-#: plugin.py:572
+#: plugin.py:1232
 msgid ""
 "Please wait..\n"
 "START UP CAM"
 msgstr ""
 
-#: plugin.py:628
+#: plugin.py:1295
 msgid ""
 "Please wait..\n"
 "STOP CAM"
 msgstr ""
 
-#: plugin.py:788
+#: plugin.py:1455
 msgid "Getting the list, please wait ..."
 msgstr "Getting the list, please wait ..."
 
-#: plugin.py:790 plugin.py:922 plugin.py:1097
+#: plugin.py:1457 plugin.py:1589 plugin.py:1767
 msgid "Back"
 msgstr "Indietro"
 
-#: plugin.py:791
+#: plugin.py:1458
 msgid "Load"
 msgstr ""
 
-#: plugin.py:878
+#: plugin.py:1545
 msgid "Please select ..."
 msgstr "Seleziona prego..."
 
-#: plugin.py:882
+#: plugin.py:1549
 msgid "Error processing server addons data"
 msgstr ""
 
-#: plugin.py:886
+#: plugin.py:1553
 msgid "Try again later ..."
 msgstr "Riprova piu tardi ..."
 
-#: plugin.py:920
+#: plugin.py:1587
 msgid "Select and Install"
 msgstr "Seleziona e Installa"
 
-#: plugin.py:952
+#: plugin.py:1619
 msgid "Do you install this plugin ?"
 msgstr ""
 
-#: plugin.py:968 plugin.py:975 plugin.py:1035 plugin.py:1044
+#: plugin.py:1635 plugin.py:1642 plugin.py:1702 plugin.py:1711
 msgid "Unknow Image!"
 msgstr "Unknow Image!"
 
-#: plugin.py:1014
+#: plugin.py:1681
 #, python-format
 msgid ""
 "Installing %s\n"
 "Please Wait..."
 msgstr ""
 
-#: plugin.py:1018
+#: plugin.py:1685
 msgid "Do you want to remove?"
 msgstr "Vuoi rimuovere?"
 
-#: plugin.py:1052
+#: plugin.py:1719
 #, python-format
 msgid "Removing %s"
 msgstr ""
 
-#: plugin.py:1056
+#: plugin.py:1723
 msgid "Do you want to restart Gui Interface?"
 msgstr "Vuoi riavviare enigma?"
 
-#: plugin.py:1098
+#: plugin.py:1768
 msgid "Force Update"
 msgstr ""
 
-#: plugin.py:1099
+#: plugin.py:1769
 msgid "Update"
 msgstr ""
 
-#: plugin.py:1140
+#: plugin.py:1770 plugin.py:1956
+msgid "Resources"
+msgstr ""
+
+#: plugin.py:1810
 #, python-format
 msgid ""
 "New version %s is available\n"
 "\n"
 "Changelog: %s\n"
 "\n"
-"Press info_long or yellow_long button to start force updating."
+"Press yellow button to update."
 msgstr ""
 
-#: plugin.py:1145
+#: plugin.py:1815
 #, python-format
 msgid ""
 "New version %s is available.\n"
 "\n"
 "Changelog: %s \n"
 "\n"
-"Do you want to install it now?"
+"Install now?"
 msgstr ""
 
-#: plugin.py:1147
-msgid "Congrats! You already have the latest version..."
+#: plugin.py:1817
+msgid "You have the latest version!"
 msgstr ""
 
-#: plugin.py:1156
+#: plugin.py:1826
 #, python-format
-msgid "Do you want to install update ( %s ) now?"
-msgstr "Vuoi installare aggiornamento(%s) adesso?"
+msgid "Install developer update (%s)?"
+msgstr ""
 
-#: plugin.py:1162
+#: plugin.py:1832
 msgid "Update Aborted!"
 msgstr ""
 
-#: plugin.py:1323
+#: plugin.py:1840
+msgid ""
+"QUICK HELP - SOFTCOM MANAGER\n"
+"            SHORTCUT KEYS:\n"
+"            0-Keys Update  1-CCcam Info\n"
+"            2-OSCam Info   3-NCam Info\n"
+"            4-Create Bkp   5-Restore Bkp\n"
+"            8-This Help    9-Restart GUI\n"
+"\n"
+"            CONFIG PATHS:\n"
+"            CCcam: /etc/CCcam.cfg\n"
+"            OScam: /etc/tuxbox/config/oscam.server\n"
+"            NCam: /etc/tuxbox/config/ncam.server\n"
+"            Keys: /usr/keys/SoftCam.Key\n"
+"\n"
+"            BLUE BUTTON: Opens active cam info\n"
+"            GREEN: Start/Restart cam\n"
+"            RED: Stop cam\n"
+"            YELLOW: Download cams"
+msgstr ""
+
+#: plugin.py:1879
+#, python-format
+msgid ""
+"SYSTEM RESOURCES\n"
+"                Architecture: %s\n"
+"                Python: %s\n"
+"                Memory: %s\n"
+"                Disk: %s\n"
+"                ACTIVE CAM: %s"
+msgstr ""
+
+#: plugin.py:1888
+msgid "Error loading system info: "
+msgstr ""
+
+#: plugin.py:1900
+#, python-format
+msgid ""
+"SYSTEM INFORMATION\n"
+"                CPU Arch: %s\n"
+"                Platform: %s\n"
+"                Python: %s\n"
+"                LibSSL: %s\n"
+"                Image: %s"
+msgstr ""
+
+#: plugin.py:1908
+msgid "Error loading system information: "
+msgstr ""
+
+#: plugin.py:1962
+msgid "Help"
+msgstr "Aiuto"
+
+#: plugin.py:2087
 msgid "Softcam Manager"
 msgstr ""
+
+#, python-format
+#~ msgid "Do you want to install update ( %s ) now?"
+#~ msgstr "Vuoi installare aggiornamento(%s) adesso?"
 
 #~ msgid "FTA"
 #~ msgstr "FTA"
