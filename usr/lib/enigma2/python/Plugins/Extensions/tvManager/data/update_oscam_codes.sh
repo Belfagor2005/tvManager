@@ -9,7 +9,8 @@ BACKUP_DIR="/tmp/oscam_backups"
 BACKUP_FILE="$BACKUP_DIR/oscam.server.backup_$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="/tmp/oscam_update.log"
 TEMP_FILE="/tmp/oscam_temp"
-KEYS_URL="https://0g.gg/?dd6ef61ca87810fd#6tLnCmx2a7ZqijWddspjEwDGW6ZGtLdKQzJvLMTy3Xr9"
+# KEYS_URL="https://0g.gg/?dd6ef61ca87810fd#6tLnCmx2a7ZqijWddspjEwDGW6ZGtLdKQzJvLMTy3Xr9"
+KEYS_URL="https://raw.githubusercontent.com/levi-45/tivusatrsakey/main/rsakey_tiger.txt"
 
 # Hardcoded current keys (YOUR COMPLETE KEYS)
 CURRENT_KEYS=$(cat << 'EOF'
@@ -41,7 +42,6 @@ download_new_keys() {
             return 0
         fi
     fi
-
     # Prova con curl se wget fallisce
     if curl -s --connect-timeout 30 --max-time 60 -o "/tmp/new_tivusat_keys.txt" "$KEYS_URL"; then
         if [ -s "/tmp/new_tivusat_keys.txt" ] && grep -q "rsakey" "/tmp/new_tivusat_keys.txt"; then
@@ -55,6 +55,178 @@ download_new_keys() {
     return 1
 }
 
+update_tivusat_system() {
+    local new_keys="$1"
+
+    log "Checking Tivusat reader status..."
+
+    # Crea backup
+    cp "$OSCAM_FILE" "$BACKUP_FILE"
+
+    # Cerca reader Tivusat esistente
+    local tivusat_line=$(get_tivusat_reader_info)
+
+    if [ -n "$tivusat_line" ]; then
+        log "Found existing Tivusat reader at line: $tivusat_line"
+        update_existing_reader "$tivusat_line" "$new_keys"
+    else
+        log "No Tivusat reader found - checking for reader with caid 183E"
+
+        # Cerca se esiste un reader con caid 183E ma senza chiavi
+        local caid_183e_line=$(grep -n "caid.*183E" "$OSCAM_FILE" | head -1 | cut -d: -f1)
+
+        if [ -n "$caid_183e_line" ]; then
+            log "Found reader with caid 183E at line: $caid_183e_line - converting to Tivusat"
+            convert_to_tivusat_reader "$caid_183e_line" "$new_keys"
+        else
+            log "No reader with caid 183E found - creating new Tivusat reader"
+            create_new_tivusat_reader "$new_keys"
+        fi
+    fi
+}
+
+# Caso 1: Reader Tivusat esistente - aggiorna chiavi
+update_existing_reader() {
+    local start_line="$1"
+    local new_keys="$2"
+    log "Updating existing Tivusat reader..."
+    awk -v start="$start_line" -v new_keys="$new_keys" '
+    BEGIN {
+        split(new_keys, key_lines, "\n")
+        in_target=0
+        processed=0
+    }
+    {
+        if (NR < start) {
+            print
+            next
+        }
+        if (NR == start) {
+            in_target=1
+            print
+            next
+        }
+        if (in_target && !processed) {
+            # Salta le vecchie chiavi
+            if (/rsakey[[:space:]]*=/ || /tiger_/) {
+                next
+            }
+            # Quando troviamo una riga che non è una chiave, inseriamo le nuove chiavi
+            if (!/rsakey[[:space:]]*=/ && !/tiger_/ && !/^[[:space:]]*$/) {
+                # Inserisci tutte le nuove chiavi
+                for (i in key_lines) {
+                    if (key_lines[i] != "") print key_lines[i]
+                }
+                processed=1
+            }
+            print
+            next
+        }
+        print
+    }
+    END {
+        if (in_target && !processed) {
+            # Se siamo alla fine e non abbiamo ancora inserito, aggiungi chiavi
+            for (i in key_lines) {
+                if (key_lines[i] != "") print key_lines[i]
+            }
+        }
+    }
+    ' "$OSCAM_FILE" > "${TEMP_FILE}_updated"
+
+    mv "${TEMP_FILE}_updated" "$OSCAM_FILE"
+}
+
+# Caso 2: Reader con caid 183E ma non Tivusat - convertilo
+convert_to_tivusat_reader() {
+    local start_line="$1"
+    local new_keys="$2"
+
+    log "Converting existing reader to Tivusat..."
+
+    awk -v start="$start_line" -v new_keys="$new_keys" '
+    BEGIN {
+        split(new_keys, key_lines, "\n")
+        in_target=0
+        processed=0
+    }
+    {
+        if (NR < start) {
+            print
+            next
+        }
+        if (NR == start && !in_target) {
+            in_target=1
+            # Modifica il label per renderlo Tivusat
+            if (/label[[:space:]]*=/) {
+                gsub(/label[[:space:]]*=.*/, "label                         = Tivusat-183E")
+            } else {
+                # Se non c'è label, aggiungilo dopo [reader]
+                gsub(/^\[reader\]/, "[reader]\nlabel                         = Tivusat-183E")
+            }
+            print
+            next
+        }
+        if (in_target && !processed) {
+            # Salta vecchie chiavi se esistono
+            if (/rsakey[[:space:]]*=/ || /tiger_/) {
+                next
+            }
+
+            # Dopo caid, inserisci le nuove chiavi
+            if (/caid[[:space:]]*=/) {
+                print
+                # Aggiungi tutte le nuove chiavi
+                for (i in key_lines) {
+                    if (key_lines[i] != "") print key_lines[i]
+                }
+                processed=1
+                next
+            }
+
+            print
+            next
+        }
+        print
+    }
+    ' "$OSCAM_FILE" > "${TEMP_FILE}_updated"
+
+    mv "${TEMP_FILE}_updated" "$OSCAM_FILE"
+}
+
+# Caso 3: Nessun reader 183E - creane uno nuovo
+create_new_tivusat_reader() {
+    local new_keys="$1"
+    log "Creating new Tivusat reader..."
+    # Crea il nuovo reader all'inizio del file
+    local new_reader=$(cat << EOF
+#################################################################
+####################### Levi45 Protocol  ########################
+#################################################################
+
+[reader]
+label                         = Tivusat-183E
+description                   = Tivusat
+protocol                      = internal
+device                        = /dev/sci0
+localcards                    = 183E:000000,005411
+caid                          = 183E
+$new_keys
+detect                        = cd
+nagra_read                    = 1
+mhz                           = 500
+ident                         = 183E:000000,005411
+group                         = 1
+emmcache                      = 0,3,2,0
+ecmwhitelist                  = 91
+ecmheaderwhitelist            = 80308ED387,81308ED387
+EOF
+)
+
+    # Inserisci all'inizio del file
+    echo "$new_reader" | cat - "$OSCAM_FILE" > "${TEMP_FILE}_new"
+    mv "${TEMP_FILE}_new" "$OSCAM_FILE"
+}
 # Function to get hardcoded keys (FALLBACK)
 get_hardcoded_keys() {
     cat << 'EOF'
@@ -71,31 +243,32 @@ EOF
 
 # Function to check if Tivusat reader exists and get its info
 get_tivusat_reader_info() {
-    # Look for reader with caid 183E
+
     awk '
     /^\[reader\]/ {
         in_reader=1
         reader_start=NR
-        reader_content=""
+        has_tivusat_label=0
+        has_183e=0
     }
     in_reader {
-        reader_content = reader_content $0 "\n"
-        if (/caid.*183E/) {
-            has_tivusat=1
-            tivusat_start=reader_start
-        }
+        if (/label.*Tivusat/) has_tivusat_label=1
+        if (/caid.*183E/) has_183e=1
+
+
+
         if (/^\[/ && NR > reader_start) {
-            if (has_tivusat) {
-                print tivusat_start
+            if (has_tivusat_label && has_183e) {
+                print reader_start
                 exit
             }
             in_reader=0
-            has_tivusat=0
+
         }
     }
     END {
-        if (in_reader && has_tivusat) {
-            print tivusat_start
+        if (in_reader && has_tivusat_label && has_183e) {
+            print reader_start
         }
     }
     ' "$OSCAM_FILE"
@@ -230,11 +403,12 @@ main() {
     local CURRENT_KEYS
     if download_new_keys; then
         CURRENT_KEYS=$(cat "/tmp/new_tivusat_keys.txt")
-        log "Using downloaded keys from online source"
+        log "Using downloaded keys"
     else
         CURRENT_KEYS=$(get_hardcoded_keys)
-        log "Using hardcoded fallback keys"
+        log "Using hardcoded keys"
     fi
+    update_tivusat_system "$CURRENT_KEYS"
 
     # Check if oscam.server exists
     if [ ! -f "$OSCAM_FILE" ]; then
