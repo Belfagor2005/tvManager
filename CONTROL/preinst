@@ -1,39 +1,106 @@
 #!/bin/sh
-# if [ -d /usr/lib/python2.6 ]; then
-# if [ ! -d /usr/lib/python2.7 ]; then
-# echo "**********************************************************"
-# echo "*                        Oooooooops                      *"
-# echo "*                Not Compatible with (OE1.6)             *"
-# echo "**********************************************************"
-# sleep 2
-# fi
-# fi
-# exit 1 
-echo "Checking for an older version in the system..."
-if [ -d /usr/lib/enigma2/python/Plugins/Extensions/tvManager ]
-then 
-echo "tvManager Installato"
-rm -rf /usr/lib/enigma2/python/Plugins/Extensions/tvManager > /dev/null 2>&1
-echo "Una versione precedente trovata e rimossa..."
-else
-echo "Nessun Plugin tvManager Installato"
-echo "***********************************"
-echo "* Proceeding to installation...   *"
-echo "***********************************"
-fi
+
+# **************************************
+# Softcam Manager - Pre-Installation Script
+# **************************************
+
 LINE="======================================================================="
-######### checking Package: libssl & libcrypto ###########
-if [ -f /etc/apt/apt.conf ] ; then
-    images="OE2.5 IMAGES:"
-    lib_files="/var/lib/dpkg/status"
-    list_files="/var/lib/dpkg/info"
-elif [ -f /etc/opkg/opkg.conf ] ; then
-    images="OE2.0 IMAGES:"
-    lib_files="/var/lib/opkg/status"
-    list_files="/var/lib/opkg/info"
+
+echo "$LINE"
+echo "Softcam Manager - Pre-Installation Check"
+echo "$LINE"
+
+# Controlla versione Python
+echo "Checking Python version..."
+if python -V 2>&1 | grep -q "Python 2"; then
+    echo "✓ Python 2.x detected"
+    PYTHON_OK=true
+elif python -V 2>&1 | grep -q "Python 3"; then
+    echo "✓ Python 3.x detected" 
+    PYTHON_OK=true
 else
-    echo "Sorry, your device not have the opkg/dpkg folder :("
+    echo "✗ Python not found or unsupported version"
+    PYTHON_OK=false
 fi
+
+# Controlla e rimuovi versione precedente
+PLUGIN_DIR="/usr/lib/enigma2/python/Plugins/Extensions/tvManager/"
+echo "Checking for previous version..."
+if [ -d "$PLUGIN_DIR" ]; then
+    echo "✓ Previous version found, removing..."
+    rm -rf "$PLUGIN_DIR" > /dev/null 2>&1
+    echo "✓ Old version removed successfully"
+else
+    echo "✓ No previous version found"
+fi
+
+# Determina il tipo di package manager
+echo "Detecting package manager..."
+if [ -f /etc/apt/apt.conf ]; then
+    echo "✓ DreamOS (dpkg) detected"
+    PKG_MANAGER="dpkg"
+    LIB_FILES="/var/lib/dpkg/status"
+    LIST_FILES="/var/lib/dpkg/info"
+elif [ -f /etc/opkg/opkg.conf ]; then
+    echo "✓ OpenPLi/OpenATV (opkg) detected" 
+    PKG_MANAGER="opkg"
+    LIB_FILES="/var/lib/opkg/status"
+    LIST_FILES="/var/lib/opkg/info"
+else
+    echo "⚠ Unknown package manager, continuing anyway..."
+    PKG_MANAGER="unknown"
+fi
+
+# Controlla dipendenze essenziali
+echo "Checking essential dependencies..."
+MISSING_DEPS=""
+
+# Controlla libusb
+if ! ldconfig -p | grep -q "libusb-1.0.so"; then
+    if [ ! -f /usr/lib/libusb-1.0.so.0 ] && [ ! -f /usr/lib/libusb-1.0.so ]; then
+        MISSING_DEPS="$MISSING_DEPS libusb-1.0-0"
+    fi
+fi
+
+# Controlla libssl
+if ! ldconfig -p | grep -q "libssl.so"; then
+    MISSING_DEPS="$MISSING_DEPS libssl"
+fi
+
+if [ -n "$MISSING_DEPS" ]; then
+    echo "⚠ Missing dependencies:$MISSING_DEPS"
+    echo "These will be installed automatically if possible"
+else
+    echo "✓ All essential dependencies available"
+fi
+
+# Controlla spazio disco
+echo "Checking disk space..."
+AVAILABLE_SPACE=$(df /usr/lib/enigma2/python/Plugins/Extensions/ | awk 'NR==2 {print $4}')
+if [ "$AVAILABLE_SPACE" -lt 1024 ]; then
+    echo "⚠ Low disk space: ${AVAILABLE_SPACE}KB available"
+    echo "Recommended: at least 1MB free space"
+else
+    echo "✓ Sufficient disk space: ${AVAILABLE_SPACE}KB"
+fi
+
+# Controlla permessi
+echo "Checking permissions..."
+if [ -w "/usr/lib/enigma2/python/Plugins/Extensions/" ]; then
+    echo "✓ Write permissions OK"
+else
+    echo "✗ No write permission to plugin directory"
+    echo "Please run as root or check permissions"
+    exit 1
+fi
+
+# Pulisci file temporanei vecchi
+echo "Cleaning old temporary files..."
+find /tmp -name "*tvManager*" -mtime +1 -delete 2>/dev/null
+find /tmp -name "*.ipk" -mtime +1 -delete 2>/dev/null
+find /tmp -name "*.deb" -mtime +1 -delete 2>/dev/null
+
+
 usrlibpath="/usr/lib/"
 libpath="/lib/"
 if [ -d "/etc/tuxbox/config" ] ; then
@@ -397,4 +464,10 @@ else ## Try to Download libcrypto from feed
         exit 1
     fi
 fi
+
+echo "$LINE"
+echo "Pre-installation check completed successfully!"
+echo "Proceeding with installation..."
+echo "$LINE"
+
 exit 0

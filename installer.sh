@@ -1,8 +1,8 @@
 #!/bin/bash
 ## setup command=wget -q --no-check-certificate https://raw.githubusercontent.com/Belfagor2005/tvManager/main/installer.sh -O - | /bin/sh
 
-version='3.2'
-changelog='\nRecoded sources'
+version='3.3'
+changelog='\nAdd Options 7: update tvsat reader'
 
 TMPPATH=/tmp/tvManager-install
 FILEPATH=/tmp/tvManager-main.tar.gz
