@@ -138,13 +138,20 @@ update_existing_reader() {
 }
 
 # Caso 2: Reader con caid 183E ma non Tivusat - convertilo
+# Caso 2: Reader con caid 183E ma non Tivusat - convertilo
 convert_to_tivusat_reader() {
     local start_line="$1"
     local new_keys="$2"
 
     log "Converting existing reader to Tivusat..."
 
-    awk -v start="$start_line" -v new_keys="$new_keys" '
+    # Trova la fine del reader
+    local end_line=$(awk -v start="$start_line" '
+        NR > start && /^\[reader\]/ { print NR-1; exit }
+        END { print NR }
+    ' "$OSCAM_FILE")
+
+    awk -v start="$start_line" -v end="$end_line" -v new_keys="$new_keys" '
     BEGIN {
         split(new_keys, key_lines, "\n")
         in_target=0
@@ -155,26 +162,32 @@ convert_to_tivusat_reader() {
             print
             next
         }
+        
         if (NR == start && !in_target) {
             in_target=1
             # Modifica il label per renderlo Tivusat
-            if (/label[[:space:]]*=/) {
-                gsub(/label[[:space:]]*=.*/, "label                         = Tivusat-183E")
+            if ($0 ~ /label[[:space:]]*=/) {
+                sub(/label[[:space:]]*=.*/, "label                         = Tivusat-183E")
             } else {
                 # Se non c'è label, aggiungilo dopo [reader]
-                gsub(/^\[reader\]/, "[reader]\nlabel                         = Tivusat-183E")
+                if ($0 ~ /^\[reader\]/) {
+                    print $0
+                    print "label                         = Tivusat-183E"
+                    next
+                }
             }
             print
             next
         }
+        
         if (in_target && !processed) {
             # Salta vecchie chiavi se esistono
-            if (/rsakey[[:space:]]*=/ || /tiger_/) {
+            if ($0 ~ /rsakey[[:space:]]*=/ || $0 ~ /tiger_/) {
                 next
             }
 
             # Dopo caid, inserisci le nuove chiavi
-            if (/caid[[:space:]]*=/) {
+            if ($0 ~ /caid[[:space:]]*=/) {
                 print
                 # Aggiungi tutte le nuove chiavi
                 for (i in key_lines) {
@@ -184,14 +197,32 @@ convert_to_tivusat_reader() {
                 next
             }
 
+            # Se siamo alla fine del reader e non abbiamo ancora processato
+            if (NR >= end) {
+                # Aggiungi chiavi alla fine
+                for (i in key_lines) {
+                    if (key_lines[i] != "") print key_lines[i]
+                }
+                processed=1
+            }
+            
             print
             next
         }
+        
         print
+    }
+    END {
+        if (in_target && !processed) {
+            # Se siamo alla fine del file e non abbiamo ancora inserito, aggiungi chiavi
+            for (i in key_lines) {
+                if (key_lines[i] != "") print key_lines[i]
+            }
+        }
     }
     ' "$OSCAM_FILE" > "${TEMP_FILE}_updated"
 
-    mv "${TEMP_FILE}_updated" "$OSCAM_FILE"
+    mv "${TEMP_FILE}_updated" "$OSCAM_FILE"'
 }
 
 # Caso 3: Nessun reader 183E - creane uno nuovo
