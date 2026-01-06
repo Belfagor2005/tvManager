@@ -1,27 +1,26 @@
-SUMMARY = "Lululla"
+SUMMARY = "TV Manager Plugin"
 MAINTAINER = "Lululla"
 SECTION = "base"
 PRIORITY = "required"
-LICENSE = "proprietary"
+LICENSE = "CLOSED"
 
 require conf/license/license-gplv2.inc
 
-inherit gitpkgv autotools pkgconfig
+inherit gitpkgv allarch
 
 SRCREV = "${AUTOREV}"
-PV = "1.0+git${SRCPV}"
-PKGV = "1.0+git${GITPKGV}"
-VER ="3.9"
+PV = "3.9+git${SRCPV}"
+PKGV = "3.9+git${GITPKGV}"
 PR = "r0"
 
 SRC_URI = "git://github.com/Belfagor2005/tvManager.git;protocol=https;branch=main"
 
 S = "${WORKDIR}/git"
 
-FILES_${PN} = "/usr/* /etc*"
-
 do_install() {
-    cp -af --no-preserve=ownership ${S}/usr* /etc* ${D}/ 
+    install -d ${D}${libdir}/enigma2/python/Plugins/Extensions/tvManager
+    cp -r ${S}/usr/lib/enigma2/python/Plugins/Extensions/tvManager/* \
+          ${D}${libdir}/enigma2/python/Plugins/Extensions/tvManager/
 }
 
-
+FILES:${PN} = "${libdir}/enigma2/python/Plugins/Extensions/tvManager"
