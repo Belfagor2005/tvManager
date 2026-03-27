@@ -1,4 +1,4 @@
-# tvManager (Softcam Manager) v3.1.0 🚀
+# tvManager (Softcam Manager) v3.4 🚀
 
 <div align="center">
 
@@ -6,11 +6,15 @@
 
 **Enterprise Grade Enigma2 Softcam Management Plugin**
 
+
 [![Python package](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml/badge.svg)](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml)
 [![Python 2.7/3.x](https://img.shields.io/badge/Python-2.7%2F3.x-blue.svg)](https://www.python.org/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Enigma2](https://img.shields.io/badge/Enigma2-Plugin-orange.svg)](https://github.com/OpenPLi/enigma2)
-
+  <a href="https://github.com/Belfagor2005/tvManager">
+    <img src="https://img.shields.io/badge/Version-3.4-blue.svg" alt="Version">
+  </a>
+  
 *Professional softcam management solution for Enigma2-based receivers*
 
 </div>
