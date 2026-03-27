@@ -268,15 +268,16 @@ class MyCCcamCollector:
                 nice = 5
                 lb_weight = 200
 
-            # Build the reader block without using triple-quoted f-string to avoid syntax issues.
+            # Build the reader block without using triple-quoted f-string to
+            # avoid syntax issues.
             block = "# [{i}] {src_icon} {stars_txt} - {ping}ms - {priority} - {src_name}\n".format(
-                i=i, src_icon=src_icon, stars_txt=stars_txt, ping=ping, priority=priority, src_name=src_name
-            )
+                i=i, src_icon=src_icon, stars_txt=stars_txt, ping=ping, priority=priority, src_name=src_name)
             block += "[reader]\n"
             block += "label = {tag}_{i:03d}\n".format(tag=self.tag, i=i)
             block += "enable = 1\n"
             block += "protocol = cccam\n"
-            block += "device = {host},{port}\n".format(host=s['host'], port=s['port'])
+            block += "device = {host},{port}\n".format(
+                host=s['host'], port=s['port'])
             block += "user = {user}\n".format(user=s['username'])
             block += "password = {password}\n".format(password=s['password'])
             block += "group = 1,2,3,4,5,6,7,8,9,10\n"
