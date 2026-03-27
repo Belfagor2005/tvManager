@@ -60,10 +60,12 @@ class MyCCcamCollector:
             try:
                 r = requests.get(url, timeout=8, verify=False)
                 if r.status_code == 200:
-                    servers.extend(self._extract_cccam_line(r.text, 'testious', '[T]'))
+                    servers.extend(
+                        self._extract_cccam_line(
+                            r.text, 'testious', '[T]'))
                     if len(servers) >= 8:
                         break
-            except:
+            except BaseException:
                 pass
         return servers[:8]
 
@@ -77,7 +79,7 @@ class MyCCcamCollector:
             r = requests.get(url, headers=headers, timeout=8, verify=False)
             if r.status_code == 200:
                 return self._extract_cccam_line(r.text, 'cccamnet', '[CN]')[:5]
-        except:
+        except BaseException:
             pass
         return []
 
@@ -90,8 +92,9 @@ class MyCCcamCollector:
             }
             r = requests.get(url, headers=headers, timeout=8, verify=False)
             if r.status_code == 200:
-                return self._extract_cccam_line(r.text, 'cccamlive', '[CL]')[:3]
-        except:
+                return self._extract_cccam_line(
+                    r.text, 'cccamlive', '[CL]')[:3]
+        except BaseException:
             pass
         return []
 
@@ -104,26 +107,34 @@ class MyCCcamCollector:
             }
             r = requests.get(url, headers=headers, timeout=8, verify=False)
             if r.status_code == 200:
-                return self._extract_cccam_line(r.text, 'cccampremium', '[CM]')[:5]
-        except:
+                return self._extract_cccam_line(
+                    r.text, 'cccampremium', '[CM]')[:5]
+        except BaseException:
             pass
         return []
 
     def _fetch_cccamhub(self):
         try:
-            r = requests.get('https://cccamhub.com/cccamfree/', timeout=6, verify=False)
+            r = requests.get(
+                'https://cccamhub.com/cccamfree/',
+                timeout=6,
+                verify=False)
             if r.status_code == 200:
                 return self._extract_cccam_line(r.text, 'cccamhub', '[CH]')[:5]
-        except:
+        except BaseException:
             pass
         return []
 
     def _fetch_cccamiptv(self):
         try:
-            r = requests.get('https://cccamiptv.club/free-cccam/', timeout=6, verify=False)
+            r = requests.get(
+                'https://cccamiptv.club/free-cccam/',
+                timeout=6,
+                verify=False)
             if r.status_code == 200:
-                return self._extract_cccam_line(r.text, 'cccamiptv', '[CI]')[:5]
-        except:
+                return self._extract_cccam_line(
+                    r.text, 'cccamiptv', '[CI]')[:5]
+        except BaseException:
             pass
         return []
 
@@ -136,8 +147,9 @@ class MyCCcamCollector:
             }
             r = requests.get(url, headers=headers, timeout=8, verify=False)
             if r.status_code == 200:
-                return self._extract_cccam_line(r.text, 'tvcccamnet', '[TV]')[:3]
-        except:
+                return self._extract_cccam_line(
+                    r.text, 'tvcccamnet', '[TV]')[:3]
+        except BaseException:
             pass
         return []
 
@@ -217,7 +229,8 @@ class MyCCcamCollector:
             if ok:
                 active.append(s)
             if status_callback and idx % 5 == 0:
-                status_callback(f"  Tested {idx}/{len(servers)} – {len(active)} active")
+                status_callback(
+                    f"  Tested {idx}/{len(servers)} – {len(active)} active")
 
         # Quality filter
         if self.min_stars > 0:
@@ -257,12 +270,18 @@ class MyCCcamCollector:
 
             block = f"""# [{i}] {src_icon} {stars_txt} - {ping}ms - {priority} - {src_name}
 [reader]
-label = {self.tag}_{i:03d}
+label = {
+                self.tag}_{
+                i:03d}
 enable = 1
 protocol = cccam
-device = {s['host']},{s['port']}
-user = {s['username']}
-password = {s['password']}
+device = {
+                s['host']},{
+                s['port']}
+user = {
+                    s['username']}
+password = {
+                        s['password']}
 group = 1,2,3,4,5,6,7,8,9,10
 cccversion = 2.3.2
 cccmaxhops = 2
@@ -310,9 +329,12 @@ disablecrccws = 1
                     lines_keep.append(line.rstrip('\n'))
 
         new_section = []
-        new_section.append(f"# {self.tag} start - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        new_section.append(
+            f"# {self.tag} start - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         new_section.append(f"# {self.tag.upper()} - Auto-generated config")
-        new_section.append(f"# Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        new_section.append(
+            f"# Date: {
+                datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         new_section.append(f"# Active servers: {len(new_blocks)}")
         new_section.append("")
         new_section.append("# ========================================")
@@ -349,7 +371,9 @@ disablecrccws = 1
                     return
 
                 if status_callback:
-                    status_callback(f"Found {len(active_servers)} active servers. Generating config...")
+                    status_callback(
+                        f"Found {
+                            len(active_servers)} active servers. Generating config...")
 
                 # Generate reader blocks
                 new_blocks = self._generate_reader_blocks(active_servers)
