@@ -255,29 +255,38 @@ class MyCCcamCollector:
                 nice = 5
                 lb_weight = 200
 
-            block = f"""# [{i}] {src_icon} {stars_txt} - {ping}ms - {priority} - {src_name}
-[reader]
-label = {self.tag}_{i:03d}
-enable = 1
-protocol = cccam
-device = {s['host']},{s['port']}
-user = {s['username']}
-password = {s['password']}
-group = 1,2,3,4,5,6,7,8,9,10
-cccversion = 2.3.2
-cccmaxhops = 2
-cccreconnect = 1
-ccckeepalive = 1
-audisabled = 1
-disablecrccws = 1
-"""
+            # Build the reader block without using triple-quoted f-string to avoid syntax issues.
+            block = "# [{i}] {src_icon} {stars_txt} - {ping}ms - {priority} - {src_name}\n".format(
+                i=i, src_icon=src_icon, stars_txt=stars_txt, ping=ping, priority=priority, src_name=src_name
+            )
+            block += "[reader]\n"
+            block += "label = {tag}_{i:03d}\n".format(tag=self.tag, i=i)
+            block += "enable = 1\n"
+            block += "protocol = cccam\n"
+            block += "device = {host},{port}\n".format(host=s['host'], port=s['port'])
+            block += "user = {user}\n".format(user=s['username'])
+            block += "password = {password}\n".format(password=s['password'])
+            block += "group = 1,2,3,4,5,6,7,8,9,10\n"
+            block += "cccversion = 2.3.2\n"
+            block += "cccmaxhops = 2\n"
+            block += "cccreconnect = 1\n"
+            block += "ccckeepalive = 1\n"
+            block += "audisabled = 1\n"
+            block += "disablecrccws = 1\n"
+
 
             if ping < 200:
-                block += "cccping = 2\ncccpingmax = 20\ncccbusycarddelay = 1000\n"
+                block += "cccping = 2\n"
+                block += "cccpingmax = 20\n"
+                block += "cccbusycarddelay = 1000\n"
             else:
-                block += "cccping = 3\ncccpingmax = 30\ncccbusycarddelay = 1500\n"
+                block += "cccping = 3\n"
+                block += "cccpingmax = 30\n"
+                block += "cccbusycarddelay = 1500\n"
 
-            block += f"lb_weight = {lb_weight}\nnice = {nice}\nfallback = 0\n"
+            block += "lb_weight = {lb_weight}\n".format(lb_weight=lb_weight)
+            block += "nice = {nice}\n".format(nice=nice)
+            block += "fallback = 0\n"
             block += "disablecrccws_only_for = 0500:030B00,032830,050F00;098C:000000;098D:000000;09C4:000000;1884:000000;1708:000000;1709:000000;1841:000000;1811:003311\n\n"
 
             blocks.append(block)
