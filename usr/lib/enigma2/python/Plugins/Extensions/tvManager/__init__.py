@@ -4,11 +4,31 @@
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 import gettext
+from os.path import dirname, join
 import os
+import sys
+
+currversion = "3.3"
+NAME_PLUG = "Softcam Manager"
+TITLE_PLUG = "..:: " + NAME_PLUG + " V. %s ::.." % currversion
+PLUGIN_PATH = dirname(sys.modules[__name__].__file__)
+ICONPIC = join(PLUGIN_PATH, "logo.png")
+DATA_PATH = join(PLUGIN_PATH, "data")
+DIR_WORK = "/usr/lib/enigma2/python/Screens"
+FILE_XML = join(PLUGIN_PATH, "tvManager.xml")
+ECM_INFO = "/tmp/ecm.info"
+EMPTY_ECM_INFO = ("", "0", "0", "0")
 
 sl = 'slManager'
 PluginLanguageDomain = 'tvManager'
 PluginLanguagePath = 'Extensions/tvManager/locale'
+
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "deflate"}
+
 
 global isDreamOS
 isDreamOS = False

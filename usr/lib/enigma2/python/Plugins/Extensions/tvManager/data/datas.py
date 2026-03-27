@@ -69,8 +69,7 @@ from Tools.Directories import SCOPE_PLUGINS, fileExists, resolveFilename
 # =========================
 # Local project imports
 # =========================
-from .. import _, paypal
-from ..plugin import currversion, runningcam
+from .. import _, paypal, currversion
 
 
 global skin_path
@@ -549,6 +548,7 @@ class tv_config(Screen, ConfigListScreen):
             self.getcl()
         else:
             try:
+                from ..plugin import runningcam
                 print("datas runningcam=", runningcam)
 
                 def execute_command(choice):

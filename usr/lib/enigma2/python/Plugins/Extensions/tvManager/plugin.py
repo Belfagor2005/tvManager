@@ -91,11 +91,29 @@ from enigma import (
 # =========================
 # Local project imports
 # =========================
-from . import _, paypal, installer_url, developer_url, ftpxml  # , wgetsts
+from . import (
+    _,
+    currversion,
+    # headers,
+    paypal,
+    installer_url,
+    developer_url,
+    ftpxml,
+    NAME_PLUG,
+    TITLE_PLUG,
+    PLUGIN_PATH,
+    ICONPIC,
+    DATA_PATH,
+    DIR_WORK,
+    FILE_XML,
+    ECM_INFO,
+    EMPTY_ECM_INFO
+)
+
+
 from .data.Utils import RequestAgent, b64decoder, checkGZIP
 from .data.GetEcmInfo import GetEcmInfo
 from .data.Console import Console
-
 
 global active, skin_path
 global _session
@@ -116,16 +134,6 @@ else:
     from urllib2 import urlopen, Request
 
 
-currversion = "3.3"
-NAME_PLUG = "Softcam Manager"
-TITLE_PLUG = "..:: " + NAME_PLUG + " V. %s ::.." % currversion
-plugin_path = dirname(sys.modules[__name__].__file__)
-ICONPIC = join(plugin_path, "logo.png")
-DATA_PATH = join(plugin_path, "data")
-DIR_WORK = "/usr/lib/enigma2/python/Screens"
-FILE_XML = join(plugin_path, "tvManager.xml")
-ECM_INFO = "/tmp/ecm.info"
-EMPTY_ECM_INFO = ("", "0", "0", "0")
 old_ecm_time = time.time()
 info = {}
 ecm = ""
@@ -136,17 +144,9 @@ OSCAMINFO = 2
 AgentRequest = RequestAgent()
 
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Encoding": "deflate"}
-
-
 # =========================
 # Utility Functions
 # =========================
-
-
 def execute_cam_command(cmd):
     """Executes cam commands without blocking - uses simple system()"""
     print("Executing cam command: %s" % cmd)
@@ -393,11 +393,11 @@ checkdir()
 
 screenwidth = getDesktop(0).size()
 if screenwidth.width() == 2560:
-    skin_path = plugin_path + "/res/skins/uhd/"
+    skin_path = PLUGIN_PATH + "/res/skins/uhd/"
 elif screenwidth.width() == 1920:
-    skin_path = plugin_path + "/res/skins/fhd/"
+    skin_path = PLUGIN_PATH + "/res/skins/fhd/"
 else:
-    skin_path = plugin_path + "/res/skins/hd/"
+    skin_path = PLUGIN_PATH + "/res/skins/hd/"
 
 if exists("/usr/bin/apt-get"):
     skin_path = skin_path + "dreamOs/"
@@ -917,9 +917,9 @@ class tvManager(Screen):
                     runningcam = key
                     self.BlueAction = action
                     self["key_blue"].setText(action)
-                    pyo_file = join(plugin_path, "data/%s.pyo" % file_name)
-                    pyc_file = join(plugin_path, "data/%s.pyc" % file_name)
-                    py_file = join(plugin_path, "data/%s.py" % file_name)
+                    pyo_file = join(DATA_PATH, "%s.pyo" % file_name)
+                    pyc_file = join(DATA_PATH, "%s.pyc" % file_name)
+                    py_file = join(DATA_PATH, "%s.py" % file_name)
                     if exists(pyo_file) or exists(pyc_file) or exists(py_file):
                         print("exists %s" % file_name)
                     break
@@ -1257,7 +1257,7 @@ class tvManager(Screen):
 
     def update_oscam_codes(self):
         """Executes the OSCam codes update script"""
-        script_path = join(plugin_path, "data/update_oscam_codes.sh")
+        script_path = join(PLUGIN_PATH, "data/update_oscam_codes.sh")
 
         if not exists(script_path):
             self.session.open(
@@ -1317,7 +1317,7 @@ class tvManager(Screen):
         """Update Softcam Keys"""
         print("[DEBUG] Opening Console for keys update")
 
-        script = join(plugin_path, "auto")
+        script = join(PLUGIN_PATH, "auto")
         if not access(script, X_OK):
             chmod(script, 493)
         if exists("/usr/keys/SoftCam.Key"):
@@ -2414,7 +2414,7 @@ def mainmenu(menu_id):
 
 
 def Plugins(**kwargs):
-    ICONPIC = "logo.png"
+    # ICONPIC = "logo.png"
     return [
         PluginDescriptor(
             name=_(NAME_PLUG),

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-version='3.3'
-changelog='\nAdd Options 7: update tvsat reader'
+version='3.4'
+changelog='\nFix get lines'
 
 TMPPATH=/tmp/tvManager-install
 FILEPATH=/tmp/tvManager-main.tar.gz
