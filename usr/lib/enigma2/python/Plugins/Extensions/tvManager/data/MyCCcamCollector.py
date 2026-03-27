@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -24,7 +24,7 @@ from threading import Thread
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-class MyCCcamCollector:
+class MyCCcamCollector(object):
     def __init__(self, output_path="/etc/tuxbox/config/oscam.server"):
         self.output_path = output_path
         self.tag = "lululla"                # Marker for generated readers
@@ -56,7 +56,7 @@ class MyCCcamCollector:
         servers = []
         for days in range(2):
             date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
-            url = f"https://testious.com/old-free-cccam-servers/{date}/"
+            url = "https://testious.com/old-free-cccam-servers/{}/".format(date)
             try:
                 r = requests.get(url, timeout=8, verify=False)
                 if r.status_code == 200:
@@ -196,20 +196,20 @@ class MyCCcamCollector:
         ]
         for scraper in scrapers:
             if status_callback:
-                status_callback(f"Scraping {scraper.__name__}...")
+                status_callback("Scraping {}...".format(scraper.__name__))
             try:
                 servers = scraper()
                 all_servers.extend(servers)
                 if status_callback:
-                    status_callback(f"  Found {len(servers)} servers")
+                    status_callback("  Found {} servers".format(len(servers)))
             except Exception as e:
                 if status_callback:
-                    status_callback(f"  Error: {e}")
+                    status_callback("  Error: {}".format(e))
 
         # Deduplicate
         unique = {}
         for s in all_servers:
-            key = f"{s['host']}:{s['port']}:{s['username']}"
+            key = "{}:{}:{}".format(s['host'], s['port'], s['username'])
             if key not in unique:
                 unique[key] = s
         servers = list(unique.values())
@@ -217,7 +217,7 @@ class MyCCcamCollector:
             servers = servers[:self.max_servers]
 
         if status_callback:
-            status_callback(f"Testing {len(servers)} unique servers...")
+            status_callback("Testing {} unique servers...".format(len(servers)))
 
         # Test each
         active = []
@@ -230,7 +230,7 @@ class MyCCcamCollector:
                 active.append(s)
             if status_callback and idx % 5 == 0:
                 status_callback(
-                    f"  Tested {idx}/{len(servers)} – {len(active)} active")
+                    "  Tested {}/{} – {} active".format(idx, len(servers), len(active)))
 
         # Quality filter
         if self.min_stars > 0:
@@ -268,16 +268,15 @@ class MyCCcamCollector:
                 nice = 5
                 lb_weight = 200
 
-            # Build the reader block without using triple-quoted f-string to
-            # avoid syntax issues.
+            # Build the reader block without using f-strings
             block = "# [{i}] {src_icon} {stars_txt} - {ping}ms - {priority} - {src_name}\n".format(
-                i=i, src_icon=src_icon, stars_txt=stars_txt, ping=ping, priority=priority, src_name=src_name)
+                i=i, src_icon=src_icon, stars_txt=stars_txt, ping=ping, priority=priority, src_name=src_name
+            )
             block += "[reader]\n"
             block += "label = {tag}_{i:03d}\n".format(tag=self.tag, i=i)
             block += "enable = 1\n"
             block += "protocol = cccam\n"
-            block += "device = {host},{port}\n".format(
-                host=s['host'], port=s['port'])
+            block += "device = {host},{port}\n".format(host=s['host'], port=s['port'])
             block += "user = {user}\n".format(user=s['username'])
             block += "password = {password}\n".format(password=s['password'])
             block += "group = 1,2,3,4,5,6,7,8,9,10\n"
@@ -308,12 +307,18 @@ class MyCCcamCollector:
 
     # ----- Write to oscam.server (or any .server file) -----
     def _write_server_config(self, filepath, new_blocks):
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        # Ensure directory exists
+        dirname = os.path.dirname(filepath)
+        if dirname and not os.path.exists(dirname):
+            try:
+                os.makedirs(dirname)
+            except OSError:
+                pass
 
         # Backup
         if os.path.exists(filepath):
-            backup = f"{filepath}.backup.{int(time.time())}"
-            os.system(f"cp '{filepath}' '{backup}' 2>/dev/null")
+            backup = "{}.backup.{}".format(filepath, int(time.time()))
+            os.system("cp '{}' '{}' 2>/dev/null".format(filepath, backup))
 
         lines_keep = []
         in_generated_section = False
@@ -321,10 +326,10 @@ class MyCCcamCollector:
             with open(filepath, 'r') as f:
                 for line in f:
                     stripped = line.strip()
-                    if stripped.startswith(f"# {self.tag} start"):
+                    if stripped.startswith("# {} start".format(self.tag)):
                         in_generated_section = True
                         continue
-                    elif stripped.startswith(f"# {self.tag} end"):
+                    elif stripped.startswith("# {} end".format(self.tag)):
                         in_generated_section = False
                         continue
                     if in_generated_section:
@@ -333,19 +338,18 @@ class MyCCcamCollector:
 
         new_section = []
         new_section.append(
-            f"# {self.tag} start - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        new_section.append(f"# {self.tag.upper()} - Auto-generated config")
+            "# {} start - {}".format(self.tag, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        new_section.append("# {} - Auto-generated config".format(self.tag.upper()))
         new_section.append(
-            f"# Date: {
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        new_section.append(f"# Active servers: {len(new_blocks)}")
+            "# Date: {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        new_section.append("# Active servers: {}".format(len(new_blocks)))
         new_section.append("")
         new_section.append("# ========================================")
-        new_section.append(f"# READERS GENERATED BY {self.tag.upper()}")
+        new_section.append("# READERS GENERATED BY {}".format(self.tag.upper()))
         new_section.append("# ========================================")
         new_section.append("")
         new_section.extend(new_blocks)
-        new_section.append(f"# {self.tag} end")
+        new_section.append("# {} end".format(self.tag))
 
         with open(filepath, 'w') as f:
             for line in lines_keep:
@@ -375,8 +379,7 @@ class MyCCcamCollector:
 
                 if status_callback:
                     status_callback(
-                        f"Found {
-                            len(active_servers)} active servers. Generating config...")
+                        "Found {} active servers. Generating config...".format(len(active_servers)))
 
                 # Generate reader blocks
                 new_blocks = self._generate_reader_blocks(active_servers)
@@ -385,18 +388,13 @@ class MyCCcamCollector:
                 self._write_server_config(self.output_path, new_blocks)
 
                 if status_callback:
-                    status_callback(f"Config written to {self.output_path}")
-
-                # Optionally, also write to CCcam.cfg? For now, we only write to the given file.
-                # If you want to also update CCcam.cfg, you could call write_cccam_cfg here,
-                # but that would require importing it or duplicating code. Not done by default.
-                # You can easily extend.
+                    status_callback("Config written to {}".format(self.output_path))
 
             except Exception as e:
                 if status_callback:
-                    status_callback(f"ERROR: {e}")
+                    status_callback("ERROR: {}".format(e))
                 else:
-                    print(f"ERROR: {e}")
+                    print("ERROR: {}".format(e))
                 raise
 
         # Run in a separate thread to avoid blocking the GUI
