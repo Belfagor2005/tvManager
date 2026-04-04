@@ -69,7 +69,7 @@ from Tools.Directories import SCOPE_PLUGINS, fileExists, resolveFilename
 # =========================
 # Local project imports
 # =========================
-from .. import _, paypal, currversion
+from .. import _, paypal, __version__
 
 
 global skin_path
@@ -109,7 +109,6 @@ def b64decoder(s):
     return outp
 
 
-# currversion = "2.3"
 NAME_PLUG = "TiVuStream Softcam Manager"
 plugin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/tvManager")
 data_path = plugin_path + "/data/"
@@ -484,7 +483,7 @@ class tv_config(Screen, ConfigListScreen):
         self.session.open(
             MessageBox,
             _("Softcam Manager by Lululla\nV.%s\nInstall Cam Software\nForum Support www.corvoboys.org\n") %
-            currversion,
+            __version__,
             MessageBox.TYPE_INFO,
             timeout=4)
 

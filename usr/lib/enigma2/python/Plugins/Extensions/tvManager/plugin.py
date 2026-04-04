@@ -93,7 +93,7 @@ from enigma import (
 # =========================
 from . import (
     _,
-    currversion,
+    __version__,
     # headers,
     paypal,
     installer_url,
@@ -2076,7 +2076,7 @@ class InfoCfg(Screen):
                     break
         self.new_version = remote_version
         self.new_changelog = remote_changelog
-        if currversion < remote_version:
+        if __version__ < remote_version:
             self.Update = True
             self["key_yellow"].show()
             self.session.open(
