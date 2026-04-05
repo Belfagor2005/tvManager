@@ -3,7 +3,7 @@ name: Create Tag and Release on Version Change
 on:
   push:
     paths:
-      - usr/lib/enigma2/python/Plugins/Extensions/TVGarden/__init__.py
+      - usr/lib/enigma2/python/Plugins/Extensions/tvManager/__init__.py
     branches:
       - main
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
       - name: Read version from file
         id: get_version
         run: |
-          VERSION=$(grep -oP '(?<=__version__ = ")[^"]+' usr/lib/enigma2/python/Plugins/Extensions/TVGarden/__init__.py)
+          VERSION=$(grep -oP '(?<=__version__ = ")[^"]+' usr/lib/enigma2/python/Plugins/Extensions/tvManager/__init__.py)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check if tag already exists
