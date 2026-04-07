@@ -6,14 +6,18 @@
 
 **Enterprise Grade Enigma2 Softcam Management Plugin**
 
-
+![](https://komarev.com/ghpvc/?username=Belfagor2005&label=Repository%20Views&color=blueviolet)
 [![Python package](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml/badge.svg)](https://github.com/Belfagor2005/tvManager/actions/workflows/pylint.yml)
-[![Python 2.7/3.x](https://img.shields.io/badge/Python-2.7%2F3.x-blue.svg)](https://www.python.org/)
+[![Ruff Status](https://github.com/Belfagor2005/tvManager/actions/workflows/ruff.yml/badge.svg)](https://github.com/Belfagor2005/tvManager/actions/workflows/ruff.yml)
+[![Version](https://img.shields.io/badge/Version-3.4-blue.svg)](https://github.com/Belfagor2005/tvManager)
+[![Enigma2](https://img.shields.io/badge/Enigma2-Plugin-ff6600.svg)](https://www.enigma2.net)
+[![Python](https://img.shields.io/badge/Python-2.7%2B-blue.svg)](https://www.python.org)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Enigma2](https://img.shields.io/badge/Enigma2-Plugin-orange.svg)](https://github.com/OpenPLi/enigma2)
-  <a href="https://github.com/Belfagor2005/tvManager">
-    <img src="https://img.shields.io/badge/Version-3.4-blue.svg" alt="Version">
-  </a>
+[![GitHub stars](https://img.shields.io/github/stars/Belfagor2005/tvManager?style=social)](https://github.com/Belfagor2005/tvManager/stargazers)
+
+
+
+
   
 *Professional softcam management solution for Enigma2-based receivers*
 
