@@ -2,6 +2,78 @@
 # -*- coding: UTF-8 -*-
 
 from __future__ import print_function
+import codecs
+import json
+import subprocess
+import sys
+import time
+from base64 import b64decode
+from datetime import datetime
+from os import (
+    mkdir,
+    access,
+    X_OK,
+    system,
+    popen,
+    chmod,
+    remove,
+    walk,
+    stat,
+    listdir
+)
+from os.path import dirname, join, exists, islink, basename
+from re import sub
+from time import sleep
+from xml.dom import minidom
+
+from twisted.web.client import getPage
+
+from Components.ActionMap import ActionMap, NumberActionMap
+from Components.Button import Button
+from Components.Label import Label
+from Components.MenuList import MenuList
+from Components.MultiContent import MultiContentEntryText
+from Components.Sources.List import List
+from Plugins.Plugin import PluginDescriptor
+from Screens.MessageBox import MessageBox
+from Screens.ChoiceBox import ChoiceBox
+from Screens.Screen import Screen
+from Screens.Standby import TryQuitMainloop
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+from Tools.LoadPixmap import LoadPixmap
+from enigma import (
+    RT_HALIGN_LEFT,
+    RT_VALIGN_CENTER,
+    eListboxPythonMultiContent,
+    eTimer,
+    gFont,
+    getDesktop,
+)
+
+from . import (
+    _,
+    __version__,
+    # headers,
+    paypal,
+    installer_url,
+    developer_url,
+    ftpxml,
+    NAME_PLUG,
+    TITLE_PLUG,
+    PLUGIN_PATH,
+    ICONPIC,
+    DATA_PATH,
+    DIR_WORK,
+    FILE_XML,
+    ECM_INFO,
+    EMPTY_ECM_INFO
+)
+
+
+from .data.Utils import RequestAgent, b64decoder, checkGZIP
+from .data.GetEcmInfo import GetEcmInfo
+from .data.Console import Console
+
 ###############################################################################
 #                                                                             #
 #                      S O F T C A M   M A N A G E R                          #
@@ -30,90 +102,6 @@ from __future__ import print_function
 #     For commercial licensing inquiries, contact: business@lululla.com       #
 #                                                                             #
 ###############################################################################
-
-# =========================
-# Standard library imports
-# =========================
-import codecs
-import json
-import subprocess
-import sys
-import time
-from base64 import b64decode
-from datetime import datetime
-from os import (
-    mkdir,
-    access,
-    X_OK,
-    system,
-    popen,
-    chmod,
-    remove,
-    walk,
-    stat,
-    listdir
-)
-from os.path import dirname, join, exists, islink, basename
-from re import sub
-from time import sleep
-from xml.dom import minidom
-
-# =========================
-# Third-party imports
-# =========================
-from twisted.web.client import getPage
-
-# =========================
-# Enigma2 / framework imports
-# =========================
-from Components.ActionMap import ActionMap, NumberActionMap
-from Components.Button import Button
-from Components.Label import Label
-from Components.MenuList import MenuList
-from Components.MultiContent import MultiContentEntryText
-from Components.Sources.List import List
-from Plugins.Plugin import PluginDescriptor
-from Screens.MessageBox import MessageBox
-from Screens.ChoiceBox import ChoiceBox
-from Screens.Screen import Screen
-from Screens.Standby import TryQuitMainloop
-from Tools.Directories import resolveFilename, SCOPE_PLUGINS
-from Tools.LoadPixmap import LoadPixmap
-from enigma import (
-    RT_HALIGN_LEFT,
-    RT_VALIGN_CENTER,
-    eListboxPythonMultiContent,
-    eTimer,
-    gFont,
-    getDesktop,
-)
-
-# =========================
-# Local project imports
-# =========================
-from . import (
-    _,
-    __version__,
-    # headers,
-    paypal,
-    installer_url,
-    developer_url,
-    ftpxml,
-    NAME_PLUG,
-    TITLE_PLUG,
-    PLUGIN_PATH,
-    ICONPIC,
-    DATA_PATH,
-    DIR_WORK,
-    FILE_XML,
-    ECM_INFO,
-    EMPTY_ECM_INFO
-)
-
-
-from .data.Utils import RequestAgent, b64decoder, checkGZIP
-from .data.GetEcmInfo import GetEcmInfo
-from .data.Console import Console
 
 global active, skin_path
 global _session

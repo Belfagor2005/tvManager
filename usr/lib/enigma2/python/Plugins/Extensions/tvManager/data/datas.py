@@ -2,33 +2,6 @@
 # -*- coding: UTF-8 -*-
 
 from __future__ import print_function
-"""
-===============================================================================
- Config - Helper for Enigma2
-
- This module collects free CCcam lines from various websites and automatically
- converts them into [reader] blocks for use in oscam.server.
- Send emm tu tvsat card
-
- Features:
- - Fetches data from multiple sources using regular expressions
- - Validates hostnames and ports
- - Automatically generates OSCam reader blocks
- - Backs up the original file if it exists
- - Avoids writing duplicate readers
- - Uses threading to avoid blocking the GUI
-
- Requirements:
- - Internet access on the device
-
- Credits: by Lululla
- Date: May 2025
-===============================================================================
-"""
-
-# =========================
-# Standard library imports
-# =========================
 import base64
 import codecs
 import re
@@ -39,10 +12,6 @@ from os import X_OK, access, chmod, listdir, popen, stat, system
 from os.path import dirname, exists, join
 from random import choice
 from threading import Thread
-
-# =========================
-# Enigma2 / framework imports
-# =========================
 from enigma import eTimer, getDesktop
 
 from Components.ActionMap import ActionMap
@@ -66,11 +35,30 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 
 from Tools.Directories import SCOPE_PLUGINS, fileExists, resolveFilename
 
-# =========================
-# Local project imports
-# =========================
 from .. import _, paypal, __version__
+"""
+===============================================================================
+ Config - Helper for Enigma2
 
+ This module collects free CCcam lines from various websites and automatically
+ converts them into [reader] blocks for use in oscam.server.
+ Send emm tu tvsat card
+
+ Features:
+ - Fetches data from multiple sources using regular expressions
+ - Validates hostnames and ports
+ - Automatically generates OSCam reader blocks
+ - Backs up the original file if it exists
+ - Avoids writing duplicate readers
+ - Uses threading to avoid blocking the GUI
+
+ Requirements:
+ - Internet access on the device
+
+ Credits: by Lululla
+ Date: May 2025
+===============================================================================
+"""
 
 global skin_path
 

@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+import socket
+import time
+import os
+import requests
+import urllib3
+from datetime import datetime, timedelta
+from threading import Thread
+
 """
 ===============================================================================
  CCcam Auto Collector - Advanced version
@@ -11,15 +20,6 @@
  section, preventing file bloat.
 ===============================================================================
 """
-
-import re
-import socket
-import time
-import os
-import requests
-import urllib3
-from datetime import datetime, timedelta
-from threading import Thread
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

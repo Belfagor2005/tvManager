@@ -7,11 +7,10 @@ PluginLanguageDomain = 'tvManager'
 PluginLanguagePath = plugin_path + 'locale'
 
 
-try:
-    from enigma import eMediaDatabase
+global isDreamOS
+isDreamOS = False
+if os.path.exists("/var/lib/dpkg/status"):
     isDreamOS = True
-except BaseException:
-    isDreamOS = False
 
 
 def localeInit():
