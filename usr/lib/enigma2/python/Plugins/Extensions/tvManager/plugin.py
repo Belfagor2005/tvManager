@@ -63,10 +63,10 @@ from . import (
     PLUGIN_PATH,
     ICONPIC,
     DATA_PATH,
-    DIR_WORK,
+    # DIR_WORK,
+    # EMPTY_ECM_INFO
     FILE_XML,
-    ECM_INFO,
-    EMPTY_ECM_INFO
+    ECM_INFO
 )
 
 
