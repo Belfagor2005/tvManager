@@ -7,6 +7,7 @@ import json
 import subprocess
 import sys
 import time
+import threading
 from base64 import b64decode
 from datetime import datetime
 from os import (
@@ -361,7 +362,13 @@ def install_package():
         print("Package installation error: %s" % str(e))
 
 
-install_package()
+def _install_later():
+    time.sleep(15)
+    install_package()
+t = threading.Thread(target=_install_later)
+t.daemon = True
+t.start()
+# install_package()
 
 
 def checkdir():

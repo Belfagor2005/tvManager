@@ -8,7 +8,7 @@ from os.path import dirname, join
 import os
 import sys
 
-__version__ = "3.4"
+__version__ = "3.3"
 NAME_PLUG = "Softcam Manager"
 TITLE_PLUG = "..:: " + NAME_PLUG + " V. %s ::.." % __version__
 PLUGIN_PATH = dirname(sys.modules[__name__].__file__)
@@ -36,20 +36,32 @@ if os.path.exists("/var/lib/dpkg/status"):
     isDreamOS = True
 
 
+# def wgetsts():
+    # wgetsts = False
+    # cmd22 = 'find /usr/bin -name "wget"'
+    # res = os.popen(cmd22).read()
+    # if 'wget' not in res.lower():
+        # if os.path.exists("/var/lib/dpkg/status"):
+            # cmd23 = 'apt-get update && apt-get install wget'
+            # os.popen(cmd23)
+            # wgetsts = True
+        # else:
+            # cmd23 = 'opkg update && opkg install wget'
+            # os.popen(cmd23)
+            # wgetsts = True
+        # return wgetsts
+
+
 def wgetsts():
-    wgetsts = False
-    cmd22 = 'find /usr/bin -name "wget"'
-    res = os.popen(cmd22).read()
-    if 'wget' not in res.lower():
-        if os.path.exists("/var/lib/dpkg/status"):
-            cmd23 = 'apt-get update && apt-get install wget'
-            os.popen(cmd23)
-            wgetsts = True
-        else:
-            cmd23 = 'opkg update && opkg install wget'
-            os.popen(cmd23)
-            wgetsts = True
-        return wgetsts
+    if os.path.exists("/usr/bin/wget"):
+        return False
+    
+    # Installa in background
+    import threading
+    def _install():
+        os.system("opkg update && opkg install wget > /dev/null 2>&1 &")
+    threading.Thread(target=_install, daemon=True).start()
+    return True
 
 
 def paypal():
